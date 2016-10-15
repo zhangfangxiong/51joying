@@ -1,0 +1,53 @@
+<div class="pheader clearfix">页面列表</div>
+<div class="pbody clearfix">
+	<div class="btn-toolbar list-toolbar">
+		<button class="btn btn-primary" id="meta_add">
+			<i class="fa fa-plus"></i> 增加页面
+		</button>
+	</div>
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th class="text-center">页面</th>
+				<th class="text-center">Title</th>
+				<th class="text-center">Keyword</th>
+				<th class="text-center">Description</th>
+				<th class="text-center">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+        <?php foreach ($aList['aList'] as $v) {?>
+            <tr>
+				<td><?php echo $v['sPage']?></td>
+				<td><?php echo $v['sTitle']?></td>
+				<td><?php echo $v['sKeyword']?></td>
+				<td><?php echo $v['sDescription']?></td>
+				<td class="text-center">
+					<a href="/admin/meta/edit?id=<?php echo $v['sPage']?>" title="编辑"><i
+						class="fa fa-pencil fa-large"></i></a> <a class="meta_delete"
+						href="/admin/meta/del?id=<?php echo $v['sPage']?>" role="button"
+						data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a>
+				</td>
+			</tr>
+        <?php }?>
+    	</tbody>
+	</table>
+    <?php echo $aList['aPager']?>
+</div>
+<script>
+$('.meta_delete').click(function() {
+	var url = this.href;
+	if (confirm("您确认要删除该页面吗？")) {
+		$.get(url, function(ret){
+			alert(ret.data);
+			if (ret.status) {
+				location.reload();
+			}
+		}, 'json');
+	}
+	return false;
+});
+$('#meta_add').click(function(){
+	location.href = '/admin/meta/add.html';
+});
+</script>

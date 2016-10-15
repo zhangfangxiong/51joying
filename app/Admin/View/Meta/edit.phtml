@@ -1,0 +1,50 @@
+<div class="pheader clearfix"><?php echo isset($aMeta['iMetaID'])?'编辑':'增加'?>页面</div>
+<div class="pbody clearfix">
+    <form id="myform" class="form-horizontal" role="form" method="post" action="">
+		<div class="form-group">
+			<label for="sPage" class="col-sm-2 control-label"><strong style="color:red;">*</strong> 页面：</label>
+			<div class="col-sm-10">
+				<input name="sPage" validate="!length:2-50" type="text" value="<?php echo isset($aMeta['sPage'])?$aMeta['sPage']:''?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="sPassword" class="col-sm-2 control-label"><strong style="color:red;">*</strong> Title：</label>
+			<div class="col-sm-10">
+			    <input name="sTitle" validate="!length:2-255" type="text" value="<?php echo isset($aMeta['sTitle'])?$aMeta['sTitle']:''?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="sPassword" class="col-sm-2 control-label"><strong style="color:red;">*</strong> Keyword：</label>
+			<div class="col-sm-10">
+			    <input name="sKeyword" validate="!length:2-255" type="text" value="<?php echo isset($aMeta['sKeyword'])?$aMeta['sKeyword']:''?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="sPassword" class="col-sm-2 control-label"><strong style="color:red;">*</strong> Description：</label>
+			<div class="col-sm-10">
+			    <textarea name="sDescription" validate="!length:2-255" class="form-control input-validate"><?php echo isset($aMeta['sDescription'])?$aMeta['sDescription']:''?></textarea>
+		        <span class="validate_checktip"></span>  
+			</div>
+		</div>
+    	<div class="btn-toolbar text-center">
+        	<button id="save" class="btn btn-primary">保存</button>
+        	<button id="cancel"class="btn" onclick="location.href='/admin/meta/list.html';return false;">取消</button>
+        </div>
+	</form>
+</div>
+<script type="text/javascript">
+$(function() {
+	$("#myform").validate({submitHandler: function(form) {
+	    $.post(form.action, $(form).serialize(), function(ret){
+	        alert(ret.data);
+	        if (ret.status) {
+	            location.href = '/admin/meta/list.html';
+	        }
+	    }, 'json');
+		return false;
+	}});
+});
+</script>

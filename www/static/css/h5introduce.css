@@ -1,0 +1,60 @@
+@charset "utf-8";
+/* CSS Document */
+ html, body {
+        position: relative;
+        height: 100%;
+    }
+    body {
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: .28rem;
+        color:#000;
+        margin: 0;
+        padding: 0;
+    }
+    .swiper-container {
+        width: 100%;
+        height: 100%;
+    }
+    .swiper-slide {
+        text-align: center;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        position:relative;
+    }
+  .slideone{background-color:#ffdb83;}
+  .slidetwo{background-color:#f66262;}
+  .slidethrid{background-color:#904a68;}
+  .slidefour{background-color:#78b6e5;}
+  .slidefive{background-color:#68c39f;}
+.topfont{width:5rem;height:2rem;position:absolute;margin:auto;top:.5rem;left:0;right:0;}
+.slideone .topfont{background:url("../images/introduce/h5/p1font.png") center center no-repeat; background-size:4.66rem auto;}
+.bottomPhone{width:6.6rem;bottom:0;margin:auto;position:absolute;top:2.84rem;left:0;right:0;}
+.slideone .bottomPhone{background:url("../images/introduce/h5/p1phone.jpg") center center no-repeat; background-size:contain;}
+.slideone .iconflag{position:absolute;top:2rem;right:.7rem;width:2.42rem;height:1.42rem;background:url("../images/introduce/h5/p1icon.png") center center no-repeat; background-size:contain;}
+
+.slidetwo .topfont{background:url("../images/introduce/h5/p2font.png") center center no-repeat; background-size:4.66rem auto;}
+.slidetwo .bottomPhone{background:url("../images/introduce/h5/p2phone.jpg") center center no-repeat; background-size:contain;}
+
+.slidethrid .topfont{background:url("../images/introduce/h5/p3font.png") center center no-repeat; background-size:4.66rem auto;}
+.slidethrid .bottomPhone{background:url("../images/introduce/h5/p3phone.jpg") center center no-repeat; background-size:contain;}
+.slidethrid .iconflag{position:absolute;top:1.3rem;left:.4rem;width:2.35rem;height:1.83rem;background:url("../images/introduce/h5/p3icon.png") center center no-repeat; background-size:contain;}
+
+.slidefour .topfont{background:url("../images/introduce/h5/p4font.png") center center no-repeat; background-size:4.66rem auto;}
+.slidefour .bottomPhone{width:7.03rem;margin-right:0;background:url("../images/introduce/h5/p4phone.jpg") center center no-repeat; background-size:contain;}
+.slidefive .topfont{background:url("../images/introduce/h5/p5font.png") center center no-repeat; background-size:4.66rem auto;}
+.slidefive .bottomPhone{background:url("../images/introduce/h5/p5phone.jpg") center center no-repeat; background-size:contain;}
+.slidefive .iconflag{position:absolute;left:0rem;bottom:0;width:3.36rem;height:4.84rem;background:url("../images/introduce/h5/p5icon.png") center center no-repeat; background-size:contain;}
+
+
+
+

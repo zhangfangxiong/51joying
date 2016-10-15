@@ -1,0 +1,72 @@
+<div class="pheader clearfix">《<?=$aQuestion['sTitle']?>》答案</div>
+<div class="pbody clearfix">
+    <div class="btn-toolbar list-toolbar">
+    	<button class="btn btn-primary" id="answerAdd">
+    		<i class="fa fa-plus"></i> 增加答案
+    	</button>
+    </div>
+    <table class="table table-bordered table-hover">
+    	<thead>
+    		<tr>
+    			<th class="col-sm-1 text-center">#</th>
+                <th>答案</th>
+                <th>答案对应问题</th>
+    			<th>创建时间</th>
+    			<th>修改时间</th>
+    			<th class="text-center">操作</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+        <?if (!empty($aQuestion['aAnswer'])){?>
+        <?php foreach ($aQuestion['aAnswer'] as $aAnswer) {?>
+            <tr id="answerInfo<?=$aAnswer['iAutoID']?>">
+    			<td class="col-sm-1 text-center"><?=$aAnswer['iAutoID']?></td>
+                <td><?=$aAnswer['sAnswer']?></td>
+
+                <td><?=$aAnswer['sNextQuestion']?></td>
+                <td style="display:none;"><?=$aAnswer['iNextID']?></td>
+                <td><?=date('Y-m-d H:i:s', $aAnswer['iCreateTime'])?></td>
+                <td><?=date('Y-m-d H:i:s', $aAnswer['iUpdateTime'])?></td>
+    			<td class="text-center">
+    			    <a href="/admin/question/answeredit.html?qid=<?php echo $aQuestion['iAutoID']?>&aid=<?php echo $aAnswer['iAutoID']?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
+    			    <a class="question_delete" href="/admin/question/answerdel.html?id=<?php echo $aAnswer['iAutoID']?>" title="删除"><i class="fa fa-trash fa-large"></i></a>
+    			</td>
+    		</tr>
+        <?php }?>
+        <?php }?>
+    	</tbody>
+    </table>
+</div>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script>
+    $(function() {
+        $('#answerAdd').click(function () {
+            location.href = '/admin/question/answeradd.html?qid=<?php echo $aQuestion['iAutoID']?>';
+        });
+    });
+
+</script>
+
+
+<script>
+
+function loadAuto() {
+    var fileref = document.createElement('script');
+    fileref.setAttribute("type","text/javascript");
+    fileref.setAttribute("src",'<?php echo $sStaticRoot ?>/js/autocomplete.js');
+    document.getElementsByTagName("head")[0].appendChild(fileref);
+}
+$('.question_delete').click(function() {
+	var url = this.href;
+	if (confirm("您确认要删除该答案吗？")) {
+		$.get(url, function(ret){
+			alert(ret.data);
+			if (ret.status) {
+				location.reload();
+			}
+		}, 'json');
+	}
+	return false;
+});
+</script>

@@ -1,0 +1,154 @@
+<div class="pheader clearfix"><?php echo isset($aQuestion['iAutoID'])?'编辑':'增加'?>问题</div>
+<div class="pbody clearfix">
+    <form id="myform" class="form-horizontal" role="form" method="post" action="">
+        <input name="iQuestionID" type="hidden" value="<?php echo isset($aQuestion['iAutoID'])?$aQuestion['iAutoID']:''?>">
+		<div class="form-group">
+			<label for="sRoleName" class="col-sm-2 control-label"><strong style="color:red;">*</strong> 问题标题：</label>
+			<div class="col-sm-10">
+				<input name="sTitle" validate="!length:1-100" type="text" value="<?php echo isset($aQuestion['sTitle'])?$aQuestion['sTitle']:''?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><strong style="color:red;">*</strong> <?php echo $sClassName?>：</label>
+            <div class="col-sm-10">
+                <select name="iCategoryID" class="form-control input-validate col-sm-10">
+                    <option value="0"><?php echo $sClassName?></option>
+                    <?php
+                    if(!empty($aQcat)){
+                        $iTypeID = isset($aQuestion['iCategoryID'])?$aQuestion['iCategoryID']:'';
+                        foreach ($aQcat as $v){
+                            ?>
+                            <option value="<?php echo $v['iTypeID']?>" <?php echo $v['iTypeID']==$iTypeID?'selected':'';?>><?php echo ($v['iLevel']>0?'└'.str_repeat('─', $v['iLevel'] * 2):'') . $v['sTypeName']?></option>
+                        <?php }}?>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">问题标签：</label>
+
+            <div class="col-sm-10">
+                <input type="hidden" name="sTag" id="sTag"
+                       value="<?php echo isset($aQuestion['sTag']) ? $aQuestion['sTag'] : '' ?>">
+                <?php $aQuestionTag = isset($aQuestion['sTag']) ? explode(',', $aQuestion['sTag']) : [] ?>
+                <div style="float:left;width:70%">
+                    <div class="clear"></div>
+                    <div class="selestbeizhu">
+                        <span style="float:left;">可选10个标签：</span>
+
+                        <div id="questionTagSelect" style="">
+                            <?php if (isset($aQuestion['aTag'])) {
+                                foreach ($aQuestion['aTag'] as $questionTag) {?>
+                                    <a href="javascript:void(0);" class="des_post" rel="<?=$questionTag['iTypeID']?>"><span><?php echo $questionTag['sTypeName'] ?></span><i
+                                            class="fa fa-remove"></i></a>
+                            <?php }} ?>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="selestbeizhu">
+                    <select onchange="onTagSelect(this.value);">
+                        <?php foreach ($aTag as $key => $value) { ?>
+                            <option value="<?php echo $value['iTypeID']?>"><?php echo $value['cat']?></option>
+                        <?php }?>
+                    </select>
+                    </div>
+                    <?php $i = 1;?>
+                    <?php foreach($aTag as $key => $value){?>
+                    <div class="selestxuanze questiontags" id="tags<?php echo $value['iTypeID']?>" <?php if ($i != 1){?>style="display:none"<?php }?>>
+                        <?php foreach ($value['aTags'] as $iTagID => $sTag) { ?>
+                            <a href="javascript:void(0)" rel="<?=$sTag['iTypeID'];?>" <?php
+                            if (isset($aQuestionTag) && in_array($sTag['iTypeID'], $aQuestionTag)) {
+                                echo "class='gray'";
+                            }
+                            ?>><?php echo $sTag['sTypeName'] ?></a>
+                        <?php } ?>
+                        <?php $i++;?>
+                    </div>
+                    <?php }?>
+                </div>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">问题描述：</label>
+            <div class="col-sm-10">
+                <textarea name="sDesc" class="form-control input-validate"><?php echo isset($aQuestion['sDesc'])?$aQuestion['sDesc']:''?></textarea>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">问题提示：</label>
+            <div class="col-sm-10">
+                <textarea name="sTips" class="form-control input-validate"><?php echo isset($aQuestion['sTips'])?$aQuestion['sTips']:''?></textarea>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+
+    	<div class="btn-toolbar text-center">
+        	<button id="save" class="btn btn-primary">保存</button>
+        	<button id="cancel"class="btn" onclick="location.href='/admin/question/list.html';return false;">取消</button>
+        </div>
+	</form>
+</div>
+<script>
+
+    function onTagSelect(id) {
+        $('.questiontags').each(function(){
+            $(this).hide();
+        });
+        $('#tags'+id).show();
+    }
+
+$(function() {
+	$("#myform").validate({submitHandler: function(form) {
+	    $.post(form.action, $(form).serialize(), function(ret){
+	        alert(ret.data);
+	        if (ret.status) {
+	            location.href = '/admin/question/list.html';
+	        }
+	    }, 'json');
+		return false;
+	}});
+
+
+    //标签操作
+    $('.questiontags a').click(function () {
+        if ($(this).hasClass('gray')) {
+            return false;
+        }
+        var val = $('#sTag').val();
+        if (val.split(',').length == 10) {
+            alert('只能添加十个标签！');
+            return false;
+        }
+        val = val.length == 0 ? $(this).prop('rel') : val + ',' + $(this).prop('rel');
+        $('#sTag').val(val);
+
+        var str = '<a href="javascript:void(0);" class="des_post" rel="' + $(this).prop('rel') + '"><span>' + $(this).html() + '</span><i class="fa fa-remove"></i></a>';
+        $('#questionTagSelect').append($(str));
+        $(this).addClass('gray');
+        $('#questionTagSelect a').click(delNewsTag);
+    });
+
+    $('#questionTagSelect a').click(delNewsTag);
+    function delNewsTag() {
+        var str = $(this).prop('rel');
+        var vals = $('#sTag').val().split(',');
+        for (var i = 0; i < vals.length; i++) {
+            if (vals[i] == str) {
+                vals.splice(i, 1);
+                break;
+            }
+        }
+        $('#sTag').val(vals.join(','));
+        $(this).remove();
+        $('.questiontags a').each(function () {
+            if ($(this).prop('rel') == str) {
+                $(this).removeClass('gray');
+            }
+        })
+    }
+});
+</script>

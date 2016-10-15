@@ -1,0 +1,377 @@
+@charset "utf-8";
+*{ margin:0; padding:0;}
+html { background: #EAEAEA; }
+body{ font-family: Helvetica,Arial,"Hiragino Sans GB","Microsoft Yahei","微软雅黑","宋体",sans-serif;; font-size:14px; color:#333; line-height:1.6em; height: 100%; background: #EAEAEA; }
+h1{line-height:1.3em;}
+a:hover img,img{ border:none;}
+img{ vertical-align:top;}
+ul{ list-style:none;}
+input,button,select,textarea{outline:none;font-family:"Microsoft YaHei",Arial,"宋体"; font-size:12px;}
+table input,table button,table select,table textarea{ vertical-align:middle;}
+textarea{resize:none}
+table{ border-collapse:collapse;}
+a{ text-decoration:none; color:#333;}
+a:hover{ text-decoration:none; color:#25b7aa;}
+
+#header {
+    background: #EAEAEA;
+    height: 80px;
+    position: fixed; top: 0; z-index:9999;
+    left:0; right: 0;
+}
+
+#header .header_w {
+    height: 80px;
+    width: 1080px;
+    margin:0 auto;
+}
+
+.header_position {
+    height: 80px;
+    margin: 0 auto;
+}
+
+#logo {
+    float: left;
+}
+
+#nav {
+    float: right;
+    width:720px;
+    padding: 9px 0;
+    overflow: hidden;
+}
+
+#nav li {
+    float: right;
+    height: 60px;
+    line-height: 60px;
+    width: 100px;
+    text-align: center;
+    font-size: 16px;
+    padding: 0 10px;
+}
+
+#nav li.selected {
+    border-bottom: 2px solid #10AA9A;
+}
+
+#big_show {
+    clear: both;
+    position: relative;
+    overflow: hidden;
+    min-width:1080px;
+    height: auto;
+}
+
+#big_show img {
+    width: 100%;
+}
+
+#intro_list {
+    height: 410px;
+    background-color: #fff;
+}
+
+#intro_list ul {
+    width: 1000px;
+    margin:0 auto;
+}
+
+#intro_list li {
+    float: left;
+    width: 230px;
+    text-align: center;
+}
+
+#intro_list .item_icon {
+    margin:80px auto 10px auto;
+    width: 125px;
+    height: 125px;
+    background: url(/static/images/fjl/intro_item_icon.png) no-repeat;
+}
+
+
+#intro_list .icon_sssj {
+    background-position: 0 0;
+}
+
+#intro_list .icon_dwzzjp {
+    background-position: -244px 0;
+}
+
+#intro_list .icon_znfx {
+    background-position: -488px 0;
+}
+
+#intro_list .icon_xgdx {
+    background-position: -732px 0;
+}
+
+#intro_list .item_title {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 25px;
+    padding:10px 0;
+}
+
+#intro_list .item_desc {
+    padding:5px  25px;
+}
+
+#fjl_home {
+    height: 575px;
+    background-color: #F2F2F2;
+    width: 100%;
+    overflow: hidden;
+}
+
+#fjl_home .fjl_home_w {
+    width: 1080px;
+    margin: 0 auto;
+    padding-top: 85px;
+}
+
+#fjl_home .fjl_home_part1{
+    float: left;
+    width: 420px;
+}
+
+#fjl_home .fjl_home_part2 {
+    float: left;
+    width: 560px;
+    padding-top: 95px;
+}
+
+#fjl_home .fjl_home_part3{
+    float: left;
+    width: 560px;
+    padding-top: 95px;
+}
+
+#fjl_home .fjl_home_part4 {
+    float: left;
+    width: 420px;
+}
+
+#fjl_home .home_title {
+    font-size: 42px;
+    height: 78px;
+    line-height: 78px;
+    color: #50BF8F;
+}
+
+#fjl_home .home_desc {
+    font-size: 20px;
+    line-height: 30px;
+    color: #999;
+}
+
+#fjl_home .home_desc_space{
+    line-height: 30px;
+    height: 30px;
+}
+
+#developer_list {
+    /*height: 210px;*/
+    background: #fff;
+    clear: both;
+}
+
+#developer_list .developer_list_w {
+    margin: 0 auto;
+    width: 1080px;
+    padding-top: 100px;
+}
+
+#developer_list .developer_list_w li {
+    width: 246px;
+    float: left;
+    height: 280px;
+    padding: 10px 16px;
+    text-align: center;
+}
+
+#developer_list .dev_img {
+    width: 245px;
+}
+
+#developer_list .dev_title {
+    margin-top: 20px;
+    font-size: 18px;
+    line-height: 35px;
+}
+
+#developer_list .dev_desc{
+    text-align: left;
+}
+
+#developer_list .dev_logo_w {
+    clear: both;
+    margin: 0 auto;
+    width: 1080px;
+    height: 180px;
+    padding-top: 30px;
+}
+#developer_list .tempWrap {
+    float: left;
+}
+
+#developer_list .ul {
+    clear: both;
+    margin:0 auto;
+    width: 1080px;
+    height: 180px;
+}
+
+#developer_list .dev_logo_w  li {
+    float: left;
+    height: 150px;
+}
+#developer_list .dev_logo {
+    width: 195px;
+    overflow: hidden;
+}
+
+#developer_list .arrow_l {
+    width: 50px;
+    vertical-align: middle;
+    padding-top: 45px;
+}
+
+#developer_list .arrow_r {
+    width: 50px;
+    float: right;
+    vertical-align: middle;
+    padding-top: 45px;
+}
+
+#footer {
+}
+
+#footer  .footer_w {
+    width: 1160px;
+    margin: 0 auto;
+}
+
+#footer .contact {
+    height: 35px;
+    margin: 25px auto;
+    width: 1060px;
+}
+#footer .contact li {
+    float: left;
+    width: 350px;
+    height: 30px;
+    line-height: 30px;
+    color: #838383;
+    vertical-align: middle;
+}
+#footer .contact span {
+    width: 30px;
+    height: 25px;
+    display: inline-block;
+    line-height: 30px;
+}
+
+#footer .contact label {
+    height: 30px;
+    line-height: 30px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+#footer .contact_addr_icon {
+    background: url(/static/images/fjl/contact_icons.png) no-repeat;
+}
+#footer .contact_name_icon {
+    background: url(/static/images/fjl/contact_icons.png) no-repeat -35px 0;
+}
+#footer .contact_phone_icon {
+    background: url(/static/images/fjl/contact_icons.png) no-repeat -70px 0;
+}
+
+#footer .fjl_footer_logo {
+    margin: 70px auto 0 auto;
+    width: 1080px;
+    text-align: center;
+}
+
+#footer .contact_info {
+    float: left;
+    width: 330px;
+    padding-left: 20px;
+    height: 30px;
+}
+
+#footer .contact_info li {
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    width: 80px;
+}
+
+#footer .seperator_line {
+    height: 1px;
+    background-color: #CBCBCB;
+    width: 1280px;
+    margin: 0 auto;
+}
+
+#footer .site_info {
+    width: 1000px;
+    text-align: center;
+    margin: 20px auto 0 auto;
+    color: #838383;
+    height: 80px;
+}
+
+#footer .copyright {
+    float: left;
+    text-align: right;
+    width: 500px;
+    line-height: 30px;
+    padding-right: 20px;
+}
+
+#fjl_body {
+    color: #333;
+    background: #fff;
+    min-height: 100px;
+}
+
+#fjl_body .fjl_body_w {
+    width: 980px;
+    padding:20px 0px;
+    margin:0 auto;
+}
+
+.fjl_title {
+    font-size: 22px;
+}
+
+.fjl_title h2 {
+    line-height: 75px;
+    border-bottom:2px solid #89C39B;
+    display: inline-block;
+    font-size: 22px;
+}
+
+.fjl_content {
+    font-size: 16px;
+    margin-top: 30px;
+    line-height: 2.6em;
+}
+
+.top_fix{
+    position: fixed; top: 0; z-index:9999;
+    left:0; right: 0;
+}
+
+
+
+
+
+
+
+
