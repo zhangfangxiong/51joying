@@ -20,6 +20,10 @@
 	margin-top: 0px;
 }
 
+.labal-top {
+	margin-top:5px;
+}
+
 .user-menu,.project-menu {
 	border: none;
 }
@@ -410,6 +414,7 @@ label {
 }
 .search-form .form-group {
 	margin-right: 10px;
+	margin-bottom: 15px;
 }
 
 /**validate**/
@@ -470,4 +475,10 @@ label {
 .actGotop a:hover {
   background: url(../img/top.gif) no-repeat;
   outline: none;
+}
+
+.tubiao {
+	font-weight: bold;
+	color: red;
+	padding-right: 4px;
 }

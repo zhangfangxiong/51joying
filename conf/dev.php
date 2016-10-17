@@ -1,8 +1,8 @@
 <?php
 $config['database']['tpa']['master'] = array(
     'dsn' => 'mysql:host=127.0.0.1;dbname=tpa',
-    'user' => 'root',
-    'pass' => 'xjc.123',
+    'user' => 'zfx',
+    'pass' => '111111',
     'init' => array(
         'SET CHARACTER SET utf8',
         'SET NAMES utf8'
@@ -10,8 +10,8 @@ $config['database']['tpa']['master'] = array(
 );
 $config['database']['tpa']['salve'] = array(
     'dsn' => 'mysql:host=127.0.0.1;dbname=tpa',
-    'user' => 'root',
-    'pass' => 'xjc.123',
+    'user' => 'zfx',
+    'pass' => '111111',
     'init' => array(
         'SET CHARACTER SET utf8',
         'SET NAMES utf8'
