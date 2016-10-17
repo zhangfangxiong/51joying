@@ -25,14 +25,14 @@ class Payment_Controller_Weixin extends Index_Controller_Base
     private function logPay($aParam)
     {
         $aData = array(
-            'iPayType' => Admin_Model_Finance::TYPE_WEIXIN,
+            'iPayType' => Tpa_Model_Admin_Finance::TYPE_WEIXIN,
             'sPayAccount' => $aParam['openid'],
             'sPayOrderID' => $aParam['transaction_id'],
             'sMyOrderID' => $aParam['attach'],
             'sData' => json_encode($aParam, JSON_UNESCAPED_UNICODE),
             'iStatus' => 0
         );
-        return Admin_Model_Pay::logPay($aData);
+        return Tpa_Model_Admin_Pay::logPay($aData);
     }
     
     /**
@@ -51,11 +51,11 @@ class Payment_Controller_Weixin extends Index_Controller_Base
         $iMoney = $data['total_fee'] / 100;
         $sOrderID = $data['attach'];
         $aArg = array(
-            'iPayType' => Admin_Model_Finance::TYPE_WEIXIN,
+            'iPayType' => Tpa_Model_Admin_Finance::TYPE_WEIXIN,
             'sPayAccount' => $data['openid'],
             'sPayOrder' => $data['transaction_id'],
         );
         
-        return Admin_Model_Finance::pay($sOrderID, $iMoney, $aArg);
+        return Tpa_Model_Admin_Finance::pay($sOrderID, $iMoney, $aArg);
     }
 }

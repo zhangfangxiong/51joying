@@ -32,14 +32,14 @@ class Payment_Controller_Alipay extends Index_Controller_Base
     private function logPay($aParam) 
     {
         $aData = array(
-            'iPayType' => Admin_Model_Finance::TYPE_ALIPAY,
+            'iPayType' => Tpa_Model_Admin_Finance::TYPE_ALIPAY,
             'sPayAccount' => $aParam['buyer_email'],
             'sPayOrderID' => $aParam['trade_no'],
             'sMyOrderID' => $aParam['out_trade_no'],
             'sData' => json_encode($aParam, JSON_UNESCAPED_UNICODE),
             'iStatus' => 0
         );
-        return Admin_Model_Pay::logPay($aData);
+        return Tpa_Model_Admin_Pay::logPay($aData);
     }
     
     /**
@@ -60,12 +60,12 @@ class Payment_Controller_Alipay extends Index_Controller_Base
             $this->logPay($aParam);
             
             $aArg = array(
-                'iPayType' => Admin_Model_Finance::TYPE_ALIPAY,
+                'iPayType' => Tpa_Model_Admin_Finance::TYPE_ALIPAY,
                 'sPayAccount' => $aParam['buyer_email'],
                 'sPayOrder' => $aParam['trade_no']
             );
             
-            $iPayID = Admin_Model_Finance::pay($iOrderID, $iMoney, $aArg);
+            $iPayID = Tpa_Model_Admin_Finance::pay($iOrderID, $iMoney, $aArg);
             $url = "/payment/pay/success/id/" . $iPayID . '.html';
         } else { // 支付失败
             $url = "/payment/pay/fail/id/" . $aParam['out_trade_no'] . '.html';
@@ -91,12 +91,12 @@ class Payment_Controller_Alipay extends Index_Controller_Base
             $this->logPay($aParam);
             
             $aArg = array(
-                'iPayType' => Admin_Model_Finance::TYPE_ALIPAY,
+                'iPayType' => Tpa_Model_Admin_Finance::TYPE_ALIPAY,
                 'sPayAccount' => $aParam['buyer_email'],
                 'sPayOrder' => $aParam['trade_no']
             );
             
-            Admin_Model_Finance::pay($iOrderID, $iMoney, $aArg);
+            Tpa_Model_Admin_Finance::pay($iOrderID, $iMoney, $aArg);
             echo "success";
         } else { // 支付失败
             echo "fail";

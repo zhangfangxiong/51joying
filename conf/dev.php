@@ -1,6 +1,6 @@
 <?php
-$config['database']['default']['master'] = array(
-    'dsn' => 'mysql:host=127.0.0.1;dbname=sas',
+$config['database']['tpa']['master'] = array(
+    'dsn' => 'mysql:host=127.0.0.1;dbname=tpa',
     'user' => 'root',
     'pass' => 'xjc.123',
     'init' => array(
@@ -8,8 +8,8 @@ $config['database']['default']['master'] = array(
         'SET NAMES utf8'
     )
 );
-$config['database']['default']['salve'] = array(
-    'dsn' => 'mysql:host=127.0.0.1;dbname=sas',
+$config['database']['tpa']['salve'] = array(
+    'dsn' => 'mysql:host=127.0.0.1;dbname=tpa',
     'user' => 'root',
     'pass' => 'xjc.123',
     'init' => array(

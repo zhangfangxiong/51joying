@@ -1,6 +1,6 @@
 <?php
 //登录cookie配置
-$config['cookie']['prefix'] = 'fangjl';
+$config['cookie']['prefix'] = 'tpa';
 $config['cookie']['authkey'] = 'auth';
 $config['cookie']['cryptkey'] = 'kdi##20.83(&%$63ldwl';
 $config['cookie']['ad'] = 'ad';
