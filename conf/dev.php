@@ -18,6 +18,25 @@ $config['database']['tpa']['salve'] = array(
     )
 );
 
+$config['database']['tijian']['master'] = array(
+    'dsn' => 'mysql:host=127.0.0.1;dbname=tijian',
+    'user' => 'zfx',
+    'pass' => '111111',
+    'init' => array(
+        'SET CHARACTER SET utf8',
+        'SET NAMES utf8'
+    )
+);
+$config['database']['tijian']['salve'] = array(
+    'dsn' => 'mysql:host=127.0.0.1;dbname=tijian',
+    'user' => 'zfx',
+    'pass' => '111111',
+    'init' => array(
+        'SET CHARACTER SET utf8',
+        'SET NAMES utf8'
+    )
+);
+
 $config['cache']['bll'] = array(
     array(
         'host' => '127.0.0.1',

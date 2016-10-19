@@ -215,7 +215,7 @@ class Tijian_Controller_Wx_Appointment extends Tijian_Controller_Wx_Base
             }
             return $this->show404('编辑失败!', false);
         } else {
-            $aCitys = Model_City::getPair(['where' => ['iStatus' => Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
+            $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
             $this->assign('aParam', $aParam);
             $this->assign('aProduct', $aProduct);
             $this->assign('aCard', $aCard);
@@ -247,7 +247,7 @@ class Tijian_Controller_Wx_Appointment extends Tijian_Controller_Wx_Base
     public function storeListAction()
     {
         $aParam = $this->getParams();
-        $aCitys = Model_City::getPair(['where' => ['iStatus' => Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
+        $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         $aSupplier = Model_Type::getOption('supplier');
         $this->assign('id', $aParam['id']);
         $this->assign('aSupplier', $aSupplier);
@@ -294,7 +294,7 @@ class Tijian_Controller_Wx_Appointment extends Tijian_Controller_Wx_Base
         }
 
         $aUser = Model_Customer::getDetail($this->iCurrUserID);
-        $aCitys = Model_City::getPair(['where' => ['iStatus' => Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
+        $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         $aSupplier = Model_Type::getOption('supplier');
         $this->assign('aParam', $aParam);
         $this->assign('aProduct', $aProduct);
@@ -853,7 +853,7 @@ class Tijian_Controller_Wx_Appointment extends Tijian_Controller_Wx_Base
             $aItemsDetailParam['iItemID IN'] = array_values($aTmp);
             $aItems = Model_Item::getAll($aItemsDetailParam, true);
         }
-        $aCitys = Model_City::getPair(['where' => ['iStatus' => Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
+        $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         $aSupplier = Model_Type::getOption('supplier');
         $this->assign('aParam', $aParam);
         $this->assign('aSupplier', $aSupplier);
@@ -967,7 +967,7 @@ class Tijian_Controller_Wx_Appointment extends Tijian_Controller_Wx_Base
         }
         //价格显示当前性别的价格
         $aProduct['iPrice'] = $aProduct[$this->aPriceKey[$aCard['iSex']]];
-        $aCitys = Model_City::getPair(['where' => ['iStatus' => Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
+        $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         $aSupplier = Model_Type::getOption('supplier');
         $this->assign('id', $aParam['id']);
         $this->assign('pid', $aParam['pid']);

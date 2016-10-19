@@ -13,8 +13,8 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
         $aUser['aCityID'] = explode(',', $aUser['sCityID']);
         $aUser['aRoleID'] = explode(',', $aUser['sRoleID']);
         $this->assign('aUser', $aUser);
-        $this->assign('aCity', Model_City::getPairCitys());
-        $this->assign('aRole', Model_Role::getPairRoles());
+        $this->assign('aCity', Tijian_Model_City::getPairCitys());
+        $this->assign('aRole', Tijian_Model_Role::getPairRoles());
     }
 
     /**
@@ -87,7 +87,7 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
             if ($aUser['sRoleID'] == - 1) {
                 $aList['aList'][$k]['sRoleName'] = '管理员';
             } else {
-                $aRoleName = Model_Role::getCol(array(
+                $aRoleName = Tijian_Model_Role::getCol(array(
                     'where' => array(
                         'iRoleID IN' => $aUser['sRoleID']
                     )
@@ -97,8 +97,8 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
         }
         $this->assign('aList', $aList);
         $this->assign('aParam', $aParam);
-        $this->assign('aCity', Model_City::getPairCitys());
-        $this->assign('aRole', Model_Role::getPairRoles());
+        $this->assign('aCity', Tijian_Model_City::getPairCitys());
+        $this->assign('aRole', Tijian_Model_Role::getPairRoles());
     }
 
     /**
@@ -132,8 +132,8 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
             $aUser['aCityID'] = explode(',', $aUser['sCityID']);
             $aUser['aRoleID'] = explode(',', $aUser['sRoleID']);
             $this->assign('aUser', $aUser);
-            $this->assign('aCity', Model_City::getPairCitys());
-            $this->assign('aRole', Model_Role::getPairRoles());
+            $this->assign('aCity', Tijian_Model_City::getPairCitys());
+            $this->assign('aRole', Tijian_Model_Role::getPairRoles());
         }
     }
 
@@ -156,8 +156,8 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
                 return $this->showMsg('用户增加失败！', false);
             }
         } else {
-            $this->assign('aCity', Model_City::getPairCitys());
-            $this->assign('aRole', Model_Role::getPairRoles());
+            $this->assign('aCity', Tijian_Model_City::getPairCitys());
+            $this->assign('aRole', Tijian_Model_Role::getPairRoles());
         }
     }
 
@@ -193,7 +193,7 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
         if (! Util_Validate::isLength($sRealName, 2, 20)) {
             return $this->showMsg('真实姓名长度范围为2到20字符！', false);
         }
-        $aCity = Model_City::getPairCitys();
+        $aCity = Tijian_Model_City::getPairCitys();
         if (! isset($aCity[$iCityID])) {
             return $this->showMsg('选择的城市不存在！', false);
         }

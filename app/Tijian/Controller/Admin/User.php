@@ -76,7 +76,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
         $this->assign('aStatus', Model_User::$aStatus);
-        $this->assign('aRole', Model_Role::getPairRoles(Model_User::TYPE_ADMIN, null));
+        $this->assign('aRole', Tijian_Model_Role::getPairRoles(Model_User::TYPE_ADMIN, null));
     }
 
     /**
@@ -183,7 +183,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
                 return $this->showMsg('该用户不存在！', false);
             }
             $this->assign('aUser', $aUser);
-            $this->assign('aRole', Model_Role::getPairRoles(Model_User::TYPE_ADMIN, null));
+            $this->assign('aRole', Tijian_Model_Role::getPairRoles(Model_User::TYPE_ADMIN, null));
         }
     }
 
@@ -920,7 +920,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
             $aUser['iIsCheck'] = Model_User::NOCHECK;
             $aUser['sPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $aUser['sUserName']);
             $aUser['iCreateUserID'] = $aUser['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
-            $aRole = Model_Role::getRoleByName(Model_Role::HRROLENAME, 2);
+            $aRole = Tijian_Model_Role::getRoleByName(Tijian_Model_Role::HRROLENAME, 2);
             if (empty($aRole)) {
                 return $this->showMsg('请先在权限中设置一个hr系统管理员账号', false);
             }

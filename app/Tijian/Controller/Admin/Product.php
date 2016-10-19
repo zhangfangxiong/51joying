@@ -166,7 +166,7 @@ class Tijian_Controller_Admin_Product extends Tijian_Controller_Admin_ItemBase
         }
         $aWhere['iStatus >'] = 0;
         $aSupplier = Model_Type::getOption('supplier');
-        $aCity = Model_City::getPair($aWhere, 'iCityID', 'sCityName');
+        $aCity = Tijian_Model_City::getPair($aWhere, 'iCityID', 'sCityName');
         $this->assign('iType', Model_Product::TYPE_BASE);
         $this->assign('aSupplier', $aSupplier);
         $this->assign('aCity', $aCity);
@@ -457,7 +457,7 @@ class Tijian_Controller_Admin_Product extends Tijian_Controller_Admin_ItemBase
         }
         $aWhere['iStatus >'] = 0;
         $aSupplier = Model_Type::getOption('supplier');
-        $aCity = Model_City::getPair($aWhere, 'iCityID', 'sCityName');
+        $aCity = Tijian_Model_City::getPair($aWhere, 'iCityID', 'sCityName');
         $aType = Yaf_G::getConf('aStoreType', 'product');
         $sTips = '';
 

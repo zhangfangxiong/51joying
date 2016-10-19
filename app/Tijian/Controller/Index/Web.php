@@ -85,8 +85,8 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
 
         //购物车信息
         $aChart = Model_Cart::getCart($this->iCurrUserID);
-        $aCitys = Model_City::getPair([
-            'where' => ['iStatus' => Model_City::STATUS_VALID],
+        $aCitys = Tijian_Model_City::getPair([
+            'where' => ['iStatus' => Tijian_Model_City::STATUS_VALID],
             'order' => 'sPinyin ASC' 
         ], 'iCityID', 'sCityName');
         
@@ -228,7 +228,7 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
 
         //购物车信息
         $aChart = Model_Cart::getCart($this->iCurrUserID);
-        $aCitys = Model_City::getPair(['where' => ['iStatus' => Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
+        $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         
         $iChannelType = 2;
         $aSupplier = Model_Store::getStoreSupplier($aData['iProductID'], $this->aUser['iCreateUserID'], $iChannelType, $this->aUser['iChannelID']);

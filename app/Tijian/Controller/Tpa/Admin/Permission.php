@@ -21,12 +21,12 @@ class Tijian_Controller_Tpa_Admin_Permission extends Tijian_Controller_Tpa_Admin
         if (! empty($sKey)) {
             $aWhere['sPath LIKE'] = '%' . $sKey . '%';
         }
-        $aList = Model_Permission::getList($aWhere, $iPage);
+        $aList = Tijian_Model_Permission::getList($aWhere, $iPage);
         $aMenuID = array();
         foreach ($aList['aList'] as $v) {
             $aMenuID[] = $v['iMenuID'];
         }
-        $aMenuList = Model_Menu::getPKIDList($aMenuID, true);
+        $aMenuList = Tijian_Model_Menu::getPKIDList($aMenuID, true);
         $this->assign('aList', $aList);
         $this->assign('aMenuList', $aMenuList);
     }
@@ -39,7 +39,7 @@ class Tijian_Controller_Tpa_Admin_Permission extends Tijian_Controller_Tpa_Admin
     public function delAction ()
     {
         $iPermissionID = intval($this->getParam('id'));
-        $iRet = Model_Permission::delData($iPermissionID);
+        $iRet = Tijian_Model_Permission::delData($iPermissionID);
         if ($iRet == 1) {
             return $this->showMsg('权限点删除成功！', true);
         } else {
@@ -60,16 +60,16 @@ class Tijian_Controller_Tpa_Admin_Permission extends Tijian_Controller_Tpa_Admin
                 return null;
             }
             $aPermission['iPermissionID'] = intval($this->getParam('iPermissionID'));
-            if (1 == Model_Permission::updData($aPermission)) {
+            if (1 == Tijian_Model_Permission::updData($aPermission)) {
                 return $this->showMsg('权限点信息更新成功！', true);
             } else {
                 return $this->showMsg('权限点信息更新失败！', false);
             }
         } else {
             $iPermissionID = intval($this->getParam('id'));
-            $aPermission = Model_Permission::getDetail($iPermissionID);
+            $aPermission = Tijian_Model_Permission::getDetail($iPermissionID);
             $this->assign('aPermission', $aPermission);
-            $this->assign('aMenuTree', Model_Menu::getMenus());
+            $this->assign('aMenuTree', Tijian_Model_Menu::getMenus());
         }
     }
 
@@ -85,13 +85,13 @@ class Tijian_Controller_Tpa_Admin_Permission extends Tijian_Controller_Tpa_Admin
             if (empty($aPermission)) {
                 return null;
             }
-            if (Model_Permission::addData($aPermission) > 0) {
+            if (Tijian_Model_Permission::addData($aPermission) > 0) {
                 return $this->showMsg('权限点增加成功！', true);
             } else {
                 return $this->showMsg('权限点增加失败！', false);
             }
         } else {
-            $this->assign('aMenuTree', Model_Menu::getMenus());
+            $this->assign('aMenuTree', Tijian_Model_Menu::getMenus());
         }
     }
 
@@ -100,7 +100,7 @@ class Tijian_Controller_Tpa_Admin_Permission extends Tijian_Controller_Tpa_Admin
      */
     public function makeAction ()
     {
-        $aMenuList = Model_Menu::getMenus();
+        $aMenuList = Tijian_Model_Menu::getMenus();
         
         $aCtrClass = array();
         $aMenuAction = array();
@@ -155,7 +155,7 @@ class Tijian_Controller_Tpa_Admin_Permission extends Tijian_Controller_Tpa_Admin
         
         $iCnt = 0;
         foreach ($aPermission as $v) {
-            $aRow = Model_Permission::getRow(array(
+            $aRow = Tijian_Model_Permission::getRow(array(
                 'where' => array(
                     'sPath' => $v[1]
                 )
@@ -166,12 +166,12 @@ class Tijian_Controller_Tpa_Admin_Permission extends Tijian_Controller_Tpa_Admin
                     'sPermissionName' => $v[2],
                     'sPath' => $v[1]
                 );
-                Model_Permission::addData($aRow);
+                Tijian_Model_Permission::addData($aRow);
                 $iCnt ++;
             } else {
                 $aRow['iMenuID'] = $v[0];
                 $aRow['sPermissionName'] = $v[2];
-                Model_Permission::updData($aRow);
+                Tijian_Model_Permission::updData($aRow);
                 $iCnt ++;
             }
         }
@@ -199,7 +199,7 @@ class Tijian_Controller_Tpa_Admin_Permission extends Tijian_Controller_Tpa_Admin
         if (empty($iMenuID)) {
             return $this->showMsg('请选择权限点的归属模块！', false);
         }
-        $iCnt = Model_Menu::getCnt(array(
+        $iCnt = Tijian_Model_Menu::getCnt(array(
             'where' => array(
                 'iParentID' => $iMenuID
             )

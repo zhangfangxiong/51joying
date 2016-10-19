@@ -236,7 +236,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         } else {
             $aWhere['iStatus >'] = 0;
             $aSupplier = Model_Type::getOption('supplier');
-            $aCity = Model_City::getPair($aWhere, 'iCityID', 'sCityName');
+            $aCity = Tijian_Model_City::getPair($aWhere, 'iCityID', 'sCityName');
             $aSex = Yaf_G::getConf('aSex', 'product');
             $this->assign('aProduct', $aProduct);
             $this->assign('aSupplier', $aSupplier);
@@ -309,7 +309,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         }
         $aWhere['iStatus >'] = 0;
         $aSupplier = Model_Type::getOption('supplier');
-        $aCity = Model_City::getPair($aWhere, 'iCityID', 'sCityName');
+        $aCity = Tijian_Model_City::getPair($aWhere, 'iCityID', 'sCityName');
         $aStatus = Yaf_G::getConf('aCodeStatus', 'product');
         $aSex = Yaf_G::getConf('aSex', 'product');
         $this->assign('aProduct', $aProduct);
@@ -463,7 +463,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         }
         $aWhere['iStatus >'] = 0;
         $aSupplier = Model_Type::getOption('supplier');
-        $aCity = Model_City::getPair($aWhere, 'iCityID', 'sCityName');
+        $aCity = Tijian_Model_City::getPair($aWhere, 'iCityID', 'sCityName');
         $aChannel = Yaf_G::getConf('aChannel');
         $aStatus = Yaf_G::getConf('aStatus', 'product');
         $aWhere['iType'] = Model_Product::TYPE_BASE;
@@ -636,7 +636,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $aWhere['iStatus >'] = 0;
             $aSupplier = Model_Type::getOption('supplier');
             $aSupplier = array_flip($aSupplier);
-            $aCity = Model_City::getPair($aWhere, 'sCityName', 'iCityID');
+            $aCity = Tijian_Model_City::getPair($aWhere, 'sCityName', 'iCityID');
             $aSex = Yaf_G::getConf('aSex', 'product');
             $aSex = array_flip($aSex);
             $iTotal = 0;//总共项
@@ -1871,7 +1871,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         }
         $aWhere['iStatus >'] = 0;
         $aSupplier = Model_Type::getOption('supplier');
-        $aCity = Model_City::getPair($aWhere, 'iCityID', 'sCityName');
+        $aCity = Tijian_Model_City::getPair($aWhere, 'iCityID', 'sCityName');
         $aType = Yaf_G::getConf('aStoreType', 'product');
         $sTips = '';
 
@@ -2567,7 +2567,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         }
         $aWhere['iStatus >'] = 0;
         $aSupplier = Model_Type::getOption('supplier');
-        $aCity = Model_City::getPair($aWhere, 'iCityID', 'sCityName');
+        $aCity = Tijian_Model_City::getPair($aWhere, 'iCityID', 'sCityName');
         $aType = Yaf_G::getConf('aStoreType', 'product');
         $sTips = '';
 
@@ -2868,7 +2868,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             return $this->showMsg('产品不存在', false);
         }
         $aWhere['iStatus > '] = 0;
-        $aCity = Model_City::getPair($aWhere, 'iCityID', 'sCityName');
+        $aCity = Tijian_Model_City::getPair($aWhere, 'iCityID', 'sCityName');
         if ($this->isPost()) {
             $aParam = $this->getParams();
             if (empty($aParam['aCityID'])) {

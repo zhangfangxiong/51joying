@@ -16,7 +16,7 @@ class Tijian_Controller_Admin_Order extends Tijian_Controller_Admin_Base
 
         $this->assign('aData', $aList);
         $this->assign('aSupplier', Model_Type::getOption('supplier'));
-        $this->assign('aCity', Model_City::getPairCitys(0));
+        $this->assign('aCity', Tijian_Model_City::getPairCitys(0));
         $this->assign('aPreStatus', Util_Common::getConf('prestatus', 'physical'));
         $this->assign('aStatus', Util_Common::getConf('status', 'physical'));
         $this->assign('aPType', Util_Common::getConf('type', 'physical'));
@@ -99,7 +99,7 @@ class Tijian_Controller_Admin_Order extends Tijian_Controller_Admin_Base
 //var_dump($aList);exit;
         $this->assign('aData', $aList);
         $this->assign('aSupplier', Model_Type::getOption('supplier'));
-        $this->assign('aCity', Model_City::getPairCitys(0));
+        $this->assign('aCity', Tijian_Model_City::getPairCitys(0));
         $this->assign('aPreStatus', Util_Common::getConf('prestatus', 'physical'));
         $this->assign('aStatus', Util_Common::getConf('status', 'physical'));
         $this->assign('aPType', Util_Common::getConf('type', 'physical'));
@@ -126,7 +126,7 @@ class Tijian_Controller_Admin_Order extends Tijian_Controller_Admin_Base
 //var_dump($aList);exit;
         $this->assign('aData', $aList);
         $this->assign('aSupplier', Model_Type::getOption('supplier'));
-        $this->assign('aCity', Model_City::getPairCitys(0));
+        $this->assign('aCity', Tijian_Model_City::getPairCitys(0));
         $this->assign('aPreStatus', Util_Common::getConf('prestatus', 'physical'));
         $this->assign('aStatus', Util_Common::getConf('status', 'physical'));
         $this->assign('aPType', Util_Common::getConf('type', 'physical'));

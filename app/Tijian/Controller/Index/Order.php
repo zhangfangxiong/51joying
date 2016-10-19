@@ -463,7 +463,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
         }
 
         $aUser = Model_Customer::getDetail($this->iCurrUserID);
-        $aCitys = Model_City::getPair(['where' => ['iStatus' => Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
+        $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         if ($upid) {
         	$spid = $upid;
         } else {

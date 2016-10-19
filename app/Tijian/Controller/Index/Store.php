@@ -59,8 +59,8 @@ class Tijian_Controller_Index_Store extends Tijian_Controller_Index_Base
         }
 
         $aRegion = Model_Region::getPair(['where' => ['iStatus' => 1]], 'iRegionID', 'sRegionName');
-        $aCity = Model_City::getPair([
-                'where' => ['iStatus' => Model_City::STATUS_VALID],
+        $aCity = Tijian_Model_City::getPair([
+                'where' => ['iStatus' => Tijian_Model_City::STATUS_VALID],
                 'order' => 'sPinyin ASC'
             ], 'iCityID', 'sCityName');
         $aCreditLevel = Yaf_G::getConf('aShopLevel', 'store');
@@ -114,8 +114,8 @@ class Tijian_Controller_Index_Store extends Tijian_Controller_Index_Base
         $aStore = Model_Store::getPair($aWhere, 'iStoreID', 'sName');
 
         $aRegion = Model_Region::getPair(['where' => ['iStatus' => 1]], 'iRegionID', 'sRegionName');
-        $aCity = Model_City::getPair([
-                'where' => ['iStatus' => Model_City::STATUS_VALID],
+        $aCity = Tijian_Model_City::getPair([
+                'where' => ['iStatus' => Tijian_Model_City::STATUS_VALID],
                 'order' => 'sPinyin ASC'
             ], 'iCityID', 'sCityName');
         if (empty($aStore)) {
@@ -148,8 +148,8 @@ class Tijian_Controller_Index_Store extends Tijian_Controller_Index_Base
         if (empty($aProduct)) {
             return $this->show404('产品不存在', false);
         }
-        $aCitys = Model_City::getPair([
-                'where' => ['iStatus' => Model_City::STATUS_VALID],
+        $aCitys = Tijian_Model_City::getPair([
+                'where' => ['iStatus' => Tijian_Model_City::STATUS_VALID],
                 'order' => 'sPinyin ASC'    
             ], 'iCityID', 'sCityName');
         $aSupplier = Model_Type::getOption('supplier');
@@ -206,8 +206,8 @@ class Tijian_Controller_Index_Store extends Tijian_Controller_Index_Base
         }
         //购物车信息
         $aChart = Model_Cart::getCart($this->iCurrUserID);
-        $aCitys = Model_City::getPair([
-                'where' => ['iStatus' => Model_City::STATUS_VALID],
+        $aCitys = Tijian_Model_City::getPair([
+                'where' => ['iStatus' => Tijian_Model_City::STATUS_VALID],
                 'order' => 'sPinyin ASC'
             ], 'iCityID', 'sCityName');
         $aSupplier = Model_Type::getOption('supplier');

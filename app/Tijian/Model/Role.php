@@ -4,6 +4,8 @@ class Tijian_Model_Role extends Tijian_Model_Base
 {
 
     const TABLE_NAME = 't_role';
+    const PK_FIELD = 'iRoleID';
+
 
     static $aStatus = array(//是否启用
         1=>'是',

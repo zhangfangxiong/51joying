@@ -189,7 +189,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
                 return $this->showMsg($this->_aResult, true);
             }
 
-            $aRole = Model_Role::getRoleByName(Model_Role::HRROLENAME, 2);
+            $aRole = Tijian_Model_Role::getRoleByName(Tijian_Model_Role::HRROLENAME, 2);
             if (empty($aRole)) {
                 $this->_aResult['code'] = 2003;
                 $this->_aResult['msg'] = $this->codeMsg[2003];
@@ -827,7 +827,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
                 $aSupplier = Model_Type::getDetail($iSupplierID);
                 $supplierName = !empty($aSupplier) ? $aSupplier['sTypeName'] : '';
 
-                $acity = Model_City::getDetail(intval($store['iCityID']));
+                $acity = Tijian_Model_City::getDetail(intval($store['iCityID']));
                 $city = !empty($acity) ? $acity['sCityName'] : '';
 
                 $aRegioin = Model_Region::getDetail(intval($store['iRegionID']));
@@ -876,7 +876,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
                 $aSupplier = Model_Type::getDetail($iSupplierID);
                 $supplierName = !empty($aSupplier) ? $aSupplier['sTypeName'] : '';
 
-                $acity = Model_City::getDetail(intval($store['iCityID']));
+                $acity = Tijian_Model_City::getDetail(intval($store['iCityID']));
                 $city = !empty($acity) ? $acity['sCityName'] : '';
 
                 $aRegioin = Model_Region::getDetail(intval($store['iRegionID']));

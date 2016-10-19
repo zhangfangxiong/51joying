@@ -9,7 +9,7 @@ class Tijian_Controller_Tpa_Admin_City extends Tijian_Controller_Tpa_Admin_Base
     public function delAction ()
     {
         $iCityID = intval($this->getParam('id'));
-        $iRet = Model_City::delData($iCityID);
+        $iRet = Tijian_Model_City::delData($iCityID);
         if ($iRet == 1) {
             return $this->showMsg('城市删除成功！', true);
         } else {
@@ -30,7 +30,7 @@ class Tijian_Controller_Tpa_Admin_City extends Tijian_Controller_Tpa_Admin_Base
         $aWhere = array(
             'iStatus' => 1
         );
-        $aList = Model_City::getList($aWhere, $iPage, 'sPinyin ASC');
+        $aList = Tijian_Model_City::getList($aWhere, $iPage, 'sPinyin ASC');
         $this->assign('aList', $aList);
     }
 
@@ -45,23 +45,23 @@ class Tijian_Controller_Tpa_Admin_City extends Tijian_Controller_Tpa_Admin_Base
                 return null;
             }
             $aCity['iCityID'] = intval($this->getParam('iCityID'));
-            $aOldCity = Model_City::getDetail($aCity['iCityID']);
+            $aOldCity = Tijian_Model_City::getDetail($aCity['iCityID']);
             if (empty($aOldCity)) {
                 return $this->showMsg('城市不存在！', false);
             }
             if ($aOldCity['sCityName'] != $aCity['sCityName']) {
-                if (Model_City::getCityByName($aCity['sCityName'])) {
+                if (Tijian_Model_City::getCityByName($aCity['sCityName'])) {
                     return $this->showMsg('城市已经存在！', false);
                 }
             }
-            if (1 == Model_City::updData($aCity)) {
+            if (1 == Tijian_Model_City::updData($aCity)) {
                 return $this->showMsg('城市信息更新成功！', true);
             } else {
                 return $this->showMsg('城市信息更新失败！', false);
             }
         } else {
             $iCityID = intval($this->getParam('id'));
-            $aCity = Model_City::getDetail($iCityID);
+            $aCity = Tijian_Model_City::getDetail($iCityID);
             $this->assign('aCity', $aCity);
         }
     }
@@ -76,10 +76,10 @@ class Tijian_Controller_Tpa_Admin_City extends Tijian_Controller_Tpa_Admin_Base
             if (empty($aCity)) {
                 return null;
             }
-            if (Model_City::getCityByName($aCity['sCityName'])) {
+            if (Tijian_Model_City::getCityByName($aCity['sCityName'])) {
                 return $this->showMsg('城市已经存在！', false);
             }
-            if (Model_City::addData($aCity) > 0) {
+            if (Tijian_Model_City::addData($aCity) > 0) {
                 return $this->showMsg('城市增加成功！', true);
             } else {
                 return $this->showMsg('城市增加失败！', false);

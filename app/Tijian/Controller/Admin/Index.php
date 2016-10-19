@@ -5,15 +5,15 @@ class Tijian_Controller_Admin_Index extends Tijian_Controller_Admin_Base
 
     protected $aLoginType = [
         1=>[
-            'url' => '/admin/login',
+            'url' => '/tijian/admin/index/login',
             'name' => 'admin后台'
         ],
         2=>[
-            'url' => '/admin/hrlogin',
+            'url' => '/tijian/admin/index/hrlogin',
             'name' => 'hr后台'
         ],
         4=>[
-            'url' => '/admin/supplierlogin',
+            'url' => '/tijian/admin/index/supplierlogin',
             'name' => '供应商后台'
         ],
     ];
@@ -24,13 +24,13 @@ class Tijian_Controller_Admin_Index extends Tijian_Controller_Admin_Base
         // 当前用户
         $this->aCurrUser = Util_Cookie::get(Yaf_G::getConf('authkey', 'cookie'));
         if (!$this->aCurrUser) {
-            $sUrl = '/admin/login';
+            $sUrl = $this->aLoginType[1]['url'];
             return $this->redirect($sUrl);
         } else {
             //体检预约数和到检数(只取今年的)
             $aReserveParam['iBookStatus IN'] = [1,2];
             $aReserveParam['iReserveTime >'] = strtotime(date('Y',time()).'0101');
-            $aReseveData = Model_OrderCardProduct::getAll($aReserveParam);
+            $aReseveData = Tijian_Model_OrderCardProduct::getAll($aReserveParam);
             $aReserveMonthData = [];
             $aReserveArriveMonthData = [];
             if (!empty($aReseveData)) {
@@ -95,23 +95,23 @@ class Tijian_Controller_Admin_Index extends Tijian_Controller_Admin_Base
         $sPassword = $this->getParam('password');
         $bRemember = $this->getParam('remember');
         $iType = $this->getParam('type') ? intval($this->getParam('type')) : 1;//可以各个后台登陆
-        $aUser = Model_User::getUserByUserName($sAdminName,$iType);
+        $aUser = Tijian_Model_User::getUserByUserName($sAdminName,$iType);
         if (empty($aUser)) {
             return $this->showMsg('帐号不存在！', false);
         }
-        if ($aUser['iIsCheck'] == Model_User::NOCHECK) {
+        if ($aUser['iIsCheck'] == Tijian_Model_User::NOCHECK) {
             return $this->showMsg('帐号待审核！', false);
         }
-        if ($aUser['iIsCheck'] == Model_User::REFUSE) {
+        if ($aUser['iIsCheck'] == Tijian_Model_User::REFUSE) {
             return $this->showMsg('帐号未审核通过！', false);
         }
-        if ($aUser['iStatus'] == Model_User::STATUS_TYPE_LOCK) {
+        if ($aUser['iStatus'] == Tijian_Model_User::STATUS_TYPE_LOCK) {
             return $this->showMsg('帐号被禁用！', false);
         }
-        if ($aUser['iStatus'] == Model_User::STATUS_TYPE_LEAVE) {
+        if ($aUser['iStatus'] == Tijian_Model_User::STATUS_TYPE_LEAVE) {
             return $this->showMsg('该员工已离职！', false);
         }
-        if ($aUser['iStatus'] == Model_User::STATUS_TYPE_DELETE) {
+        if ($aUser['iStatus'] == Tijian_Model_User::STATUS_TYPE_DELETE) {
             return $this->showMsg('该账号已删除！', false);
         }
         if ($aUser['sPassword'] != md5(Yaf_G::getConf('cryptkey', 'cookie') . $sPassword)) {
@@ -130,16 +130,18 @@ class Tijian_Controller_Admin_Index extends Tijian_Controller_Admin_Base
         }
         Util_Cookie::set(Yaf_G::getConf('authkey', 'cookie'), $aCookie, $expire);
 
-        $aPermissions = Model_Permission::getUserPermissions($aCookie['iUserID']);
+
+        $aPermissions = Tijian_Model_Permission::getUserPermissions($aCookie['iUserID']);
+
 
         if ($iType == 1) {
-            $sUrl = '/admin/';
+            $sUrl = '/tijian/admin/index/index';
         }
         if ($iType == 2) {
-            $sUrl = '/company/employer/index';
+            $sUrl = '/tijian/company/employer/index';
         }
         if ($iType == 4) {
-            $sUrl = '/supplier/order/index';
+            $sUrl = '/tijian/supplier/order/index';
         }
         
         return $this->showMsg([
@@ -156,16 +158,16 @@ class Tijian_Controller_Admin_Index extends Tijian_Controller_Admin_Base
         // 当前用户
         $aCookie = Util_Cookie::get(Yaf_G::getConf('authkey', 'cookie'));
         if (empty($aCookie)) {
-            return $this->redirect('/admin/login');
+            return $this->redirect('/tijian/admin/index/login');
         }
         $this->aCurrUser = $aCookie;
         
         $iCityID = $this->getParam('id');
-        $aCity = Model_City::getDetail($iCityID);
+        $aCity = Tijian_Model_City::getDetail($iCityID);
         if (empty($aCity) || $aCity['iBackendShow'] == 0 || $aCity['iStatus'] == 0) {
             return $this->showMsg('城市不存在或未开放！', false);
         }
-        $aUser = Model_User::getDetail($this->aCurrUser['iUserID']);
+        $aUser = Tijian_Model_User::getDetail($this->aCurrUser['iUserID']);
         $aCityID = explode(',', $aUser['sCityID']);
         if ($aUser['sCityID'] != '-1' && ! in_array($iCityID, $aCityID)) {
             return $this->showMsg('您没有访问该城市的权限，请联系管理员！', false);
@@ -176,7 +178,7 @@ class Tijian_Controller_Admin_Index extends Tijian_Controller_Admin_Base
 
     public function permissionAction ()
     {
-        $aMenuList = Model_Menu::getMenus();
+        $aMenuList = Tijian_Model_Menu::getMenus();
         
         $aCtrClass = array();
         $aMenuAction = array();

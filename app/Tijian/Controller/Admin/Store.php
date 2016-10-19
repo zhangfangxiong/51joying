@@ -20,8 +20,8 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
     {
         parent::actionBefore();
 
-        $aCitys = Model_City::getAll([
-            'where' => [ 'iStatus' => Model_City::STATUS_VALID ],
+        $aCitys = Tijian_Model_City::getAll([
+            'where' => [ 'iStatus' => Tijian_Model_City::STATUS_VALID ],
             'order' => 'sPinyin ASC'
         ]); 
         if ($aCitys) {
@@ -224,7 +224,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
 
         if ($iCityID) {
             $aRegions = Model_Region::getAll(['where' => [ 
-                    'iStatus' => Model_City::STATUS_VALID,
+                    'iStatus' => Tijian_Model_City::STATUS_VALID,
                     'iCityID' => $iCityID
                 ]
             ]);     

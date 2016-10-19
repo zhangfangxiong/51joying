@@ -114,7 +114,7 @@ class Tijian_Controller_Wx_Account extends Tijian_Controller_Wx_Base
     public function userInfoAction()
     {
         $aParam = $this->getParams();
-        $aCitys = Model_City::getPair(['where' => ['iStatus' => Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
+        $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         $aRegionParam['where']['iStatus'] = 1;
         if (!empty($this->aUser['iCityID'])) {
             $aRegionParam['where']['iCityID'] = $this->aUser['iCityID'];
@@ -139,7 +139,7 @@ class Tijian_Controller_Wx_Account extends Tijian_Controller_Wx_Base
             }
             return $this->show404('编辑失败!', false);
         } else {
-            $aCitys = Model_City::getPair(['where' => ['iStatus' => Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
+            $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
             $aRegionParam['where']['iStatus'] = 1;
             if (!empty($this->aUser['iCityID'])) {
                 $aRegionParam['where']['iCityID'] = $this->aUser['iCityID'];

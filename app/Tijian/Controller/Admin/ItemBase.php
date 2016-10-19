@@ -60,9 +60,9 @@ class Tijian_Controller_Admin_ItemBase extends Tijian_Controller_Admin_Base
 				$this->supplierName[$value] = $key;
 			}
 		}
-		$aCity = Model_City::getAll([
+		$aCity = Tijian_Model_City::getAll([
 			'where' => [
-				'iStatus' => Model_City::STATUS_VALID
+				'iStatus' => Tijian_Model_City::STATUS_VALID
 			],
 			'order' => 'sPinyin ASC'
 		]);

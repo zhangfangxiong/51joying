@@ -6,6 +6,8 @@ class Tijian_Model_User extends Tijian_Model_Base
     //所有用户初始密码都定为用户名
 
     const TABLE_NAME = 't_user';
+    const PK_FIELD = 'iUserID';
+
 
     static $aType = array(
         1 => '中盈员工',

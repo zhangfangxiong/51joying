@@ -53,9 +53,9 @@ class Tijian_Controller_Index_Base extends Yaf_Controller
      */
     public function setBasicData ()
     {
-        $aCitys = Model_City::getAll([
+        $aCitys = Tijian_Model_City::getAll([
             'where' => [
-                'iStatus' => Model_City::STATUS_VALID
+                'iStatus' => Tijian_Model_City::STATUS_VALID
             ],
             'order' => 'sPinyin ASC' 
         ]);

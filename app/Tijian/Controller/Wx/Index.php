@@ -84,7 +84,7 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         }
 
         $aRegion = Model_Region::getPair(['where' => ['iStatus' => 1]], 'iRegionID', 'sRegionName');
-        $aCity = Model_City::getPair(['where' => ['iStatus' => Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
+        $aCity = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         $aCreditLevel = Yaf_G::getConf('aShopLevel', 'store');
 
         $aData = Model_Store::getList($aWhere, $iPage);
@@ -136,7 +136,7 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         $aStore = Model_Store::getPair($aWhere, 'iStoreID', 'sName');
 
         $aRegion = Model_Region::getPair(['where' => ['iStatus' => 1]], 'iRegionID', 'sRegionName');
-        $aCity = Model_City::getPair(['where' => ['iStatus' => Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
+        $aCity = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         if (empty($aStore)) {
             $aData['aList'] = [];
             return $this->show404($aData, true);
@@ -167,7 +167,7 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         if (empty($aProduct)) {
             return $this->show404('产品不存在', false);
         }
-        $aCitys = Model_City::getPair(['where' => ['iStatus' => Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
+        $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         $aSupplier = Model_Type::getOption('supplier');
         //购物车信息
         $aChart = Model_Cart::getCart($this->iCurrUserID);
@@ -222,7 +222,7 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         }
         //购物车信息
         $aChart = Model_Cart::getCart($this->iCurrUserID);
-        $aCitys = Model_City::getPair(['where' => ['iStatus' => Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
+        $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         $aSupplier = Model_Type::getOption('supplier');
         $this->assign('aSupplier', $aSupplier);
         $this->assign('aCitys', $aCitys);

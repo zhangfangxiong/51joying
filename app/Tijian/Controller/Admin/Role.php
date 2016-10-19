@@ -17,7 +17,7 @@ class Tijian_Controller_Admin_Role extends Tijian_Controller_Admin_Base
     public function delAction()
     {
         $iRoleID = intval($this->getParam('id'));
-        $iRet = Model_Role::delData($iRoleID);
+        $iRet = Tijian_Model_Role::delData($iRoleID);
         if ($iRet == 1) {
             return $this->showMsg('角色删除成功！', true);
         } else {
@@ -45,13 +45,13 @@ class Tijian_Controller_Admin_Role extends Tijian_Controller_Admin_Base
         if (!empty($aParam['sRoleName'])) {
             $aWhere['sRoleName LIKE'] = '%'.$aParam['sRoleName'].'%';
         }
-        $aData = Model_Role::getList($aWhere, $iPage, '', 20);
-        $this->assign('sHrRoleName', Model_Role::HRROLENAME);
-        $this->assign('sSupplierRoleName', Model_Role::SUPPLIERROLENAME);
+        $aData = Tijian_Model_Role::getList($aWhere, $iPage, '', 20);
+        $this->assign('sHrRoleName', Tijian_Model_Role::HRROLENAME);
+        $this->assign('sSupplierRoleName', Tijian_Model_Role::SUPPLIERROLENAME);
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
         $this->assign('aType', Model_User::$aType);
-        $this->assign('aStatus', Model_Role::$aStatus);
+        $this->assign('aStatus', Tijian_Model_Role::$aStatus);
     }
 
     /**
@@ -70,22 +70,22 @@ class Tijian_Controller_Admin_Role extends Tijian_Controller_Admin_Base
             $aRole['iRoleID'] = intval($this->getParam('iRoleID'));
             $aRole['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
             $aRole['sLastUpDataUserName'] = $this->aCurrUser['sUserName'];
-            if (1 == Model_Role::updData($aRole)) {
+            if (1 == Tijian_Model_Role::updData($aRole)) {
                 return $this->showMsg('角色信息更新成功！', true);
             } else {
                 return $this->showMsg('角色信息更新失败！', false);
             }
         } else {
             $iRoleID = intval($this->getParam('id'));
-            $aRole = Model_Role::getDetail($iRoleID);
+            $aRole = Tijian_Model_Role::getDetail($iRoleID);
             $aRole['aPermission'] = explode(',', $aRole['sPermission']);
             $aRole['aModule'] = explode(',', $aRole['sModule']);
             $this->assign('aRole', $aRole);
-            $this->assign('aPermissionList', Model_Permission::getAllPermissions());
-            $this->assign('aMenuList', Model_Menu::getMenus());
+            $this->assign('aPermissionList', Tijian_Model_Permission::getAllPermissions());
+            $this->assign('aMenuList', Tijian_Model_Menu::getMenus());
             $this->assign('aType', Model_User::$aType);
             $this->assign('iType', !empty($iType) ? $iType : $aRole['iType']);
-            $this->assign('aStatus', Model_Role::$aStatus);
+            $this->assign('aStatus', Tijian_Model_Role::$aStatus);
         }
     }
 
@@ -105,17 +105,17 @@ class Tijian_Controller_Admin_Role extends Tijian_Controller_Admin_Base
             }
             $aRole['iCreateUserID'] = $this->aCurrUser['iUserID'];
             $aRole['sCreateUserName'] = $aRole['sLastUpDataUserName'] = $this->aCurrUser['sUserName'];
-            if (Model_Role::addData($aRole) > 0) {
+            if (Tijian_Model_Role::addData($aRole) > 0) {
                 return $this->showMsg('角色增加成功！', true);
             } else {
                 return $this->showMsg('角色增加失败！', false);
             }
         } else {
-            $this->assign('aPermissionList', Model_Permission::getAllPermissions());
-            $this->assign('aMenuList', Model_Menu::getMenus());
+            $this->assign('aPermissionList', Tijian_Model_Permission::getAllPermissions());
+            $this->assign('aMenuList', Tijian_Model_Menu::getMenus());
             $this->assign('aType', Model_User::$aType);
             $this->assign('iType', $iType);
-            $this->assign('aStatus', Model_Role::$aStatus);
+            $this->assign('aStatus', Tijian_Model_Role::$aStatus);
         }
     }
 
@@ -136,7 +136,7 @@ class Tijian_Controller_Admin_Role extends Tijian_Controller_Admin_Base
             return $this->showMsg('角色名长度范围为2到20个字！', false);
         }
 
-        if ($sType == 'add' && Model_Role::getRoleByName($sRoleName, $iType)) {
+        if ($sType == 'add' && Tijian_Model_Role::getRoleByName($sRoleName, $iType)) {
             return $this->showMsg('该权限名已存在！', false);
         }
 

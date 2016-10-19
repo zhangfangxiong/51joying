@@ -97,7 +97,7 @@ class Tijian_Controller_Tpa_Admin_Index extends Tijian_Controller_Tpa_Admin_Base
 
     public function permissionAction ()
     {
-        $aMenuList = Model_Menu::getMenus();
+        $aMenuList = Tijian_Model_Menu::getMenus();
         
         $aCtrClass = array();
         $aMenuAction = array();
