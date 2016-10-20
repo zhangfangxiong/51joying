@@ -8,7 +8,7 @@ class Tijian_Controller_Admin_Message extends Tijian_Controller_Admin_Base {
 	 */
 	public function __call($sMethod, $aArg) {
 		$sClass = str_replace ( 'Action', '', $sMethod );
-		$aClass = Model_Message::getClass ( $sClass );
+		$aClass = Tijian_Model_Message::getClass ( $sClass );
 		if (empty ( $aClass )) {
 			parent::__call ( $sMethod, $aArg );
 			return false;
@@ -24,7 +24,7 @@ class Tijian_Controller_Admin_Message extends Tijian_Controller_Admin_Base {
 		if (empty ( $sClass )) {
 			$sClass = $this->getParam ( 'class', '' );
 		}
-		$aClass = Model_Message::getClass ( $sClass );
+		$aClass = Tijian_Model_Message::getClass ( $sClass );
 		
 		$aParam = array ();
 		$aParam ['sClass'] = $aClass ['sClass'];
@@ -40,7 +40,7 @@ class Tijian_Controller_Admin_Message extends Tijian_Controller_Admin_Base {
 			$sOrder = $aParam ['sOrder'];
 		}
 		$aParam ['sOrder'] = $sOrder;
-		$aList = Model_Message::getPageList ( $aParam, $iPage, $sOrder );
+		$aList = Tijian_Model_Message::getPageList ( $aParam, $iPage, $sOrder );
 		$this->assign ( 'aParam', $aParam );
 		$this->assign ( 'aList', $aList );
 		$this->assign ( 'aClass', $aClass );
@@ -68,7 +68,7 @@ class Tijian_Controller_Admin_Message extends Tijian_Controller_Admin_Base {
 		$aMessageID = explode ( ',', $sMessageID );
 		$fail_message = array ();
 		foreach ( $aMessageID as $iMessageID ) {
-			$iRet = Model_Message::updData ( array (
+			$iRet = Tijian_Model_Message::updData ( array (
 					'iMessageID' => $iMessageID,
 					'iStatus' => $iStatus 
 			) );
@@ -98,8 +98,8 @@ class Tijian_Controller_Admin_Message extends Tijian_Controller_Admin_Base {
 			}
 			
 			$aMessage ['iStatus'] = 1; // 后台回复不需要审核
-			$aClass = Model_Message::getClass ( $aMessage ['sClass'] );
-			if (Model_Message::addData ( $aMessage )) {
+			$aClass = Tijian_Model_Message::getClass ( $aMessage ['sClass'] );
+			if (Tijian_Model_Message::addData ( $aMessage )) {
 				return $this->showMsg ( $aClass ['sClassTitle'] . '信息回复成功！', true );
 			} else {
 				return $this->showMsg ( $aClass ['sClassTitle'] . '信息回复失败！', false );
@@ -108,11 +108,11 @@ class Tijian_Controller_Admin_Message extends Tijian_Controller_Admin_Base {
 			$this->_response->setHeader ( 'Access-Control-Allow-Origin', '*' );
 			
 			$iMessageID = intval ( $this->getParam ( 'id' ) );
-			$aMessage = Model_Message::getDetail ( $iMessageID );
+			$aMessage = Tijian_Model_Message::getDetail ( $iMessageID );
 			
 			$this->assign ( 'aMessage', $aMessage );
-			$this->assign ( 'aAuthor', Model_Message::getAuthors ( $aMessage ['sClass'] ) );
-			$this->assign ( 'aClass', Model_Message::getClass ( $aMessage ['sClass'] ) );
+			$this->assign ( 'aAuthor', Tijian_Model_Message::getAuthors ( $aMessage ['sClass'] ) );
+			$this->assign ( 'aClass', Tijian_Model_Message::getClass ( $aMessage ['sClass'] ) );
 			$this->_assignUrl ( $aMessage ['sClass'] );
 		}
 	}

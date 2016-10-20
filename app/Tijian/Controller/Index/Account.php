@@ -33,18 +33,18 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             if (empty($aParam)) {
                 return null;
             }
-            $aCustomer = Model_Customer::getRow(['where' => [
+            $aCustomer = Tijian_Model_Customer::getRow(['where' => [
                 'sIdentityCard' => $aParam['sIdentityCard'],
-                'iStatus >' => Model_Customer::STATUS_INVALID
+                'iStatus >' => Tijian_Model_Customer::STATUS_INVALID
             ]]);
             if ($aCustomer && $aCustomer['iUserID'] != $this->iCurrUserID) {
                 return $this->showMsg('身份证已被注册', false);
             }
 
-            Model_Customer::updData($aParam);
+            Tijian_Model_Customer::updData($aParam);
             return $this->showMsg('保存成功', true);
         } else {
-            $aEmployee = Model_CustomerNew::getDetail($this->iCurrUserID);
+            $aEmployee = Tijian_Model_CustomerNew::getDetail($this->iCurrUserID);
             $this->assign('aEmployee', $aEmployee);
         }
     }
@@ -66,7 +66,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             if (empty($aParam)) {
                 return null;
             }
-            Model_CustomerNew::updData($aParam);
+            Tijian_Model_CustomerNew::updData($aParam);
             
             return $this->showMsg('修改密码成功', true);
         }
@@ -87,7 +87,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             if (empty($aParam)) {
                 return null;
             }
-            Model_CustomerNew::updData($aParam);
+            Tijian_Model_CustomerNew::updData($aParam);
             
             return $this->showMsg('修改密码成功', true);
         }
@@ -104,15 +104,15 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
                 return null;
             }
             //入库操作
-            $aParam['sUserName'] = Model_CustomerNew::initUserName(Model_CustomerNew::TYPE_USER);
+            $aParam['sUserName'] = Tijian_Model_CustomerNew::initUserName(Tijian_Model_CustomerNew::TYPE_USER);
             $aParam['sPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $param['sPassword']);
             $aParam['iStatus'] = 1;
 
-            $aUser = Model_User::getRow(['sUserName' => 'registers']);
+            $aUser = Tijian_Model_User::getRow(['sUserName' => 'registers']);
             $aParam['iCreateUserID'] = $aUser['iUserID'];
-            $aParam['iUserID'] = Model_CustomerNew::addData($aParam);
+            $aParam['iUserID'] = Tijian_Model_CustomerNew::addData($aParam);
             if ($aParam['iUserID']) {
-                $aCUser = Model_User::getDetail($aUser['iCreateUserID']);
+                $aCUser = Tijian_Model_User::getDetail($aUser['iCreateUserID']);
                 $aParam['iChannelID'] = $aCUser['iChannel'];
                 Util_Cookie::set(Yaf_G::getConf('indexuserkey', 'cookie'), $aParam);
                 return $this->showMsg('注册成功！', true);
@@ -142,10 +142,10 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
                 return $this->showMsg('参数有误', false);
             }
             //更改用户的status状态
-            $aUser = Model_User::getUserByMobile($sPhoneNum,Model_User::TYPE_USER);
+            $aUser = Tijian_Model_User::getUserByMobile($sPhoneNum,Model_User::TYPE_USER);
             if (!empty($aUser)) {
                 $aUser['iStatus'] = 1;
-                $aResult = Model_User::updData($aUser);
+                $aResult = Tijian_Model_User::updData($aUser);
                 if ($aResult) {
                     return $this->showMsg('注册成功！', true);
                 }
@@ -173,7 +173,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
                 return null;
             }
 
-            $aCUser = Model_User::getDetail($aParam['iCreateUserID']);
+            $aCUser = Tijian_Model_User::getDetail($aParam['iCreateUserID']);
             $aParam['iChannelID'] = $aCUser['iChannel'];
             //加cookie操作
             Util_Cookie::set(Yaf_G::getConf('indexuserkey', 'cookie'),$aParam);
@@ -195,7 +195,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
                 return null;
             }
 
-            $aCUser = Model_User::getDetail($aParam['iCreateUserID']);
+            $aCUser = Tijian_Model_User::getDetail($aParam['iCreateUserID']);
             $aParam['iChannelID'] = $aCUser['iChannel'];
             //加cookie操作
             Util_Cookie::set(Yaf_G::getConf('indexuserkey', 'cookie'), $aParam);
@@ -218,7 +218,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
                 return null;
             }
             if ($aCard['iUserID']) { //用户id不为空 则卡已绑定
-                Model_CustomerNew::setCookie($aCard['iUserID']);
+                Tijian_Model_CustomerNew::setCookie($aCard['iUserID']);
                 $url = '/index/record/list/';
             } else {
                 $iOrderID = $aCard['iOrderID'];
@@ -309,7 +309,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             return $this->showMsg('手机验证码不正确！', false);
         }
         //验证身份证是否被注册
-        if (Model_CustomerNew::getUserByIdentityCard($param['sIdentityCard'])) {
+        if (Tijian_Model_CustomerNew::getUserByIdentityCard($param['sIdentityCard'])) {
             return $this->showMsg('该身份证被注册！', false);
         }
 
@@ -333,7 +333,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             return $this->showMsg('请输入密码!', false);
         }
 
-        $aUser = Model_CustomerNew::getUserByUserName($param['sUserName']);
+        $aUser = Tijian_Model_CustomerNew::getUserByUserName($param['sUserName']);
         if (empty($aUser)) {
             return $this->showMsg('用户名不存在!', false);
         }
@@ -366,7 +366,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             return $this->showMsg('验证码错误', false);
         }
 
-        $aUser = Model_CustomerNew::getUserByIdentityCard($param['sIdentityCard']);
+        $aUser = Tijian_Model_CustomerNew::getUserByIdentityCard($param['sIdentityCard']);
         if ($aUser && trim($aUser['sMobile']) == trim($param['sMobile'])) {
             return $aUser;
         } else {
@@ -391,11 +391,11 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             return $this->showMsg('验证码不正确！', false);
         }
 
-        $aCard = Model_OrderCard::getCardByMedicalCard($param['sMedicalCard']);
+        $aCard = Tijian_Model_OrderCard::getCardByMedicalCard($param['sMedicalCard']);
         if (empty($aCard) || !in_array($aCard['iStatus'], [1, 3])) {
             return $this->showMsg('体检卡号不存在!', false);
         }
-        if ($aCard['iOrderType'] == Model_OrderCard::ORDERTYPE_RCARD && $aCard['sEndDate'] < date('Y-m-d', time())) {
+        if ($aCard['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_RCARD && $aCard['sEndDate'] < date('Y-m-d', time())) {
             return $this->showMsg('该体检卡已过有效期，不能使用!', false);   
         }
 
@@ -423,10 +423,10 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             return $this->showMsg('请输入身份证号!', false);
         }
 
-        $aUser = Model_Customer::getRow(['where' => [
+        $aUser = Tijian_Model_Customer::getRow(['where' => [
             'sMobile' => $param['sMobile'],
             'sIdentityCard' => $param['sIdentityCard'],
-            'iStatus >' => Model_Customer::STATUS_INVALID
+            'iStatus >' => Tijian_Model_Customer::STATUS_INVALID
         ]]);
 
         if ($this->aUser['sRealName'] != $aUser['sRealName']) {
@@ -490,7 +490,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
                 return null;
             }
 
-            $aCUser = Model_User::getDetail($aParam['iCreateUserID']);
+            $aCUser = Tijian_Model_User::getDetail($aParam['iCreateUserID']);
             $aParam['iChannelID'] = $aCUser['iChannel'];
             
             //加cookie操作
@@ -513,7 +513,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
                 return null;
             }
 
-            $aCUser = Model_User::getDetail($aParam['iCreateUserID']);
+            $aCUser = Tijian_Model_User::getDetail($aParam['iCreateUserID']);
             $aParam['iChannelID'] = $aCUser['iChannel'];
             
             //加cookie操作
@@ -531,7 +531,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
     public function setcardpwdAction ()
     {
         $id = $this->getParam('id');
-        $aCard = Model_OrderCard::getDetail($id);
+        $aCard = Tijian_Model_OrderCard::getDetail($id);
 
         if ($this->isPost()) {
             $aParam = $this->getParams();
@@ -545,15 +545,15 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
                 return $this->showMsg('密码不一致', false);        
             }
 
-            $card = Model_OrderCard::getCardByCode($aParam['sCardCode']);
+            $card = Tijian_Model_OrderCard::getCardByCode($aParam['sCardCode']);
             if (!$card) {
                 return $this->showMsg('卡号不存在', false);  
             }
 
             $card['sCardPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $aParam['sCardPwd']);
-            Model_OrderCard::updData($card);
+            Tijian_Model_OrderCard::updData($card);
 
-            Model_CustomerNew::setCookie($card['iUserID']);
+            Tijian_Model_CustomerNew::setCookie($card['iUserID']);
             return $this->showMsg('设置成功', true, '/index/record/list/');
         }
         $this->assign('aCard', $aCard);
@@ -566,10 +566,10 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
     public function nosetcardpwdAction ()
     {
         $id = $this->getParam('id');
-        $aCard = Model_OrderCard::getDetail($id);
+        $aCard = Tijian_Model_OrderCard::getDetail($id);
 
         if ($aCard) {
-            Model_CustomerNew::setCookie($aCard['iUserID']);
+            Tijian_Model_CustomerNew::setCookie($aCard['iUserID']);
             return $this->redirect('/index/record/list/');
         } else {
             return  $this->redirect('/index/account/cdlogin/');
@@ -583,7 +583,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
     public function cardpwdAction ()
     {
         $id = $this->getParam('id');
-        $aCard = Model_OrderCard::getDetail($id);
+        $aCard = Tijian_Model_OrderCard::getDetail($id);
 
         if ($this->isPost()) {
             $aParam = $this->getParams();
@@ -594,7 +594,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
                 return $this->showMsg('密码不能为空', false);     
             }
 
-            $card = Model_OrderCard::getCardByCode($aParam['sCardCode']);
+            $card = Tijian_Model_OrderCard::getCardByCode($aParam['sCardCode']);
             if (!$card) {
                 return $this->showMsg('卡号不存在', false);  
             }
@@ -604,7 +604,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
                 return $this->showMsg('密码错误', false);  
             }
 
-            Model_CustomerNew::setCookie($card['iUserID']);
+            Tijian_Model_CustomerNew::setCookie($card['iUserID']);
             return $this->showMsg('登陆成功', true, '/index/record/list/');
         }
         
@@ -618,8 +618,8 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
     public function forgetcardpwdAction ()
     {
         $id = $this->getParam('id');
-        $aCard = Model_OrderCard::getDetail($id);
-        $aCustomer = Model_CustomerNew::getDetail($aCard['iUserID']);
+        $aCard = Tijian_Model_OrderCard::getDetail($id);
+        $aCustomer = Tijian_Model_CustomerNew::getDetail($aCard['iUserID']);
         
         if ($this->isPost()) {
             $aParam = $this->getParams();
@@ -636,13 +636,13 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
                 return $this->showMsg('验证码不正确', false);
             }
 
-            $card = Model_OrderCard::getCardByCode($aParam['sCardCode']);
+            $card = Tijian_Model_OrderCard::getCardByCode($aParam['sCardCode']);
             if (!$card) {
                 return $this->showMsg('卡号不存在', false);  
             }
             
             $card['sCardPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $aParam['sCardPwd']);
-            Model_OrderCard::updData($card);
+            Tijian_Model_OrderCard::updData($card);
 
             return $this->showMsg('修改成功', true, '/index/account/cardpwd/id/' . $card['iAutoID']);
         }
@@ -662,7 +662,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
                 return null;
             }
             if ($aCard['iUserID']) { //用户id不为空 则卡已绑定
-                // Model_CustomerNew::setCookie($aCard['iUserID']);
+                // Tijian_Model_CustomerNew::setCookie($aCard['iUserID']);
                 // $url = '/index/record/list/';
                 if (!$aCard['sCardPassword']) {
                     $url = '/index/account/setcardpwd/id/'.$aCard['iAutoID'];   

@@ -93,14 +93,14 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
         	unset($aParam['page']);
         }
         
-		$aList = Model_Item::getList($aParam, $page, 'iUpdateTime DESC');
+		$aList = Tijian_Model_Item::getList($aParam, $page, 'iUpdateTime DESC');
 		foreach ($aList['aList'] as $key => $value) {
 			$aList['aList'][$key]['sCost'] = 0;
-			$aStore = Model_ProductStore::getAll([
+			$aStore = Tijian_Model_ProductStore::getAll([
 				'where' => [
 					'iProductID' => $value['iItemID'],
 					'iType' => 1,
-					'iStatus' => Model_ProductStore::STATUS_VALID
+					'iStatus' => Tijian_Model_ProductStore::STATUS_VALID
 				]
 			]);
 			$sort = array(  
@@ -135,8 +135,8 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
 				return;
 			}
 
-			$aItem['sCode'] = Model_Item::initItemCode();	
-			$addID = Model_Item::addData($aItem);
+			$aItem['sCode'] = Tijian_Model_Item::initItemCode();
+			$addID = Tijian_Model_Item::addData($aItem);
 			$msg   = $addID ? '新增成功' : '新增失败';	
 			$bool  = $addID ? true : false;					
 
@@ -155,7 +155,7 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
 				return;
 			}
 
-			$update = Model_Item::updData($aItem);
+			$update = Tijian_Model_Item::updData($aItem);
 			$msg    = $update ? '修改成功' : '修改失败';
 			$bool = $update ? true : false;
 			
@@ -166,8 +166,8 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
 				return $this->showMsg('ID'.self::ERROR, false);
 			}
 
-			$aItem = Model_Item::getDetail($iItemID);
-			if (isset($aItem['iStatus']) && $aItem['iStatus'] != Model_Item::STATUS_VALID) {
+			$aItem = Tijian_Model_Item::getDetail($iItemID);
+			if (isset($aItem['iStatus']) && $aItem['iStatus'] != Tijian_Model_Item::STATUS_VALID) {
 				$aItem = [];
 			}
 
@@ -191,9 +191,9 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
      */
     public function setCate($catId)
     {
-    	$aSubCate = Model_Product_Category::getAll(['where' => [
+    	$aSubCate = Tijian_Model_Product_Category::getAll(['where' => [
     		'iParentID' => $catId,
-    		'iStatus' => Model_Product_Category::STATUS_VALID
+    		'iStatus' => Tijian_Model_Product_Category::STATUS_VALID
     	]]);
 
     	$subCat = [];
@@ -236,9 +236,9 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
 			}
 		}
 
-		$row = Model_Item::getRow(['where' => [
+		$row = Tijian_Model_Item::getRow(['where' => [
 			'sName' => $params['sName'],
-			'iStatus' => Model_Item::STATUS_VALID 
+			'iStatus' => Tijian_Model_Item::STATUS_VALID
 		]]);
 		
 		if ($row) {
@@ -268,7 +268,7 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
 				? array_keys($this->getParam('aCity')) : [];
 				$aParam['sCity'] = implode(',', $aParam['aCity']);
 
-				$allStore = Model_Store::getAllStore($aParam);
+				$allStore = Tijian_Model_Store::getAllStore($aParam);
 				if ($allStore) {
 					foreach ($allStore as $key => $value) {
 						$aStoreID[$key] = $value['iStoreID'];
@@ -278,14 +278,14 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
 					$param['iProductID'] = $iProductID;
 
 				}
-				$aStore = Model_ProductStore::getPStoreByIDs($param);
+				$aStore = Tijian_Model_ProductStore::getPStoreByIDs($param);
 				
 				$this->assign('aParam', $aParam);
 	    	} else {    		
-    			$aStore = Model_ProductStore::getAll([
+    			$aStore = Tijian_Model_ProductStore::getAll([
 	    			'where' => [
 	    				'iProductID' => $iProductID,
-						'iStatus' => Model_Store::STATUS_VALID,
+						'iStatus' => Tijian_Model_Store::STATUS_VALID,
 						'iType'   => 1,
 					]
 	    		]);
@@ -321,7 +321,7 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
     		$data[$key] = $params[$key];
     	}
 
-   		$upd = Model_ProductStore::updData($data);
+   		$upd = Tijian_Model_ProductStore::updData($data);
 		$msg = $upd ? '保存成功' : '保存失败';
 		$bool = $upd ? true : false;
 
@@ -351,13 +351,13 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
 				$aParam['iStore'] = 1;
 			}
 
-			$aStore = Model_Store::getAllStore($aParam);
+			$aStore = Tijian_Model_Store::getAllStore($aParam);
 			
 			$this->assign('aParam', $aParam);
     	} else {
-    		$aStore = Model_Store::getAll([
+    		$aStore = Tijian_Model_Store::getAll([
     			'where' => [
-					'iStatus' => Model_Store::STATUS_VALID,
+					'iStatus' => Tijian_Model_Store::STATUS_VALID,
 					'iType'   => 1
 				]
     		]);   		
@@ -415,7 +415,7 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
 					$store['iType'] = 1;
 					$store['iStoreID'] = $value;
 
-					$row = Model_ProductStore::getRow(['where' => $store]);
+					$row = Tijian_Model_ProductStore::getRow(['where' => $store]);
 					if ($store['iStoreID'] && $row) {
 						$store['iAutoID'] = $row['iAutoID'];
 						$store['iCreateUserID'] = $this->aCurrUser['iUserID'];
@@ -459,11 +459,11 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
 		$aParam['sCat'] = implode(',', $aParam['aCat']);
 		$aParam['sKeyword'] = $this->getParam('sKeyword');
 
-		$aList = Model_Item::getPageList($aParam, $page);
+		$aList = Tijian_Model_Item::getPageList($aParam, $page);
 		foreach ($aList['aList'] as $key => $value) {
-			$allName = Model_Itemname::getAll(['where' => [
+			$allName = Tijian_Model_Itemname::getAll(['where' => [
 				'iItemID' => $value['iItemID'],
-				'iStatus' => Model_Itemname::STATUS_VALID
+				'iStatus' => Tijian_Model_Itemname::STATUS_VALID
 			]]);
 			if ($allName) {				
 				foreach ($allName as $k => $val) {
@@ -494,7 +494,7 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
     	if ($params['array']) {    		
     		foreach ($params['array'] as $key => $value) {
     			if (trim($value) && $this->supplier[$key]) {
-    				$row = Model_Itemname::getRow(['where' => [
+    				$row = Tijian_Model_Itemname::getRow(['where' => [
 	    				'iItemID' => $params['itemId'],
 	    				'iSupplierID' => $key,
 	    			]]);
@@ -503,13 +503,13 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
 	    				$data['iItemID'] = $params['itemId'];
     					$data['iSupplierID'] = $key;
     					$data['sItemName'] = $value;
-    					Model_Itemname::addData($data);
+    					Tijian_Model_Itemname::addData($data);
 	    			} else {
 	    				$data['iAutoID'] = $row['iAutoID'];
 	    				$data['iItemID'] = $params['itemId'];
     					$data['iSupplierID'] = $key;
     					$data['sItemName'] = $value;
-	    				Model_Itemname::updData($data);
+	    				Tijian_Model_Itemname::updData($data);
 	    			}
     			}
     		}
@@ -571,13 +571,13 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
 						}
 						$data['iSupplierID'] = $this->supplierName[$supplier[$k]];
 						$data['sItemName'] = $PHPExcel->getActiveSheet()->getCellByColumnAndRow($k, $i)->getValue();
-						$row = Model_Itemname::getRow(['where' => [
+						$row = Tijian_Model_Itemname::getRow(['where' => [
 							'iItemID' => $data['iItemID'],
 							'iSupplierID' => $this->supplierName[$supplier[$k]],
-							'iStatus' => Model_Itemname::STATUS_VALID
+							'iStatus' => Tijian_Model_Itemname::STATUS_VALID
 						]]);
 						if (!$row) {
-							Model_Itemname::addData($data);	
+							Tijian_Model_Itemname::addData($data);
 						}					
 					}					
 				}	

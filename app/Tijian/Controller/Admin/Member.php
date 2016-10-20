@@ -12,7 +12,7 @@ class Tijian_Controller_Admin_Member extends Tijian_Controller_Admin_Base
     public function infoAction ()
     {
         $iUserID = $this->aCurrUser['iUserID'];
-        $aUser = Model_User::getDetail($iUserID);
+        $aUser = Tijian_Model_User::getDetail($iUserID);
         $this->assign('aUser', $aUser);
         $this->assign('aBusiness', Model_Domain::getPairDomain(Model_Domain::TYPE_CO_INDUSTRY)); // 行业
     }
@@ -25,12 +25,12 @@ class Tijian_Controller_Admin_Member extends Tijian_Controller_Admin_Base
         if ($this->isPost()) {
             $sOldPass = $this->getParam('oldpass');
             $sNewPass = $this->getParam('newpass');
-            $aUser = Model_User::getDetail($this->aCurrUser['iUserID']);
+            $aUser = Tijian_Model_User::getDetail($this->aCurrUser['iUserID']);
             $sCryptkey = Yaf_G::getConf('cryptkey', 'cookie');
             if ($aUser['sPassword'] != md5($sCryptkey . $sOldPass)) {
                 return $this->showMsg('旧密码不正确！', false);
             }
-            Model_User::updData(array(
+            Tijian_Model_User::updData(array(
                 'iUserID' => $this->aCurrUser['iUserID'],
                 'sPassword' => md5($sCryptkey . $sNewPass)
             ));
@@ -45,7 +45,7 @@ class Tijian_Controller_Admin_Member extends Tijian_Controller_Admin_Base
     public function delAction ()
     {
         $iUserID = intval($this->getParam('id'));
-        $iRet = Model_User::delData($iUserID);
+        $iRet = Tijian_Model_User::delData($iUserID);
         if ($iRet == 1) {
             return $this->showMsg('用户删除成功！', true);
         } else {
@@ -82,7 +82,7 @@ class Tijian_Controller_Admin_Member extends Tijian_Controller_Admin_Base
             $aWhere['iStatus IN'] = '1,2';
         }
         
-        $aList = Model_User::getList($aWhere, $iPage, $this->getParam('sOrder', ''));
+        $aList = Tijian_Model_User::getList($aWhere, $iPage, $this->getParam('sOrder', ''));
         $this->assign('aList', $aList);
         $this->assign('aParam', $aParam);
         $this->assign('aBusiness', Model_Domain::getPairDomain(Model_Domain::TYPE_CO_INDUSTRY)); // 行业
@@ -99,7 +99,7 @@ class Tijian_Controller_Admin_Member extends Tijian_Controller_Admin_Base
                 return null;
             }
             $aUser['iUserID'] = intval($this->getParam('iUserID'));
-            $aOldUser = Model_User::getDetail($aUser['iUserID']);
+            $aOldUser = Tijian_Model_User::getDetail($aUser['iUserID']);
             if (empty($aOldUser)) {
                 return $this->showMsg('用户不存在！', false);
             }
@@ -108,7 +108,7 @@ class Tijian_Controller_Admin_Member extends Tijian_Controller_Admin_Base
                     return $this->showMsg('用户已经存在！', false);
                 }
             }
-            if (1 == Model_User::updData($aUser)) {
+            if (1 == Tijian_Model_User::updData($aUser)) {
                 
                 // 判断利率是否变化
                 if ($aOldUser['iRate'] != $aUser['iRate']) {
@@ -120,7 +120,7 @@ class Tijian_Controller_Admin_Member extends Tijian_Controller_Admin_Base
             }
         } else {
             $iUserID = intval($this->getParam('id'));
-            $aUser = Model_User::getDetail($iUserID);
+            $aUser = Tijian_Model_User::getDetail($iUserID);
             $this->assign('aUser', $aUser);
             $this->assign('aBusiness', Model_Domain::getPairDomain(Model_Domain::TYPE_CO_INDUSTRY)); // 行业
         }
@@ -180,7 +180,7 @@ class Tijian_Controller_Admin_Member extends Tijian_Controller_Admin_Base
             $aWhere['iStatus IN'] = '1,2';
         }
         
-        $aList = Model_User::getAll(array(
+        $aList = Tijian_Model_User::getAll(array(
             'where' => $aWhere
         ));
         

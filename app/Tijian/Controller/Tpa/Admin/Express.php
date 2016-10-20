@@ -18,7 +18,7 @@ class Tijian_Controller_Tpa_Admin_Express extends Tijian_Controller_Tpa_Admin_Ba
         $where = [];
         if (in_array($iType, [1, 2])) {
             $where['iType'] = $iType;
-            $where['iStatus'] = Model_Tpa_Express::NOPRINT;
+            $where['iStatus'] = Tijian_Model_Tpa_Express::NOPRINT;
         } else {
             if (!empty($aParam['sExpressCode'])) {
                 $where['sExpressCode'] = $aParam['sExpressCode'];
@@ -34,10 +34,10 @@ class Tijian_Controller_Tpa_Admin_Express extends Tijian_Controller_Tpa_Admin_Ba
             if (!empty($aParam['iType'])) {
                 $where['iType'] = $aParam['iType'];
             }
-            $where['iStatus'] = Model_Tpa_Express::HASPRINT;
+            $where['iStatus'] = Tijian_Model_Tpa_Express::HASPRINT;
 
         }
-        $aData = Model_Tpa_Express::getList($where, $iPage,'iUpdateTime DESC');
+        $aData = Tijian_Model_Tpa_Express::getList($where, $iPage,'iUpdateTime DESC');
         $this->assign('aData', $aData);
         $this->assign('aStatus', Yaf_G::getConf('aPrintStatus'));
         $this->assign('aExpressType', Yaf_G::getConf('aExpressType'));
@@ -49,23 +49,23 @@ class Tijian_Controller_Tpa_Admin_Express extends Tijian_Controller_Tpa_Admin_Ba
     public function addAction()
     {
         $aParams = $this->getParams();
-        if (!empty($aParams['type']) && in_array($aParams['type'], [Model_Tpa_Express::TYPESELF, Model_Tpa_Express::TYPEEXPRESS])) {
-            if ($aParams['type'] == Model_Tpa_Express::TYPESELF) {
+        if (!empty($aParams['type']) && in_array($aParams['type'], [Tijian_Model_Tpa_Express::TYPESELF, Tijian_Model_Tpa_Express::TYPEEXPRESS])) {
+            if ($aParams['type'] == Tijian_Model_Tpa_Express::TYPESELF) {
                 if (empty($aParams['sExpressCode'])) {
                     return $this->showMsg('快递单号不能为空！', false);
                 }
-                $aExpress = Model_Tpa_Express::getExpressByCode($aParams['sExpressCode']);
+                $aExpress = Tijian_Model_Tpa_Express::getExpressByCode($aParams['sExpressCode']);
                 if (!empty($aExpress)) {
                     return $this->showMsg('该快递单号已经录入，请检查是否单号输入有误！', false);
                 }
-            } elseif ($aParams['type'] == Model_Tpa_Express::TYPEEXPRESS) {
-                $aParams['sExpressCode'] = Model_Tpa_Express::initExpressCode();
+            } elseif ($aParams['type'] == Tijian_Model_Tpa_Express::TYPEEXPRESS) {
+                $aParams['sExpressCode'] = Tijian_Model_Tpa_Express::initExpressCode();
             } else {
                 return $this->showMsg('非法操作', false);
             }
             $aParams['iType'] = $aParams['type'];
             $aParams['iCreateUserID'] = $aParams['iUpdateUserID'] = $this->aCurrUser['iUserID'];
-            if (Model_Tpa_Express::addData($aParams)) {
+            if (Tijian_Model_Tpa_Express::addData($aParams)) {
                 return $this->showMsg('录入成功！', true);
             }
             return $this->showMsg('录入失败！', false);
@@ -83,7 +83,7 @@ class Tijian_Controller_Tpa_Admin_Express extends Tijian_Controller_Tpa_Admin_Ba
         }
         $aParam['iStatus'] = 0;
         $aParam['iAutoID'] = $iID;
-        if (Model_Tpa_Express::updData($aParam)) {
+        if (Tijian_Model_Tpa_Express::updData($aParam)) {
             return $this->showMsg('删除成功！', true);
         } else {
             return $this->showMsg('删除失败！', false);
@@ -100,7 +100,7 @@ class Tijian_Controller_Tpa_Admin_Express extends Tijian_Controller_Tpa_Admin_Ba
         //调用打印接口
         //todo
         //批量标记为已打印
-        $iResult = Model_Tpa_Express::printExpress($iIDs,$this->aCurrUser['iUserID']);
+        $iResult = Tijian_Model_Tpa_Express::printExpress($iIDs,$this->aCurrUser['iUserID']);
         if ($iResult) {
             return $this->showMsg('打印接口未完成，先假装已经打印成功！', true);
         } else {

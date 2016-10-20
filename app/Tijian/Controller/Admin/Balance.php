@@ -13,7 +13,7 @@ class Tijian_Controller_Admin_Balance extends Tijian_Controller_Admin_Base {
 	 */
 	public function balanceAction() {
 		$iBalanceID = intval ( $this->getParam ( 'id' ) );
-		Model_Balance::updData ( array (
+		Tijian_Model_Balance::updData ( array (
 				'iStatus' => 3,
 				'iBalanceID' => $iBalanceID 
 		) );
@@ -26,9 +26,9 @@ class Tijian_Controller_Admin_Balance extends Tijian_Controller_Admin_Base {
 	 */
 //	public function detailAction() {
 //		$iBalanceID = intval ( $this->getParam ( 'id' ) );
-//		$aBalance = Model_Balance::getDetail ( $iBalanceID );
-//		$aList = Model_BalancePhysical::getPhysicalList ( $iBalanceID );
-//		$aSupplier = Model_Type::getDetail ( $aBalance ['iSupplierID'] );
+//		$aBalance = Tijian_Model_Balance::getDetail ( $iBalanceID );
+//		$aList = Tijian_Model_BalancePhysical::getPhysicalList ( $iBalanceID );
+//		$aSupplier = Tijian_Model_Type::getDetail ( $aBalance ['iSupplierID'] );
 //
 //		$this->assign ( 'aList', $aList );
 //		$this->assign ( 'aBalance', $aBalance );
@@ -43,16 +43,16 @@ class Tijian_Controller_Admin_Balance extends Tijian_Controller_Admin_Base {
 			$this->redirect('/admin/order/balance');
 		}
 
-		$aDetail = Model_Balance::getDetail(intval($id));
+		$aDetail = Tijian_Model_Balance::getDetail(intval($id));
 		$aSupplier = array();
 
-		if ($aDetail && $aDetail['iStatus'] > Model_Balance::STATUS_INVALID) {
-			$aSupplier = Model_Type::getDetail ( $aDetail ['iSupplierID'] );
+		if ($aDetail && $aDetail['iStatus'] > Tijian_Model_Balance::STATUS_INVALID) {
+			$aSupplier = Tijian_Model_Type::getDetail ( $aDetail ['iSupplierID'] );
 
 			$aDetail['iCount'] = 0;
-			$aPhysical = Model_BalancePhysical::getAll(['where' => [
+			$aPhysical = Tijian_Model_BalancePhysical::getAll(['where' => [
 				'iBalanceID' => $id,
-				'iStatus' => Model_BalancePhysical::STATUS_VALID
+				'iStatus' => Tijian_Model_BalancePhysical::STATUS_VALID
 			]]);
 
 			$aProduct = [];
@@ -68,14 +68,14 @@ class Tijian_Controller_Admin_Balance extends Tijian_Controller_Admin_Base {
 					$sPhysicalIDs = implode(',', $aPhysicalIDs);
 					$aDetail['iCount'] = count($aPhysicalIDs);
 
-					$aProduct = Model_OrderCardProduct::getListByPKIDs($sPhysicalIDs);
+					$aProduct = Tijian_Model_OrderCardProduct::getListByPKIDs($sPhysicalIDs);
 					foreach ($aProduct as $k => $val) {
-						$storeInfo = Model_Store::getDetail($val['iStoreID']);
+						$storeInfo = Tijian_Model_Store::getDetail($val['iStoreID']);
 						$aProduct[$k]['sStoreName'] = $storeInfo['sName'];
 						$aProduct[$k]['sCityName'] = $this->aStoreCity[$storeInfo['iCityID']];
 
-						$aCard = Model_OrderCard::getDetail($val['iCardID']);
-						$userInfo = Model_CustomerNew::getDetail($aCard['iUserID']);
+						$aCard = Tijian_Model_OrderCard::getDetail($val['iCardID']);
+						$userInfo = Tijian_Model_CustomerNew::getDetail($aCard['iUserID']);
 						if (!$userInfo) {
 							unset($aProduct[$k]);
 							continue;
@@ -93,22 +93,22 @@ class Tijian_Controller_Admin_Balance extends Tijian_Controller_Admin_Base {
 						$aProduct[$k]['iPersonPrice'] = 0;
 						$aProduct[$k]['sChannel'] = "";
 
-						$storeCodeInfo = Model_StoreCode::getData($val['iProductID'], $val['iStoreID'], $userInfo['iSex']);
+						$storeCodeInfo = Tijian_Model_StoreCode::getData($val['iProductID'], $val['iStoreID'], $userInfo['iSex']);
 						if(!empty($storeCodeInfo)) {
 							$aProduct[$k]['sChannelPrice'] = $storeCodeInfo['sChannelPrice'];
 							$aProduct[$k]['sSupplierPrice'] = $storeCodeInfo['sSupplierPrice'];
 						}
 
 						if(!empty($aCard)) {
-							if( !(2 == $aCard['iCreateUserType'] && Model_OrderCard::PAYTYPE_COMPANY == $aCard['iPayType']) ) {
-								$orderProduct = Model_OrderProduct::getDetail($aProduct['iOPID']);
+							if( !(2 == $aCard['iCreateUserType'] && Tijian_Model_OrderCard::PAYTYPE_COMPANY == $aCard['iPayType']) ) {
+								$orderProduct = Tijian_Model_OrderProduct::getDetail($aProduct['iOPID']);
 								if(!empty($orderProduct)) {
 									$aProduct[$k]['iPersonPrice'] = $orderProduct['sTotalPrice'];
 								}
 							}
 
 							if( 2 == $aCard['iCreateUserType'] && !empty($aCard['iCreateUserID']) ) {
-								$company = Model_User::getDetail($aCard['iCreateUserID']);
+								$company = Tijian_Model_User::getDetail($aCard['iCreateUserID']);
 								if(!empty($company)) {
 									$iChnnel = $company['iChannel'];
 									if(!empty($iChnnel)) {
@@ -138,17 +138,17 @@ class Tijian_Controller_Admin_Balance extends Tijian_Controller_Admin_Base {
 	public function exportAction() {
 		$id = intval($this->getParam('id'));
 
-		$aDetail = Model_Balance::getDetail(intval($id));
+		$aDetail = Tijian_Model_Balance::getDetail(intval($id));
 		$aSupplier = array();
 		$states = Util_Common::getConf ( 'status', 'physical' );
 
-		if ($aDetail && $aDetail['iStatus'] > Model_Balance::STATUS_INVALID) {
-			$aSupplier = Model_Type::getDetail ( $aDetail ['iSupplierID'] );
+		if ($aDetail && $aDetail['iStatus'] > Tijian_Model_Balance::STATUS_INVALID) {
+			$aSupplier = Tijian_Model_Type::getDetail ( $aDetail ['iSupplierID'] );
 
 			$aDetail['iCount'] = 0;
-			$aPhysical = Model_BalancePhysical::getAll(['where' => [
+			$aPhysical = Tijian_Model_BalancePhysical::getAll(['where' => [
 				'iBalanceID' => $id,
-				'iStatus' => Model_BalancePhysical::STATUS_VALID
+				'iStatus' => Tijian_Model_BalancePhysical::STATUS_VALID
 			]]);
 
 			$aProduct = [];
@@ -166,13 +166,13 @@ class Tijian_Controller_Admin_Balance extends Tijian_Controller_Admin_Base {
 					$sPhysicalIDs = implode(',', $aPhysicalIDs);
 					$aDetail['iCount'] = count($aPhysicalIDs);
 
-					$aProduct = Model_OrderCardProduct::getListByPKIDs($sPhysicalIDs);
+					$aProduct = Tijian_Model_OrderCardProduct::getListByPKIDs($sPhysicalIDs);
 
 					foreach ($aProduct as $k => $val) {
-						$storeInfo = Model_Store::getDetail($val['iStoreID']);
+						$storeInfo = Tijian_Model_Store::getDetail($val['iStoreID']);
 
-						$aCard = Model_OrderCard::getDetail($val['iCardID']);
-						$userInfo = Model_CustomerNew::getDetail($aCard['iUserID']);
+						$aCard = Tijian_Model_OrderCard::getDetail($val['iCardID']);
+						$userInfo = Tijian_Model_CustomerNew::getDetail($aCard['iUserID']);
 						if (!$userInfo) {
 							unset($aProduct[$k]);
 							continue;
@@ -193,22 +193,22 @@ class Tijian_Controller_Admin_Balance extends Tijian_Controller_Admin_Base {
 						);
 
 
-						$storeCodeInfo = Model_StoreCode::getData($val['iProductID'], $val['iStoreID'], $userInfo['iSex']);
+						$storeCodeInfo = Tijian_Model_StoreCode::getData($val['iProductID'], $val['iStoreID'], $userInfo['iSex']);
 						if(!empty($storeCodeInfo)) {
 							$item['sAFCost'] = $storeCodeInfo['sChannelPrice'];
 							$item['sSupplierCost'] = $storeCodeInfo['sSupplierPrice'];
 						}
 
 						if(!empty($aCard)) {
-							if( !(2 == $aCard['iCreateUserType'] && Model_OrderCard::PAYTYPE_COMPANY == $aCard['iPayType']) ) {
-								$orderProduct = Model_OrderProduct::getDetail($aProduct['iOPID']);
+							if( !(2 == $aCard['iCreateUserType'] && Tijian_Model_OrderCard::PAYTYPE_COMPANY == $aCard['iPayType']) ) {
+								$orderProduct = Tijian_Model_OrderProduct::getDetail($aProduct['iOPID']);
 								if(!empty($orderProduct)) {
 									$item['iPayMoney'] = $orderProduct['sTotalPrice'];
 								}
 							}
 
 							if( 2 == $aCard['iCreateUserType'] && !empty($aCard['iCreateUserID']) ) {
-								$company = Model_User::getDetail($aCard['iCreateUserID']);
+								$company = Tijian_Model_User::getDetail($aCard['iCreateUserID']);
 								if(!empty($company)) {
 									$iChnnel = $company['iChannel'];
 									if(!empty($iChnnel)) {

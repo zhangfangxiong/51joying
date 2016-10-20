@@ -93,7 +93,7 @@ class Tijian_Model_CustomerNew extends Tijian_Model_Base
     public static function setCookie($iCustomerid)
     {
         $aCustomer = self::getDetail($iCustomerid);
-        $aCUser = Model_User::getDetail($aCustomer['iCreateUserID']);
+        $aCUser = Tijian_Model_User::getDetail($aCustomer['iCreateUserID']);
         $aCustomer['iChannelID'] = $aCUser['iChannel'];
 
         Util_Cookie::delete(Yaf_G::getConf('indexuserkey', 'cookie'));

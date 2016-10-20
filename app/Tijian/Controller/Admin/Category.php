@@ -34,10 +34,10 @@ class Tijian_Controller_Admin_Category extends Tijian_Controller_Admin_Base
 		
 		$where = [
 			'iParentID' => 0,
-    		'iStatus'   => Model_Product_Category::STATUS_VALID        		
+    		'iStatus'   => Tijian_Model_Product_Category::STATUS_VALID
     	];
     	
-    	$aCategory = Model_Product_Category::getAll(['where' => $where]);
+    	$aCategory = Tijian_Model_Product_Category::getAll(['where' => $where]);
     	foreach ($aCategory as $key => $value) {
     		$this->category[$value['iAutoID']] = $value['sCateName'];
     	}
@@ -52,7 +52,7 @@ class Tijian_Controller_Admin_Category extends Tijian_Controller_Admin_Base
     public function listAction ()
     {
     	$where = [
-    		'iStatus' => Model_Product_Category::STATUS_VALID        		
+    		'iStatus' => Tijian_Model_Product_Category::STATUS_VALID
     	];
 
         $parentId = $this->getParam('type') ? intval($this->getParam('type')) : 0;
@@ -63,20 +63,20 @@ class Tijian_Controller_Admin_Category extends Tijian_Controller_Admin_Base
         	$where['iParentID'] = 0;
         }
 
-        $aCategory = Model_Product_Category::getList($where, $page);
+        $aCategory = Tijian_Model_Product_Category::getList($where, $page);
         if ($aCategory['aList']) {
         	foreach ($aCategory['aList'] as $key => $value) {
         		if ($value['iParentID']) {
         			$aCategory['aList'][$key]['sBelong'] = $this->category[$value['iParentID']];
-        			$aCategory['aList'][$key]['iCount'] = Model_Item::getCnt(['where' => [
+        			$aCategory['aList'][$key]['iCount'] = Tijian_Model_Item::getCnt(['where' => [
 	        			'iCat' => $value['iAutoID'],
 	        			'iParentCat' => $value['iParentID'],
-	        			'iStatus' => Model_Item::STATUS_VALID
+	        			'iStatus' => Tijian_Model_Item::STATUS_VALID
 	        		]]);	
         		} else {
-        			$aCategory['aList'][$key]['iCount'] = Model_Item::getCnt(['where' => [
+        			$aCategory['aList'][$key]['iCount'] = Tijian_Model_Item::getCnt(['where' => [
 	        			'iParentCat' => $value['iAutoID'],
-	        			'iStatus' => Model_Item::STATUS_VALID
+	        			'iStatus' => Tijian_Model_Item::STATUS_VALID
 	        		]]);	
         		}        		
         	}
@@ -120,7 +120,7 @@ class Tijian_Controller_Admin_Category extends Tijian_Controller_Admin_Base
 
 			$where = [
 				'sCateName' => $aCate['sCateName'],
-				'iStatus' => Model_Product_Category::STATUS_VALID
+				'iStatus' => Tijian_Model_Product_Category::STATUS_VALID
 			];
 			if ($parentId) {
 	        	$where['iParentID >'] = 0;        	
@@ -128,11 +128,11 @@ class Tijian_Controller_Admin_Category extends Tijian_Controller_Admin_Base
 	        	$where['iParentID'] = 0;
 	        }
 
-			$row  = Model_Product_Category::getRow(['where' => $where]);
+			$row  = Tijian_Model_Product_Category::getRow(['where' => $where]);
 			if ($row) {
 				$msg = '类别已经存在';
 			} else {
-				$addID = Model_Product_Category::addData($aCate);
+				$addID = Tijian_Model_Product_Category::addData($aCate);
 				$msg   = $addID ? '新增成功' : '新增失败';			
 			}
 
@@ -156,7 +156,7 @@ class Tijian_Controller_Admin_Category extends Tijian_Controller_Admin_Base
 
 			$where = [
 				'sCateName' => $aCate['sCateName'],
-				'iStatus' => Model_Product_Category::STATUS_VALID
+				'iStatus' => Tijian_Model_Product_Category::STATUS_VALID
 			];
 			if ($parentId) {
 	        	$where['iParentID >'] = 0;        	
@@ -164,12 +164,12 @@ class Tijian_Controller_Admin_Category extends Tijian_Controller_Admin_Base
 	        	$where['iParentID'] = 0;
 	        }
 
-			$row  = Model_Product_Category::getRow(['where' => $where]);
+			$row  = Tijian_Model_Product_Category::getRow(['where' => $where]);
 			if ($row && $row['iAutoID'] != $aCate['iAutoID']) {
 				$bool = false;
 				$msg  = '类别已经存在';
 			} else {
-				$update = Model_Product_Category::updData($aCate);
+				$update = Tijian_Model_Product_Category::updData($aCate);
 				$msg    = $update ? '修改成功' : '修改失败';	
 				$bool   = $update ? true : false;		
 			}
@@ -181,8 +181,8 @@ class Tijian_Controller_Admin_Category extends Tijian_Controller_Admin_Base
 				return $this->showMsg('类别ID'.self::ERROR, false);
 			}
 
-			$aCate = Model_Product_Category::getDetail($iCateID);
-			if (isset($aCate['iStatus']) && $aCate['iStatus'] != Model_Product_Category::STATUS_VALID) {
+			$aCate = Tijian_Model_Product_Category::getDetail($iCateID);
+			if (isset($aCate['iStatus']) && $aCate['iStatus'] != Tijian_Model_Product_Category::STATUS_VALID) {
 				$aCate = [];
 			}
 
@@ -205,9 +205,9 @@ class Tijian_Controller_Admin_Category extends Tijian_Controller_Admin_Base
     	}
 
     	if (!$type) {
-    		$aCate = Model_Product_Category::getRow([
+    		$aCate = Tijian_Model_Product_Category::getRow([
 	    		'where' => [
-	    			'iStatus' => Model_Product_Category::STATUS_VALID,
+	    			'iStatus' => Tijian_Model_Product_Category::STATUS_VALID,
 	    			'iParentID' => $id
 	    		]
 	    	]);
@@ -218,10 +218,10 @@ class Tijian_Controller_Admin_Category extends Tijian_Controller_Admin_Base
 
     	$where  = [
     		'iAutoID' => $id,
-    		'iStatus' => Model_Product_Category::STATUS_INVALID,
+    		'iStatus' => Tijian_Model_Product_Category::STATUS_INVALID,
     	];
 
-    	$update = Model_Product_Category::updData($where);
+    	$update = Tijian_Model_Product_Category::updData($where);
     	$msg    = $update ? '修改成功' : '修改失败';	
 		$bool   = $update ? true : false;
 
@@ -273,10 +273,10 @@ class Tijian_Controller_Admin_Category extends Tijian_Controller_Admin_Base
 	public function getSubCateAction ()
 	{
 		$iCateID = $this->getParam('iCateID');
-        $aData = Model_Product_Category::getAll([
+        $aData = Tijian_Model_Product_Category::getAll([
         	'where' => [
         		'iParentID' => $iCateID, 
-        		'iStatus' => Model_Product_Category::STATUS_VALID
+        		'iStatus' => Tijian_Model_Product_Category::STATUS_VALID
         	]
         ]);
 
@@ -286,7 +286,7 @@ class Tijian_Controller_Admin_Category extends Tijian_Controller_Admin_Base
 	public function getRemarkAction ()
 	{
 		$iCateID = $this->getParam('iCateID');
-        $aData = Model_Product_Category::getDetail($iCateID);
+        $aData = Tijian_Model_Product_Category::getDetail($iCateID);
 
         return $this->showMsg($aData, true);
 	}

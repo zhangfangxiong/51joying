@@ -24,12 +24,12 @@ class Tijian_Controller_Company_Index extends Tijian_Controller_Company_Base
         //产品购买情况
         
         //公司信息
-        $aCompany = Model_User::getDetail($this->enterpriseId);
+        $aCompany = Tijian_Model_User::getDetail($this->enterpriseId);
         $this->assign('aCompany', $aCompany);
         
         //数据汇总
         $aStatistics = [];
-        $aStatistics['sEmployeeNumber'] = Model_CustomerNew::getCnt(['where' => ['iCreateUserID' => $this->enterpriseId, 'iStatus' => 1]]);
+        $aStatistics['sEmployeeNumber'] = Tijian_Model_CustomerNew::getCnt(['where' => ['iCreateUserID' => $this->enterpriseId, 'iStatus' => 1]]);
         $aStatistics['sMonthlyNumber'] = $this->getMonthly();
         $aStatistics['sSeriousNumber'] = $this->getSerious();
         $this->assign('aStatistics', $aStatistics);        
@@ -58,10 +58,10 @@ class Tijian_Controller_Company_Index extends Tijian_Controller_Company_Base
         isset($params['iStatus']) && ($params['iStatus'] != -1) ? $where['iBookStatus'] = $params['iStatus']
         : '';
 
-        $aEmployees = Model_Company_Company::getAll([
+        $aEmployees = Tijian_Model_Company_Company::getAll([
             'where' => [
                 'iCreateUserID' => $this->enterpriseId,
-                'iStatus >' => Model_Company_Company::STATUS_INVALID
+                'iStatus >' => Tijian_Model_Company_Company::STATUS_INVALID
             ]
         ]);
 
@@ -83,7 +83,7 @@ class Tijian_Controller_Company_Index extends Tijian_Controller_Company_Base
         $sUserIDs = implode(',', $aUserIDs);
         $where1['iUserID IN'] = $sUserIDs;
         
-        $aCard = Model_OrderCard::getAll(['where' => $where1]);
+        $aCard = Tijian_Model_OrderCard::getAll(['where' => $where1]);
         if ($aCard) {
             $aCardID = [];
             foreach ($aCard as $key => $value) {
@@ -97,17 +97,17 @@ class Tijian_Controller_Company_Index extends Tijian_Controller_Company_Base
         }
 
         $where['iCardID IN'] = $sCardID;
-        return Model_OrderCardProduct::getCnt(['where' => $where]);
+        return Tijian_Model_OrderCardProduct::getCnt(['where' => $where]);
     }
 
 
     /** 大病检出预警人数 */
     public function getSerious ()
     {
-        $aEmployees = Model_Company_Company::getAll([
+        $aEmployees = Tijian_Model_Company_Company::getAll([
             'where' => [
                 'iCreateUserID' => $this->enterpriseId,
-                'iStatus >' => Model_Company_Company::STATUS_INVALID
+                'iStatus >' => Tijian_Model_Company_Company::STATUS_INVALID
             ]
         ]);
 
@@ -129,7 +129,7 @@ class Tijian_Controller_Company_Index extends Tijian_Controller_Company_Base
         $sUserIDs = implode(',', $aUserIDs);
         $where1['iUserID IN'] = $sUserIDs;
         
-        $aCard = Model_OrderCard::getAll(['where' => $where1]);
+        $aCard = Tijian_Model_OrderCard::getAll(['where' => $where1]);
         if ($aCard) {
             $aCardID = [];
             foreach ($aCard as $key => $value) {
@@ -144,7 +144,7 @@ class Tijian_Controller_Company_Index extends Tijian_Controller_Company_Base
 
         $where['iIsSerious'] = 1;
         $where['iCardID IN'] = $sCardID;
-        return  Model_OrderCardProduct::getCnt(['where' => $where]);
+        return  Tijian_Model_OrderCardProduct::getCnt(['where' => $where]);
     }
     
 }

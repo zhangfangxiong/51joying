@@ -14,7 +14,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
     public function actionAfter()
     {
         parent::actionAfter();
-        $this->assign('aType', Model_User::$aType);
+        $this->assign('aType', Tijian_Model_User::$aType);
     }
 
     /**
@@ -40,13 +40,13 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         if (!empty($aParam['iStatus'])) {
             $aWhere['iStatus'] = intval($aParam['iStatus']);
         }
-        $aWhere['iType'] = Model_User::TYPE_ADMIN;
-        $aData = Model_User::getList($aWhere, $iPage);
+        $aWhere['iType'] = Tijian_Model_User::TYPE_ADMIN;
+        $aData = Tijian_Model_User::getList($aWhere, $iPage);
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
-        $this->assign('aStatus', Model_User::$aStatus);
-        $this->assign('aDept', Model_Type::getOption('dept'));
-        $this->assign('aJobGradeID', Model_Type::getOption('jobgrade'));
+        $this->assign('aStatus', Tijian_Model_User::$aStatus);
+        $this->assign('aDept', Tijian_Model_Type::getOption('dept'));
+        $this->assign('aJobGradeID', Tijian_Model_Type::getOption('jobgrade'));
     }
     
     /**
@@ -71,11 +71,11 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         if (!empty($aParam['sRealName'])) {
             $aWhere['sRealName LIKE'] = '%' . trim($aParam['sRealName']) . '%';
         }
-        $aWhere['iType'] = Model_User::TYPE_ADMIN;
-        $aData = Model_User::getList($aWhere, $iPage);
+        $aWhere['iType'] = Tijian_Model_User::TYPE_ADMIN;
+        $aData = Tijian_Model_User::getList($aWhere, $iPage);
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
-        $this->assign('aStatus', Model_User::$aStatus);
+        $this->assign('aStatus', Tijian_Model_User::$aStatus);
         $this->assign('aRole', Tijian_Model_Role::getPairRoles(Model_User::TYPE_ADMIN, null));
     }
 
@@ -93,11 +93,11 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         if (!empty($aParam['sRealName'])) {
             $aWhere['sRealName LIKE'] = '%' . trim($aParam['sRealName']) . '%';
         }
-        $aWhere['iType'] = Model_User::TYPE_HR;
-        $aData = Model_User::getList($aWhere, $iPage);
+        $aWhere['iType'] = Tijian_Model_User::TYPE_HR;
+        $aData = Tijian_Model_User::getList($aWhere, $iPage);
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
-        $this->assign('aStatus', Model_User::$aStatus);
+        $this->assign('aStatus', Tijian_Model_User::$aStatus);
     }
 
     /**
@@ -115,24 +115,24 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             $aWhere['sRealName LIKE'] = '%' . trim($aParam['sRealName']) . '%';
         }
         if (!empty($aParam['sCompanyName'])) {
-            $aCompany = Model_User::getUserByRealName(trim($aParam['sCompanyName']), Model_User::TYPE_HR);
+            $aCompany = Tijian_Model_User::getUserByRealName(trim($aParam['sCompanyName']), Tijian_Model_User::TYPE_HR);
             if (!empty($aCompany)) {
                 $aWhere['iCreateUserID'] = $aCompany['iUserID'];
             } else {
                 $aWhere['iCreateUserID'] = -999;//搞个永远搜不到的数
             }
         }
-        $aData = Model_Customer::getList($aWhere, $iPage);
+        $aData = Tijian_Model_Customer::getList($aWhere, $iPage);
         if (!empty($aData['aList'])) {
             $aCompanyStatus = Yaf_G::getConf('aCompanyState');
             foreach ($aData['aList'] as $key => $value) {
                 $aData['aList'][$key]['sCompanyName'] = '';
                 $aCompanyParam['iUserID'] = $value['iUserID'];
                 $aCompanyParam['iStatus >'] = 0;
-                $aCompanys = Model_Company_Company::getPair($aCompanyParam,'iCompanyID','iStatus');
+                $aCompanys = Tijian_Model_Company_Company::getPair($aCompanyParam,'iCompanyID','iStatus');
                 if (!empty($aCompanys)) {
                     foreach ($aCompanys as $k => $v) {
-                        $aCompany = Model_User::getDetail($k);
+                        $aCompany = Tijian_Model_User::getDetail($k);
                         $aData['aList'][$key]['sCompanyName'] .= $aCompany['sRealName']."(<span>".$aCompanyStatus[$v]."</span>)<br>";
                     }
                 }
@@ -140,7 +140,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         }
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
-        $this->assign('aStatus', Model_User::$aStatus);
+        $this->assign('aStatus', Tijian_Model_User::$aStatus);
     }
 
     /**
@@ -150,12 +150,12 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
     public function lockUserAction()
     {
         $iUserID = $this->getParam('id');
-        $aUser = Model_User::getDetail($iUserID);
+        $aUser = Tijian_Model_User::getDetail($iUserID);
         if (empty($aUser)) {
             return $this->showMsg('该用户不存在！', false);
         }
-        $aUser['iStatus'] = ($aUser['iStatus'] == Model_User::STATUS_TYPE_LOCK) ? Model_User::STATUS_TYPE_NORMAL : Model_User::STATUS_TYPE_LOCK;
-        $sType = ($aUser['iStatus'] == Model_User::STATUS_TYPE_LOCK) ? '锁定' : '解锁';
+        $aUser['iStatus'] = ($aUser['iStatus'] == Tijian_Model_User::STATUS_TYPE_LOCK) ? Tijian_Model_User::STATUS_TYPE_NORMAL : Tijian_Model_User::STATUS_TYPE_LOCK;
+        $sType = ($aUser['iStatus'] == Tijian_Model_User::STATUS_TYPE_LOCK) ? '锁定' : '解锁';
         if (Model_User::updData($aUser) > 0) {
             return $this->showMsg('用户' . $sType . '成功！', true);
         } else {
@@ -178,7 +178,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             }
         } else {
             $iUserID = $this->getParam('id');
-            $aUser = Model_User::getDetail($iUserID);
+            $aUser = Tijian_Model_User::getDetail($iUserID);
             if (empty($aUser)) {
                 return $this->showMsg('该用户不存在！', false);
             }
@@ -194,7 +194,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
     public function resetUserPwdAction()
     {
         $iUserID = $this->getParam('id');
-        $aUser = Model_User::getDetail($iUserID);
+        $aUser = Tijian_Model_User::getDetail($iUserID);
         if (empty($aUser)) {
             return $this->showMsg('该用户不存在！', false);
         }
@@ -224,15 +224,15 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             }
         } else {
             $iUserID = $this->getParam('id');
-            $aUser = Model_User::getDetail($iUserID);
+            $aUser = Tijian_Model_User::getDetail($iUserID);
             if (empty($aUser)) {
                 return $this->showMsg('该用户不存在！', false);
             }
             $this->assign('aUser', $aUser);
-            $this->assign('aSex', Model_User::$aSex);
-            $this->assign('aStatus', Model_User::$aStatus);
-            $this->assign('aDept', Model_Type::getOption('dept'));
-            $this->assign('aJobTitleID', Model_Type::getOption('jobgrade'));
+            $this->assign('aSex', Tijian_Model_User::$aSex);
+            $this->assign('aStatus', Tijian_Model_User::$aStatus);
+            $this->assign('aDept', Tijian_Model_Type::getOption('dept'));
+            $this->assign('aJobTitleID', Tijian_Model_Type::getOption('jobgrade'));
         }
     }
 
@@ -246,10 +246,10 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             if (empty($aUser)) {
                 return null;
             }
-            $aUser['sUserName'] = Model_User::initUserName(1);
-            $aUser['iType'] = Model_User::TYPE_ADMIN;
-            $aUser['iStatus'] = Model_User::STATUS_TYPE_NORMAL;
-            $aUser['iIsCheck'] = Model_User::ISCHECK;
+            $aUser['sUserName'] = Tijian_Model_User::initUserName(1);
+            $aUser['iType'] = Tijian_Model_User::TYPE_ADMIN;
+            $aUser['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
+            $aUser['iIsCheck'] = Tijian_Model_User::ISCHECK;
             $aUser['sPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $aUser['sUserName']);
             $aUser['iCreateUserID'] = $aUser['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
             if (Model_User::addData($aUser) > 0) {
@@ -258,10 +258,10 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
                 return $this->showMsg('用户增加失败！', false);
             }
         } else {
-            $this->assign('aSex', Model_User::$aSex);
-            $this->assign('aStatus', Model_User::$aStatus);
-            $this->assign('aDept', Model_Type::getOption('dept'));
-            $this->assign('aJobTitleID', Model_Type::getOption('jobgrade'));
+            $this->assign('aSex', Tijian_Model_User::$aSex);
+            $this->assign('aStatus', Tijian_Model_User::$aStatus);
+            $this->assign('aDept', Tijian_Model_Type::getOption('dept'));
+            $this->assign('aJobTitleID', Tijian_Model_Type::getOption('jobgrade'));
         }
     }
 
@@ -289,14 +289,14 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         }
         //验证邮箱
         if (!empty($aParam['sEmail'])) {
-            $aUser = Model_User::getUserByEmail($aParam['sEmail'], Model_User::TYPE_ADMIN);
+            $aUser = Tijian_Model_User::getUserByEmail($aParam['sEmail'], Tijian_Model_User::TYPE_ADMIN);
             if (!empty($aUser['iUserID']) && $aUser['iUserID'] != $aParam['iUserID']) {
                 return $this->showMsg('该邮箱已被注册！', false);
             }
         }
         //验证手机是否被注册
         if (!empty($aParam['sMobile'])) {
-            $aUser = Model_User::getUserByMobile($aParam['sMobile'], Model_User::TYPE_ADMIN);
+            $aUser = Tijian_Model_User::getUserByMobile($aParam['sMobile'], Tijian_Model_User::TYPE_ADMIN);
             if (!empty($aUser['iUserID']) && $aUser['iUserID'] != $aParam['iUserID']) {
                 return $this->showMsg('该手机已被注册！', false);
             }
@@ -330,17 +330,17 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         if (!empty($aParam['iChannel'])) {
             $aWhere['iChannel'] = intval($aParam['iChannel']);
         }
-        $aWhere['iType'] = Model_User::TYPE_HR;
+        $aWhere['iType'] = Tijian_Model_User::TYPE_HR;
 
-        $aData = Model_User::getList($aWhere, $iPage);
+        $aData = Tijian_Model_User::getList($aWhere, $iPage);
         $aProperty = Yaf_G::getConf('aProperty');
         $aRelationLevel = Yaf_G::getConf('aRelationLevel');
         $aCreditLevel = Yaf_G::getConf('aCreditLevel');
         $aChannel = Yaf_G::getConf('aChannel');
-        $aCustomerManager = Model_User::getPairUser(Model_User::TYPE_ADMIN, Model_User::STATUS_TYPE_NORMAL);
+        $aCustomerManager = Tijian_Model_User::getPairUser(Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
-        $this->assign('aIsCheck', Model_User::$aIsCheck);
+        $this->assign('aIsCheck', Tijian_Model_User::$aIsCheck);
         $this->assign('aProperty', $aProperty);
         $this->assign('aCreditLevel', $aCreditLevel);
         $this->assign('aRelationLevel', $aRelationLevel);
@@ -374,18 +374,18 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         if (!empty($aParam['iChannel'])) {
             $aWhere['iChannel'] = intval($aParam['iChannel']);
         }
-        $aWhere['iType'] = Model_User::TYPE_HR;
-        $aWhere['iIsCheck IN'] = [Model_User::NOCHECK, Model_User::REFUSE];
+        $aWhere['iType'] = Tijian_Model_User::TYPE_HR;
+        $aWhere['iIsCheck IN'] = [Model_User::NOCHECK, Tijian_Model_User::REFUSE];
 
-        $aData = Model_User::getList($aWhere, $iPage);
+        $aData = Tijian_Model_User::getList($aWhere, $iPage);
         $aProperty = Yaf_G::getConf('aProperty');
         $aRelationLevel = Yaf_G::getConf('aRelationLevel');
         $aCreditLevel = Yaf_G::getConf('aCreditLevel');
         $aChannel = Yaf_G::getConf('aChannel');
-        $aCustomerManager = Model_User::getPairUser(Model_User::TYPE_ADMIN, Model_User::STATUS_TYPE_NORMAL);
+        $aCustomerManager = Tijian_Model_User::getPairUser(Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
-        $this->assign('aIsCheck', Model_User::$aIsCheck);
+        $this->assign('aIsCheck', Tijian_Model_User::$aIsCheck);
         $this->assign('aProperty', $aProperty);
         $this->assign('aCreditLevel', $aCreditLevel);
         $this->assign('aRelationLevel', $aRelationLevel);
@@ -419,17 +419,17 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         if (!empty($aParam['iChannel'])) {
             $aWhere['iChannel'] = intval($aParam['iChannel']);
         }
-        $aWhere['iType'] = Model_User::TYPE_HR;
+        $aWhere['iType'] = Tijian_Model_User::TYPE_HR;
         $aWhere['iCustomerManager'] = $this->aCurrUser['iUserID'];
-        $aData = Model_User::getList($aWhere, $iPage);
+        $aData = Tijian_Model_User::getList($aWhere, $iPage);
         $aProperty = Yaf_G::getConf('aProperty');
         $aRelationLevel = Yaf_G::getConf('aRelationLevel');
         $aCreditLevel = Yaf_G::getConf('aCreditLevel');
         $aChannel = Yaf_G::getConf('aChannel');
-        $aCustomerManager = Model_User::getPairUser(Model_User::TYPE_ADMIN, Model_User::STATUS_TYPE_NORMAL);
+        $aCustomerManager = Tijian_Model_User::getPairUser(Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
-        $this->assign('aIsCheck', Model_User::$aIsCheck);
+        $this->assign('aIsCheck', Tijian_Model_User::$aIsCheck);
         $this->assign('aProperty', $aProperty);
         $this->assign('aCreditLevel', $aCreditLevel);
         $this->assign('aRelationLevel', $aRelationLevel);
@@ -445,7 +445,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         $this->_clientMenu(1);
 
         $iUserID = $this->getParam('id');
-        $aUser = Model_User::getDetail($iUserID);
+        $aUser = Tijian_Model_User::getDetail($iUserID);
         if (empty($aUser)) {
             return $this->showMsg('该用户不存在！', false);
         }
@@ -459,11 +459,11 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         $aSendMassage = Yaf_G::getConf('aSendMassage');
         $aLockUser = Yaf_G::getConf('aLockUser');
         $aCanLoadReport = Yaf_G::getConf('aCanLoadReport');
-        $aIsCheck = Model_User::$aIsCheck;
-        $aParam['where']['iStatus'] = Model_User::STATUS_TYPE_NORMAL;
-        $aParam['where']['iType'] = Model_User::TYPE_HR;
-        $aCustomerManager = Model_User::getPairUser(Model_User::TYPE_ADMIN, Model_User::STATUS_TYPE_NORMAL);
-        $aUser['iLockUser'] = ($aUser['iStatus'] == Model_User::STATUS_TYPE_LOCK) ? 1 : 0;
+        $aIsCheck = Tijian_Model_User::$aIsCheck;
+        $aParam['where']['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
+        $aParam['where']['iType'] = Tijian_Model_User::TYPE_HR;
+        $aCustomerManager = Tijian_Model_User::getPairUser(Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
+        $aUser['iLockUser'] = ($aUser['iStatus'] == Tijian_Model_User::STATUS_TYPE_LOCK) ? 1 : 0;
         $this->assign('aIndustry', $aIndustry);
         $this->assign('aProperty', $aProperty);
         $this->assign('aCreditLevel', $aCreditLevel);
@@ -490,13 +490,13 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         if (empty($iUserID)) {
             return $this->showMsg('参数有误！', false);
         }
-        $aUser = Model_User::getDetail($iUserID);
+        $aUser = Tijian_Model_User::getDetail($iUserID);
         if (empty($aUser)) {
             return $this->showMsg('该用户不存在！', false);
         }
         $aParam['iStatus'] = 1;
         $aParam['iUserID'] = $iUserID;
-        $aData = Model_Contecter::getList($aParam, $iPage);
+        $aData = Tijian_Model_Contecter::getList($aParam, $iPage);
         $this->assign('aData', $aData);
         $this->assign('iUserID', $iUserID);
         $this->assign('aUser', $aUser);
@@ -513,7 +513,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         if (empty($iUserID)) {
             return $this->showMsg('参数有误！', false);
         }
-        $aUser = Model_User::getDetail($iUserID);
+        $aUser = Tijian_Model_User::getDetail($iUserID);
         if (empty($aUser)) {
             return $this->showMsg('该用户不存在！', false);
         }
@@ -531,7 +531,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         }
         $aParam['iStatus'] = 1;
         $aParam['iUserID'] = $iUserID;
-        $aData = Model_Communicate::getList($aParam, $iPage);
+        $aData = Tijian_Model_Communicate::getList($aParam, $iPage);
         $aCommunicateLevel = Yaf_G::getConf('aCommunicateLevel');
         $aCommunicateResult = Yaf_G::getConf('aCommunicateResult');
         $aParam['iStime'] = $iStime;
@@ -557,7 +557,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         if (empty($iUserID)) {
             return $this->showMsg('参数有误！', false);
         }
-        $aUser = Model_User::getDetail($iUserID);
+        $aUser = Tijian_Model_User::getDetail($iUserID);
         if (empty($aUser)) {
             return $this->showMsg('员工不存在！', false);
         }
@@ -566,7 +566,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         }
         $aParam['iStatus'] = 1;
 
-        $aProductChannel = Model_ProductChannel::getProductByChannel($aUser['iChannel']);
+        $aProductChannel = Tijian_Model_ProductChannel::getProductByChannel($aUser['iChannel']);
         if (!empty($aProductChannel)) {
             $aTmp = [];
             foreach ($aProductChannel as $key => $value) {
@@ -575,7 +575,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             $aParam['iProductID IN'] = $aTmp;
         }
         if (!empty($aParam['iProductID IN'])) {
-            $aData = Model_Product::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
+            $aData = Tijian_Model_Product::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
         } else {
             $aData['aList'] = [];
         }
@@ -588,8 +588,8 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
                     unset($aData['aList'][$key]);
                 }
                 //基础产品单项数目
-                $aProductItem = Model_ProductItem::getProductItems($value['iParentID'], Model_ProductItem::BASEPRODUCT,1,true);
-                $aHasStore = Model_ProductStore::getProductStores($value['iProductID'], Model_ProductStore::EXPANDPRODUCT);
+                $aProductItem = Tijian_Model_ProductItem::getProductItems($value['iParentID'], Tijian_Model_ProductItem::BASEPRODUCT,1,true);
+                $aHasStore = Tijian_Model_ProductStore::getProductStores($value['iProductID'], Tijian_Model_ProductStore::EXPANDPRODUCT);
                 $aData['aList'][$key]['iStoreNum'] = count($aHasStore);
                 $aData['aList'][$key]['iCityNum'] = 0;
                 $aData['aList'][$key]['iSupplierNum'] = 0;
@@ -599,7 +599,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
                 $aData['aList'][$key]['iIndivUserNum'] = 0;
                 $aData['aList'][$key]['iItemChange'] = '';
                 //统计单项变化
-                $aSonItem = Model_ProductItem::getProductItems($value['iProductID'], Model_ProductItem::EXPANDPRODUCT,1,true);
+                $aSonItem = Tijian_Model_ProductItem::getProductItems($value['iProductID'], Tijian_Model_ProductItem::EXPANDPRODUCT,1,true);
 
                 //单项交集
                 $aItemIntersect = array_intersect($aProductItem,$aSonItem);
@@ -623,7 +623,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
                 //统计城市和供应商数目
                 if (!empty($aHasStore)) {
                     foreach ($aHasStore as $k => $val) {
-                        $aProductData = Model_Store::getDetail($val['iStoreID']);
+                        $aProductData = Tijian_Model_Store::getDetail($val['iStoreID']);
                         $aHasStore[$key]['aStore'] = $aProductData;
                         //按城市分组
                         $aCityTmp[$aProductData['iCityID']][] = 1;
@@ -635,7 +635,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
                 }
                 //统计渠道和客户数量
                 if (!empty($value['iCanCompany'])) {
-                    $aChannel = Model_ProductChannel::getChannelInfoByProductID($value['iProductID'], Model_ProductChannel::TYPE_COMPANY);
+                    $aChannel = Tijian_Model_ProductChannel::getChannelInfoByProductID($value['iProductID'], Tijian_Model_ProductChannel::TYPE_COMPANY);
                     $aData['aList'][$key]['iComChannelNum'] = count($aChannel);
                     if (!empty($aChannel)) {
                         $iNumTmp = 0;
@@ -645,14 +645,14 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
                             if ($val['iViewRange'] == 0 || $val['iViewRange'] == 2) {//全部和不可见要统计渠道所有支持数目
                                 $aUserParam['where']['iStatus >'] = 0;
                                 $aUserParam['where']['iChannel'] = $val['iChannelID'];
-                                $aChannelUser = Model_User::getCnt($aUserParam);
+                                $aChannelUser = Tijian_Model_User::getCnt($aUserParam);
                                 $iNumTmp += $aChannelUser;
                                 if ($val['iViewRange'] == 2) {
-                                    $aViewList = Model_Product::getUserViewlist($value['iProductID'], Model_ProductChannel::TYPE_COMPANY, $val['iChannelID']);
+                                    $aViewList = Tijian_Model_Product::getUserViewlist($value['iProductID'], Tijian_Model_ProductChannel::TYPE_COMPANY, $val['iChannelID']);
                                     $iNumTmp = $iNumTmp - count($aViewList);
                                 }
                             } else {
-                                $aViewList = Model_Product::getUserViewlist($value['iProductID'], Model_ProductChannel::TYPE_COMPANY, $val['iChannelID']);
+                                $aViewList = Tijian_Model_Product::getUserViewlist($value['iProductID'], Tijian_Model_ProductChannel::TYPE_COMPANY, $val['iChannelID']);
                                 if (!empty($aViewList)) {
                                     $iNumTmp += count($aViewList);
                                 }
@@ -662,7 +662,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
                     }
                 }
                 if (!empty($value['iCanIndividual'])) {
-                    $aChannel = Model_ProductChannel::getChannelInfoByProductID($value['iProductID'], Model_ProductChannel::TYPE_INDIVIDUAL);
+                    $aChannel = Tijian_Model_ProductChannel::getChannelInfoByProductID($value['iProductID'], Tijian_Model_ProductChannel::TYPE_INDIVIDUAL);
                     $aData['aList'][$key]['iIndivChannelNum'] = count($aChannel);
                     if (!empty($aChannel)) {
                         $iNumTmp = 0;
@@ -672,14 +672,14 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
                             if ($val['iViewRange'] == 0 || $val['iViewRange'] == 2) {//全部和不可见要统计渠道所有支持数目
                                 $aUserParam['where']['iStatus >'] = 0;
                                 $aUserParam['where']['iChannel'] = $val['iChannelID'];
-                                $aChannelUser = Model_User::getCnt($aUserParam);
+                                $aChannelUser = Tijian_Model_User::getCnt($aUserParam);
                                 $iNumTmp += $aChannelUser;
                                 if ($val['iViewRange'] == 2) {
-                                    $aViewList = Model_Product::getUserViewlist($value['iProductID'], Model_ProductChannel::TYPE_INDIVIDUAL, $val['iChannelID']);
+                                    $aViewList = Tijian_Model_Product::getUserViewlist($value['iProductID'], Tijian_Model_ProductChannel::TYPE_INDIVIDUAL, $val['iChannelID']);
                                     $iNumTmp = $iNumTmp - count($aViewList);
                                 }
                             } else {
-                                $aViewList = Model_Product::getUserViewlist($value['iProductID'], Model_ProductChannel::TYPE_INDIVIDUAL, $val['iChannelID']);
+                                $aViewList = Tijian_Model_Product::getUserViewlist($value['iProductID'], Tijian_Model_ProductChannel::TYPE_INDIVIDUAL, $val['iChannelID']);
                                 if (!empty($aViewList)) {
                                     $iNumTmp += count($aViewList);
                                 }
@@ -708,7 +708,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         if (empty($iUserID)) {
             return $this->showMsg('参数有误！', false);
         }
-        $aUser = Model_User::getDetail($iUserID);
+        $aUser = Tijian_Model_User::getDetail($iUserID);
         if (empty($aUser)) {
             return $this->showMsg('该用户不存在！', false);
         }
@@ -731,12 +731,12 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             $aWhere['iStatus'] = intval($aParam['iStatus']);
         }
         $aWhere['iCreateUserID'] = $iUserID;
-        $aData = Model_Customer::getList($aWhere, $iPage);
+        $aData = Tijian_Model_Customer::getList($aWhere, $iPage);
         if (!empty($aData['aList'])) {
             foreach ($aData['aList'] as $key => &$value) {
                 $aUserCompanyDataParam['iCompanyID'] = $value['iCreateUserID'];
                 $aUserCompanyDataParam['iUserID'] = $value['iUserID'];
-                $aUserCompanyData = Model_CustomerCompany::getRow($aUserCompanyDataParam);
+                $aUserCompanyData = Tijian_Model_CustomerCompany::getRow($aUserCompanyDataParam);
                 if (!empty($aUserCompanyData)) {
                     $value['iDeptID'] = $aUserCompanyData['iDeptID'];
                     $value['iJobGradeID'] = $aUserCompanyData['iJobGradeID'];
@@ -747,9 +747,9 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         }
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
-        $this->assign('aStatus', Model_User::$aStatus);
+        $this->assign('aStatus', Tijian_Model_User::$aStatus);
         $this->assign('aUser', $aUser);
-        $this->assign('aDepartment', Model_Company_Department::getPairDepartment($iUserID));
+        $this->assign('aDepartment', Tijian_Model_Company_Department::getPairDepartment($iUserID));
     }
 
     /**
@@ -771,7 +771,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
     {
         $page = $this->getParam('page');
         $userId = $this->getParam('id');
-        $aUser = Model_User::getDetail($userId);
+        $aUser = Tijian_Model_User::getDetail($userId);
 
         Util_Cookie::set('iHrID', $userId, '86400 * 7');
         
@@ -784,16 +784,16 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         isset($params['iStatus']) && ($params['iStatus'] != '-1') ? $where['iStatus'] = intval($params['iStatus']) : '';
         $this->assign('aParam', $params);
 
-        // $aProduct = Model_Physical_Product::getAll([
+        // $aProduct = Tijian_Model_Physical_Product::getAll([
         //     'iUserID' => $userId,
-        //     'iType' => Model_Physical_Product::TYPE_PRODUCT_PLAN,
-        //     'iStatus >' => Model_Physical_Product::STATUS_UNCONFIRM
+        //     'iType' => Tijian_Model_Physical_Product::TYPE_PRODUCT_PLAN,
+        //     'iStatus >' => Tijian_Model_Physical_Product::STATUS_UNCONFIRM
         // ]);
 
-        // $aProduct = Model_OrderCard::getAll([
+        // $aProduct = Tijian_Model_OrderCard::getAll([
         //     'iCompanyID' => $userId,
-        //     'iType' => Model_Physical_Product::TYPE_PRODUCT_PLAN,
-        //     'iStatus >' => Model_Physical_Product::STATUS_UNCONFIRM
+        //     'iType' => Tijian_Model_Physical_Product::TYPE_PRODUCT_PLAN,
+        //     'iStatus >' => Tijian_Model_Physical_Product::STATUS_UNCONFIRM
         // ]);
 
         
@@ -818,7 +818,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         //     return null;
         // }
 
-        $aPlan = Model_Physical_Plan::getList($where, $page, 'iUpdateTime Desc');
+        $aPlan = Tijian_Model_Physical_Plan::getList($where, $page, 'iUpdateTime Desc');
         if ($aPlan['aList']) {
             foreach ($aPlan['aList'] as $key => $value) {
                 $aPlan['aList'][$key]['sPublishTime'] = date('Y-m-d H:i:s', $value['iCreateTime']);
@@ -849,7 +849,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         if ($this->_request->isPost()) {
             $aParam = $this->getParams();
             $iUserID = $this->getParam('iUserID');
-            $aUser = Model_User::getDetail($iUserID);
+            $aUser = Tijian_Model_User::getDetail($iUserID);
             if (empty($aUser)) {
                 return $this->showMsg('该用户不存在！', false);
             }
@@ -865,14 +865,14 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         } else {
             $iUserID = $this->getParam('id');
             $iPage = $this->getParam('page') ? intval($this->getParam('page')) : 1;
-            $aUser = Model_User::getDetail($iUserID);
+            $aUser = Tijian_Model_User::getDetail($iUserID);
             if (empty($aUser)) {
                 return $this->showMsg('该用户不存在！', false);
             }
             //联系人相关
             $aParam['iStatus'] = 1;
             $aParam['iUserID'] = $iUserID;
-            $aData = Model_Contecter::getList($aParam, $iPage);
+            $aData = Tijian_Model_Contecter::getList($aParam, $iPage);
             //详情信息相关
             $aIndustry = Yaf_G::getConf('aIndustry');
             $aProperty = Yaf_G::getConf('aProperty');
@@ -884,11 +884,11 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             $aSendMassage = Yaf_G::getConf('aSendMassage');
             $aLockUser = Yaf_G::getConf('aLockUser');
             $aCanLoadReport = Yaf_G::getConf('aCanLoadReport');
-            $aIsCheck = Model_User::$aIsCheck;
-            $aParam['where']['iStatus'] = Model_User::STATUS_TYPE_NORMAL;
-            $aParam['where']['iType'] = Model_User::TYPE_ADMIN;
-            $aCustomerManager = Model_User::getPairUser(Model_User::TYPE_ADMIN, Model_User::STATUS_TYPE_NORMAL);
-            $aUser['iLockUser'] = ($aUser['iStatus'] == Model_User::STATUS_TYPE_LOCK) ? 1 : 0;
+            $aIsCheck = Tijian_Model_User::$aIsCheck;
+            $aParam['where']['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
+            $aParam['where']['iType'] = Tijian_Model_User::TYPE_ADMIN;
+            $aCustomerManager = Tijian_Model_User::getPairUser(Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
+            $aUser['iLockUser'] = ($aUser['iStatus'] == Tijian_Model_User::STATUS_TYPE_LOCK) ? 1 : 0;
             $this->assign('aIndustry', $aIndustry);
             $this->assign('aProperty', $aProperty);
             $this->assign('aCreditLevel', $aCreditLevel);
@@ -916,8 +916,8 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             if (empty($aUser)) {
                 return null;
             }
-            $aUser['iType'] = Model_User::TYPE_HR;
-            $aUser['iIsCheck'] = Model_User::NOCHECK;
+            $aUser['iType'] = Tijian_Model_User::TYPE_HR;
+            $aUser['iIsCheck'] = Tijian_Model_User::NOCHECK;
             $aUser['sPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $aUser['sUserName']);
             $aUser['iCreateUserID'] = $aUser['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
             $aRole = Tijian_Model_Role::getRoleByName(Tijian_Model_Role::HRROLENAME, 2);
@@ -926,9 +926,9 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             }
             $aUser['iRoleID'] = $aRole['iRoleID'];
             if ($aUser['iLockUser'] == 1) {
-                $aUser['iStatus'] = Model_User::STATUS_TYPE_LOCK;
+                $aUser['iStatus'] = Tijian_Model_User::STATUS_TYPE_LOCK;
             } else {
-                $aUser['iStatus'] = Model_User::STATUS_TYPE_NORMAL;
+                $aUser['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
             }
             if (Model_User::addData($aUser) > 0) {
                 return $this->showMsg('用户增加成功！', true);
@@ -946,9 +946,9 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             $aSendMassage = Yaf_G::getConf('aSendMassage');
             $aLockUser = Yaf_G::getConf('aLockUser');
             $aCanLoadReport = Yaf_G::getConf('aCanLoadReport');
-            $aParam['where']['iStatus'] = Model_User::STATUS_TYPE_NORMAL;
-            $aParam['where']['iType'] = Model_User::TYPE_ADMIN;
-            $aCustomerManager = Model_User::getAll($aParam);
+            $aParam['where']['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
+            $aParam['where']['iType'] = Tijian_Model_User::TYPE_ADMIN;
+            $aCustomerManager = Tijian_Model_User::getAll($aParam);
             $this->assign('aIndustry', $aIndustry);
             $this->assign('aProperty', $aProperty);
             $this->assign('aCreditLevel', $aCreditLevel);
@@ -974,9 +974,9 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
                 return null;
             }
             if ($aUser['iLockUser'] == 1) {
-                $aUser['iStatus'] = Model_User::STATUS_TYPE_LOCK;
+                $aUser['iStatus'] = Tijian_Model_User::STATUS_TYPE_LOCK;
             } else {
-                $aUser['iStatus'] = Model_User::STATUS_TYPE_NORMAL;
+                $aUser['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
             }
             $aUser['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
             if (Model_User::updData($aUser) > 0) {
@@ -986,11 +986,11 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             }
         } else {
             $iUserID = $this->getParam('id');
-            $aUser = Model_User::getDetail($iUserID);
+            $aUser = Tijian_Model_User::getDetail($iUserID);
             if (empty($aUser)) {
                 return $this->showMsg('该用户不存在！', false);
             }
-            $aUser['iLockUser'] = ($aUser['iStatus'] == Model_User::STATUS_TYPE_LOCK) ? 1 : 0;
+            $aUser['iLockUser'] = ($aUser['iStatus'] == Tijian_Model_User::STATUS_TYPE_LOCK) ? 1 : 0;
             $aIndustry = Yaf_G::getConf('aIndustry');
             $aProperty = Yaf_G::getConf('aProperty');
             $aCreditLevel = Yaf_G::getConf('aCreditLevel');
@@ -1001,9 +1001,9 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             $aSendMassage = Yaf_G::getConf('aSendMassage');
             $aLockUser = Yaf_G::getConf('aLockUser');
             $aCanLoadReport = Yaf_G::getConf('aCanLoadReport');
-            $aParam['where']['iStatus'] = Model_User::STATUS_TYPE_NORMAL;
-            $aParam['where']['iType'] = Model_User::TYPE_ADMIN;
-            $aCustomerManager = Model_User::getAll($aParam);
+            $aParam['where']['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
+            $aParam['where']['iType'] = Tijian_Model_User::TYPE_ADMIN;
+            $aCustomerManager = Tijian_Model_User::getAll($aParam);
             $this->assign('aIndustry', $aIndustry);
             $this->assign('aProperty', $aProperty);
             $this->assign('aCreditLevel', $aCreditLevel);
@@ -1049,7 +1049,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             if (empty($aParam['iUserID'])) {
                 return $this->showMsg('非法操作！', false);
             }
-            $aUser = Model_User::getDetail($aParam['iUserID']);
+            $aUser = Tijian_Model_User::getDetail($aParam['iUserID']);
             if (empty($aUser)) {
                 return $this->showMsg('用户不存在！', false);
             }
@@ -1059,14 +1059,14 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
         }
         //验证邮箱
         if (!empty($aParam['sEmail'])) {
-            $aUser = Model_User::getUserByEmail($aParam['sEmail'], Model_User::TYPE_HR);
+            $aUser = Tijian_Model_User::getUserByEmail($aParam['sEmail'], Tijian_Model_User::TYPE_HR);
             if (!empty($aUser['iUserID']) && $aUser['iUserID'] != $aParam['iUserID']) {
                 return $this->showMsg('该邮箱已被注册！', false);
             }
         }
         //验证手机是否被注册
         if (!empty($aParam['sMobile'])) {
-            $aUser = Model_User::getUserByMobile($aParam['sMobile'], Model_User::TYPE_HR);
+            $aUser = Tijian_Model_User::getUserByMobile($aParam['sMobile'], Tijian_Model_User::TYPE_HR);
             if (!empty($aUser['iUserID']) && $aUser['iUserID'] != $aParam['iUserID']) {
                 return $this->showMsg('该手机已被注册！', false);
             }
@@ -1074,7 +1074,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
 
         //验证手机是否被注册
         if (!empty($aParam['sUserName'])) {
-            $aUser = Model_User::getUserByUserName($aParam['sUserName'], Model_User::TYPE_HR);
+            $aUser = Tijian_Model_User::getUserByUserName($aParam['sUserName'], Tijian_Model_User::TYPE_HR);
             if (!empty($aUser['iUserID']) && $aUser['iUserID'] != $aParam['iUserID']) {
                 return $this->showMsg('该账号已被注册！', false);
             }
@@ -1098,16 +1098,16 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             
             $where = [
                 'iUserID' => $this->aCurrUser['iUserID'],
-                'iType' => Model_User::TYPE_ADMIN,
-                'iStatus' => Model_User::STATUS_TYPE_NORMAL         
+                'iType' => Tijian_Model_User::TYPE_ADMIN,
+                'iStatus' => Tijian_Model_User::STATUS_TYPE_NORMAL
             ];          
-            $aUser = Model_User::getRow([
+            $aUser = Tijian_Model_User::getRow([
                 'where' => $where
             ]);
             if ($aUser) {
                 if ($aUser['sPassword'] == md5(Yaf_G::getConf('cryptkey', 'cookie') .$sOldPwd)) {
                     $where['sPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $sNewPwd);
-                    $result = Model_User::updData($where);  
+                    $result = Tijian_Model_User::updData($where);
                 }               
             }
 

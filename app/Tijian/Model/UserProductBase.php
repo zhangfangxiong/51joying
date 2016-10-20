@@ -17,7 +17,7 @@ class Tijian_Model_UserProductBase extends Tijian_Model_Base
     public static function getUserProductBase($iProductID,$iUserID,$iChannelType,$iChannelID,$sCode=false)
     {
         if ($sCode) {
-            $aProduct = $aBaseProduct = Model_Product::getProductByCode($iProductID);
+            $aProduct = $aBaseProduct = Tijian_Model_Product::getProductByCode($iProductID);
             $iProductID = $aProduct['iProductID'];
         } else {
             $aProduct = $aBaseProduct =Model_Product::getDetail($iProductID);
@@ -36,7 +36,7 @@ class Tijian_Model_UserProductBase extends Tijian_Model_Base
             'where' => $aWhere
         ));
         if (empty($aUserProductBase)) {//如果没有，读渠道的价格,再读拓展产品价格
-            $ProductChannel = Model_ProductChannel::getData($iProductID,$iChannelType,$iChannelID);
+            $ProductChannel = Tijian_Model_ProductChannel::getData($iProductID,$iChannelType,$iChannelID);
             if (empty($ProductChannel)) {
                 return $aProduct;
             } else {

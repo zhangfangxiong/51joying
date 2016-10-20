@@ -11,7 +11,7 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
     public function __call ($sMethod, $aArg)
     {
         $sClass = str_replace('Action', '', $sMethod);
-        $aClass = Model_Article::getClass($sClass);
+        $aClass = Tijian_Model_Article::getClass($sClass);
         if (empty($aClass)) {
             parent::__call($sMethod, $aArg);
             return false;
@@ -28,7 +28,7 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
         if (empty($sClass)) {
             $sClass = $this->getParam('class', '');
         }
-        $aClass = Model_Article::getClass($sClass);
+        $aClass = Tijian_Model_Article::getClass($sClass);
         $aParam['sClass'] = $aClass['sClass'];
         
         $aParam = array();
@@ -53,11 +53,11 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
             $sOrder = $aParam['sOrder'];
         }
         $aParam['sOrder'] = $sOrder;
-        $aList = Model_Article::getPageList($aParam, $iPage, $sOrder);
+        $aList = Tijian_Model_Article::getPageList($aParam, $iPage, $sOrder);
         $this->assign('aParam', $aParam);
         $this->assign('aList', $aList);
         $this->assign('aClass', $aClass);
-        $this->assign('aCategory', Model_Article::getCategorys($sClass));
+        $this->assign('aCategory', Tijian_Model_Article::getCategorys($sClass));
         $this->_assignUrl($aClass['sClass']);
     }
 
@@ -82,12 +82,12 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
         $fail_article = array();
         $secc_article = array();
         foreach ($iArticleID as $key => $value) {
-            $aArticle[$key] = Model_Article::getDetail($value);
+            $aArticle[$key] = Tijian_Model_Article::getDetail($value);
             $aRow = array(
                 'iArticleID' => $value,
                 'iPublishStatus' => 0
             );
-            $iRet = Model_Article::updData($aRow);
+            $iRet = Tijian_Model_Article::updData($aRow);
             if ($iRet != 1) {
                 $fail_article[] = $value;
             } else {
@@ -122,7 +122,7 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
         $fail_article = array();
         $secc_article = array();
         foreach ($iArticleID as $key => $value) {
-            $aArticle[$key] = Model_Article::getDetail($value);
+            $aArticle[$key] = Tijian_Model_Article::getDetail($value);
             $aRow = $this->_checkData('edit', $aArticle[$key]);
             if (empty($aRow)) {
                 $fail_article[] = $value;
@@ -132,7 +132,7 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
                 'iArticleID' => $value,
                 'iPublishStatus' => 1
             );
-            $iRet = Model_Article::updData($aRow);
+            $iRet = Tijian_Model_Article::updData($aRow);
             if ($iRet != 1) {
                 $fail_article[] = $value;
             } else {
@@ -168,7 +168,7 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
         
         $fail_article = array();
         foreach ($iArticleID as $key => $value) {
-            $iRet = Model_Article::delData($value);
+            $iRet = Tijian_Model_Article::delData($value);
             if ($iRet != 1) {
                 $fail_article[] = $value;
             }
@@ -202,11 +202,11 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
             }
             $aArticle['iArticleID'] = intval($this->getParam('iArticleID'));
             
-            $aClass = Model_Article::getClass($aArticle['sClass']);
+            $aClass = Tijian_Model_Article::getClass($aArticle['sClass']);
             //修改需要加上当前修改人ID
             $aCurrUserInfo = $this->aCurrUser;
             $aArticle['iUpdateUserID'] = $aCurrUserInfo['iUserID'];
-            if (1 == Model_Article::updData($aArticle)) {
+            if (1 == Tijian_Model_Article::updData($aArticle)) {
                 return $this->showMsg(['sMsg' => $aClass['sTitle'].'信息' . $sAction . '成功！', 'iArticleID' => $aArticle['iArticleID']], true);
             } else {
                 return $this->showMsg($aClass['sTitle'].'信息' . $sAction . '失败！', false);
@@ -215,19 +215,19 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
             $this->_response->setHeader('Access-Control-Allow-Origin', '*');
 
             $iArticleID = intval($this->getParam('id'));
-            $aArticle = Model_Article::getDetail($iArticleID);
+            $aArticle = Tijian_Model_Article::getDetail($iArticleID);
             if ($aArticle['sTag']) {
                 $aArticle['aTag'] = explode(',', $aArticle['sTag']);
             }
 
             $this->assign('aArticle', $aArticle);
-            $this->assign('aCategory', Model_Article::getCategorys($aArticle['sClass']));
-            $this->assign('aTag', Model_Article::getTags($aArticle['sClass']));
-            $this->assign('aAuthor', Model_Article::getAuthors($aArticle['sClass']));
+            $this->assign('aCategory', Tijian_Model_Article::getCategorys($aArticle['sClass']));
+            $this->assign('aTag', Tijian_Model_Article::getTags($aArticle['sClass']));
+            $this->assign('aAuthor', Tijian_Model_Article::getAuthors($aArticle['sClass']));
             $this->assign('sUploadUrl', Yaf_G::getConf('upload', 'url'));
             $this->assign('sFileBaseUrl', 'http://' . Yaf_G::getConf('file', 'domain'));
             $this->_assignUrl($aArticle['sClass']);
-            $this->assign('aClass', Model_Article::getClass($aArticle['sClass']));
+            $this->assign('aClass', Tijian_Model_Article::getClass($aArticle['sClass']));
         }
     }
 
@@ -249,12 +249,12 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
                 $sAction = '发布';
             }
             
-            $aClass = Model_Article::getClass($aArticle['sClass']);
+            $aClass = Tijian_Model_Article::getClass($aArticle['sClass']);
             //增加需要加上当前添加人ID
             $aCurrUserInfo = $this->aCurrUser;
             $aArticle['iUpdateUserID'] = $aCurrUserInfo['iUserID'];
             $aArticle['iCreateUserID'] = $aCurrUserInfo['iUserID'];
-            $iArticleID = Model_Article::addData($aArticle);
+            $iArticleID = Tijian_Model_Article::addData($aArticle);
             if ($iArticleID > 0) {
                 return $this->showMsg(['sMsg' => $aClass['sTitle'] . '信息' . $sAction . '成功！', 'iArticleID' => $iArticleID], true);
             } else {
@@ -264,12 +264,12 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
             $this->_response->setHeader('Access-Control-Allow-Origin', '*.*');
             $sClass = $this->getParam('class');
             $this->assign('iCityID', $this->iCurrCityID);
-            $this->assign('aCategory', Model_Article::getCategorys($sClass));
-            $this->assign('aTag', Model_Article::getTags($sClass));
-            $this->assign('aAuthor', Model_Article::getAuthors($sClass));
+            $this->assign('aCategory', Tijian_Model_Article::getCategorys($sClass));
+            $this->assign('aTag', Tijian_Model_Article::getTags($sClass));
+            $this->assign('aAuthor', Tijian_Model_Article::getAuthors($sClass));
             $this->assign('sUploadUrl', Yaf_G::getConf('upload', 'url'));
             $this->assign('sFileBaseUrl', 'http://' . Yaf_G::getConf('file', 'domain'));
-            $this->assign('aClass', Model_Article::getClass($sClass));
+            $this->assign('aClass', Tijian_Model_Article::getClass($sClass));
             $this->_assignUrl($sClass);
         }
     }
@@ -313,7 +313,7 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
     public function _checkData($sType = 'add', $aParam = array())
     {
         $aRow = empty($aParam) ? $this->_getParams() : $aParam;
-        $aClass = Model_Article::getClass($aRow['sClass']); 
+        $aClass = Tijian_Model_Article::getClass($aRow['sClass']);
         
         //保存和发布都需要做的判断
         if (! Util_Validate::isLength($aRow['sTitle'], 5, 80)) {
@@ -368,7 +368,7 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
             if ($aClass['sTag'] && $aRow['sTag']) {
                 $sTag = explode(',', $aRow['sTag']);
                 foreach ($sTag as $key => $value) {
-                    $aTag = Model_Type::getDetail($value);
+                    $aTag = Tijian_Model_Type::getDetail($value);
                     if (empty($aTag) || $aTag['iStatus'] != 1) {
                         return $this->showMsg('标签不存在,无效标签名称为（' . $value . ')', false);
                     }

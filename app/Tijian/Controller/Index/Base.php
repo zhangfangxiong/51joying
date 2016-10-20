@@ -23,14 +23,14 @@ class Tijian_Controller_Index_Base extends Yaf_Controller
         $this->iCurrUserID = $this->aUser['iUserID'];
 
         if (!$this->aUser) {
-            $aCreateUser = Model_User::getUserByUserName($this->sCompanyName, 2);
+            $aCreateUser = Tijian_Model_User::getUserByUserName($this->sCompanyName, 2);
             if (empty($aCreateUser)) {
                 return $this->show404('请先在admin后台添加一个用户名为“registers”的hr用户', false);
             }            
         } else {
             //加入创建人和渠道信息
-            $aCreateUser = Model_User::getDetail($this->aUser['iCreateUserID']);
-            $aUser = Model_Customer::getDetail($this->aUser['iUserID']);
+            $aCreateUser = Tijian_Model_User::getDetail($this->aUser['iCreateUserID']);
+            $aUser = Tijian_Model_Customer::getDetail($this->aUser['iUserID']);
         }
         $this->aUser['iCreateUserID'] = $aCreateUser['iUserID'];
         $this->aUser['iChannel'] = $aCreateUser['iChannel'];
@@ -38,9 +38,9 @@ class Tijian_Controller_Index_Base extends Yaf_Controller
         $this->aUser['iSex'] = $aUser['iSex'] != 1 ? ($aUser['iSex'] == 2 && $aUser['iMarriage'] == 1) ? 2 : 3 : 1;
        
         $this->assign('sStaticRoot', 'http://' . Yaf_G::getConf('static', 'domain'));
-        $aMenu = Model_Lang::getMenu();
+        $aMenu = Tijian_Model_Lang::getMenu();
         $sPhoneNum = Util_Common::getConf('sZixunPhone', 'web');
-        $aCommonLang = Model_Lang::getCommonLang();
+        $aCommonLang = Tijian_Model_Lang::getCommonLang();
         $this->assign('aCommonLang',$aCommonLang);
         $this->assign('sPhoneNum',$sPhoneNum);
         $this->assign('aMenu',$aMenu);
@@ -67,7 +67,7 @@ class Tijian_Controller_Index_Base extends Yaf_Controller
         $aCardType = Yaf_G::getConf('aCardType');
         $this->assign('aCardType', $aCardType);   
 
-        $aSupplier = Model_Type::getOption('supplier');
+        $aSupplier = Tijian_Model_Type::getOption('supplier');
         $this->assign('aSupplier', $aSupplier);               
     }
 
@@ -77,8 +77,8 @@ class Tijian_Controller_Index_Base extends Yaf_Controller
      */
     protected function getCanViewProduct($iPage = 1)
     {
-        $aUser = Model_User::getDetail($this->aUser['iCreateUserID']);
-        $aProductList = Model_Product::getUserViewProductList($this->aUser['iCreateUserID'], 2, $aUser['iChannel'], $iPage);
+        $aUser = Tijian_Model_User::getDetail($this->aUser['iCreateUserID']);
+        $aProductList = Tijian_Model_Product::getUserViewProductList($this->aUser['iCreateUserID'], 2, $aUser['iChannel'], $iPage);
         return $aProductList;
     }
 
@@ -98,12 +98,12 @@ class Tijian_Controller_Index_Base extends Yaf_Controller
     {
         $aProductStoreParam['iProductID'] = $iProductID;
         $aProductStoreParam['iStatus'] = 1;
-        $aProductStoreParam['iType'] = Model_ProductStore::EXPANDPRODUCT;
-        $aProductStore = Model_ProductStore::getPair($aProductStoreParam, 'iAutoID', 'iStoreID');
+        $aProductStoreParam['iType'] = Tijian_Model_ProductStore::EXPANDPRODUCT;
+        $aProductStore = Tijian_Model_ProductStore::getPair($aProductStoreParam, 'iAutoID', 'iStoreID');
 
         $sStoreNum = count($aProductStore);
-        $sCardNum = Model_OrderCardProduct::getCnt(['where' => [
-                'iType' => Model_ProductStore::EXPANDPRODUCT,
+        $sCardNum = Tijian_Model_OrderCardProduct::getCnt(['where' => [
+                'iType' => Tijian_Model_ProductStore::EXPANDPRODUCT,
                 'iProductID' => $iProductID,
                 'iBookStatus IN' => ['0', '1', '2', '5']
         ]]);

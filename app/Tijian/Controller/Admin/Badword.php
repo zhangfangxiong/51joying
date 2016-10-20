@@ -9,7 +9,7 @@ class Tijian_Controller_Admin_Badword extends Tijian_Controller_Admin_Base
     public function delAction ()
     {
         $iBadwordID = intval($this->getParam('id'));
-        $iRet = Model_Badword::delData($iBadwordID);
+        $iRet = Tijian_Model_Badword::delData($iBadwordID);
         if ($iRet == 1) {
             return $this->showMsg('敏感词删除成功！', true);
         } else {
@@ -35,7 +35,7 @@ class Tijian_Controller_Admin_Badword extends Tijian_Controller_Admin_Base
             $aWhere['sWord LIKE'] = '%' . $aParam['sWord'] . '%';
         }
         
-        $aList = Model_Badword::getList($aWhere, $iPage);
+        $aList = Tijian_Model_Badword::getList($aWhere, $iPage);
         $this->assign('aList', $aList);
         $this->assign('aParam', $aParam);
     }
@@ -51,23 +51,23 @@ class Tijian_Controller_Admin_Badword extends Tijian_Controller_Admin_Base
                 return null;
             }
             $aBadword['iAutoID'] = intval($this->getParam('iAutoID'));
-            $aOldBadword = Model_Badword::getDetail($aBadword['iAutoID']);
+            $aOldBadword = Tijian_Model_Badword::getDetail($aBadword['iAutoID']);
             if (empty($aOldBadword)) {
                 return $this->showMsg('敏感词不存在！', false);
             }
             if ($aOldBadword['sWord'] != $aBadword['sWord']) {
-                if (Model_Badword::getBadwordByWord($aBadword['sWord'])) {
+                if (Tijian_Model_Badword::getBadwordByWord($aBadword['sWord'])) {
                     return $this->showMsg('敏感词已经存在！', false);
                 }
             }
-            if (1 == Model_Badword::updData($aBadword)) {
+            if (1 == Tijian_Model_Badword::updData($aBadword)) {
                 return $this->showMsg('敏感词信息更新成功！', true);
             } else {
                 return $this->showMsg('敏感词信息更新失败！', false);
             }
         } else {
             $iBadwordID = intval($this->getParam('id'));
-            $aBadword = Model_Badword::getDetail($iBadwordID);
+            $aBadword = Tijian_Model_Badword::getDetail($iBadwordID);
             $this->assign('aBadword', $aBadword);
         }
     }
@@ -82,10 +82,10 @@ class Tijian_Controller_Admin_Badword extends Tijian_Controller_Admin_Base
             if (empty($aBadword)) {
                 return null;
             }
-            if (Model_Badword::getBadwordByWord($aBadword['sWord'])) {
+            if (Tijian_Model_Badword::getBadwordByWord($aBadword['sWord'])) {
                 return $this->showMsg('敏感词已经存在！', false);
             }
-            if (Model_Badword::addData($aBadword) > 0) {
+            if (Tijian_Model_Badword::addData($aBadword) > 0) {
                 return $this->showMsg('敏感词增加成功！', true);
             } else {
                 return $this->showMsg('敏感词增加失败！', false);

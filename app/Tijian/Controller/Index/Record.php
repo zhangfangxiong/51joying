@@ -45,7 +45,7 @@ class Tijian_Controller_Index_Record extends Tijian_Controller_Index_Base
             return $this->redirect('/index/account/cdlogin');
         }
 
-        $aCustomer = Model_CustomerNew::getDetail($this->aUser['iUserID']);
+        $aCustomer = Tijian_Model_CustomerNew::getDetail($this->aUser['iUserID']);
         if ($aCustomer['iLoginStatus'] == 0) {
             $this->assign('hasLoged', 0);
         } else {
@@ -62,23 +62,23 @@ class Tijian_Controller_Index_Record extends Tijian_Controller_Index_Base
         if (empty($aParam['id']) || empty($aParam['pid'])) {
             return $this->show404('参数不全', false);
         }
-        $aCard = Model_OrderCard::getDetail($aParam['id']);
+        $aCard = Tijian_Model_OrderCard::getDetail($aParam['id']);
         if (empty($aCard)) {
             return $this->show404('体检卡号不存在', false);
         }
         if ($aCard['iUserID'] != $this->iCurrUserID) {
             return $this->show404('你无权操作该体检卡', false);
         }
-        $aCardProduct = Model_OrderCardProduct::getCardProduct($aParam['id'], $aParam['pid']);
+        $aCardProduct = Tijian_Model_OrderCardProduct::getCardProduct($aParam['id'], $aParam['pid']);
         if (empty($aCardProduct)) {
             return $this->show404('该体检卡没有绑定该产品', false);
         }
-        $iChannelType = ($aCard['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT || $aCard['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT_PLAN) ? 1 : 2;
-        $aProduct = Model_UserProductBase::getUserProductBase($aCardProduct['iProductID'], $aCard['iCompanyID'], $iChannelType, $this->aUser['iChannel']);
+        $iChannelType = ($aCard['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT || $aCard['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT_PLAN) ? 1 : 2;
+        $aProduct = Tijian_Model_UserProductBase::getUserProductBase($aCardProduct['iProductID'], $aCard['iCompanyID'], $iChannelType, $this->aUser['iChannel']);
         if (empty($aProduct)) {
             return $this->show404('产品不存在', false);
         }
-        Model_Refund::ifCanRefund($aCard,$aCardProduct);
+        Tijian_Model_Refund::ifCanRefund($aCard,$aCardProduct);
         if (empty($aCardProduct['iCanRefund'])) {
             return $this->show404('该产品不符合退款条件', false);
         }
@@ -87,7 +87,7 @@ class Tijian_Controller_Index_Record extends Tijian_Controller_Index_Base
             //记录退款log
             $aRefundParam['iCustomerID'] = $this->iCurrUserID;
             $aRefundParam['iCardProductID'] = $aCardProduct['iAutoID'];
-            $aCustomer = Model_Customer::getDetail($this->iCurrUserID);
+            $aCustomer = Tijian_Model_Customer::getDetail($this->iCurrUserID);
             if (empty($aCustomer)) {
                 return $this->show404('用户不存在', false);
             }
@@ -98,36 +98,36 @@ class Tijian_Controller_Index_Record extends Tijian_Controller_Index_Base
             $aRefundParam['sOrderCode'] = $aCardProduct['sOrderCode'];
             $aRefundParam['sPayOrderID'] = $aCardProduct['sPayOrderID'];
             $aRefundParam['sMoney'] = $aCardProduct['iRefundMoney'];
-            Model_OrderCardProduct::begin();
-            if($iRefundID = Model_Refund::addData($aRefundParam)) {
+            Tijian_Model_OrderCardProduct::begin();
+            if($iRefundID = Tijian_Model_Refund::addData($aRefundParam)) {
                 $aCardProductParam['iRefundID'] = $iRefundID;
-                if (Model_OrderCardProduct::updData($aCardProductParam)) {
-                    Model_OrderCardProduct::commit();
+                if (Tijian_Model_OrderCardProduct::updData($aCardProductParam)) {
+                    Tijian_Model_OrderCardProduct::commit();
                     return $this->show404('申请退款成功！等待管理员审核或取消退款申请！期间不能进行预约,升级等操作', true);
                 } else {
-                    Model_OrderCardProduct::rollback();
+                    Tijian_Model_OrderCardProduct::rollback();
                     return $this->show404('申请退款失败！', false);
                 }
             } else {
-                Model_OrderCardProduct::rollback();
+                Tijian_Model_OrderCardProduct::rollback();
                 return $this->show404('申请退款失败！', false);
             }
         } else {//退款中
             //记录退款log
             $aRefundParam['iAutoID'] = $aCardProduct['iRefundID'];
-            $aRefundParam['iStatus'] = Model_Refund::REFUND_CANCEL;
-            Model_OrderCardProduct::begin();
-            if(Model_Refund::updData($aRefundParam)) {
+            $aRefundParam['iStatus'] = Tijian_Model_Refund::REFUND_CANCEL;
+            Tijian_Model_OrderCardProduct::begin();
+            if(Tijian_Model_Refund::updData($aRefundParam)) {
                 $aCardProductParam['iRefundID'] = 0;
-                if (Model_OrderCardProduct::updData($aCardProductParam)) {
-                    Model_OrderCardProduct::commit();
+                if (Tijian_Model_OrderCardProduct::updData($aCardProductParam)) {
+                    Tijian_Model_OrderCardProduct::commit();
                     return $this->show404('取消退款成功！', true);
                 } else {
-                    Model_OrderCardProduct::rollback();
+                    Tijian_Model_OrderCardProduct::rollback();
                     return $this->show404('取消退款失败！', false);
                 }
             } else {
-                Model_OrderCardProduct::rollback();
+                Tijian_Model_OrderCardProduct::rollback();
                 return $this->show404('取消退款失败！', false);
             }
         }
@@ -141,7 +141,7 @@ class Tijian_Controller_Index_Record extends Tijian_Controller_Index_Base
     {
         $params = $this->getParams();
         $iPage = $this->getParam('page') ? intval($this->getParam('page')) : 1;
-        list($aTree, $aCard['iTotal'], $aCard['aPager']) = Model_OrderCard::getTree($this->iCurrUserID, $iPage, $params);
+        list($aTree, $aCard['iTotal'], $aCard['aPager']) = Tijian_Model_OrderCard::getTree($this->iCurrUserID, $iPage, $params);
         $aCard['aList'] = $aTree;
         $this->assign('aTree', $aTree);
         $this->assign('aColor', array(
@@ -181,14 +181,14 @@ class Tijian_Controller_Index_Record extends Tijian_Controller_Index_Base
         if (!$iCardId) {
             return $this->redirect('/index/record/list/');
         }
-        $aCard = Model_OrderCard::getDetail($iCardId);
+        $aCard = Tijian_Model_OrderCard::getDetail($iCardId);
         if (!$aCard || $aCard['iUserID'] != $this->aUser['iUserID']) {
             return $this->redirect('/index/record/list/');
         }
 
-        $aStore = Model_Store::getDetail($aCard['iStoreID']);
-        $aProduct = Model_UserProductBase::getUserProductBase($aCard['iProductID'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID']);
-        $aEmployee = Model_Company_Employee::getDetail($aCard['iUserID']);
+        $aStore = Tijian_Model_Store::getDetail($aCard['iStoreID']);
+        $aProduct = Tijian_Model_UserProductBase::getUserProductBase($aCard['iProductID'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID']);
+        $aEmployee = Tijian_Model_Company_Employee::getDetail($aCard['iUserID']);
 
         $this->assign('aCard', $aCard);
         $this->assign('aStore', $aStore);

@@ -20,15 +20,15 @@ class Tijian_Controller_Company_System extends Tijian_Controller_Company_Base
 		parent::actionBefore();
 
 		//公司Logo获取
-		$sLogo = Model_Kv::getValue(self::LOGO_KEY.$this->enterpriseId);
+		$sLogo = Tijian_Model_Kv::getValue(self::LOGO_KEY.$this->enterpriseId);
 		$this->assign('sLogo', $sLogo);
 
 		//登录页面图片获取
-		$sLogin = Model_Kv::getValue(self::PAGE_KEY.$this->enterpriseId);
+		$sLogin = Tijian_Model_Kv::getValue(self::PAGE_KEY.$this->enterpriseId);
 		$this->assign('sLogin', $sLogin);
 
 		//邮件格式获取
-		$sMail = Model_Kv::getValue(self::MAIL_KEY.$this->enterpriseId);
+		$sMail = Tijian_Model_Kv::getValue(self::MAIL_KEY.$this->enterpriseId);
 		if (!$sMail) {
 			$sMail = Yaf_G::getConf('mail', 'employee');
 		}
@@ -44,15 +44,15 @@ class Tijian_Controller_Company_System extends Tijian_Controller_Company_Base
 			}
 			
 			if (!empty($param['sLogoKey'])) {
-				Model_Kv::setValue(self::LOGO_KEY.$this->enterpriseId, $param['sLogoKey']);
+				Tijian_Model_Kv::setValue(self::LOGO_KEY.$this->enterpriseId, $param['sLogoKey']);
 			}
 
 			if (!empty($param['sPageKey'])) {
-				Model_Kv::setValue(self::PAGE_KEY.$this->enterpriseId, $param['sPageKey']);
+				Tijian_Model_Kv::setValue(self::PAGE_KEY.$this->enterpriseId, $param['sPageKey']);
 			}
 
 			if (!empty($param['sMail'])) {
-				Model_Kv::setValue(self::MAIL_KEY.$this->enterpriseId, $param['sMail']);
+				Tijian_Model_Kv::setValue(self::MAIL_KEY.$this->enterpriseId, $param['sMail']);
 			}
 
 			return $this->showMsg('设置成功', true);
@@ -80,16 +80,16 @@ class Tijian_Controller_Company_System extends Tijian_Controller_Company_Base
 			
 			$where = [
 				'iUserID' => $this->enterpriseId,
-				'iType' => Model_User::TYPE_HR,
-				'iStatus' => Model_User::STATUS_TYPE_NORMAL			
+				'iType' => Tijian_Model_User::TYPE_HR,
+				'iStatus' => Tijian_Model_User::STATUS_TYPE_NORMAL
 			];			
-			$aUser = Model_User::getRow([
+			$aUser = Tijian_Model_User::getRow([
 				'where' => $where
 			]);
 			if ($aUser) {
 				if ($aUser['sPassword'] == md5(Yaf_G::getConf('cryptkey', 'cookie') .$sOldPwd)) {
 					$where['sPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $sNewPwd);
-					$result = Model_User::updData($where);	
+					$result = Tijian_Model_User::updData($where);
 				}				
 			}
 
@@ -120,7 +120,7 @@ class Tijian_Controller_Company_System extends Tijian_Controller_Company_Base
 					'sReceiveMail' => $sMail
 				];
 
-				Model_Kv::setValue(self::ALLOW_KEY.$this->enterpriseId, $aAllow);
+				Tijian_Model_Kv::setValue(self::ALLOW_KEY.$this->enterpriseId, $aAllow);
 
 				return $this->showMsg('设置成功', true);
 			}
@@ -135,23 +135,23 @@ class Tijian_Controller_Company_System extends Tijian_Controller_Company_Base
 				$where = [
 					'iUserID' => $this->enterpriseId,
 					'sPassword' => md5(Yaf_G::getConf('cryptkey', 'cookie') . $sPassword),
-					'iType' => Model_User::TYPE_HR,
-					'iStatus' => Model_User::STATUS_TYPE_NORMAL			
+					'iType' => Tijian_Model_User::TYPE_HR,
+					'iStatus' => Tijian_Model_User::STATUS_TYPE_NORMAL
 				];
-				$aUser = Model_User::getRow([
+				$aUser = Tijian_Model_User::getRow([
 					'where' => $where
 				]);
 				if ($aUser) {
 					$where['sEmail'] = $sMail;	
-					$aSet = Model_User::getAll(['where' => [
+					$aSet = Tijian_Model_User::getAll(['where' => [
 						'sEmail' => $sMail,
-						'iType' => Model_User::TYPE_HR,
-						'iStatus' => Model_User::STATUS_TYPE_NORMAL
+						'iType' => Tijian_Model_User::TYPE_HR,
+						'iStatus' => Tijian_Model_User::STATUS_TYPE_NORMAL
 					]]);
 					if ($aSet) {
 						return $this->showMsg('邮箱已存在!', false);
 					}
-					$result = Model_User::updData($where);
+					$result = Tijian_Model_User::updData($where);
 				} else {
 					return $this->showMsg('密码不正确!', false);
 				}
@@ -164,15 +164,15 @@ class Tijian_Controller_Company_System extends Tijian_Controller_Company_Base
 		} else {
 			$where = [
 				'iUserID' => $this->enterpriseId,
-				'iType' => Model_User::TYPE_HR,
-				'iStatus' => Model_User::STATUS_TYPE_NORMAL			
+				'iType' => Tijian_Model_User::TYPE_HR,
+				'iStatus' => Tijian_Model_User::STATUS_TYPE_NORMAL
 			];
-			$aUser = Model_User::getRow([
+			$aUser = Tijian_Model_User::getRow([
 				'where' => $where
 			]);
 			$sMail = isset($aUser['sEmail']) ? $aUser['sEmail'] : '';
 
-			$aValue = Model_Kv::getValue(self::ALLOW_KEY.$this->enterpriseId, true);
+			$aValue = Tijian_Model_Kv::getValue(self::ALLOW_KEY.$this->enterpriseId, true);
 
 			$this->assign('sMail', $sMail);
 			$this->assign('aValue', $aValue);

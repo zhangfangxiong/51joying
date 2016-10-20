@@ -14,9 +14,9 @@ class Tijian_Model_Physical_Plan extends Tijian_Model_Base
 		$content = Yaf_G::getConf('planmail', 'physical');
 		$msg  = Yaf_G::getConf('planmsg', 'physical');
 
-		$aPlan = Model_Physical_Plan::getDetail($iPlanID);
-		$aCompany = Model_User::getDetail($aPlan['iHRID']);
-		$iCnt = Model_OrderCard::getCnt(['where' => ['iPlanID' => $iPlanID]]);
+		$aPlan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
+		$aCompany = Tijian_Model_User::getDetail($aPlan['iHRID']);
+		$iCnt = Tijian_Model_OrderCard::getCnt(['where' => ['iPlanID' => $iPlanID]]);
 		
 		$msg = preg_replace('/\【公司名称\】/', $aCompany['sRealName'], $msg);
 		$msg = preg_replace('/\【体检计划\】/', $aPlan['sPlanName'], $msg);

@@ -80,12 +80,12 @@
                                         <a class="btn btn-primary" href="/order/buyfourth/id/<?php echo $iCardID ?>/pid/<?php echo $iProductID ?>/sid/<?php echo $value['iStoreID'] ?>/upid/<?php echo $iUpgradeID ?>">立即预约</a>
                                         <??>
                                         <?php if (!$iUpgradeID 
-                                            && (($aCard['iPayType'] == Model_OrderCard::PAYTYPE_PERSON 
+                                            && (($aCard['iPayType'] == Tijian_Model_OrderCard::PAYTYPE_PERSON
                                                 && !empty($aCardProduct['iPayStatus']) 
-                                                || $aCard['iPayType'] == Model_OrderCard::PAYTYPE_COMPANY))
+                                                || $aCard['iPayType'] == Tijian_Model_OrderCard::PAYTYPE_COMPANY))
                                             && (empty($aCardProduct['iLastProductID']))
                                             ) { ?>
-                                        <!-- && (($aCard['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT_PLAN || $aCard['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT ) && $aCard['iPayType'] == Model_OrderCard::PAYTYPE_PERSON && !empty($aCardProduct['iPayStatus']))
+                                        <!-- && (($aCard['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT_PLAN || $aCard['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT ) && $aCard['iPayType'] == Tijian_Model_OrderCard::PAYTYPE_PERSON && !empty($aCardProduct['iPayStatus']))
                                          -->
                                         <a class="btn btn-primary upgradebtn" href="javascript:void(0)">升级套餐</a>
                                         <?php } ?>

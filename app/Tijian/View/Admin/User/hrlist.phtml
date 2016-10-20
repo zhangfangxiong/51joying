@@ -41,7 +41,7 @@
                     <td class="text-center"><?php echo !empty($aUser['sRealName']) ? $aUser['sRealName'] : '' ?></td>
                     <td class="text-center"><?php echo !empty($aStatus[$aUser['iStatus']]) ? $aStatus[$aUser['iStatus']] : '' ?></td>
                     <td class="text-center">
-                        <a class="user_lock" href="javascript:;" data-url="/admin/user/lockuser?id=<?php echo $aUser['iUserID'] ?>">账号<span><?php echo ($aUser['iStatus'] == Model_User::STATUS_TYPE_LOCK) ? '解锁' : '锁定';?></span></a>
+                        <a class="user_lock" href="javascript:;" data-url="/admin/user/lockuser?id=<?php echo $aUser['iUserID'] ?>">账号<span><?php echo ($aUser['iStatus'] == Tijian_Model_User::STATUS_TYPE_LOCK) ? '解锁' : '锁定';?></span></a>
                         <a class="user_reset" href="javascript:;" data-url="/admin/user/resetuserpwd?id=<?php echo $aUser['iUserID'] ?>">密码重置</a>
                     </td>
                 </tr>

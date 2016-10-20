@@ -3,7 +3,7 @@
 /**
  * 供应商处理类
  */
-class Tijian_Model_Supplier extends Tijian_Model_Base
+class Model_Supplier extends Tijian_Model_Base
 {
     const TABLE_NAME = '';
 
@@ -16,7 +16,7 @@ class Tijian_Model_Supplier extends Tijian_Model_Base
             'sClass' => 'supplier',
             'iStatus' => 1
         );
-        $aSupplier = Model_Type::getAll($where);
+        $aSupplier = Tijian_Model_Type::getAll($where);
         return $aSupplier;
     }
 
@@ -28,7 +28,7 @@ class Tijian_Model_Supplier extends Tijian_Model_Base
             'iStatus' => 1,
             'sCode' => $sSupplierCode
         );
-        $aSupplier = Model_Type::getRow($where);
+        $aSupplier = Tijian_Model_Type::getRow($where);
         return $aSupplier;
     }
 
@@ -60,7 +60,7 @@ class Tijian_Model_Supplier extends Tijian_Model_Base
             if ($sSupplierCode != 'ciming-sh') {//慈珉的也要单独处理,也日了狗了
                 //$aCardProductParam['sApiCardID'] = '';//卡号不能清，可以共用(线上的说取消重新预约要重新买卡)
             }
-            Model_OrderCardProduct::updData($aCardProductParam);
+            Tijian_Model_OrderCardProduct::updData($aCardProductParam);
             return 1;//取消预约成功
         } else {
             return 0;//取消预约失败
@@ -80,7 +80,7 @@ class Tijian_Model_Supplier extends Tijian_Model_Base
         $sClassName = $aHasApiConf[$sSupplierCode]['classname'];
         if ($sSupplierCode == 'ruici-sh') {//瑞慈要单独处理,日了狗了
             $sUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/api/' . $sClassName . '/modifymentDate/';
-            $aCustomer = Model_Customer::getDetail($aCard['iUserID']);
+            $aCustomer = Tijian_Model_Customer::getDetail($aCard['iUserID']);
             $aUserInfoParam['Mobile'] = $aCustomer['sMobile'];
             $aUserInfoParam['CertNo'] = $aCustomer['sIdentityCard'];
             $aUserInfoParam['Name'] = $aCustomer['sRealName'];
@@ -108,7 +108,7 @@ class Tijian_Model_Supplier extends Tijian_Model_Base
                 $aCardProductParam['iAutoID'] = $aCardProduct['iAutoID'];
                 $aCardProductParam['sApiReserveOrderID'] = $aData['orderid'];
                 $aCardProductParam['sApiCardID'] = $aData['cardnumber'];
-                Model_OrderCardProduct::updData($aCardProductParam);
+                Tijian_Model_OrderCardProduct::updData($aCardProductParam);
                 return 1;//预约改期成功
             } else {
                 return 0;//预约改期失败
@@ -128,7 +128,7 @@ class Tijian_Model_Supplier extends Tijian_Model_Base
             $aCardProductParam['iAutoID'] = $aCardProduct['iAutoID'];
             $aCardProductParam['sApiReserveOrderID'] = $aData['orderid'];
             $aCardProductParam['sApiCardID'] = $aData['cardnumber'];
-            Model_OrderCardProduct::updData($aCardProductParam);
+            Tijian_Model_OrderCardProduct::updData($aCardProductParam);
             return 1;//预约改期成功
         } else {
             return 0;//预约改期失败
@@ -164,7 +164,7 @@ class Tijian_Model_Supplier extends Tijian_Model_Base
                 } else {
                     return 0;
                 }
-                $aCustomer = Model_Customer::getDetail($aCard['iUserID']);
+                $aCustomer = Tijian_Model_Customer::getDetail($aCard['iUserID']);
                 $aUserInfoParam['Mobile'] = $aCustomer['sMobile'];
                 $aUserInfoParam['CertNo'] = $aCustomer['sIdentityCard'];
                 $aUserInfoParam['Name'] = $aCustomer['sRealName'];
@@ -187,7 +187,7 @@ class Tijian_Model_Supplier extends Tijian_Model_Base
                 //print_r($sUrl);die;
                 break;
             case 'renai'://已OK
-                $aCustomer = Model_Customer::getDetail($aCard['iUserID']);
+                $aCustomer = Tijian_Model_Customer::getDetail($aCard['iUserID']);
                 $aParam['cardnumber'] = $aCardProduct['iAutoID'];
                 $aParam['regdate'] = $sDate;
                 $aParam['packagecode'] = $sProductCode;
@@ -205,7 +205,7 @@ class Tijian_Model_Supplier extends Tijian_Model_Base
                 $sUrl .= "?" . http_build_query($aParam);
                 break;
             case 'meinian-sh'://已OK
-                $aCustomer = Model_Customer::getDetail($aCard['iUserID']);
+                $aCustomer = Tijian_Model_Customer::getDetail($aCard['iUserID']);
                 $aParam['customerName'] = $aCustomer['sRealName'];
                 $aParam['customerIdentityNo'] = $aCustomer['sIdentityCard'];
                 $aParam['customerGender'] = $aCustomer['iSex'];
@@ -225,7 +225,7 @@ class Tijian_Model_Supplier extends Tijian_Model_Base
                 break;
             case 'aikang-sh'://已OK
                 //NONEM672198
-                $aCustomer = Model_Customer::getDetail($aCard['iUserID']);
+                $aCustomer = Tijian_Model_Customer::getDetail($aCard['iUserID']);
                 $aParam['cardnumber'] = $aCardProduct['iAutoID'];
                 $aParam['regdate'] = $sDate;
                 $aParam['packagecode'] = $sProductCode;
@@ -244,7 +244,7 @@ class Tijian_Model_Supplier extends Tijian_Model_Base
 
                 //先调用买卡接口
                 $sBuyCardUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/api/' . $sClassName . '/createCode/';
-                $aCustomer = Model_Customer::getDetail($aCard['iUserID']);
+                $aCustomer = Tijian_Model_Customer::getDetail($aCard['iUserID']);
                 $aBuyParam['orderId'] = "ZY-" . $aCardProduct['iAutoID'] . "-" . $time;
                 //$aBuyParam['orderId'] = 999;
                 $aBuyParam['customerName'] = $aCustomer['sRealName'];
@@ -281,7 +281,7 @@ class Tijian_Model_Supplier extends Tijian_Model_Base
             $aCardProductParam['iAutoID'] = $aCardProduct['iAutoID'];
             $aCardProductParam['sApiReserveOrderID'] = $aData['orderid'];
             $aCardProductParam['sApiCardID'] = $aData['cardnumber'];
-            Model_OrderCardProduct::updData($aCardProductParam);
+            Tijian_Model_OrderCardProduct::updData($aCardProductParam);
             return 1;//预约成功
         } else {
             return 0;//预约失败

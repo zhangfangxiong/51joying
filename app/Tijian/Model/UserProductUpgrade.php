@@ -17,7 +17,7 @@ class Tijian_Model_UserProductUpgrade extends Tijian_Model_Base
             'where' => $aWhere
         ));
         if (empty($aData)) {
-            $aData = Model_ProductUpgrade::getProductUpgrades($iProductID, Model_ProductUpgrade::EXPANDPRODUCT);
+            $aData = Tijian_Model_ProductUpgrade::getProductUpgrades($iProductID, Tijian_Model_ProductUpgrade::EXPANDPRODUCT);
         }
         return $aData;
     }

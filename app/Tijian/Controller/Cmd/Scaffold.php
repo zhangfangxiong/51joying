@@ -32,7 +32,7 @@ class Tijian_Controller_Cmd_Scaffold extends Tijian_Controller_Cmd_Base
             $sData = 
 "<?php
 
-class Model_$sFile extends Model_Base
+class Model_$sFile extends Tijian_Model_Base
 {
 
     const TABLE_NAME = '$sTable';

@@ -22,24 +22,24 @@ class Tijian_Controller_Supplier_Order extends Tijian_Controller_Supplier_Base
     		$status = 1;
     		$type = 1;
     	}    	
-    	$aUser = Model_User::getDetail($this->aCurrUser['iUserID']);
-    	if ($aUser && $aUser['iStatus'] !== Model_Store::STATUS_INVALID) {
+    	$aUser = Tijian_Model_User::getDetail($this->aCurrUser['iUserID']);
+    	if ($aUser && $aUser['iStatus'] !== Tijian_Model_Store::STATUS_INVALID) {
 	        if ($this->sStoreIDs) {
-	        	$aPhysical = Model_OrderCardProduct::getAll([
+	        	$aPhysical = Tijian_Model_OrderCardProduct::getAll([
 	                'where' => [
 	                    'iStoreID IN' => $this->sStoreIDs,
 	                    'iBookStatus'  => $status,
-	                    'iPreStatus' => Model_OrderCardProduct::STATUS_INVALID
+	                    'iPreStatus' => Tijian_Model_OrderCardProduct::STATUS_INVALID
 	                ]
 	            ]);
 	            if ($aPhysical) {
 	            	foreach ($aPhysical as $key => $value) {
-	            		$aCard = Model_OrderCard::getDetail($value['iCardID']);
+	            		$aCard = Tijian_Model_OrderCard::getDetail($value['iCardID']);
 	            		if (!$aCard) {
 	            			unset($aPhysical[$key]);
 	            			continue;
 	            		}
-	            		$userInfo = Model_CustomerNew::getDetail($aCard['iUserID']);
+	            		$userInfo = Tijian_Model_CustomerNew::getDetail($aCard['iUserID']);
 	            		if (!$userInfo) {
 	            			unset($aPhysical[$key]);
 	            			continue;
@@ -49,7 +49,7 @@ class Tijian_Controller_Supplier_Order extends Tijian_Controller_Supplier_Base
 	            		$aPhysical[$key]['sSex'] = ($userInfo['iSex'] == 2) ? '女' : '男';
 	            		$aPhysical[$key]['sOrderDate'] = $value['iOrderTime'] ? date('Y-m-d', $value['iOrderTime']) : '';
 	            		
-	            		$storeInfo = Model_Store::getDetail($value['iStoreID']);
+	            		$storeInfo = Tijian_Model_Store::getDetail($value['iStoreID']);
 	            		$aPhysical[$key]['sStoreName'] = $storeInfo['sName'];
 	            	}
 	            }
@@ -74,13 +74,13 @@ class Tijian_Controller_Supplier_Order extends Tijian_Controller_Supplier_Base
     			return $this->showMsg('预约日期不能为空', false, '');
     		}
 
-    		$aPhysical = Model_OrderCardProduct::getDetail($params['id']);
+    		$aPhysical = Tijian_Model_OrderCardProduct::getDetail($params['id']);
     		if ($aPhysical && $aPhysical['iStatus']) {
     			$data['iAutoID'] = $params['id'];    			
     			$data['iOrderTime'] = strtotime($params['sOrderDate']);
     			$data['iPreStatus'] = 1;
-    			Model_OrderCardProduct::sendMailMsg($params['id']);
-    			Model_OrderCardProduct::updData($data);
+    			Tijian_Model_OrderCardProduct::sendMailMsg($params['id']);
+    			Tijian_Model_OrderCardProduct::updData($data);
     			return $this->showMsg('修改成功', true, '/supplier/order/detail/type/'.$params['type']);
     		} else {
     			return $this->showMsg('无此信息', false, '/supplier/order/detail/type/'.$params['type']);
@@ -94,19 +94,19 @@ class Tijian_Controller_Supplier_Order extends Tijian_Controller_Supplier_Base
 	    		$this->redirect('/supplier/order/index/type'.$type);
 	    	}
 
-	    	$aDetail = Model_OrderCardProduct::getDetail($id);	 
+	    	$aDetail = Tijian_Model_OrderCardProduct::getDetail($id);
 	    	if ($aDetail && $aDetail['iPreStatus'] == 0) {
-	    		$aCard = Model_OrderCard::getDetail($aDetail['iCardID']);
-    			$aOrder = Model_OrderInfo::getDetail($aDetail['iOrderID']);
+	    		$aCard = Tijian_Model_OrderCard::getDetail($aDetail['iCardID']);
+    			$aOrder = Tijian_Model_OrderInfo::getDetail($aDetail['iOrderID']);
     			$aDetail['sOrderCode'] = $aOrder['sOrderCode'];
 
-	    		$productInfo = Model_Product::getDetail($aDetail['iProductID']);
+	    		$productInfo = Tijian_Model_Product::getDetail($aDetail['iProductID']);
 			    $aDetail['sProductName'] = $productInfo['sProductName'];
 			    
-			    $storeInfo = Model_Store::getDetail($aDetail['iStoreID']);
+			    $storeInfo = Tijian_Model_Store::getDetail($aDetail['iStoreID']);
 			    $aDetail['sStoreName'] = $storeInfo['sName'];
 
-			    $userInfo = Model_CustomerNew::getDetail($aCard['iUserID']);
+			    $userInfo = Tijian_Model_CustomerNew::getDetail($aCard['iUserID']);
 				$aDetail['sRealName'] = $userInfo['sRealName'];
 				$aDetail['sSex'] = ($userInfo['iSex'] == 2) ? '女' : '男';
 				$aDetail['sMarriage'] = ($userInfo['iMarriage'] == 2) ? '已婚' : '未婚';
@@ -136,12 +136,12 @@ class Tijian_Controller_Supplier_Order extends Tijian_Controller_Supplier_Base
 	 * 导出
 	 */
 	public function exportAction() {
-		$aUser = Model_User::getDetail($this->aCurrUser['iUserID']);
-    	if ($aUser && $aUser['iStatus'] !== Model_Store::STATUS_INVALID) {
-    		$aStore = Model_Store::getAll([
+		$aUser = Tijian_Model_User::getDetail($this->aCurrUser['iUserID']);
+    	if ($aUser && $aUser['iStatus'] !== Tijian_Model_Store::STATUS_INVALID) {
+    		$aStore = Tijian_Model_Store::getAll([
 	            'where' => [
 	                'iSupplierID' => $aUser['iSupplierID'],
-	                'iStatus' => Model_Store::STATUS_VALID
+	                'iStatus' => Tijian_Model_Store::STATUS_VALID
 	            ]    
 	        ]);
 
@@ -156,21 +156,21 @@ class Tijian_Controller_Supplier_Order extends Tijian_Controller_Supplier_Base
 		        }
 		        if ($aStoreIDs) {
 		        	$sStoreIDs = implode(',', $aStoreIDs);
-		        	$aPhysical = Model_OrderCardProduct::getAll([
+		        	$aPhysical = Tijian_Model_OrderCardProduct::getAll([
 		                'where' => [
 		                    'iStoreID IN' => $sStoreIDs,
 		                    'iBookStatus'  => $status,
-		                    'iPreStatus' => Model_OrderCardProduct::STATUS_INVALID
+		                    'iPreStatus' => Tijian_Model_OrderCardProduct::STATUS_INVALID
 		                ]
 		            ]);
 		            if ($aPhysical) {
 		            	foreach ($aPhysical as $key => $value) {
-		            		$aCard = Model_OrderCard::getDetail($value['iCardID']);
+		            		$aCard = Tijian_Model_OrderCard::getDetail($value['iCardID']);
 		            		if (!$aCard) {
 		            			unset($aPhysical[$key]);
 		            			continue;
 		            		}
-		            		$userInfo = Model_CustomerNew::getDetail($aCard['iUserID']);
+		            		$userInfo = Tijian_Model_CustomerNew::getDetail($aCard['iUserID']);
 		            		if (!$userInfo) {
 		            			unset($aPhysical[$key]);
 		            			continue;
@@ -181,7 +181,7 @@ class Tijian_Controller_Supplier_Order extends Tijian_Controller_Supplier_Base
 		            		$aPhysical[$key]['sMarriage'] = ($userInfo['iMarriage'] == 2) ? '已婚' : '未婚';
 		            		$aPhysical[$key]['sMobile'] = $userInfo['sMobile'];
 
-		            		$storeInfo = Model_Store::getDetail($value['iStoreID']);
+		            		$storeInfo = Tijian_Model_Store::getDetail($value['iStoreID']);
 		            		$aPhysical[$key]['sStoreName'] = $storeInfo['sName'];
 		            		
 		            		$aPhysical[$key]['sOrderDate'] = $value['iOrderTime'] ? date('Y-m-d', $value['iOrderTime']) : '';

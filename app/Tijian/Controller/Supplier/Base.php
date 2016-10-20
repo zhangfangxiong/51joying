@@ -28,16 +28,16 @@ class Tijian_Controller_Supplier_Base extends Tijian_Controller_Admin_Base
 		$this->aBalanceStatus = Yaf_G::getConf('aStatus', 'balance');
 		$this->assign('aBalanceStatus', $this->aBalanceStatus);
 
-		$aUser = Model_User::getDetail($this->aCurrUser['iUserID']);
-		if ($aUser && $aUser['iStatus'] !== Model_Store::STATUS_INVALID) {	
+		$aUser = Tijian_Model_User::getDetail($this->aCurrUser['iUserID']);
+		if ($aUser && $aUser['iStatus'] !== Tijian_Model_Store::STATUS_INVALID) {
 			$this->iSupplierID = $aUser['iSupplierID'];	
 			$where = [
                 'iSupplierID' => $this->iSupplierID,
-                'iStatus' => Model_Store::STATUS_VALID
+                'iStatus' => Tijian_Model_Store::STATUS_VALID
             ];	
 
             $this->getParam('iCityID') ? $where['iCityID'] = $this->getParam('iCityID') : '';
-    		$aStore = Model_Store::getAll(['where' => $where]);
+    		$aStore = Tijian_Model_Store::getAll(['where' => $where]);
 	        if ($aStore) {
 	        	$aStoreIDs = [];
 		        $sStoreIDs = '';

@@ -26,20 +26,20 @@ class Tijian_Controller_Company_Employee extends Tijian_Controller_Company_Base
 		$page  = $this->getParam('page') ? intval($this->getParam('page')) : 1;
 		
 		if (!empty($param['sRealName'])) {
-			$sUserIDs = Model_CustomerNew::getCustomerIDsByName($param['sRealName']);
+			$sUserIDs = Tijian_Model_CustomerNew::getCustomerIDsByName($param['sRealName']);
 			if ($sUserIDs) {
 				$this->where['iUserID IN'] = $sUserIDs;
-				$aList = Model_Company_Company::getList($this->where, $page);
+				$aList = Tijian_Model_Company_Company::getList($this->where, $page);
 			} else {
 				$aList = [];
 			}
 		} else {
-			$aList = Model_Company_Company::getList($this->where, $page);
+			$aList = Tijian_Model_Company_Company::getList($this->where, $page);
 		}
 
 		if ($aList) {
 			foreach ($aList['aList'] as $key => &$value) {
-				$aCustomer = Model_CustomerNew::getDetail($value['iUserID']);
+				$aCustomer = Tijian_Model_CustomerNew::getDetail($value['iUserID']);
 				$value['sRealName'] = $aCustomer['sRealName'];
 				$value['sMobile'] = $aCustomer['sMobile'];
 			}
@@ -73,7 +73,7 @@ class Tijian_Controller_Company_Employee extends Tijian_Controller_Company_Base
 
 			isset($param['iStatus']) && intval($param['iStatus']) 
 			? $where['iStatus'] = intval($param['iStatus']) 
-			: $where['iStatus >'] = Model_Company_Employee::STATUS_INVALID;		
+			: $where['iStatus >'] = Tijian_Model_Company_Employee::STATUS_INVALID;
 		}
 
 		return [$where, $param];
@@ -86,11 +86,11 @@ class Tijian_Controller_Company_Employee extends Tijian_Controller_Company_Base
 	 */
 	public function detailAction () {
 		$this->employeeId = intval($this->getParam('iEmployeeID'));
-		$aEmployee = Model_Company_Company::getRow([
+		$aEmployee = Tijian_Model_Company_Company::getRow([
 			'where' => [
 				'iCreateUserID' => $this->enterpriseId,
 				'iUserID' => $this->employeeId,
-				'iStatus >'	=> Model_Company_Company::STATUS_INVALID
+				'iStatus >'	=> Tijian_Model_Company_Company::STATUS_INVALID
 			]
 		]);	
 
@@ -98,7 +98,7 @@ class Tijian_Controller_Company_Employee extends Tijian_Controller_Company_Base
 			$this->redirect('/company/employee/list');
 		}
 		if ($aEmployee) {
-			$aCustomer = Model_CustomerNew::getDetail($aEmployee['iUserID']);
+			$aCustomer = Tijian_Model_CustomerNew::getDetail($aEmployee['iUserID']);
 			$aEmployee['sRealName'] = $aCustomer['sRealName'];
 			$aEmployee['iSex'] = $aCustomer['iSex'];
 			$aEmployee['iMarriage'] = $aCustomer['iMarriage'];
@@ -107,11 +107,11 @@ class Tijian_Controller_Company_Employee extends Tijian_Controller_Company_Base
 			$aEmployee['sBirthDate'] = $aCustomer['sBirthDate'];
 		}	
 
-		$aFamily = Model_Company_Family::getAll([
+		$aFamily = Tijian_Model_Company_Family::getAll([
 			'where' => [
 				'iEnterpriseID' => $this->enterpriseId,
 				'iCCID' => $aEmployee['iAutoID'],
-				'iStatus >'	=> Model_Company_Family::STATUS_INVALID
+				'iStatus >'	=> Tijian_Model_Company_Family::STATUS_INVALID
 			]
 		]);
 
@@ -134,17 +134,17 @@ class Tijian_Controller_Company_Employee extends Tijian_Controller_Company_Base
 
 			//若有iuserid，则员工基本信息已经存在，可能是其他企业创建的
 			if (!empty($aCustomer['iUserID'])) {
-				$row = Model_Company_Company::checkIsExist($aCompany['iUserID'], $aCompany['iCreateUserID']);
+				$row = Tijian_Model_Company_Company::checkIsExist($aCompany['iUserID'], $aCompany['iCreateUserID']);
 				if ($row) {
 					return $this->showMsg('该员工已存在', false);
 				}
-				Model_CustomerNew::updData($aCustomer);
+				Tijian_Model_CustomerNew::updData($aCustomer);
 			} else {
-				$aCustomer['iUserID'] = Model_CustomerNew::addData($aCustomer);
+				$aCustomer['iUserID'] = Tijian_Model_CustomerNew::addData($aCustomer);
 			}
 
 			$aCompany['iUserID'] = $aCustomer['iUserID'];
-			Model_Company_Company::addData($aCompany);
+			Tijian_Model_Company_Company::addData($aCompany);
 
 			return $this->showMsg('新增成功', true);
 		}
@@ -163,12 +163,12 @@ class Tijian_Controller_Company_Employee extends Tijian_Controller_Company_Base
 			}
 
 			$aCompany['iUserID'] = $aCustomer['iUserID'];
-			$row = Model_Company_Company::checkIsExist($aCompany['iUserID'], $aCompany['iCreateUserID']);
+			$row = Tijian_Model_Company_Company::checkIsExist($aCompany['iUserID'], $aCompany['iCreateUserID']);
 			if ($row) {
-				Model_CustomerNew::updData($aCustomer);
+				Tijian_Model_CustomerNew::updData($aCustomer);
 
 				$aCompany['iAutoID'] = $row['iAutoID'];
-				Model_Company_Company::updData($aCompany);
+				Tijian_Model_Company_Company::updData($aCompany);
 				return $this->showMsg('修改成功', true);
 			} else {
 				return $this->showMsg('员工不存在', false);
@@ -206,7 +206,7 @@ class Tijian_Controller_Company_Employee extends Tijian_Controller_Company_Base
 			return $this->showMsg('员工手机号码不能为空', false);
 		}
 		if (!$params['sUserName']) {
-			$params['sUserName'] = Model_Company_Company::initUserName();
+			$params['sUserName'] = Tijian_Model_Company_Company::initUserName();
 		}
 
 		$aCustomer['sRealName'] = $params['sRealName'];
@@ -219,9 +219,9 @@ class Tijian_Controller_Company_Employee extends Tijian_Controller_Company_Base
 			$aCustomer['sBirthDate'] = $params['sBirthDate'];	
 		}
 
-		$customer = Model_CustomerNew::getUserByIdentityCard($params['sIdentityCard']);
+		$customer = Tijian_Model_CustomerNew::getUserByIdentityCard($params['sIdentityCard']);
 		if ($type == 1) {
-			$aCustomer['sUserName'] = Model_CustomerNew::initUserName();
+			$aCustomer['sUserName'] = Tijian_Model_CustomerNew::initUserName();
 			if ($customer && $customer['sRealName'] != $params['sRealName']) {
 				return $this->showMsg('相同身份证号员工已存在', false);
 			}
@@ -246,7 +246,7 @@ class Tijian_Controller_Company_Employee extends Tijian_Controller_Company_Base
 		$aCompany['sUserName'] = $params['sUserName'];
 		$aCompany['iCompanyID'] = $this->enterpriseId;
 		$aCompany['iCreateUserID'] = $this->enterpriseId;
-		$aCompanyUser = Model_User::getDetail($this->enterpriseId);
+		$aCompanyUser = Tijian_Model_User::getDetail($this->enterpriseId);
 		$aCompany['sCompanyName']  = $aCompanyUser['sRealName'];
 		$aCompany['sCompanyCode']  = $aCompanyUser['sUserName'];
 		if ($params['iDeptID']) {
@@ -322,9 +322,9 @@ class Tijian_Controller_Company_Employee extends Tijian_Controller_Company_Base
 				return $this->showMsg('员工ID'.self::ERROR, false);
 			}
 
-			$aEmployee = Model_CustomerNew::getListByPKIDs($aEmployeeID);
+			$aEmployee = Tijian_Model_CustomerNew::getListByPKIDs($aEmployeeID);
 			foreach ($aEmployee as $key => $value) {
-				$row = Model_Company_Company::checkIsExist($value['iUserID'], $this->enterpriseId);
+				$row = Tijian_Model_Company_Company::checkIsExist($value['iUserID'], $this->enterpriseId);
 				if (!$row) {
 					unset($aEmployeeID[$key]);
 				}
@@ -336,7 +336,7 @@ class Tijian_Controller_Company_Employee extends Tijian_Controller_Company_Base
 				$data['iUserID'] = $value;
 				$data['iAutoID'] = $aRow[$key]['iAutoID'];
 				try {
-					$upd = Model_Company_Company::updData($data);
+					$upd = Tijian_Model_Company_Company::updData($data);
 				} catch (Exception $e) {
 					echo $e->getMessage();
 				}				

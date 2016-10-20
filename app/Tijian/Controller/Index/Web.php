@@ -43,7 +43,7 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
 	public function listAction ()
 	{
 		//购物车信息
-        $aChart = Model_Cart::getCart($this->iCurrUserID);
+        $aChart = Tijian_Model_Cart::getCart($this->iCurrUserID);
         $this->assign('aChart', $aChart);
 
         $iPage = $this->getParam('page') ? intval($this->getParam('page')) : 1;
@@ -67,7 +67,7 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
             return $this->showMsg('参数不全', false);
         }
 
-        $aData = Model_UserProductBase::getUserProductBase($aParam['id'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID'],true);
+        $aData = Tijian_Model_UserProductBase::getUserProductBase($aParam['id'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID'],true);
         if (empty($aData)) {
             return $this->showMsg('产品不存在', false);
         }
@@ -75,23 +75,23 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
         list($aData['iStoreNum'], $aData['iCardNum']) = $this->getStoreAndPersonNumber($aData['iProductID']);
         
         //获取该产品包含的单项
-        $aItem = Model_ProductItem::getProductItems($aData['iProductID'], Model_ProductItem::EXPANDPRODUCT, null, true);
+        $aItem = Tijian_Model_ProductItem::getProductItems($aData['iProductID'], Tijian_Model_ProductItem::EXPANDPRODUCT, null, true);
         if (!empty($aItem)) {
             $sItem = implode(',', $aItem);
-            $aItemCat = Model_Item::setGroupByCategory($sItem, true);
+            $aItemCat = Tijian_Model_Item::setGroupByCategory($sItem, true);
         } else {
             $aItemCat = [];
         }
 
         //购物车信息
-        $aChart = Model_Cart::getCart($this->iCurrUserID);
+        $aChart = Tijian_Model_Cart::getCart($this->iCurrUserID);
         $aCitys = Tijian_Model_City::getPair([
             'where' => ['iStatus' => Tijian_Model_City::STATUS_VALID],
             'order' => 'sPinyin ASC' 
         ], 'iCityID', 'sCityName');
         
         $iChannelType = 2;
-        $aSupplier = Model_Store::getStoreSupplier($aData['iProductID'], $this->aUser['iCreateUserID'], $iChannelType, $this->aUser['iChannelID']);
+        $aSupplier = Tijian_Model_Store::getStoreSupplier($aData['iProductID'], $this->aUser['iCreateUserID'], $iChannelType, $this->aUser['iChannelID']);
         $sSupplier = implode(',', $aSupplier);
 
         $this->assign('aSupplier', $aSupplier);
@@ -116,7 +116,7 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
     public function stdetailAction ()
     {
     	$id = intval($this->getParam('id'));
-    	$aStore = Model_Store::getDetail($id);
+    	$aStore = Tijian_Model_Store::getDetail($id);
     	if (!$id || !$aStore) {
     		return $this->redirect('/index/web/list');
     	}
@@ -125,13 +125,13 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
 
     	$where = [
     		'iStoreID' => $id,
-    		'iType' => Model_ProductStore::EXPANDPRODUCT,
+    		'iType' => Tijian_Model_ProductStore::EXPANDPRODUCT,
     		'iSex' => 1
     	];
-    	$aData = Model_ProductStore::getList($where, $page, 'iUpdateTime Desc');
+    	$aData = Tijian_Model_ProductStore::getList($where, $page, 'iUpdateTime Desc');
 
-    	$aRegions = Model_Region::getAll(['where' => [
-            'iStatus' => Model_Region::STATUS_VALID
+    	$aRegions = Tijian_Model_Region::getAll(['where' => [
+            'iStatus' => Tijian_Model_Region::STATUS_VALID
         ]]);
         foreach ($aRegions as $k => $v) {
             $aRegion[$v['iRegionID']] = $v['sRegionName'];
@@ -144,13 +144,13 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
     //购物车列表
     public function cartlistAction()
     {
-        $aCart = Model_Cart::getCart($this->iCurrUserID);
+        $aCart = Tijian_Model_Cart::getCart($this->iCurrUserID);
         if (!empty($aCart)) {
             foreach ($aCart as $key => $value) {
-                $aDetail = Model_UserProductBase::getUserProductBase($key, $this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID']);
+                $aDetail = Tijian_Model_UserProductBase::getUserProductBase($key, $this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID']);
                 if (empty($aDetail) || $aDetail['iStatus'] != 1) {//如果不存在该产品或已下架，删除该条购物车
                     unset($aCart[$key]);
-                    Model_Cart::deleteCart($key, $this->iCurrUserID);
+                    Tijian_Model_Cart::deleteCart($key, $this->iCurrUserID);
                 } else {
                     $aCart[$key]['detail'] = $aDetail;
                 }
@@ -171,11 +171,11 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
         }
         $iProductID = $aParam['id'];
 
-        $aData = Model_UserProductBase::getUserProductBase($iProductID, $this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID']);
+        $aData = Tijian_Model_UserProductBase::getUserProductBase($iProductID, $this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID']);
         if (empty($aData)) {
             return $this->showMsg('产品不存在', false);
         }
-        if ($aCart = Model_Cart::addCart($iProductID, $this->iCurrUserID)) {
+        if ($aCart = Tijian_Model_Cart::addCart($iProductID, $this->iCurrUserID)) {
             return $this->showMsg($aCart, true);
         } else {
             return $this->showMsg('加入失败', false);
@@ -190,7 +190,7 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
             return $this->showMsg('参数不全', false);
         }
         $iProductID = $aParam['id'];
-        if (Model_Cart::deleteCart($iProductID, $this->iCurrUserID)) {
+        if (Tijian_Model_Cart::deleteCart($iProductID, $this->iCurrUserID)) {
             return $this->showMsg('删除成功', true);
         } else {
             return $this->showMsg('删除失败', false);
@@ -209,8 +209,8 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
             // return $this->showMsg('参数不全', false);
         }
 
-        $aCard = Model_OrderCard::getDetail($aParam['id']);
-        $aData = Model_UserProductBase::getUserProductBase($aParam['pid'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID']);
+        $aCard = Tijian_Model_OrderCard::getDetail($aParam['id']);
+        $aData = Tijian_Model_UserProductBase::getUserProductBase($aParam['pid'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID']);
         if (empty($aData)) {
             return $this->showMsg('产品不存在', false);
         }
@@ -218,20 +218,20 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
         list($aData['iStoreNum'], $aData['iCardNum']) = $this->getStoreAndPersonNumber($aParam['id']);
         
         //获取该产品包含的单项
-        $aItem = Model_ProductItem::getProductItems($aData['iProductID'], Model_ProductItem::EXPANDPRODUCT, null, true);
+        $aItem = Tijian_Model_ProductItem::getProductItems($aData['iProductID'], Tijian_Model_ProductItem::EXPANDPRODUCT, null, true);
         if (!empty($aItem)) {
             $sItem = implode(',', $aItem);
-            $aItemCat = Model_Item::setGroupByCategory($sItem, true);
+            $aItemCat = Tijian_Model_Item::setGroupByCategory($sItem, true);
         } else {
             $aItemCat = [];
         }
 
         //购物车信息
-        $aChart = Model_Cart::getCart($this->iCurrUserID);
+        $aChart = Tijian_Model_Cart::getCart($this->iCurrUserID);
         $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         
         $iChannelType = 2;
-        $aSupplier = Model_Store::getStoreSupplier($aData['iProductID'], $this->aUser['iCreateUserID'], $iChannelType, $this->aUser['iChannelID']);
+        $aSupplier = Tijian_Model_Store::getStoreSupplier($aData['iProductID'], $this->aUser['iCreateUserID'], $iChannelType, $this->aUser['iChannelID']);
         $sSupplier = implode(',', $aSupplier);
 
         $this->assign('aSupplier', $aSupplier);
@@ -251,9 +251,9 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
         $sAptUrl = '/order/buythird/id/' . $aParam['id'] . '/pid/' . $aParam['pid'];
         $this->assign('sAptUrl', $sAptUrl);
 
-        $aUpgrade = Model_UserProductUpgrade::getUserProductUpgrade($aParam['pid'], $this->aUser['iCreateUserID'], $iChannelType, $this->aUser['iChannelID']);
+        $aUpgrade = Tijian_Model_UserProductUpgrade::getUserProductUpgrade($aParam['pid'], $this->aUser['iCreateUserID'], $iChannelType, $this->aUser['iChannelID']);
 
-        $aCardProduct = Model_OrderCardProduct::getCardProduct($aParam['id'], $aParam['pid']);
+        $aCardProduct = Tijian_Model_OrderCardProduct::getCardProduct($aParam['id'], $aParam['pid']);
         //判断是否能升级（以下不能升级：1，个人未支付和已退款；2：已升级；3：入职体检；4：退款中）
         $iCanUpgrade = 1;
         if ((empty($aCardProduct['iPayStatus']) && $aCard['iPayType'] == 1) || !empty($aCardProduct['iLastProductID']) || $aData['iAttribute'] == 2 || !empty($aCardProduct['iRefundID'])) {
@@ -275,7 +275,7 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
         if (empty($aParam['sSupplierCode']) || empty($aParam['sStoreCode']) || empty($aParam['sdate'])) {
             return $this->showMsg('参数不全', false);
         }
-        $aReserDateList = Model_Supplier::getReserveTimeByCode($aParam['sSupplierCode'], $aParam['sdate'],$aParam['sStoreCode'], $aParam['iPhysicalType']);
+        $aReserDateList = Tijian_Model_Supplier::getReserveTimeByCode($aParam['sSupplierCode'], $aParam['sdate'],$aParam['sStoreCode'], $aParam['iPhysicalType']);
         return $this->showMsg($aReserDateList, true);
     }
 
@@ -286,13 +286,13 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
     public function confirmLoginAction ()
     {
         $iUserID = intval($this->getParam('iCustomerID'));
-        $aUser = Model_CustomerNew::getDetail($iUserID);
+        $aUser = Tijian_Model_CustomerNew::getDetail($iUserID);
         if (!$iUserID || !$aUser) {
             return $this->showMsg('无此用户', false);
         }
 
         $aUser['iLoginStatus'] = 1;
-        Model_CustomerNew::updData($aUser);
+        Tijian_Model_CustomerNew::updData($aUser);
 
         return  $this->showMsg('确认成功', true);
     }

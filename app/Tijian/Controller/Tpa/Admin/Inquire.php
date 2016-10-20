@@ -31,7 +31,7 @@ class Tijian_Controller_Tpa_Admin_Inquire extends Tijian_Controller_Tpa_Admin_Ba
                 'sName' => $aParam['sCompanyName'],
                 'iStatus' => 1
             );
-            $company = Model_Tpa_Company::getRow(['where' => $cWhere]);
+            $company = Tijian_Model_Tpa_Company::getRow(['where' => $cWhere]);
             if(!empty($company)) {
                 $where['iCompanyID'] = $company['iAutoID'];
             }else{
@@ -64,7 +64,7 @@ class Tijian_Controller_Tpa_Admin_Inquire extends Tijian_Controller_Tpa_Admin_Ba
             }
         }
 
-        $aData = Model_Tpa_Claimsplan::getList($where, $iPage);
+        $aData = Tijian_Model_Tpa_Claimsplan::getList($where, $iPage);
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
     }
@@ -76,7 +76,7 @@ class Tijian_Controller_Tpa_Admin_Inquire extends Tijian_Controller_Tpa_Admin_Ba
         $iPage = $this->getParam('page') ? $this->getParam('page') : 1;
         $where = [];
 
-        $aData = Model_Tpa_Express::getList($where, $iPage);
+        $aData = Tijian_Model_Tpa_Express::getList($where, $iPage);
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
     }

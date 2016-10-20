@@ -122,7 +122,7 @@ class Tijian_Controller_File_Index extends Yaf_Controller
             
             // 批量上传图片 @todo 待优化
             foreach ($aFiles as $aFile) {
-                list ($iError, $mResult) = $oStorage->saveFile($aFile['name'], $aFile['tmp_name'], $aFile['error'], $aFile['size'], $sIP, $sDomain, Model_FileMeta::BID_BANNER);
+                list ($iError, $mResult) = $oStorage->saveFile($aFile['name'], $aFile['tmp_name'], $aFile['error'], $aFile['size'], $sIP, $sDomain, Tijian_Model_FileMeta::BID_BANNER);
                 
                 if ($iError == 0) {
                     $iRetError = 0;
@@ -197,9 +197,9 @@ class Tijian_Controller_File_Index extends Yaf_Controller
             
             $sDomain = $this->getRequest()->getHttpHost();
             $bllFile = new File_Storage();
-            $iBid = Model_FileMeta::BID_DEFAULT;
+            $iBid = Tijian_Model_FileMeta::BID_DEFAULT;
             if (isset($params['biz']) && 'banner' == $params['biz']) {
-                $iBid = Model_FileMeta::BID_BANNER;
+                $iBid = Tijian_Model_FileMeta::BID_BANNER;
             }
             
             $mRet = $bllFile->getFile($sKey, $sExt, $aFileInfo, $sDomain, $iWidth, $iHeight, $bCrop, $iWaterMarkPosition, $iWaterMarkPath, false, $iBid);
@@ -257,9 +257,9 @@ class Tijian_Controller_File_Index extends Yaf_Controller
             
             $sDomain = $this->getRequest()->getHttpHost();
             $bllFile = new File_Storage();
-            $iBid = Model_FileMeta::BID_DEFAULT;
+            $iBid = Tijian_Model_FileMeta::BID_DEFAULT;
             if (isset($params['biz']) && 'banner' == $params['biz']) {
-                $iBid = Model_FileMeta::BID_BANNER;
+                $iBid = Tijian_Model_FileMeta::BID_BANNER;
             }
             
             $mRet = $bllFile->getFile($sKey, $sExt, $aFileInfo, $sDomain, $iWidth, $iHeight, $bCrop, $iWaterMarkPosition, $iWaterMarkPath, true, $iBid);

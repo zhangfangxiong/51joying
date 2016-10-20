@@ -159,7 +159,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $aDataParam['iSendStatus'] = $aParam['iSendStatus'];
         }
         $aDataParam['iOrderType'] = 2;
-        $aCardList = Model_OrderCard::getList($aDataParam, $iPage, 'iCreateTime');
+        $aCardList = Tijian_Model_OrderCard::getList($aDataParam, $iPage, 'iCreateTime');
         $this->assign('iType', 1);
         $this->assign('aPCard', Yaf_G::getConf('aPCard', 'product'));
         $this->assign('aCardType', Yaf_G::getConf('aCardType', 'product'));
@@ -194,7 +194,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             }
             $aParam['sRemark'] = $aParam['sRemark'] ? $aParam['sRemark'] : '';
             for ($i = 0; $i < $aParam['sNum']; $i++) {
-                Model_OrderCard::initRealCard($aParam['iPCard'], $aParam['iCardType'], $aParam['sInitNo'], $aParam['sStartDate'], $aParam['sEndDate'], $aParam['sRemark']);
+                Tijian_Model_OrderCard::initRealCard($aParam['iPCard'], $aParam['iCardType'], $aParam['sInitNo'], $aParam['sStartDate'], $aParam['sEndDate'], $aParam['sRemark']);
             }
             $sUrl = '/admin/eproduct/rcardlist/';
             return $this->showMsg('生成实体卡成功！', true, $sUrl);
@@ -211,15 +211,15 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($iID)) {
             return $this->showMsg('参数不全', false);
         }
-        $aStoreCode = Model_StoreCode::getDetail($iID);
+        $aStoreCode = Tijian_Model_StoreCode::getDetail($iID);
         if (empty($aStoreCode)) {
             return $this->showMsg('门店代码不存在', false);
         }
-        $aProduct = Model_Product::getDetail($aStoreCode['iProductID']);
+        $aProduct = Tijian_Model_Product::getDetail($aStoreCode['iProductID']);
         if (empty($aProduct)) {
             return $this->showMsg('产品不存在', false);
         }
-        $aStore = Model_Store::getDetail($aStoreCode['iStoreID']);
+        $aStore = Tijian_Model_Store::getDetail($aStoreCode['iStoreID']);
         if (empty($aStore)) {
             return $this->showMsg('门店不存在', false);
         }
@@ -227,7 +227,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if ($this->isPost()) {
             $aParam = $this->getParams();
             $aParam['iStatus'] = 2;//已配置
-            if (Model_StoreCode::updData($aParam)) {
+            if (Tijian_Model_StoreCode::updData($aParam)) {
                 $sUrl = '/admin/eproduct/storeCodeList/id/' . $aStoreCode['iProductID'];
                 return $this->showMsg('修改成功！', true, $sUrl);
             } else {
@@ -235,7 +235,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             }
         } else {
             $aWhere['iStatus >'] = 0;
-            $aSupplier = Model_Type::getOption('supplier');
+            $aSupplier = Tijian_Model_Type::getOption('supplier');
             $aCity = Tijian_Model_City::getPair($aWhere, 'iCityID', 'sCityName');
             $aSex = Yaf_G::getConf('aSex', 'product');
             $this->assign('aProduct', $aProduct);
@@ -256,7 +256,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         $iPageSize = self::PAGESIZE;
         $iPage = $this->getParam('page') ? intval($this->getParam('page')) : 1;
         $aParam = $this->getParams();
-        $aProduct = Model_Product::getDetail($aParam['id']);
+        $aProduct = Tijian_Model_Product::getDetail($aParam['id']);
         if (empty($aProduct)) {
             return $this->showMsg('产品不存在', false);
         }
@@ -281,7 +281,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         }
         $iSelectStore = (empty($aParam['aCity']) && empty($aParam['aSupplier']) && empty($aParam['sKeyword'])) ? 0 : 1;//是否要关联门店，不带条件就不关联门店
         if ($iSelectStore) {
-            $aTmp = Model_Store::getAll($aStoreParam);//满足条件的门店
+            $aTmp = Tijian_Model_Store::getAll($aStoreParam);//满足条件的门店
             $aStoreIDs = [];
             if (!empty($aTmp)) {
                 foreach ($aTmp as $key => $value) {
@@ -295,12 +295,12 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         } else {
             $aParam['iStatus >'] = 0;
             $aParam['iProductID'] = $aParam['id'];
-            $aData = Model_StoreCode::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
+            $aData = Tijian_Model_StoreCode::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
         }
         if (!empty($aData['aList'])) {
             //整合需要的数据
             foreach ($aData['aList'] as $key => &$value) {
-                $aStore = Model_Store::getDetail($value['iStoreID']);
+                $aStore = Tijian_Model_Store::getDetail($value['iStoreID']);
                 $value['sStoreName'] = $aStore['sName'];
                 $value['sStoreCode'] = $aStore['sStoreCode'];
                 $value['iSupplierID'] = $aStore['iSupplierID'];
@@ -308,7 +308,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             }
         }
         $aWhere['iStatus >'] = 0;
-        $aSupplier = Model_Type::getOption('supplier');
+        $aSupplier = Tijian_Model_Type::getOption('supplier');
         $aCity = Tijian_Model_City::getPair($aWhere, 'iCityID', 'sCityName');
         $aStatus = Yaf_G::getConf('aCodeStatus', 'product');
         $aSex = Yaf_G::getConf('aSex', 'product');
@@ -349,14 +349,14 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         }
         $iSelectStore = (empty($aParam['aCity']) && empty($aParam['aSupplier'])) ? 0 : 1;//是否要关联门店，不带条件就不关联门店
         if ($iSelectStore) {
-            $aTmp = Model_Store::getAll($aStoreParam);//满足条件的门店
+            $aTmp = Tijian_Model_Store::getAll($aStoreParam);//满足条件的门店
             $aStoreIDs = [];
             $aProductIDs = [];
             if (!empty($aTmp)) {
                 foreach ($aTmp as $key => $value) {
                     $aStoreIDs[] = $value['iStoreID'];
                 }
-                $aProduct = Model_ProductStore::getDataByStores($aStoreIDs, Model_ProductStore::EXPANDPRODUCT);
+                $aProduct = Tijian_Model_ProductStore::getDataByStores($aStoreIDs, Tijian_Model_ProductStore::EXPANDPRODUCT);
                 if (!empty($aProduct)) {
                     foreach ($aProduct as $key => $value) {
                         $aProductIDs[] = $value['iProductID'];
@@ -366,19 +366,19 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             //print_r($aProductIDs);die;
             $aParam['iProductID IN'] = $aProductIDs;
         }
-        $aParam['iType'] = Model_Product::TYPE_EXPAND;
+        $aParam['iType'] = Tijian_Model_Product::TYPE_EXPAND;
         if (!empty($aParam['sKeyword'])) {
             $aParam['sWhere'] = '(sProductCode="' . $aParam['sKeyword'] . '" OR sProductName LIKE "%' . $aParam['sKeyword'] . '%")';
         }
         if (isset($aProductIDs) && empty($aProductIDs)) {
             $aData['aList'] = [];
         } else {
-            $aData = Model_Product::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
+            $aData = Tijian_Model_Product::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
         }
         if (!empty($aData['aList'])) {
             //整合需要的数据
             foreach ($aData['aList'] as $key => $value) {
-                $aHasStore = Model_ProductStore::getProductStores($value['iProductID'], Model_ProductStore::EXPANDPRODUCT);
+                $aHasStore = Tijian_Model_ProductStore::getProductStores($value['iProductID'], Tijian_Model_ProductStore::EXPANDPRODUCT);
                 $aData['aList'][$key]['iStoreNum'] = count($aHasStore);
                 $aData['aList'][$key]['iCityNum'] = 0;
                 $aData['aList'][$key]['iSupplierNum'] = 0;
@@ -391,7 +391,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                 //统计城市和供应商数目
                 if (!empty($aHasStore)) {
                     foreach ($aHasStore as $k => $val) {
-                        $aProductData = Model_Store::getDetail($val['iStoreID']);
+                        $aProductData = Tijian_Model_Store::getDetail($val['iStoreID']);
                         $aHasStore[$k]['aStore'] = $aProductData;
                         //按城市分组
                         $aCityTmp[$aProductData['iCityID']][] = 1;
@@ -406,7 +406,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                 }
                 //统计渠道和客户数量
                 if (!empty($value['iCanCompany'])) {
-                    $aChannel = Model_ProductChannel::getChannelInfoByProductID($value['iProductID'], Model_ProductChannel::TYPE_COMPANY);
+                    $aChannel = Tijian_Model_ProductChannel::getChannelInfoByProductID($value['iProductID'], Tijian_Model_ProductChannel::TYPE_COMPANY);
                     $aData['aList'][$key]['iComChannelNum'] = count($aChannel);
                     if (!empty($aChannel)) {
                         $iNumTmp = 0;
@@ -416,14 +416,14 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                             if ($val['iViewRange'] == 0 || $val['iViewRange'] == 2) {//全部和不可见要统计渠道所有支持数目
                                 $aUserParam['where']['iStatus >'] = 0;
                                 $aUserParam['where']['iChannel'] = $val['iChannelID'];
-                                $aChannelUser = Model_User::getCnt($aUserParam);
+                                $aChannelUser = Tijian_Model_User::getCnt($aUserParam);
                                 $iNumTmp += $aChannelUser;
                                 if ($val['iViewRange'] == 2) {
-                                    $aViewList = Model_Product::getUserViewlist($value['iProductID'], Model_ProductChannel::TYPE_COMPANY, $val['iChannelID']);
+                                    $aViewList = Tijian_Model_Product::getUserViewlist($value['iProductID'], Tijian_Model_ProductChannel::TYPE_COMPANY, $val['iChannelID']);
                                     $iNumTmp = $iNumTmp - count($aViewList);
                                 }
                             } else {
-                                $aViewList = Model_Product::getUserViewlist($value['iProductID'], Model_ProductChannel::TYPE_COMPANY, $val['iChannelID']);
+                                $aViewList = Tijian_Model_Product::getUserViewlist($value['iProductID'], Tijian_Model_ProductChannel::TYPE_COMPANY, $val['iChannelID']);
                                 if (!empty($aViewList)) {
                                     $iNumTmp += count($aViewList);
                                 }
@@ -433,7 +433,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                     }
                 }
                 if (!empty($value['iCanIndividual'])) {
-                    $aChannel = Model_ProductChannel::getChannelInfoByProductID($value['iProductID'], Model_ProductChannel::TYPE_INDIVIDUAL);
+                    $aChannel = Tijian_Model_ProductChannel::getChannelInfoByProductID($value['iProductID'], Tijian_Model_ProductChannel::TYPE_INDIVIDUAL);
                     $aData['aList'][$key]['iIndivChannelNum'] = count($aChannel);
                     if (!empty($aChannel)) {
                         $iNumTmp = 0;
@@ -443,14 +443,14 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                             if ($val['iViewRange'] == 0 || $val['iViewRange'] == 2) {//全部和不可见要统计渠道所有支持数目
                                 $aUserParam['where']['iStatus >'] = 0;
                                 $aUserParam['where']['iChannel'] = $val['iChannelID'];
-                                $aChannelUser = Model_User::getCnt($aUserParam);
+                                $aChannelUser = Tijian_Model_User::getCnt($aUserParam);
                                 $iNumTmp += $aChannelUser;
                                 if ($val['iViewRange'] == 2) {
-                                    $aViewList = Model_Product::getUserViewlist($value['iProductID'], Model_ProductChannel::TYPE_INDIVIDUAL, $val['iChannelID']);
+                                    $aViewList = Tijian_Model_Product::getUserViewlist($value['iProductID'], Tijian_Model_ProductChannel::TYPE_INDIVIDUAL, $val['iChannelID']);
                                     $iNumTmp = $iNumTmp - count($aViewList);
                                 }
                             } else {
-                                $aViewList = Model_Product::getUserViewlist($value['iProductID'], Model_ProductChannel::TYPE_INDIVIDUAL, $val['iChannelID']);
+                                $aViewList = Tijian_Model_Product::getUserViewlist($value['iProductID'], Tijian_Model_ProductChannel::TYPE_INDIVIDUAL, $val['iChannelID']);
                                 if (!empty($aViewList)) {
                                     $iNumTmp += count($aViewList);
                                 }
@@ -462,13 +462,13 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             }
         }
         $aWhere['iStatus >'] = 0;
-        $aSupplier = Model_Type::getOption('supplier');
+        $aSupplier = Tijian_Model_Type::getOption('supplier');
         $aCity = Tijian_Model_City::getPair($aWhere, 'iCityID', 'sCityName');
         $aChannel = Yaf_G::getConf('aChannel');
         $aStatus = Yaf_G::getConf('aStatus', 'product');
-        $aWhere['iType'] = Model_Product::TYPE_BASE;
-        $aParent = Model_Product::getPair($aWhere, 'iProductID', 'sProductName');
-        $this->assign('iType', Model_Product::TYPE_EXPAND);
+        $aWhere['iType'] = Tijian_Model_Product::TYPE_BASE;
+        $aParent = Tijian_Model_Product::getPair($aWhere, 'iProductID', 'sProductName');
+        $this->assign('iType', Tijian_Model_Product::TYPE_EXPAND);
         $this->assign('aSupplier', $aSupplier);
         $this->assign('aCity', $aCity);
         $this->assign('aChannel', $aChannel);
@@ -484,15 +484,15 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($iProductID)) {
             return $this->showMsg('参数有误！', false);
         }
-        $aProduct = Model_Product::getDetail($iProductID);
+        $aProduct = Tijian_Model_Product::getDetail($iProductID);
         if (empty($aProduct)) {
             return $this->showMsg('产品不存在！', false);
         }
         //获取以该产品为父产品的拓展产品数目
         $aParam['where']['iStatus > '] = 0;
-        $aParam['where']['iType'] = Model_Product::TYPE_EXPAND;
+        $aParam['where']['iType'] = Tijian_Model_Product::TYPE_EXPAND;
         $aParam['where']['iParentID'] = $iProductID;
-        $iSonNum = Model_Product::getCnt($aParam);
+        $iSonNum = Tijian_Model_Product::getCnt($aParam);
         $aProduct['iSonNum'] = $iSonNum;
         $aProduct['sExpandCode'] = str_pad($iSonNum + 1, 2, "0", STR_PAD_LEFT);
         $aProduct['sImageShow'] = !empty($aProduct['sImage']) ? Util_Uri::getDFSViewURL($aProduct['sImage']) : '';
@@ -506,7 +506,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($aParam['id'])) {
             return $this->showMsg('参数不全', false);
         }
-        $aProduct = Model_Product::getDetail($aParam['id']);
+        $aProduct = Tijian_Model_Product::getDetail($aParam['id']);
         if (empty($aProduct)) {
             return $this->showMsg('不存在该产品', false);
         }
@@ -528,9 +528,9 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $currentSheet = $PHPExcel->getSheet(0);
             $allRow = $currentSheet->getHighestRow();
 
-            $aAllStores = Model_Store::getPair([
+            $aAllStores = Tijian_Model_Store::getPair([
                 'where' => [
-                    'iStatus' => Model_ProductItem::STATUS_VALID
+                    'iStatus' => Tijian_Model_ProductItem::STATUS_VALID
                 ]
             ], 'sName', 'iStoreID');
             $aSex = Yaf_G::getConf('aSex', 'product');
@@ -545,20 +545,20 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                 $sSupplierPrice = $PHPExcel->getActiveSheet()->getCell("D" . $i)->getValue();
                 $sChannelPrice = $PHPExcel->getActiveSheet()->getCell("E" . $i)->getValue();
                 if ($i == 1) {
-                    if ($sStoreName != Model_Store::INPORTROWNAME) {
-                        return $this->showMsg('导入文件格式错误，第一列请以"' . Model_Store::INPORTROWNAME . '"为标题', false);
+                    if ($sStoreName != Tijian_Model_Store::INPORTROWNAME) {
+                        return $this->showMsg('导入文件格式错误，第一列请以"' . Tijian_Model_Store::INPORTROWNAME . '"为标题', false);
                     }
-                    if ($sSex != Model_Store::INPORTROWSEX) {
-                        return $this->showMsg('导入文件格式错误，第二列请以"' . Model_Store::INPORTROWSEX . '"为标题', false);
+                    if ($sSex != Tijian_Model_Store::INPORTROWSEX) {
+                        return $this->showMsg('导入文件格式错误，第二列请以"' . Tijian_Model_Store::INPORTROWSEX . '"为标题', false);
                     }
-                    if ($sCode != Model_Store::INPORTROWCODE) {
-                        return $this->showMsg('导入文件格式错误，第三列请以"' . Model_Store::INPORTROWCODE . '"为标题', false);
+                    if ($sCode != Tijian_Model_Store::INPORTROWCODE) {
+                        return $this->showMsg('导入文件格式错误，第三列请以"' . Tijian_Model_Store::INPORTROWCODE . '"为标题', false);
                     }
-                    if ($sSupplierPrice != Model_Store::INPORTROWPRICE1) {
-                        return $this->showMsg('导入文件格式错误，第四列请以"' . Model_Store::INPORTROWPRICE1 . '"为标题', false);
+                    if ($sSupplierPrice != Tijian_Model_Store::INPORTROWPRICE1) {
+                        return $this->showMsg('导入文件格式错误，第四列请以"' . Tijian_Model_Store::INPORTROWPRICE1 . '"为标题', false);
                     }
-                    if ($sChannelPrice != Model_Store::INPORTROWPRICE2) {
-                        return $this->showMsg('导入文件格式错误，第五列请以"' . Model_Store::INPORTROWPRICE2 . '"为标题', false);
+                    if ($sChannelPrice != Tijian_Model_Store::INPORTROWPRICE2) {
+                        return $this->showMsg('导入文件格式错误，第五列请以"' . Tijian_Model_Store::INPORTROWPRICE2 . '"为标题', false);
                     }
                     continue;
                 }
@@ -574,7 +574,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                     $aFail[$i]['reason'] = '该性别不存在';
                     continue;
                 }
-                $aStore = Model_Store::getStoreByStoreName($sStoreName);
+                $aStore = Tijian_Model_Store::getStoreByStoreName($sStoreName);
                 $aStoreCodeParam['iProductID'] = $aParam['id'];
                 $aStoreCodeParam['iStoreID'] = $aStore['iStoreID'];
                 $aStoreCodeParam['iSex'] = $aSex[$sSex];
@@ -582,13 +582,13 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                 $aStoreCodeParam['sChannelPrice'] = $sChannelPrice;
                 $aStoreCodeParam['sSupplierPrice'] = $sSupplierPrice;
                 $aStoreCodeParam['iCreateUserID'] = $aStoreCodeParam['iUpdateUserID'] = $this->aCurrUser['iUserID'];;
-                if (Model_StoreCode::getData($aParam['id'], $aStore['iStoreID'], $aSex[$sSex])) {
+                if (Tijian_Model_StoreCode::getData($aParam['id'], $aStore['iStoreID'], $aSex[$sSex])) {
                     $aFail[$i]['iHang'] = $i;
                     $aFail[$i]['storeName'] = $sStoreName;
                     $aFail[$i]['reason'] = '已导入过该门店';
                     continue;
                 } else {
-                    if (!Model_StoreCode::addData($aStoreCodeParam)) {
+                    if (!Tijian_Model_StoreCode::addData($aStoreCodeParam)) {
                         $aFail[$i]['iHang'] = $i;
                         $aFail[$i]['storeName'] = $sStoreName;
                         $aFail[$i]['reason'] = '代码插入失败';
@@ -611,7 +611,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($aParam['id'])) {
             return $this->showMsg('参数不全', false);
         }
-        $aProduct = Model_Product::getDetail($aParam['id']);
+        $aProduct = Tijian_Model_Product::getDetail($aParam['id']);
         if (empty($aProduct)) {
             return $this->showMsg('不存在该产品', false);
         }
@@ -634,7 +634,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $allRow = $currentSheet->getHighestRow();
 
             $aWhere['iStatus >'] = 0;
-            $aSupplier = Model_Type::getOption('supplier');
+            $aSupplier = Tijian_Model_Type::getOption('supplier');
             $aSupplier = array_flip($aSupplier);
             $aCity = Tijian_Model_City::getPair($aWhere, 'sCityName', 'iCityID');
             $aSex = Yaf_G::getConf('aSex', 'product');
@@ -651,23 +651,23 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                 $sSupplierPrice = $PHPExcel->getActiveSheet()->getCell("E" . $i)->getValue();
                 $sChannelPrice = $PHPExcel->getActiveSheet()->getCell("F" . $i)->getValue();
                 if ($i == 1) {
-                    if ($sSupperName != Model_Store::INPORTROWSUPPERNAME) {
-                        return $this->showMsg('导入文件格式错误，第一列请以"' . Model_Store::INPORTROWSUPPERNAME . '"为标题', false);
+                    if ($sSupperName != Tijian_Model_Store::INPORTROWSUPPERNAME) {
+                        return $this->showMsg('导入文件格式错误，第一列请以"' . Tijian_Model_Store::INPORTROWSUPPERNAME . '"为标题', false);
                     }
-                    if ($sCity != Model_Store::INPORTROWCITY) {
-                        return $this->showMsg('导入文件格式错误，第二列请以"' . Model_Store::INPORTROWCITY . '"为标题', false);
+                    if ($sCity != Tijian_Model_Store::INPORTROWCITY) {
+                        return $this->showMsg('导入文件格式错误，第二列请以"' . Tijian_Model_Store::INPORTROWCITY . '"为标题', false);
                     }
-                    if ($sSex != Model_Store::INPORTROWSEX) {
-                        return $this->showMsg('导入文件格式错误，第三列请以"' . Model_Store::INPORTROWSEX . '"为标题', false);
+                    if ($sSex != Tijian_Model_Store::INPORTROWSEX) {
+                        return $this->showMsg('导入文件格式错误，第三列请以"' . Tijian_Model_Store::INPORTROWSEX . '"为标题', false);
                     }
-                    if ($sCode != Model_Store::INPORTROWCODE) {
-                        return $this->showMsg('导入文件格式错误，第四列请以"' . Model_Store::INPORTROWCODE . '"为标题', false);
+                    if ($sCode != Tijian_Model_Store::INPORTROWCODE) {
+                        return $this->showMsg('导入文件格式错误，第四列请以"' . Tijian_Model_Store::INPORTROWCODE . '"为标题', false);
                     }
-                    if ($sSupplierPrice != Model_Store::INPORTROWPRICE1) {
-                        return $this->showMsg('导入文件格式错误，第五列请以"' . Model_Store::INPORTROWPRICE1 . '"为标题', false);
+                    if ($sSupplierPrice != Tijian_Model_Store::INPORTROWPRICE1) {
+                        return $this->showMsg('导入文件格式错误，第五列请以"' . Tijian_Model_Store::INPORTROWPRICE1 . '"为标题', false);
                     }
-                    if ($sChannelPrice != Model_Store::INPORTROWPRICE2) {
-                        return $this->showMsg('导入文件格式错误，第六列请以"' . Model_Store::INPORTROWPRICE2 . '"为标题', false);
+                    if ($sChannelPrice != Tijian_Model_Store::INPORTROWPRICE2) {
+                        return $this->showMsg('导入文件格式错误，第六列请以"' . Tijian_Model_Store::INPORTROWPRICE2 . '"为标题', false);
                     }
                     continue;
                 }
@@ -698,7 +698,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
 
                 $aStoreParam['sCity'] = $aCity[$sCity];
                 $aStoreParam['sSupplier'] = $aSupplier[$sSupperName];
-                $aStores = Model_Store::getData($aStoreParam);
+                $aStores = Tijian_Model_Store::getData($aStoreParam);
                 foreach ($aStores as $key => $value) {
                     $iTotal++;
                     $aStoreCodeParam['iProductID'] = $aParam['id'];
@@ -708,7 +708,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                     $aStoreCodeParam['sChannelPrice'] = $sChannelPrice;
                     $aStoreCodeParam['sSupplierPrice'] = $sSupplierPrice;
                     $aStoreCodeParam['iCreateUserID'] = $aStoreCodeParam['iUpdateUserID'] = $this->aCurrUser['iUserID'];;
-                    if (Model_StoreCode::getData($aParam['id'], $value['iStoreID'], $aSex[$sSex])) {
+                    if (Tijian_Model_StoreCode::getData($aParam['id'], $value['iStoreID'], $aSex[$sSex])) {
                         $aTmp['iHang'] = $i;
                         $aTmp['supplierName'] = $sSupperName;
                         $aTmp['city'] = $sCity;
@@ -717,7 +717,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                         $aFail[$i][] = $aTmp;
                         continue;
                     } else {
-                        if (!Model_StoreCode::addData($aStoreCodeParam)) {
+                        if (!Tijian_Model_StoreCode::addData($aStoreCodeParam)) {
                             $aTmp['iHang'] = $i;
                             $aTmp['supplierName'] = $sSupperName;
                             $aTmp['city'] = $sCity;
@@ -759,9 +759,9 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $currentSheet = $PHPExcel->getSheet(0);
             $allRow = $currentSheet->getHighestRow();
 
-            $aItem = Model_Item::getPair([
+            $aItem = Tijian_Model_Item::getPair([
                 'where' => [
-                    'iStatus' => Model_ProductItem::STATUS_VALID
+                    'iStatus' => Tijian_Model_ProductItem::STATUS_VALID
                 ]
             ], 'sName', 'iItemID');
             $aImportItemIDs = [];
@@ -769,8 +769,8 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             for ($i = 1; $i <= $allRow; $i++) { //第1行是表头,从第2行开始读取
                 $sItemName = $PHPExcel->getActiveSheet()->getCell("A" . $i)->getValue();
                 if ($i == 1) {
-                    if ($sItemName != Model_Item::INPORTROWNAME) {
-                        return $this->showMsg('导入文件格式错误，第一列请以"' . Model_Item::INPORTROWNAME . '"为标题', false);
+                    if ($sItemName != Tijian_Model_Item::INPORTROWNAME) {
+                        return $this->showMsg('导入文件格式错误，第一列请以"' . Tijian_Model_Item::INPORTROWNAME . '"为标题', false);
                     }
                     continue;
                 }
@@ -780,13 +780,13 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                 $aImportItemIDs[] = $aItem[$sItemName];//需要导入的所有单项
             }
             if (!empty($aImportItemIDs)) {
-                $aMatchList = Model_ProductItem::matchProductByItem($aImportItemIDs);
+                $aMatchList = Tijian_Model_ProductItem::matchProductByItem($aImportItemIDs);
                 if (empty($aMatchList)) {
                     return $this->showMsg('没有匹配到相应的基础产品，请手动匹配', false);
                 }
                 //获取匹配的基础产品中总共有多少单项
                 foreach ($aMatchList as $key => $value) {
-                    $aHasItems = Model_ProductItem::getProductItems($value['iProductID'], Model_ProductItem::BASEPRODUCT, 1);
+                    $aHasItems = Tijian_Model_ProductItem::getProductItems($value['iProductID'], Tijian_Model_ProductItem::BASEPRODUCT, 1);
                     $aMatchList[$key]['iCount'] = count($aHasItems);
                 }
                 $aData['importItems'] = implode(',', $aImportItemIDs);
@@ -827,14 +827,14 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                 return null;
             }
             $iPartentID = $aProduct['iParentID'];
-            $aParent = Model_Product::getDetail($iPartentID);
-            $aProduct['sProductCode'] = Model_Product::initProductCode(1);
-            $aProduct['iType'] = Model_Product::TYPE_EXPAND;
+            $aParent = Tijian_Model_Product::getDetail($iPartentID);
+            $aProduct['sProductCode'] = Tijian_Model_Product::initProductCode(1);
+            $aProduct['iType'] = Tijian_Model_Product::TYPE_EXPAND;
             $aProduct['iCreateUserID'] = $aProduct['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
 
 
-            Model_Product::begin();
-            if ($iLastInsertID = Model_Product::addData($aProduct)) {
+            Tijian_Model_Product::begin();
+            if ($iLastInsertID = Tijian_Model_Product::addData($aProduct)) {
                 //导入基础产品的基本信息，单项，门店，加项，升级产品等信息
                 //1,基本信息(暂时知道的是匹配价格，备注也匹配？其他要匹配再在这里加)
                 $aBaseParam['iManPrice'] = $aParent['iManPrice'];
@@ -843,95 +843,95 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                 $aBaseParam['sRemark'] = $aParent['sRemark'];
                 $aBaseParam['iProductID'] = $iLastInsertID;
                 if (!Model_Product::updData($aBaseParam)) {
-                    Model_Product::rollback();
+                    Tijian_Model_Product::rollback();
                     return $this->showMsg('增加失败！', false);
                 }
                 //2,单项
                 if (!empty($aProduct['importItemID'])) {//导入item操作
                     $aImportItemID = explode(',', $aProduct['importItemID']);
                     $aItemParam['iProductID'] = $iLastInsertID;
-                    $aItemParam['iType'] = Model_ProductItem::EXPANDPRODUCT;
+                    $aItemParam['iType'] = Tijian_Model_ProductItem::EXPANDPRODUCT;
                     $aItemParam['iCreateUserID'] = $aItemParam['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
                     foreach ($aImportItemID as $key => $value) {
                         $aItemParam['iItemID'] = $value;
                         //查询是否存在该item和是否已经导入过
-                        $aItem = Model_Item::getDetail($value);
-                        if (empty($aItem) || Model_ProductItem::getDataByItemID($iLastInsertID, $value, Model_ProductItem::EXPANDPRODUCT)) {
+                        $aItem = Tijian_Model_Item::getDetail($value);
+                        if (empty($aItem) || Tijian_Model_ProductItem::getDataByItemID($iLastInsertID, $value, Tijian_Model_ProductItem::EXPANDPRODUCT)) {
                             continue;
                         }
                         if (!Model_ProductItem::addData($aItemParam)) {
-                            Model_Product::rollback();
+                            Tijian_Model_Product::rollback();
                             return $this->showMsg('增加失败！', false);
                         }
                     }
                 } else {//如果是手动  匹配的，导入基础产品中的所有单项
-                    $aPrentItem = Model_ProductItem::getProductItems($iPartentID, Model_ProductItem::BASEPRODUCT, 1);
+                    $aPrentItem = Tijian_Model_ProductItem::getProductItems($iPartentID, Tijian_Model_ProductItem::BASEPRODUCT, 1);
                     $aItemParam['iProductID'] = $iLastInsertID;
-                    $aItemParam['iType'] = Model_ProductItem::EXPANDPRODUCT;
+                    $aItemParam['iType'] = Tijian_Model_ProductItem::EXPANDPRODUCT;
                     $aItemParam['iCreateUserID'] = $aItemParam['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
                     if (!empty($aPrentItem)) {
                         foreach ($aPrentItem as $key => $value) {
                             $aItemParam['iItemID'] = $value['iItemID'];
                             //查询是否存在该item和是否已经导入过
-                            $aItem = Model_ProductItem::getDataByItemID($iLastInsertID, $value['iItemID'], Model_ProductItem::EXPANDPRODUCT);
+                            $aItem = Tijian_Model_ProductItem::getDataByItemID($iLastInsertID, $value['iItemID'], Tijian_Model_ProductItem::EXPANDPRODUCT);
                             if (!empty($aItem)) {
                                 continue;
                             }
                             if (!Model_ProductItem::addData($aItemParam)) {
-                                Model_Product::rollback();
+                                Tijian_Model_Product::rollback();
                                 return $this->showMsg('增加失败！', false);
                             }
                         }
                     }
                 }
                 //3，门店
-                $aPrentStore = Model_ProductStore::getProductStores($iPartentID, Model_ProductStore::BASEPRODUCT);
+                $aPrentStore = Tijian_Model_ProductStore::getProductStores($iPartentID, Tijian_Model_ProductStore::BASEPRODUCT);
                 $aStoreParam['iProductID'] = $iLastInsertID;
-                $aStoreParam['iType'] = Model_ProductStore::EXPANDPRODUCT;
+                $aStoreParam['iType'] = Tijian_Model_ProductStore::EXPANDPRODUCT;
                 $aStoreParam['iCreateUserID'] = $aStoreParam['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
                 if (!empty($aPrentStore)) {
                     foreach ($aPrentStore as $key => $value) {
                         $aStoreParam['iStoreID'] = $value['iStoreID'];
                         //查询是否存在该store和是否已经导入过
-                        $aStore = Model_ProductStore::getDataByStoreID($iLastInsertID, $value['iStoreID'], Model_ProductStore::EXPANDPRODUCT);
+                        $aStore = Tijian_Model_ProductStore::getDataByStoreID($iLastInsertID, $value['iStoreID'], Tijian_Model_ProductStore::EXPANDPRODUCT);
                         if (!empty($aStore)) {
                             continue;
                         }
                         if (!Model_ProductStore::addData($aStoreParam)) {
-                            Model_Product::rollback();
+                            Tijian_Model_Product::rollback();
                             return $this->showMsg('增加失败！', false);
                         }
                     }
                 }
                 //4,加项包
-                $aPrentAddtion = Model_ProductAddtion::getProductAddtions($iPartentID, Model_ProductAddtion::BASEPRODUCT);
+                $aPrentAddtion = Tijian_Model_ProductAddtion::getProductAddtions($iPartentID, Tijian_Model_ProductAddtion::BASEPRODUCT);
                 $aAddtionParam['iProductID'] = $iLastInsertID;
-                $aAddtionParam['iType'] = Model_ProductAddtion::EXPANDPRODUCT;
+                $aAddtionParam['iType'] = Tijian_Model_ProductAddtion::EXPANDPRODUCT;
                 $aAddtionParam['iCreateUserID'] = $aAddtionParam['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
                 if (!empty($aPrentAddtion)) {
                     foreach ($aPrentAddtion as $key => $value) {
                         $aAddtionParam['iAddtionID'] = $value['iAddtionID'];
                         //查询是否存在该store和是否已经导入过
-                        $aAddtion = Model_ProductAddtion::getDataByAddtionID($iLastInsertID, $value['iAddtionID'], Model_ProductAddtion::EXPANDPRODUCT);
+                        $aAddtion = Tijian_Model_ProductAddtion::getDataByAddtionID($iLastInsertID, $value['iAddtionID'], Tijian_Model_ProductAddtion::EXPANDPRODUCT);
                         if (!empty($aAddtion)) {
                             continue;
                         }
-                        if (!Model_ProductAddtion::addData($aAddtionParam)) {
-                            Model_Product::rollback();
+                        if (!Tijian_Model_ProductAddtion::addData($aAddtionParam)) {
+                            Tijian_Model_Product::rollback();
                             return $this->showMsg('增加失败！', false);
                         }
                     }
                 }
                 //5,升级产品
                 if (!empty($aProduct['iIsStand'])) {//只有标准产品才有自动导入功能
-                    $aParentUpgrade = Model_ProductUpgrade::getProductUpgrades($iPartentID, Model_ProductAddtion::BASEPRODUCT);//该基础产品的升级产品
+                    $aParentUpgrade = Tijian_Model_ProductUpgrade::getProductUpgrades($iPartentID, Tijian_Model_ProductAddtion::BASEPRODUCT);//该基础产品的升级产品
                     //统计升级产品ID
                     if (!empty($aParentUpgrade)) {
                         $aParentUpgradeID = [];
                         foreach ($aParentUpgrade as $key => $value) {
                             $aParentUpgradeID[] = $value['iUpgradeID'];
                         }
-                        $aParentUpgradeExpend = Model_Product::getExplandData($aParentUpgradeID);//以该升级产品为父产品的拓展产品
+                        $aParentUpgradeExpend = Tijian_Model_Product::getExplandData($aParentUpgradeID);//以该升级产品为父产品的拓展产品
                         foreach ($aParentUpgradeExpend as $key => $value) {//排除不是标准产品的拓展产品
                             if (empty($value['iIsStand'])) {
                                 unset($aParentUpgradeExpend[$key]);
@@ -941,33 +941,33 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
 
 
                     $aUpgradeParam['iProductID'] = $iLastInsertID;
-                    $aUpgradeParam['iType'] = Model_ProductUpgrade::EXPANDPRODUCT;
+                    $aUpgradeParam['iType'] = Tijian_Model_ProductUpgrade::EXPANDPRODUCT;
                     $aUpgradeParam['iCreateUserID'] = $aUpgradeParam['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
                     if (!empty($aParentUpgradeExpend)) {
                         foreach ($aParentUpgradeExpend as $key => $value) {
                             $aUpgradeParam['iUpgradeID'] = $value['iProductID'];
                             //查询是否存在该store和是否已经导入过
-                            $aUpgrade = Model_ProductUpgrade::getDataByUpgradeID($iLastInsertID, $value['iProductID'], Model_ProductUpgrade::EXPANDPRODUCT);
+                            $aUpgrade = Tijian_Model_ProductUpgrade::getDataByUpgradeID($iLastInsertID, $value['iProductID'], Tijian_Model_ProductUpgrade::EXPANDPRODUCT);
                             if (!empty($aUpgrade)) {
                                 continue;
                             }
-                            if (!Model_ProductUpgrade::addData($aUpgradeParam)) {
-                                Model_Product::rollback();
+                            if (!Tijian_Model_ProductUpgrade::addData($aUpgradeParam)) {
+                                Tijian_Model_Product::rollback();
                                 return $this->showMsg('增加失败！', false);
                             }
                         }
                     }
                 }
 
-                Model_Product::commit();
+                Tijian_Model_Product::commit();
                 $sNextUrl = '/admin/eproduct/additem/id/' . $iLastInsertID;
                 return $this->showMsg('添加成功!', true, $sNextUrl);
             } else {
-                Model_Product::rollback();
+                Tijian_Model_Product::rollback();
                 return $this->showMsg('增加失败！', false);
             }
         } else {
-            $this->assign('aBaseList', Model_Product::getBaseList());
+            $this->assign('aBaseList', Tijian_Model_Product::getBaseList());
             $this->assign('aPCard', Yaf_G::getConf('aPCard', 'product'));
             $this->assign('aAttribute', Yaf_G::getConf('aAttribute', 'product'));
             $this->assign('aStatus', Yaf_G::getConf('aStatus', 'product'));
@@ -983,19 +983,19 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         $iExpSuccuss = 0;//产品界别同步成功数目
         $aProductsParam['iIsStand'] = 1;
         $aProductsParam['iStatus'] = 1;
-        $aProductsParam['iType'] = Model_Product::TYPE_EXPAND;
-        $aProducts = Model_Product::getAll($aProductsParam);
+        $aProductsParam['iType'] = Tijian_Model_Product::TYPE_EXPAND;
+        $aProducts = Tijian_Model_Product::getAll($aProductsParam);
         if (!empty($aProducts)) {
             foreach ($aProducts as $aProduct) {
                 $iPartentID = $aProduct['iParentID'];
-                $aParentUpgrade = Model_ProductUpgrade::getProductUpgrades($iPartentID, Model_ProductAddtion::BASEPRODUCT);//该基础产品的升级产品
+                $aParentUpgrade = Tijian_Model_ProductUpgrade::getProductUpgrades($iPartentID, Tijian_Model_ProductAddtion::BASEPRODUCT);//该基础产品的升级产品
                 //统计升级产品ID
                 if (!empty($aParentUpgrade)) {
                     $aParentUpgradeID = [];
                     foreach ($aParentUpgrade as $key => $value) {
                         $aParentUpgradeID[] = $value['iUpgradeID'];
                     }
-                    $aParentUpgradeExpend = Model_Product::getExplandData($aParentUpgradeID);//以该升级产品为父产品的拓展产品
+                    $aParentUpgradeExpend = Tijian_Model_Product::getExplandData($aParentUpgradeID);//以该升级产品为父产品的拓展产品
                     foreach ($aParentUpgradeExpend as $key => $value) {//排除不是标准产品的拓展产品
                         if (empty($value['iIsStand'])) {
                             unset($aParentUpgradeExpend[$key]);
@@ -1004,18 +1004,18 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                 }
 
                 $aUpgradeParam['iProductID'] = $aProduct['iProductID'];
-                $aUpgradeParam['iType'] = Model_ProductUpgrade::EXPANDPRODUCT;
+                $aUpgradeParam['iType'] = Tijian_Model_ProductUpgrade::EXPANDPRODUCT;
                 $aUpgradeParam['iCreateUserID'] = $aUpgradeParam['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
                 if (!empty($aParentUpgradeExpend)) {
                     //同步拓展产品
                     foreach ($aParentUpgradeExpend as $key => $value) {
                         $aUpgradeParam['iUpgradeID'] = $value['iProductID'];
                         //查询该升级产品是否已经导入过
-                        $aUpgrade = Model_ProductUpgrade::getDataByUpgradeID($aProduct['iProductID'], $value['iProductID'], Model_ProductUpgrade::EXPANDPRODUCT);
+                        $aUpgrade = Tijian_Model_ProductUpgrade::getDataByUpgradeID($aProduct['iProductID'], $value['iProductID'], Tijian_Model_ProductUpgrade::EXPANDPRODUCT);
                         if (!empty($aUpgrade)) {
                             continue;
                         }
-                        if (!Model_ProductUpgrade::addData($aUpgradeParam)) {
+                        if (!Tijian_Model_ProductUpgrade::addData($aUpgradeParam)) {
                             return $this->showMsg('同步失败！', false);
                         } else {
                             $iExpSuccuss++;
@@ -1025,15 +1025,15 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
 
                     //同步用户级别升级产品
                     //1,获取某产品同步过的所有记录
-                    $aUserProduct = Model_UserProductUpgrade::getUserSysByProduct($aProduct['iProductID']);
+                    $aUserProduct = Tijian_Model_UserProductUpgrade::getUserSysByProduct($aProduct['iProductID']);
                     if (!empty($aUserProduct)) {
                         foreach ($aUserProduct as $key => $value) {
                             //2,判断是否编辑过,没有编辑过的再从拓展产品中同步
-                            $aHasEdit = Model_UserProductUpdateStatus::getData($value['iProductID'],$value['iUserID'],$value['iType'],$value['iChannelID'],Model_UserProductUpdateStatus::UPGRADE);
+                            $aHasEdit = Tijian_Model_UserProductUpdateStatus::getData($value['iProductID'],$value['iUserID'],$value['iType'],$value['iChannelID'],Tijian_Model_UserProductUpdateStatus::UPGRADE);
                             if (empty($aHasEdit)) {
                                 foreach ($aParentUpgradeExpend as $k => $val) {
                                     //查询该升级产品是否已经导入过
-                                    $aUpgrade = Model_UserProductUpgrade::getUserHasUpgrades($value['iProductID'],$value['iUserID'],$val['iProductID'],$value['iType'],$value['iChannelID']);
+                                    $aUpgrade = Tijian_Model_UserProductUpgrade::getUserHasUpgrades($value['iProductID'],$value['iUserID'],$val['iProductID'],$value['iType'],$value['iChannelID']);
                                     if (!empty($aUpgrade)) {
                                         continue;
                                     }
@@ -1044,7 +1044,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                                     $aUserParam['iUserID'] = $value['iUserID'];
                                     $aUserParam['iType'] = $value['iType'];
                                     $aUserParam['iChannelID'] = $value['iChannelID'];
-                                    if (!Model_UserProductUpgrade::addData($aUserParam)) {
+                                    if (!Tijian_Model_UserProductUpgrade::addData($aUserParam)) {
                                         return $this->showMsg('同步失败！', false);
                                     } else {
                                         $iUserSuccuss++;
@@ -1066,11 +1066,11 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($iProductID)) {
             return $this->showMsg('参数有误！', false);
         }
-        $aProduct = Model_Product::getDetail($iProductID);
+        $aProduct = Tijian_Model_Product::getDetail($iProductID);
         if (empty($aProduct)) {
             return $this->showMsg('产品不存在！', false);
         }
-        $aBaseProduct = Model_Product::getDetail($aProduct['iParentID']);
+        $aBaseProduct = Tijian_Model_Product::getDetail($aProduct['iParentID']);
         $aStatus = Yaf_G::getConf('aStatus', 'product');
         $aProductType = Yaf_G::getConf('aType', 'product');
         $aSpecialCheck = Yaf_G::getConf('aSpecial', 'product');
@@ -1079,7 +1079,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         $this->assign('aStatus', $aStatus);
         $this->assign('aProductType', $aProductType);
         $this->assign('aSpecialCheck', $aSpecialCheck);
-        $this->assign('aBaseList', Model_Product::getBaseList());
+        $this->assign('aBaseList', Tijian_Model_Product::getBaseList());
         $this->assign('aPCard', Yaf_G::getConf('aPCard', 'product'));
         $this->assign('aAttribute', Yaf_G::getConf('aAttribute', 'product'));
 
@@ -1096,7 +1096,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($iProductID)) {
             return $this->showMsg('参数有误！', false);
         }
-        $aProduct = Model_Product::getDetail($iProductID);
+        $aProduct = Tijian_Model_Product::getDetail($iProductID);
         if (empty($aProduct)) {
             return $this->showMsg('产品不存在！', false);
         }
@@ -1114,8 +1114,8 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             }
         } else {
             $aWhere['iStatus >'] = 0;
-            $aWhere['iType'] = Model_Product::TYPE_BASE;
-            $aParent = Model_Product::getPair($aWhere, 'iProductID', 'sProductName');
+            $aWhere['iType'] = Tijian_Model_Product::TYPE_BASE;
+            $aParent = Tijian_Model_Product::getPair($aWhere, 'iProductID', 'sProductName');
             $this->assign('aBaseList', $aParent);
             $this->assign('aPCard', Yaf_G::getConf('aPCard', 'product'));
             $this->assign('aAttribute', Yaf_G::getConf('aAttribute', 'product'));
@@ -1143,7 +1143,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($checkChannelParam)) {
             return null;
         }
-        $aProduct = Model_UserProductBase::getUserProductBase($iProductID, $sUserID, $iChannelType, $iChannelID);
+        $aProduct = Tijian_Model_UserProductBase::getUserProductBase($iProductID, $sUserID, $iChannelType, $iChannelID);
         if ($this->_request->isPost()) {
             $aParam = $this->_checkClientData(3);
             if (empty($aParam)) {
@@ -1155,21 +1155,21 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $aParam['iCreateUserID'] = $aParam['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
             $aParam['iUserID'] = $aParam['sUserID'];
             //判断是否已经添加过
-            $aUserBase = Model_UserProductBase::getUserHasData($iProductID, $aParam['sUserID'], $iChannelType, $iChannelID);
+            $aUserBase = Tijian_Model_UserProductBase::getUserHasData($iProductID, $aParam['sUserID'], $iChannelType, $iChannelID);
             $aParam['iType'] = $iChannelType;
             $aParam['iChannelID'] = $iChannelID;
             if (!empty($aUserBase)) {
                 $aParam['iAutoID'] = $aUserBase['iAutoID'];
-                Model_UserProductBase::updData($aParam);
+                Tijian_Model_UserProductBase::updData($aParam);
             } else {
-                Model_UserProductBase::addData($aParam);
+                Tijian_Model_UserProductBase::addData($aParam);
             }
             return $this->showMsg('编辑成功！', true);
         } else {
             $aUserParam['where']['iStatus >'] = 0;
             $aUserParam['where']['iType'] = 2;
             $aUserParam['where']['iUserID'] = $sUserID;
-            $aUsers = Model_User::getPair($aUserParam, 'iUserID', 'sRealName');
+            $aUsers = Tijian_Model_User::getPair($aUserParam, 'iUserID', 'sRealName');
             $this->_editUserHeader(1);
             $this->assign('aProduct', $aProduct);
             $this->assign('iProductID', $iProductID);
@@ -1188,7 +1188,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($iProductID)) {
             return $this->showMsg('参数有误', $iProductID);
         }
-        $aProduct = Model_Product::getDetail($iProductID);
+        $aProduct = Tijian_Model_Product::getDetail($iProductID);
         if (empty($aProduct)) {
             return $this->showMsg('该产品不存在!', false);
         }
@@ -1206,11 +1206,11 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             if (!empty($aProduct['submit_type'])) {//点击的是选择可见不可见用户进来的
                 $aViewParam = explode('-', $aProduct['submit_type']);
             }
-            Model_Product::begin();
+            Tijian_Model_Product::begin();
             //产品表
             $aProduct['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
             if (!Model_Product::updData($aProduct)) {
-                Model_Product::rollback();
+                Tijian_Model_Product::rollback();
                 return $this->showMsg('操作失败', false);
             }
             if (!empty($aProduct['iCanCompany'])) {//处理公司渠道
@@ -1218,7 +1218,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                     foreach ($aProduct['companyChannel'] as $key => $value) {
                         //产品渠道表
                         $aProductChannelParam['iProductID'] = $iProductID;
-                        $aProductChannelParam['iType'] = Model_ProductChannel::TYPE_COMPANY;
+                        $aProductChannelParam['iType'] = Tijian_Model_ProductChannel::TYPE_COMPANY;
                         $aProductChannelParam['iChannelID'] = $value;
                         $aProductChannelParam['iManPrice'] = !empty($aProduct['companyPrice1'][$value]) ? $aProduct['companyPrice1'][$value] : 0;
                         $aProductChannelParam['iWomanPrice1'] = !empty($aProduct['companyPrice2'][$value]) ? $aProduct['companyPrice2'][$value] : 0;
@@ -1226,17 +1226,17 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                         $aProductChannelParam['iViewRange'] = !empty($aProduct['companyViewType'][$value]) ? $aProduct['companyViewType'][$value] : 0;
                         $aProductChannelParam['iStatus'] = 1;
                         $aProductChannelParam['iCreateUserID'] = $aProductChannelParam['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
-                        $aProductChannel = Model_ProductChannel::getData($iProductID, $aProductChannelParam['iType'], $value);
+                        $aProductChannel = Tijian_Model_ProductChannel::getData($iProductID, $aProductChannelParam['iType'], $value);
                         if (!$aProductChannel) {
-                            $aProductChannelParam['iAutoID'] = Model_ProductChannel::addData($aProductChannelParam);
+                            $aProductChannelParam['iAutoID'] = Tijian_Model_ProductChannel::addData($aProductChannelParam);
                             if (!$aProductChannelParam['iAutoID']) {
-                                Model_ProductChannel::rollback();
+                                Tijian_Model_ProductChannel::rollback();
                                 return $this->showMsg('操作失败', false);
                             }
                         } else {
                             $aProductChannelParam['iAutoID'] = $aProductChannel['iAutoID'];
-                            if (!Model_ProductChannel::updData($aProductChannelParam)) {
-                                Model_ProductChannel::rollback();
+                            if (!Tijian_Model_ProductChannel::updData($aProductChannelParam)) {
+                                Tijian_Model_ProductChannel::rollback();
                                 return $this->showMsg('操作失败', false);
                             }
                         }
@@ -1249,11 +1249,11 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                 }
                 if (!empty($aCompanyChannelJoinList)) {//处理本次没有的渠道数据
                     foreach ($aCompanyChannelJoinList as $key => $value) {
-                        $aProductChannelTmp = Model_ProductChannel::getData($iProductID, Model_ProductChannel::TYPE_COMPANY, $key);
+                        $aProductChannelTmp = Tijian_Model_ProductChannel::getData($iProductID, Tijian_Model_ProductChannel::TYPE_COMPANY, $key);
                         if (!empty($aProductChannelTmp)) {
                             $aChannelTmpParam['iStatus'] = 0;
                             $aChannelTmpParam['iAutoID'] = $aProductChannelTmp['iAutoID'];
-                            Model_ProductChannel::updData($aChannelTmpParam);
+                            Tijian_Model_ProductChannel::updData($aChannelTmpParam);
                         }
                     }
                 }
@@ -1263,7 +1263,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                     foreach ($aProduct['individualChannel'] as $key => $value) {
                         //产品渠道表
                         $aProductChannelParam['iProductID'] = $iProductID;
-                        $aProductChannelParam['iType'] = Model_ProductChannel::TYPE_INDIVIDUAL;
+                        $aProductChannelParam['iType'] = Tijian_Model_ProductChannel::TYPE_INDIVIDUAL;
                         $aProductChannelParam['iChannelID'] = $value;
                         $aProductChannelParam['iManPrice'] = !empty($aProduct['individualPrice1'][$value]) ? $aProduct['individualPrice1'][$value] : 0;
                         $aProductChannelParam['iWomanPrice1'] = !empty($aProduct['individualPrice2'][$value]) ? $aProduct['individualPrice2'][$value] : 0;
@@ -1271,17 +1271,17 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                         $aProductChannelParam['iViewRange'] = !empty($aProduct['individualViewType'][$value]) ? $aProduct['individualViewType'][$value] : 0;
                         $aProductChannelParam['iStatus'] = 1;
                         $aProductChannelParam['iCreateUserID'] = $aProductChannelParam['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
-                        $aProductChannel = Model_ProductChannel::getData($iProductID, $aProductChannelParam['iType'], $value);
+                        $aProductChannel = Tijian_Model_ProductChannel::getData($iProductID, $aProductChannelParam['iType'], $value);
                         if (!$aProductChannel) {
-                            $aProductChannelParam['iAutoID'] = Model_ProductChannel::addData($aProductChannelParam);
+                            $aProductChannelParam['iAutoID'] = Tijian_Model_ProductChannel::addData($aProductChannelParam);
                             if (!$aProductChannelParam['iAutoID']) {
-                                Model_ProductChannel::rollback();
+                                Tijian_Model_ProductChannel::rollback();
                                 return $this->showMsg('操作失败', false);
                             }
                         } else {
                             $aProductChannelParam['iAutoID'] = $aProductChannel['iAutoID'];
-                            if (!Model_ProductChannel::updData($aProductChannelParam)) {
-                                Model_ProductChannel::rollback();
+                            if (!Tijian_Model_ProductChannel::updData($aProductChannelParam)) {
+                                Tijian_Model_ProductChannel::rollback();
                                 return $this->showMsg('操作失败', false);
                             }
                         }
@@ -1294,16 +1294,16 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                 }
                 if (!empty($aIndividualChannelJoinList)) {//处理本次没有的渠道数据
                     foreach ($aIndividualChannelJoinList as $key => $value) {
-                        $aProductChannelTmp = Model_ProductChannel::getData($iProductID, Model_ProductChannel::TYPE_INDIVIDUAL, $key);
+                        $aProductChannelTmp = Tijian_Model_ProductChannel::getData($iProductID, Tijian_Model_ProductChannel::TYPE_INDIVIDUAL, $key);
                         if (!empty($aProductChannelTmp)) {
                             $aChannelTmpParam['iStatus'] = 0;
                             $aChannelTmpParam['iAutoID'] = $aProductChannelTmp['iAutoID'];
-                            Model_ProductChannel::updData($aChannelTmpParam);
+                            Tijian_Model_ProductChannel::updData($aChannelTmpParam);
                         }
                     }
                 }
             }
-            Model_Product::commit();
+            Tijian_Model_Product::commit();
             if (!empty($submit_type_channel_id)) {
                 $sUrl = '/admin/eproduct/addviewrange/id/' . $submit_type_channel_id;
                 if (!empty($iType)) {
@@ -1323,12 +1323,12 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             }
         } else {
             if ($aProduct['iCanIndividual'] == 1) {
-                $aIndividualChannel = Model_ProductChannel::getChannelInfoByProductID($iProductID, 2);
+                $aIndividualChannel = Tijian_Model_ProductChannel::getChannelInfoByProductID($iProductID, 2);
                 if (!empty($aIndividualChannel)) {
                     $aTmp = [];
                     foreach ($aIndividualChannel as $key => $value) {
                         if ($value['iViewRange'] > 0) {
-                            $aUsers = Model_ProductViewRange::getDataByViewRangeID($value['iAutoID'], $value['iViewRange']);
+                            $aUsers = Tijian_Model_ProductViewRange::getDataByViewRangeID($value['iAutoID'], $value['iViewRange']);
                             $value['iViewRangeNum'] = count($aUsers);
                         }
                         $aTmp[$value['iChannelID']] = $value;
@@ -1338,12 +1338,12 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                 }
             }
             if ($aProduct['iCanCompany'] == 1) {
-                $aCompanyChannel = Model_ProductChannel::getChannelInfoByProductID($iProductID, 1);
+                $aCompanyChannel = Tijian_Model_ProductChannel::getChannelInfoByProductID($iProductID, 1);
                 if (!empty($aCompanyChannel)) {
                     $aTmp = [];
                     foreach ($aCompanyChannel as $key => $value) {
                         if ($value['iViewRange'] > 0) {
-                            $aUsers = Model_ProductViewRange::getDataByViewRangeID($value['iAutoID'], $value['iViewRange']);
+                            $aUsers = Tijian_Model_ProductViewRange::getDataByViewRangeID($value['iAutoID'], $value['iViewRange']);
                             $value['iViewRangeNum'] = count($aUsers);
                         }
                         $aTmp[$value['iChannelID']] = $value;
@@ -1373,13 +1373,13 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($iProductChannelID)) {
             return $this->showMsg('参数有误', $iProductChannelID);
         }
-        $aProductChannel = Model_ProductChannel::getDetail($iProductChannelID);
+        $aProductChannel = Tijian_Model_ProductChannel::getDetail($iProductChannelID);
         if (empty($aProductChannel)) {
             return $this->showMsg('该产品不存在该渠道!', false);
         }
-        $aHasViewrange = Model_Product::getUserViewlist($aProductChannel['iProductID'], $aProductChannel['iType'], $aProductChannel['iChannelID']);
+        $aHasViewrange = Tijian_Model_Product::getUserViewlist($aProductChannel['iProductID'], $aProductChannel['iType'], $aProductChannel['iChannelID']);
         $aUserParam['iStatus >'] = 0;
-        $aUserParam['iType'] = Model_User::TYPE_HR;
+        $aUserParam['iType'] = Tijian_Model_User::TYPE_HR;
         $aUserParam['iChannel'] = $aProductChannel['iChannelID'];//只能添加对应渠道的用户
         if (!empty($aHasViewrange)) {
             $aUserIDs = [];
@@ -1391,7 +1391,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (!empty($sKeyword)) {
             $aUserParam['sWhere'] = '(sUserName="' . $sKeyword . '" OR sRealName LIKE "%' . $sKeyword . '%")';
         }
-        $aViewrange = Model_User::getList($aUserParam, $iPage, 'iUpdateTime DESC', self::PAGESIZE);
+        $aViewrange = Tijian_Model_User::getList($aUserParam, $iPage, 'iUpdateTime DESC', self::PAGESIZE);
         $sNextUrl = !empty($iType) ? '/admin/eproduct/viewviewrange/id/' . $aProductChannel['iProductID'] : '/admin/eproduct/addchannel/id/' . $aProductChannel['iProductID'];
         $this->assign('iType', $iType);
         $this->assign('aHasViewrange', $aHasViewrange);
@@ -1420,7 +1420,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($iProductID)) {
             return $this->showMsg('参数有误', $iProductID);
         }
-        $aProduct = Model_Product::getDetail($iProductID);
+        $aProduct = Tijian_Model_Product::getDetail($iProductID);
         if (empty($aProduct)) {
             return $this->showMsg('该产品不存在!', false);
         }
@@ -1428,7 +1428,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         $aCanViewConf = Yaf_G::getConf('aCanView', 'product');
         //统计渠道和客户数量
         if (!empty($aProduct['iCanCompany'])) {
-            $aChannel = Model_ProductChannel::getChannelInfoByProductID($aProduct['iProductID'], Model_ProductChannel::TYPE_COMPANY);
+            $aChannel = Tijian_Model_ProductChannel::getChannelInfoByProductID($aProduct['iProductID'], Tijian_Model_ProductChannel::TYPE_COMPANY);
             if (!empty($aChannel)) {
                 foreach ($aChannel as $k => $val) {
                     if (!empty($aChannelConf[$val['iChannelID']])) {
@@ -1438,7 +1438,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                         $aChannel[$k]['sViewName'] = $aCanViewConf[$val['iViewRange']];
                     }
                     $aChannel[$k]['iViewNum'] = !empty($val['iViewRange']) ? 0 : '/';
-                    $aViewList = Model_ProductViewRange::getDataByViewRangeID($val['iAutoID'], $val['iViewRange']);
+                    $aViewList = Tijian_Model_ProductViewRange::getDataByViewRangeID($val['iAutoID'], $val['iViewRange']);
                     if (!empty($aViewList)) {
                         $aChannel[$k]['iViewNum'] = count($aViewList);
                     }
@@ -1453,7 +1453,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             }
         }
         if (!empty($aProduct['iCanIndividual'])) {
-            $aChannel1 = Model_ProductChannel::getChannelInfoByProductID($aProduct['iProductID'], Model_ProductChannel::TYPE_INDIVIDUAL);
+            $aChannel1 = Tijian_Model_ProductChannel::getChannelInfoByProductID($aProduct['iProductID'], Tijian_Model_ProductChannel::TYPE_INDIVIDUAL);
             if (!empty($aChannel1)) {
                 foreach ($aChannel1 as $k => $val) {
                     if (!empty($aChannelConf[$val['iChannelID']])) {
@@ -1463,7 +1463,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                         $aChannel1[$k]['sViewName'] = $aCanViewConf[$val['iViewRange']];
                     }
                     $aChannel1[$k]['iViewNum'] = !empty($val['iViewRange']) ? 0 : '/';
-                    $aViewList = Model_ProductViewRange::getDataByViewRangeID($val['iAutoID'], $val['iViewRange']);
+                    $aViewList = Tijian_Model_ProductViewRange::getDataByViewRangeID($val['iAutoID'], $val['iViewRange']);
                     if (!empty($aViewList)) {
                         $aChannel1[$k]['iViewNum'] = count($aViewList);
                     }
@@ -1498,7 +1498,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($sViewRangeID)) {
             return $this->showMsg('请先选择渠道客户', false);
         }
-        $aProductChannel = Model_ProductChannel::getDetail($iProductChannelID);
+        $aProductChannel = Tijian_Model_ProductChannel::getDetail($iProductChannelID);
         if (empty($aProductChannel)) {
             return $this->showMsg('该产品不存在!', false);
         }
@@ -1512,11 +1512,11 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $sTotalNum = count($aViewRangeID);
             foreach ($aViewRangeID as $key => $value) {
                 //判断是否存在该渠道客户
-                if (Model_ProductViewRange::getUserByViewRangeID($iProductChannelID, $value, $aProductChannel['iViewRange'])) {
+                if (Tijian_Model_ProductViewRange::getUserByViewRangeID($iProductChannelID, $value, $aProductChannel['iViewRange'])) {
                     continue;
                 }
                 $aParam['iUserID'] = $value;
-                if (Model_ProductViewRange::addData($aParam)) {
+                if (Tijian_Model_ProductViewRange::addData($aParam)) {
                     $sSuccessNum++;
                 }
             }
@@ -1525,10 +1525,10 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         } else {
             $aParam['iUserID'] = intval($sViewRangeID);
             //判断是否存在该渠道客户
-            if (Model_ProductViewRange::getUserByViewRangeID($iProductChannelID, $aParam['iViewRangeID'], $aProductChannel['iViewRange'])) {
+            if (Tijian_Model_ProductViewRange::getUserByViewRangeID($iProductChannelID, $aParam['iViewRangeID'], $aProductChannel['iViewRange'])) {
                 return $this->showMsg('已添加过该渠道客户！', false);
             }
-            if (Model_ProductViewRange::addData($aParam)) {
+            if (Tijian_Model_ProductViewRange::addData($aParam)) {
                 return $this->showMsg('添加成功！', true);
             } else {
                 return $this->showMsg('添加失败！', false);
@@ -1548,7 +1548,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($sViewRangeID)) {
             return $this->showMsg('请先选择渠道客户', false);
         }
-        $aProductChannel = Model_ProductChannel::getDetail($iProductChannelID);
+        $aProductChannel = Tijian_Model_ProductChannel::getDetail($iProductChannelID);
         if (empty($aProductChannel)) {
             return $this->showMsg('该产品不存在!', false);
         }
@@ -1559,11 +1559,11 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $sTotalNum = count($aViewRangeID);
             foreach ($aViewRangeID as $key => $value) {
                 //判断是否存在该渠道客户
-                if (!Model_ProductViewRange::getDetail($value)) {
+                if (!Tijian_Model_ProductViewRange::getDetail($value)) {
                     continue;
                 }
                 $aParam['iAutoID'] = $value;
-                if (Model_ProductViewRange::updData($aParam)) {
+                if (Tijian_Model_ProductViewRange::updData($aParam)) {
                     $sSuccessNum++;
                 }
             }
@@ -1572,7 +1572,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         } else {
             $aParam['iAutoID'] = intval($sViewRangeID);
             //判断是否存在该渠道客户
-            if (Model_ProductViewRange::updData($aParam)) {
+            if (Tijian_Model_ProductViewRange::updData($aParam)) {
                 return $this->showMsg('删除成功！', true);
             } else {
                 return $this->showMsg('删除失败！', false);
@@ -1593,26 +1593,26 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($iProductID)) {
             return $this->showMsg('参数有误', $iProductID);
         }
-        $aProduct = Model_Product::getDetail($iProductID);
+        $aProduct = Tijian_Model_Product::getDetail($iProductID);
         if (empty($aProduct)) {
             return $this->showMsg('该产品不存在!', false);
         }
-        $aChanelInfo = Model_ProductChannel::getData($iProductID, $aParam['iType'], $aParam['iChannel']);
+        $aChanelInfo = Tijian_Model_ProductChannel::getData($iProductID, $aParam['iType'], $aParam['iChannel']);
         if (!empty($aChanelInfo)) {
-            $aData = Model_Product::getViewList($iProductID, $aParam['iType'], $aParam['iChannel'], $aParam);
+            $aData = Tijian_Model_Product::getViewList($iProductID, $aParam['iType'], $aParam['iChannel'], $aParam);
             if (!empty($aData['aList'])) {//组装需要的门店升级产品等信息
                 foreach ($aData['aList'] as $key => $value) {
                     //基本信息
-                    $aBaseInfo = Model_UserProductBase::getUserProductBase($iProductID, $value['iUserID'], $aParam['iType'], $aParam['iChannel']);
+                    $aBaseInfo = Tijian_Model_UserProductBase::getUserProductBase($iProductID, $value['iUserID'], $aParam['iType'], $aParam['iChannel']);
                     $aData['aList'][$key]['iManPrice'] = !empty($aBaseInfo) ? $aBaseInfo['iManPrice'] : 0;
                     //门店信息
-                    $aStoreInfo = Model_UserProductStore::getUserProductStore($iProductID, $value['iUserID'], $aParam['iType'], $aParam['iChannel']);
+                    $aStoreInfo = Tijian_Model_UserProductStore::getUserProductStore($iProductID, $value['iUserID'], $aParam['iType'], $aParam['iChannel']);
                     $aData['aList'][$key]['iStoreNum'] = !empty($aStoreInfo) ? count($aStoreInfo) : 0;
                     //升级产品信息
-                    $aUpgradeInfo = Model_UserProductUpgrade::getUserProductUpgrade($iProductID, $value['iUserID'], $aParam['iType'], $aParam['iChannel']);
+                    $aUpgradeInfo = Tijian_Model_UserProductUpgrade::getUserProductUpgrade($iProductID, $value['iUserID'], $aParam['iType'], $aParam['iChannel']);
                     $aData['aList'][$key]['iUpgradeNum'] = !empty($aUpgradeInfo) ? count($aUpgradeInfo) : 0;
                     //升级包信息
-                    $aAddtionInfo = Model_UserProductAddtion::getUserProductAddtion($iProductID, $value['iUserID'], $aParam['iType'], $aParam['iChannel']);
+                    $aAddtionInfo = Tijian_Model_UserProductAddtion::getUserProductAddtion($iProductID, $value['iUserID'], $aParam['iType'], $aParam['iChannel']);
                     $aData['aList'][$key]['iAddtionNum'] = !empty($aAddtionInfo) ? count($aAddtionInfo) : 0;
                 }
             }
@@ -1673,17 +1673,17 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($iProductID)) {
             return $this->showMsg('参数有误', $iProductID);
         }
-        $aProduct = Model_Product::getDetail($iProductID);
+        $aProduct = Tijian_Model_Product::getDetail($iProductID);
         if (empty($aProduct)) {
             return $this->showMsg('该产品不存在!', false);
         }
-        $aHasItem = Model_ProductItem::getProductItems($iProductID, Model_ProductItem::EXPANDPRODUCT, 1);//该产品已包含的单项
+        $aHasItem = Tijian_Model_ProductItem::getProductItems($iProductID, Tijian_Model_ProductItem::EXPANDPRODUCT, 1);//该产品已包含的单项
         if (!empty($aHasItem)) {
             //整合需要的数据
             $aHasItemID = [];
             foreach ($aHasItem as $key => $value) {
                 $aHasItemID[] = $value['iItemID'];
-                $aProductData = Model_Item::getDetail($value['iItemID']);
+                $aProductData = Tijian_Model_Item::getDetail($value['iItemID']);
                 $aHasItem[$key]['aItem'] = $aProductData;
             }
             $aParam['iItemID NOT IN'] = $aHasItemID;
@@ -1696,17 +1696,17 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $aParam['sWhere'] = '(sCode="' . $aParam['sKeyword'] . '" OR sName LIKE "%' . $aParam['sKeyword'] . '%")';
         }
         $aParam['iStatus'] = 1;
-        $aItem = Model_Item::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
+        $aItem = Tijian_Model_Item::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
         //添加之后刷新，分页bug特殊处理
         if ((ceil($aItem['iTotal'] / $iPageSize)) != 0 && $iPage > (ceil($aItem['iTotal'] / $iPageSize))) {
-            $aItem = Model_Item::getList($aParam, 1, 'iUpdateTime DESC', $iPageSize);
+            $aItem = Tijian_Model_Item::getList($aParam, 1, 'iUpdateTime DESC', $iPageSize);
         }
         //获取所有小项
         $aCatParam['where'] = [
             'iParentID >' => 0,
             'iStatus' => 1,
         ];
-        $aCategory = Model_Product_Category::getPair($aCatParam, 'iAutoID', 'sCateName');
+        $aCategory = Tijian_Model_Product_Category::getPair($aCatParam, 'iAutoID', 'sCateName');
         $sNextUrl = '/admin/eproduct/addChannel/id/' . $iProductID;
         $this->assign('aCategory', $aCategory);
         $this->assign('iProductID', $iProductID);
@@ -1763,14 +1763,14 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($sItemID)) {
             return $this->showMsg('请先选择单项', false);
         }
-        $aProduct = Model_Product::getDetail($iProductID);
+        $aProduct = Tijian_Model_Product::getDetail($iProductID);
         if (empty($aProduct)) {
             return $this->showMsg('该产品不存在!', false);
         }
 
         $aParam['iProductID'] = $iProductID;
         $aParam['iCreateUserID'] = $aParam['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
-        $aParam['iType'] = Model_ProductItem::EXPANDPRODUCT;
+        $aParam['iType'] = Tijian_Model_ProductItem::EXPANDPRODUCT;
         $aParam['iStatus'] = 1;
         if ($iCommitType) {//批量
             $aItemID = explode(',', $sItemID);
@@ -1778,7 +1778,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $sTotalNum = count($aItemID);
             foreach ($aItemID as $key => $value) {
                 //判断是否存在该单项
-                if (Model_ProductItem::getDataByItemID($iProductID, $value, Model_ProductItem::EXPANDPRODUCT)) {
+                if (Model_ProductItem::getDataByItemID($iProductID, $value, Tijian_Model_ProductItem::EXPANDPRODUCT)) {
                     continue;
                 }
                 $aParam['iItemID'] = $value;
@@ -1791,7 +1791,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         } else {
             $aParam['iItemID'] = intval($sItemID);
             //判断是否存在该单项
-            if (Model_ProductItem::getDataByItemID($iProductID, $aParam['iItemID'], Model_ProductItem::EXPANDPRODUCT)) {
+            if (Model_ProductItem::getDataByItemID($iProductID, $aParam['iItemID'], Tijian_Model_ProductItem::EXPANDPRODUCT)) {
                 return $this->showMsg('已添加过该单项！', false);
             }
             if (Model_ProductItem::addData($aParam)) {
@@ -1814,7 +1814,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($sItemID)) {
             return $this->showMsg('请先选择单项', false);
         }
-        $aProduct = Model_Product::getDetail($iProductID);
+        $aProduct = Tijian_Model_Product::getDetail($iProductID);
         if (empty($aProduct)) {
             return $this->showMsg('该产品不存在!', false);
         }
@@ -1870,7 +1870,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             return null;
         }
         $aWhere['iStatus >'] = 0;
-        $aSupplier = Model_Type::getOption('supplier');
+        $aSupplier = Tijian_Model_Type::getOption('supplier');
         $aCity = Tijian_Model_City::getPair($aWhere, 'iCityID', 'sCityName');
         $aType = Yaf_G::getConf('aStoreType', 'product');
         $sTips = '';
@@ -1894,7 +1894,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             if (!empty($aHasParam['sHasKeyword'])) {
                 $aHasParam['sWhere'] = '(sCode="' . $aHasParam['sHasKeyword'] . '" OR sName LIKE "%' . $aHasParam['sHasKeyword'] . '%")';
             }
-            $aHasStore = Model_Store::getPair($aHasParam, 'iStoreID', 'sName');
+            $aHasStore = Tijian_Model_Store::getPair($aHasParam, 'iStoreID', 'sName');
             if (!empty($aHasStore)) {
                 $aHasStoreParam['iStoreID IN'] = array_keys($aHasStore);
             } else {
@@ -1908,10 +1908,10 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         $aHasStoreParam['iProductID'] = $iProductID;
         $aHasStoreParam['iType'] = $iChannelType;
         $aHasStoreParam['iChannelID'] = $iChannelID;
-        $aHasStore = Model_UserProductStore::getAll($aHasStoreParam);//判断是否编辑过
+        $aHasStore = Tijian_Model_UserProductStore::getAll($aHasStoreParam);//判断是否编辑过
 
         if (empty($aHasStore) && empty($iHasData)) {//同步拓展产品中的门店到客户表
-            $aHasStore = Model_ProductStore::getProductStores($iProductID, Model_ProductStore::EXPANDPRODUCT);//该产品已包含的门店
+            $aHasStore = Tijian_Model_ProductStore::getProductStores($iProductID, Tijian_Model_ProductStore::EXPANDPRODUCT);//该产品已包含的门店
             if (!empty($aHasStore)) {
                 foreach ($aHasStore as $key => $value) {
                     $aUserParam['iProductID'] = $iProductID;
@@ -1921,7 +1921,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                     $aUserParam['iStatus'] = 1;
                     $aUserParam['iStoreID'] = $value['iStoreID'];
                     $aUserParam['iUserID'] = $sUserID;
-                    $aHasStore[$key]['iAutoID'] = Model_UserProductStore::addData($aUserParam);
+                    $aHasStore[$key]['iAutoID'] = Tijian_Model_UserProductStore::addData($aUserParam);
                 }
             }
         } else {
@@ -1938,7 +1938,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             //整合需要的数据
             foreach ($aHasStore as $key => $value) {
                 $aStoreIDs[] = $value['iStoreID'];
-                $aProductData = Model_Store::getDetail($value['iStoreID']);
+                $aProductData = Tijian_Model_Store::getDetail($value['iStoreID']);
                 $aHasStore[$key]['aStore'] = $aProductData;
                 //按城市分组
                 $aCityTmp[$aProductData['iCityID']][] = 1;
@@ -1977,10 +1977,10 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (!empty($aParam['sKeyword'])) {
             $aParam['sWhere'] = '(sCode="' . $aParam['sKeyword'] . '" OR sName LIKE "%' . $aParam['sKeyword'] . '%")';
         }
-        $aStore = Model_Store::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
+        $aStore = Tijian_Model_Store::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
         //添加之后刷新，分页bug特殊处理
         if ((ceil($aStore['iTotal'] / $iPageSize)) != 0 && $iPage > (ceil($aStore['iTotal'] / $iPageSize))) {
-            $aStore = Model_Store::getList($aParam, 1, 'iUpdateTime DESC', $iPageSize);
+            $aStore = Tijian_Model_Store::getList($aParam, 1, 'iUpdateTime DESC', $iPageSize);
         }
         $sNextUrl = '/admin/eproduct/addupgrade/id/' . $iProductID;
         $this->assign('aType', $aType);
@@ -2012,7 +2012,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         $aUserParam['where']['iStatus >'] = 0;
         $aUserParam['where']['iType'] = 2;
         $aUserParam['where']['iUserID'] = $sUserID;
-        $aUsers = Model_User::getPair($aUserParam, 'iUserID', 'sRealName');
+        $aUsers = Tijian_Model_User::getPair($aUserParam, 'iUserID', 'sRealName');
         $this->_editUserHeader(2);
         $this->assign('sUserID', $sUserID);
         $this->assign('aUsers', $aUsers);
@@ -2050,11 +2050,11 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $sTotalNum = count($aStoreID);
             foreach ($aStoreID as $key => $value) {
                 //判断是否存在该门店
-                if (Model_UserProductStore::getUserHasStore($iProductID, $sUserID, $value, $iChannelType, $iChannelID)) {
+                if (Tijian_Model_UserProductStore::getUserHasStore($iProductID, $sUserID, $value, $iChannelType, $iChannelID)) {
                     continue;
                 }
                 $aParam['iStoreID'] = $value;
-                if (Model_UserProductStore::addData($aParam)) {
+                if (Tijian_Model_UserProductStore::addData($aParam)) {
                     $sSuccessNum++;
                 }
             }
@@ -2063,10 +2063,10 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         } else {
             $aParam['iStoreID'] = intval($sStoreID);
             //判断是否存在该门店
-            if (Model_UserProductStore::getUserHasStore($iProductID, $sUserID, $sStoreID, $iChannelType, $iChannelID)) {
+            if (Tijian_Model_UserProductStore::getUserHasStore($iProductID, $sUserID, $sStoreID, $iChannelType, $iChannelID)) {
                 return $this->showMsg('已添加过该门店！', true);
             }
-            if (Model_UserProductStore::addData($aParam)) {
+            if (Tijian_Model_UserProductStore::addData($aParam)) {
                 return $this->showMsg('添加成功！', true);
             } else {
                 return $this->showMsg('添加失败！', false);
@@ -2089,11 +2089,11 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $sTotalNum = count($aStoreID);
             foreach ($aStoreID as $key => $value) {
                 //判断是否存在该门店
-                if (!Model_UserProductStore::getDetail($value)) {
+                if (!Tijian_Model_UserProductStore::getDetail($value)) {
                     continue;
                 } else {
                     $aParam['iAutoID'] = $value;
-                    Model_UserProductStore::updData($aParam);
+                    Tijian_Model_UserProductStore::updData($aParam);
                     $sSuccessNum++;
                 }
             }
@@ -2102,7 +2102,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         } else {
             $aParam['iAutoID'] = intval($sStoreID);
             //判断是否存在该门店
-            if (Model_UserProductStore::updData($aParam)) {
+            if (Tijian_Model_UserProductStore::updData($aParam)) {
                 return $this->showMsg('删除成功！', true);
             } else {
                 return $this->showMsg('删除失败！', false);
@@ -2126,9 +2126,9 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($aProduct)) {
             return null;
         }
-        $aHasUpgrade = Model_UserProductUpgrade::getHasEdit($iProductID, $sUserID, $iChannelType, $iChannelID);//判断是否同步过
+        $aHasUpgrade = Tijian_Model_UserProductUpgrade::getHasEdit($iProductID, $sUserID, $iChannelType, $iChannelID);//判断是否同步过
         if (empty($aHasUpgrade)) {//同步拓展产品中的升级产品到客户表
-            $aHasUpgrade = Model_ProductUpgrade::getProductUpgrades($iProductID, Model_ProductUpgrade::EXPANDPRODUCT);//该产品已包含的升级产品
+            $aHasUpgrade = Tijian_Model_ProductUpgrade::getProductUpgrades($iProductID, Tijian_Model_ProductUpgrade::EXPANDPRODUCT);//该产品已包含的升级产品
             if (!empty($aHasUpgrade)) {
                 foreach ($aHasUpgrade as $key => $value) {
                     $aUserParam['iProductID'] = $iProductID;
@@ -2138,7 +2138,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                     $aUserParam['iUserID'] = $sUserID;
                     $aUserParam['iType'] = $iChannelType;
                     $aUserParam['iChannelID'] = $iChannelID;
-                    $aHasUpgrade[$key]['iAutoID'] = Model_UserProductUpgrade::addData($aUserParam);
+                    $aHasUpgrade[$key]['iAutoID'] = Tijian_Model_UserProductUpgrade::addData($aUserParam);
                 }
             }
         } else {
@@ -2149,7 +2149,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             }
         }
 
-        $aParam['iType'] = Model_Product::TYPE_EXPAND;
+        $aParam['iType'] = Tijian_Model_Product::TYPE_EXPAND;
         $aParam['iStatus'] = 1;
         $aParam['iManPrice >'] = $aProduct['iManPrice'];
         $aParam['iWomanPrice1 >'] = $aProduct['iWomanPrice1'];
@@ -2161,27 +2161,27 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $aHasUpgradeIDs = [];
             foreach ($aHasUpgrade as $key => $value) {
                 $aHasUpgradeIDs[] = $value['iUpgradeID'];
-                $aHasProductDetail = Model_Product::getDetail($value['iUpgradeID']);
+                $aHasProductDetail = Tijian_Model_Product::getDetail($value['iUpgradeID']);
                 $aHasUpgrade[$key]['sProductName'] = $aHasProductDetail['sProductName'];
                 $aHasUpgrade[$key]['sProductCode'] = $aHasProductDetail['sProductCode'];
             }
             $aParam['iProductID NOT IN'] = $aHasUpgradeIDs;
         }
-        $aUpgrade = Model_Product::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
+        $aUpgrade = Tijian_Model_Product::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
         //添加之后刷新，分页bug特殊处理
         if ((ceil($aUpgrade['iTotal'] / $iPageSize)) != 0 && $iPage > (ceil($aUpgrade['iTotal'] / $iPageSize))) {
-            $aUpgrade = Model_Product::getList($aParam, 1, 'iUpdateTime DESC', $iPageSize);
+            $aUpgrade = Tijian_Model_Product::getList($aParam, 1, 'iUpdateTime DESC', $iPageSize);
         }
         //整合需要的数据
         if (!empty($aUpgrade['aList'])) {//这块门店数目好像显示有bug，到时候查下todo
             foreach ($aUpgrade['aList'] as $key => $value) {
-                $aStore = Model_ProductStore::getProductStores($value['iProductID'], Model_ProductStore::EXPANDPRODUCT, 1);
+                $aStore = Tijian_Model_ProductStore::getProductStores($value['iProductID'], Tijian_Model_ProductStore::EXPANDPRODUCT, 1);
                 $aUpgrade['aList'][$key]['iStoreNum'] = count($aStore);
             }
         }
         if (!empty($aHasUpgrade)) {
             foreach ($aHasUpgrade as $key => $value) {
-                $aStore = Model_ProductStore::getProductStores($value['iUpgradeID'], Model_ProductStore::EXPANDPRODUCT, 1);
+                $aStore = Tijian_Model_ProductStore::getProductStores($value['iUpgradeID'], Tijian_Model_ProductStore::EXPANDPRODUCT, 1);
                 $aHasUpgrade[$key]['iStoreNum'] = count($aStore);
             }
         }
@@ -2213,7 +2213,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         $aUserParam['where']['iStatus >'] = 0;
         $aUserParam['where']['iType'] = 2;
         $aUserParam['where']['iUserID'] = $sUserID;
-        $aUsers = Model_User::getPair($aUserParam, 'iUserID', 'sRealName');
+        $aUsers = Tijian_Model_User::getPair($aUserParam, 'iUserID', 'sRealName');
         $this->_editUserHeader(4);
         $this->assign('sUserID', $sUserID);
         $this->assign('aUsers', $aUsers);
@@ -2246,7 +2246,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         $aParam['iStatus'] = 1;
 
         //更改修改状态
-        $aRow = Model_UserProductUpdateStatus::getData($iProductID,$sUserID,$iChannelType,$iChannelID,Model_UserProductUpdateStatus::UPGRADE);
+        $aRow = Tijian_Model_UserProductUpdateStatus::getData($iProductID,$sUserID,$iChannelType,$iChannelID,Tijian_Model_UserProductUpdateStatus::UPGRADE);
         if (empty($aRow)) {
             $aUpdateParam['iProductID'] = $iProductID;
             $aUpdateParam['iCreateUserID'] = $this->aCurrUser['iUserID'];
@@ -2254,8 +2254,8 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $aUpdateParam['iChannelID'] = $iChannelID;
             $aUpdateParam['iUserID'] = $sUserID;
             $aUpdateParam['iStatus'] = 1;
-            $aUpdateParam['iInitType'] = Model_UserProductUpdateStatus::UPGRADE;
-            Model_UserProductUpdateStatus::addData($aUpdateParam);
+            $aUpdateParam['iInitType'] = Tijian_Model_UserProductUpdateStatus::UPGRADE;
+            Tijian_Model_UserProductUpdateStatus::addData($aUpdateParam);
         }
 
         if ($iCommitType) {//批量
@@ -2299,12 +2299,12 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
 
         //更改修改状态
         $iUpGradeID = intval($sUpgradeID);
-        $aUpgrade = Model_UserProductUpgrade::getDetail($iUpGradeID);
+        $aUpgrade = Tijian_Model_UserProductUpgrade::getDetail($iUpGradeID);
         $iProductID = $aUpgrade['iProductID'];
         $sUserID = $aUpgrade['iUserID'];
         $iChannelType = $aUpgrade['iType'];
         $iChannelID = $aUpgrade['iChannelID'];
-        $aRow = Model_UserProductUpdateStatus::getData($iProductID,$sUserID,$iChannelType,$iChannelID,Model_UserProductUpdateStatus::UPGRADE);
+        $aRow = Tijian_Model_UserProductUpdateStatus::getData($iProductID,$sUserID,$iChannelType,$iChannelID,Tijian_Model_UserProductUpdateStatus::UPGRADE);
         if (empty($aRow)) {
             $aUpdateParam['iProductID'] = $iProductID;
             $aUpdateParam['iCreateUserID'] = $this->aCurrUser['iUserID'];
@@ -2312,8 +2312,8 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $aUpdateParam['iChannelID'] = $iChannelID;
             $aUpdateParam['iUserID'] = $sUserID;
             $aUpdateParam['iStatus'] = 1;
-            $aUpdateParam['iInitType'] = Model_UserProductUpdateStatus::UPGRADE;
-            Model_UserProductUpdateStatus::addData($aUpdateParam);
+            $aUpdateParam['iInitType'] = Tijian_Model_UserProductUpdateStatus::UPGRADE;
+            Tijian_Model_UserProductUpdateStatus::addData($aUpdateParam);
         }
 
         $aParam['iStatus'] = 0;
@@ -2327,7 +2327,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                     continue;
                 } else {
                     $aParam['iAutoID'] = $value;
-                    Model_UserProductUpgrade::updData($aParam);
+                    Tijian_Model_UserProductUpgrade::updData($aParam);
                     $sSuccessNum++;
                 }
             }
@@ -2364,9 +2364,9 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         $sTips = '';
         $aType = Yaf_G::getConf('aAddtionType', 'product');
 
-        $aHasAddtion = Model_UserProductAddtion::getHasEdit($iProductID, $sUserID, $iChannelType, $iChannelID);//判断是否编辑过
+        $aHasAddtion = Tijian_Model_UserProductAddtion::getHasEdit($iProductID, $sUserID, $iChannelType, $iChannelID);//判断是否编辑过
         if (empty($aHasAddtion)) {//同步拓展产品中的门店到客户表
-            $aHasAddtion = Model_ProductAddtion::getProductAddtions($iProductID, Model_ProductAddtion::EXPANDPRODUCT);//该产品已包含的门店
+            $aHasAddtion = Tijian_Model_ProductAddtion::getProductAddtions($iProductID, Tijian_Model_ProductAddtion::EXPANDPRODUCT);//该产品已包含的门店
             if (!empty($aHasAddtion)) {
                 foreach ($aHasAddtion as $key => $value) {
                     $aUserParam['iProductID'] = $iProductID;
@@ -2376,7 +2376,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                     $aUserParam['iUserID'] = $sUserID;
                     $aUserParam['iType'] = $iChannelType;
                     $aUserParam['iChannelID'] = $iChannelID;
-                    $aHasAddtion[$key]['iAutoID'] = Model_UserProductAddtion::addData($aUserParam);
+                    $aHasAddtion[$key]['iAutoID'] = Tijian_Model_UserProductAddtion::addData($aUserParam);
                 }
             }
         } else {
@@ -2393,7 +2393,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $aTypeTmp = [];
             foreach ($aHasAddtion as $key => $value) {
                 $aHasAddtionIDs[] = $value['iAddtionID'];
-                $aHasProductDetail = Model_Addtion::getDetail($value['iAddtionID']);
+                $aHasProductDetail = Tijian_Model_Addtion::getDetail($value['iAddtionID']);
                 $aHasAddtion[$key]['sName'] = $aHasProductDetail['sName'];
                 $aHasAddtion[$key]['iType'] = $aHasProductDetail['iType'];
                 $aHasAddtion[$key]['sCode'] = $aHasProductDetail['sCode'];
@@ -2415,10 +2415,10 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $aParam['sWhere'] = '(sCode="' . $aParam['sKeyword'] . '" OR sName LIKE "%' . $aParam['sKeyword'] . '%")';
         }
         $aParam['iStatus'] = 1;
-        $aAddtion = Model_Addtion::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
+        $aAddtion = Tijian_Model_Addtion::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
         //添加之后刷新，分页bug特殊处理
         if ((ceil($aAddtion['iTotal'] / $iPageSize)) != 0 && $iPage > (ceil($aAddtion['iTotal'] / $iPageSize))) {
-            $aAddtion = Model_Addtion::getList($aParam, 1, 'iUpdateTime DESC', $iPageSize);
+            $aAddtion = Tijian_Model_Addtion::getList($aParam, 1, 'iUpdateTime DESC', $iPageSize);
         }
 
         $sNextUrl = '/admin/product/list/';
@@ -2449,7 +2449,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         $aUserParam['where']['iStatus >'] = 0;
         $aUserParam['where']['iType'] = 2;
         $aUserParam['where']['iUserID'] = $sUserID;
-        $aUsers = Model_User::getPair($aUserParam, 'iUserID', 'sRealName');
+        $aUsers = Tijian_Model_User::getPair($aUserParam, 'iUserID', 'sRealName');
         $this->_editUserHeader(5);
         $this->assign('sUserID', $sUserID);
         $this->assign('aUsers', $aUsers);
@@ -2488,11 +2488,11 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $sTotalNum = count($aAddtionID);
             foreach ($aAddtionID as $key => $value) {
                 //判断是否存在该加项包
-                if (Model_UserProductAddtion::getUserHasAddtion($iProductID, $sUserID, $value, $iChannelType, $iChannelID)) {
+                if (Tijian_Model_UserProductAddtion::getUserHasAddtion($iProductID, $sUserID, $value, $iChannelType, $iChannelID)) {
                     continue;
                 }
                 $aParam['iAddtionID'] = $value;
-                if (Model_UserProductAddtion::addData($aParam)) {
+                if (Tijian_Model_UserProductAddtion::addData($aParam)) {
                     $sSuccessNum++;
                 }
             }
@@ -2501,10 +2501,10 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         } else {
             $aParam['iAddtionID'] = intval($sAddtionID);
             //判断是否存在该加项包
-            if (Model_UserProductAddtion::getUserHasAddtion($iProductID, $sUserID, $aParam['iAddtionID'], $iChannelType, $iChannelID)) {
+            if (Tijian_Model_UserProductAddtion::getUserHasAddtion($iProductID, $sUserID, $aParam['iAddtionID'], $iChannelType, $iChannelID)) {
                 return $this->showMsg('已添加过该加项包！', true);
             }
-            if (Model_UserProductAddtion::addData($aParam)) {
+            if (Tijian_Model_UserProductAddtion::addData($aParam)) {
                 return $this->showMsg('添加成功！', true);
             } else {
                 return $this->showMsg('添加失败！', false);
@@ -2527,11 +2527,11 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $sTotalNum = count($aAddtionID);
             foreach ($aAddtionID as $key => $value) {
                 //判断是否存在该加项包
-                if (!Model_UserProductAddtion::getDetail($value)) {
+                if (!Tijian_Model_UserProductAddtion::getDetail($value)) {
                     continue;
                 } else {
                     $aParam['iAutoID'] = $value;
-                    Model_UserProductAddtion::updData($aParam);
+                    Tijian_Model_UserProductAddtion::updData($aParam);
                     $sSuccessNum++;
                 }
             }
@@ -2540,7 +2540,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         } else {
             $aParam['iAutoID'] = intval($sAddtionID);
             //判断是否存在该加项包
-            if (Model_UserProductAddtion::updData($aParam)) {
+            if (Tijian_Model_UserProductAddtion::updData($aParam)) {
                 return $this->showMsg('删除成功！', true);
             } else {
                 return $this->showMsg('删除失败！', false);
@@ -2561,12 +2561,12 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($iProductID)) {
             return $this->showMsg('参数有误', $iProductID);
         }
-        $aProduct = Model_Product::getDetail($iProductID);
+        $aProduct = Tijian_Model_Product::getDetail($iProductID);
         if (empty($aProduct)) {
             return $this->showMsg('该产品不存在!', false);
         }
         $aWhere['iStatus >'] = 0;
-        $aSupplier = Model_Type::getOption('supplier');
+        $aSupplier = Tijian_Model_Type::getOption('supplier');
         $aCity = Tijian_Model_City::getPair($aWhere, 'iCityID', 'sCityName');
         $aType = Yaf_G::getConf('aStoreType', 'product');
         $sTips = '';
@@ -2590,7 +2590,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             if (!empty($aHasParam['sHasKeyword'])) {
                 $aHasParam['sWhere'] = '(sCode="' . $aHasParam['sHasKeyword'] . '" OR sName LIKE "%' . $aHasParam['sHasKeyword'] . '%")';
             }
-            $aHasStore = Model_Store::getPair($aHasParam, 'iStoreID', 'sName');
+            $aHasStore = Tijian_Model_Store::getPair($aHasParam, 'iStoreID', 'sName');
             if (!empty($aHasStore)) {
                 $aHasStoreParam['iStoreID IN'] = array_keys($aHasStore);
             } else {
@@ -2600,8 +2600,8 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         }
         $aHasStoreParam['iStatus >'] = 0;
         $aHasStoreParam['iProductID'] = $iProductID;
-        $aHasStoreParam['iType'] = Model_ProductStore::EXPANDPRODUCT;
-        $aHasStore = Model_ProductStore::getAll($aHasStoreParam);//该产品已包含的门店
+        $aHasStoreParam['iType'] = Tijian_Model_ProductStore::EXPANDPRODUCT;
+        $aHasStore = Tijian_Model_ProductStore::getAll($aHasStoreParam);//该产品已包含的门店
 
         if (!empty($aHasStore)) {
             $aParam['sStoreID'] = '';
@@ -2610,7 +2610,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             //整合需要的数据
             foreach ($aHasStore as $key => $value) {
                 $aStoreIDs[] = $value['iStoreID'];
-                $aProductData = Model_Store::getDetail($value['iStoreID']);
+                $aProductData = Tijian_Model_Store::getDetail($value['iStoreID']);
                 $aHasStore[$key]['aStore'] = $aProductData;
                 //按城市分组
                 $aCityTmp[$aProductData['iCityID']][] = 1;
@@ -2651,10 +2651,10 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (!empty($aParam['sKeyword'])) {
             $aParam['sWhere'] = '(sCode="' . $aParam['sKeyword'] . '" OR sName LIKE "%' . $aParam['sKeyword'] . '%")';
         }
-        $aStore = Model_Store::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
+        $aStore = Tijian_Model_Store::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
         //添加之后刷新，分页bug特殊处理
         if ((ceil($aStore['iTotal'] / $iPageSize)) != 0 && $iPage > (ceil($aStore['iTotal'] / $iPageSize))) {
-            $aStore = Model_Store::getList($aParam, 1, 'iUpdateTime DESC', $iPageSize);
+            $aStore = Tijian_Model_Store::getList($aParam, 1, 'iUpdateTime DESC', $iPageSize);
         }
         $sNextUrl = '/admin/product/addupgrade/id/' . $iProductID;
         $this->assign('aType', $aType);
@@ -2715,14 +2715,14 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($sStoreID)) {
             return $this->showMsg('请先选择门店', false);
         }
-        $aProduct = Model_Product::getDetail($iProductID);
+        $aProduct = Tijian_Model_Product::getDetail($iProductID);
         if (empty($aProduct)) {
             return $this->showMsg('该产品不存在!', false);
         }
 
         $aParam['iProductID'] = $iProductID;
         $aParam['iCreateUserID'] = $aParam['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
-        $aParam['iType'] = Model_ProductStore::EXPANDPRODUCT;//基础产品
+        $aParam['iType'] = Tijian_Model_ProductStore::EXPANDPRODUCT;//基础产品
         $aParam['iStatus'] = 1;
         if ($iCommitType) {//批量
             $aStoreID = explode(',', $sStoreID);
@@ -2730,7 +2730,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             $sTotalNum = count($aStoreID);
             foreach ($aStoreID as $key => $value) {
                 //判断是否存在该门店
-                if (Model_ProductStore::getDataByStoreID($iProductID, $value, Model_ProductStore::EXPANDPRODUCT)) {
+                if (Model_ProductStore::getDataByStoreID($iProductID, $value, Tijian_Model_ProductStore::EXPANDPRODUCT)) {
                     continue;
                 }
                 $aParam['iStoreID'] = $value;
@@ -2743,7 +2743,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         } else {
             $aParam['iStoreID'] = intval($sStoreID);
             //判断是否存在该门店
-            if (Model_ProductStore::getDataByStoreID($iProductID, $aParam['iStoreID'], Model_ProductStore::EXPANDPRODUCT)) {
+            if (Model_ProductStore::getDataByStoreID($iProductID, $aParam['iStoreID'], Tijian_Model_ProductStore::EXPANDPRODUCT)) {
                 return $this->showMsg('已添加过该门店！', false);
             }
             if (Model_ProductStore::addData($aParam)) {
@@ -2807,7 +2807,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             }
 
             //验证产品名是否存在
-            $aProduct = Model_Product::getProductByName($aParam['sProductName']);
+            $aProduct = Tijian_Model_Product::getProductByName($aParam['sProductName']);
             if (!empty($aProduct['iProductID']) && $aProduct['iProductID'] != $aParam['iProductID']) {
                 return $this->showMsg('该产品名已存在！', false);
             }
@@ -2818,7 +2818,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                     'iPCard' => $aParam['iPCard'],
                     'iStatus >' => 0
                 );
-                $aProduct = Model_Product::getRow($aWhere);
+                $aProduct = Tijian_Model_Product::getRow($aWhere);
                 if (!empty($aProduct['iProductID']) && $aProduct['iProductID'] != $aParam['iProductID']) {
                     //return $this->showMsg('该实物卡类型已存在，不能重复添加！', false);
                 }
@@ -2834,7 +2834,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($aChannel[$iChannelID])) {
             return $this->showMsg('渠道不存在！', false);
         }
-        $aProduct = Model_Product::getDetail($iProductID);
+        $aProduct = Tijian_Model_Product::getDetail($iProductID);
         if (empty($aProduct)) {
             return $this->showMsg('产品不存在！', false);
         }
@@ -2847,7 +2847,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if ($iChannelType == 2 && empty($aProduct['iCanIndividual'])) {
             return $this->showMsg('该产品不支持个人渠道', false);
         }
-        $aUser = Model_User::getDetail($sUserID);
+        $aUser = Tijian_Model_User::getDetail($sUserID);
         if (empty($aUser)) {
             return $this->showMsg('用户不存在', false);
         }
@@ -2863,7 +2863,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         if (empty($iProductID)) {
             return $this->showMsg('参数有误！', false);
         }
-        $aProduct = Model_Product::getDetail($iProductID);
+        $aProduct = Tijian_Model_Product::getDetail($iProductID);
         if (empty($aProduct)) {
             return $this->showMsg('产品不存在', false);
         }
@@ -2886,7 +2886,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                 //获取所有该城市下的门店
                 $aStoreParam['iStatus'] = 1;
                 $aStoreParam['iCityID'] = $val;
-                $aStore = Model_Store::getAll($aStoreParam);
+                $aStore = Tijian_Model_Store::getAll($aStoreParam);
                 if (empty($aStore)) {
                     return $this->showMsg($aCity[$val] . '没有门店，请先添加门店', false);
                 }
@@ -2904,7 +2904,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                     $aStoreCodeParam['iCreateUserID'] = $aStoreCodeParam['iUpdateUserID'] = $this->aCurrUser['iUserID'];
                     for ($i = 1; $i <= 3; $i++) {
                         $aStoreCodeParam['iSex'] = $i;
-                        if (Model_StoreCode::getData($iProductID, $value['iStoreID'], $i)) {
+                        if (Tijian_Model_StoreCode::getData($iProductID, $value['iStoreID'], $i)) {
                             $aTmp['iStoreID'] = $value['iStoreID'];
                             $aTmp['iSex'] = $i;
                             $aTmp['storeName'] = $value['sName'];
@@ -2912,7 +2912,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
                             $aFail[] = $aTmp;
                             continue;
                         }
-                        if (!Model_StoreCode::addData($aStoreCodeParam)) {
+                        if (!Tijian_Model_StoreCode::addData($aStoreCodeParam)) {
                             $aTmp['iStoreID'] = $value['iStoreID'];
                             $aTmp['iSex'] = $i;
                             $aTmp['storeName'] = $value['sName'];

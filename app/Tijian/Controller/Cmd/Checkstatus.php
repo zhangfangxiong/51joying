@@ -15,8 +15,8 @@ class Tijian_Controller_Cmd_Checkstatus extends Tijian_Controller_Cmd_Base
         ini_set('memory_limit', '3000M');
 
 
-        $count = Model_OrderCardProduct::getCnt(['where' => ['iBookStatus' => 1]]);
-        //$count = Model_OrderCardProduct::getCnt(['where' => ['iAutoID' => 1149]]);
+        $count = Tijian_Model_OrderCardProduct::getCnt(['where' => ['iBookStatus' => 1]]);
+        //$count = Tijian_Model_OrderCardProduct::getCnt(['where' => ['iAutoID' => 1149]]);
         if ($count > 0) {
             $iPagesize = 1000;
             $iPage = ceil($count / $iPagesize);
@@ -26,13 +26,13 @@ class Tijian_Controller_Cmd_Checkstatus extends Tijian_Controller_Cmd_Base
 
             for ($i = 0; $i < $iPage; $i++) {
                 $start = $i * $iPagesize;
-                $sSQL = "SELECT ocp.*, store.sStoreCode, sup.sCode FROM ". Model_OrderCardProduct::TABLE_NAME. " as ocp".
-                    " left join ". Model_Store::TABLE_NAME. " as store on ocp.iStoreID = store.iStoreID".
+                $sSQL = "SELECT ocp.*, store.sStoreCode, sup.sCode FROM ". Tijian_Model_OrderCardProduct::TABLE_NAME. " as ocp".
+                    " left join ". Tijian_Model_Store::TABLE_NAME. " as store on ocp.iStoreID = store.iStoreID".
                     " left join ".Model_Type::TABLE_NAME. " as sup on store.iSupplierID = sup.iTypeID".
                     " WHERE ocp.iBookStatus = 1 Limit $start,$iPagesize";
 
 
-                $ocps = Model_OrderCardProduct::query($sSQL);
+                $ocps = Tijian_Model_OrderCardProduct::query($sSQL);
                 if(!empty($ocps)) {
                     foreach($ocps as $ocp) {
                         if(in_array($ocp['sCode'], $supplierCodes)) {
@@ -44,7 +44,7 @@ class Tijian_Controller_Cmd_Checkstatus extends Tijian_Controller_Cmd_Base
                             $aParam['cardnumber'] = $ocp['sApiCardID'];
                             $aParam['hospid'] = $ocp['sStoreCode'];
 
-                            $card = Model_OrderCard::getDetail($ocp['iCardID']);
+                            $card = Tijian_Model_OrderCard::getDetail($ocp['iCardID']);
                             $iPhysicalType = !empty($card) ? $card['iPhysicalType'] : 2;
 
                             $sUrl .= "?data=" . json_encode($aParam). "&iPhysicalType=$iPhysicalType";
@@ -58,7 +58,7 @@ class Tijian_Controller_Cmd_Checkstatus extends Tijian_Controller_Cmd_Base
                                     'iBookStatus' => $aData['iBookStatus']
                                 );
 
-                                Model_OrderCardProduct::updData($updData);
+                                Tijian_Model_OrderCardProduct::updData($updData);
                             }else {
                                 continue;
                             }

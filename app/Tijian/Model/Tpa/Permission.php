@@ -42,11 +42,11 @@ class Tijian_Model_Tpa_Permission extends Tijian_Model_Tpa_Base
      */
     public static function getMenuPermissions ($iAdminID)
     {
-        $aUser = Model_User::getDetail($iAdminID);
+        $aUser = Tijian_Model_User::getDetail($iAdminID);
         if ($aUser['iRoleID'] === '0') {
             return - 1;
         }
-        $aRoleList = Model_Tpa_Role::getPKIDList($aUser['iRoleID']);
+        $aRoleList = Tijian_Model_Tpa_Role::getPKIDList($aUser['iRoleID']);
         $aModuleID = array();
         foreach ($aRoleList as $aRole) {
             if (! empty($aRole['sModule'])) {
@@ -64,11 +64,11 @@ class Tijian_Model_Tpa_Permission extends Tijian_Model_Tpa_Base
      */
     public static function getUserPermissions ($iAdminID)
     {
-        $aUser = Model_User::getDetail($iAdminID);
+        $aUser = Tijian_Model_User::getDetail($iAdminID);
         if ($aUser['iRoleID'] === '-1') {
             return - 1;
         }
-        $aRoleList = Model_Tpa_Role::getPKIDList($aUser['iRoleID']);
+        $aRoleList = Tijian_Model_Tpa_Role::getPKIDList($aUser['iRoleID']);
         $aPermissionID = array();
         foreach ($aRoleList as $aRole) {
             if (! empty($aRole['sPermission'])) {

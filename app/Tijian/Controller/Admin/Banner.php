@@ -9,7 +9,7 @@ class Tijian_Controller_Admin_Banner extends Tijian_Controller_Admin_Base
     public function delAction ()
     {
         $iBadwordID = intval($this->getParam('id'));
-        $iRet = Model_Banner::delData($iBadwordID);
+        $iRet = Tijian_Model_Banner::delData($iBadwordID);
         if ($iRet == 1) {
             return $this->showMsg('banner滚动删除成功！', true);
         } else {
@@ -35,7 +35,7 @@ class Tijian_Controller_Admin_Banner extends Tijian_Controller_Admin_Base
             $aWhere['title LIKE'] = '%' . $aParam['title'] . '%';
         }
         
-        $aList = Model_Banner::getList($aWhere, $iPage);
+        $aList = Tijian_Model_Banner::getList($aWhere, $iPage);
         $this->assign('aList', $aList);
         $this->assign('aParam', $aParam);
     }
@@ -51,18 +51,18 @@ class Tijian_Controller_Admin_Banner extends Tijian_Controller_Admin_Base
                 return null;
             }
             $aBanner['iAutoID'] = intval($this->getParam('iAutoID'));
-            $aOldBanner = Model_Banner::getDetail($aBanner['iAutoID']);
+            $aOldBanner = Tijian_Model_Banner::getDetail($aBanner['iAutoID']);
             if (empty($aOldBanner)) {
                 return $this->showMsg('banner滚动不存在！', false);
             }
-            if (1 == Model_Banner::updData($aBanner)) {
+            if (1 == Tijian_Model_Banner::updData($aBanner)) {
                 return $this->showMsg('banner滚动信息更新成功！', true);
             } else {
                 return $this->showMsg('banner滚动信息更新失败！', false);
             }
         } else {
             $iBannerID = intval($this->getParam('id'));
-            $aBanner = Model_Banner::getDetail($iBannerID);
+            $aBanner = Tijian_Model_Banner::getDetail($iBannerID);
             $this->assign('aBanner', $aBanner);
         }
     }
@@ -79,7 +79,7 @@ class Tijian_Controller_Admin_Banner extends Tijian_Controller_Admin_Base
             }
             $aBanner['iStatus'] = 1;
             $aBanner['iCreateTime'] = time();
-            if (Model_Banner::addData($aBanner) > 0) {
+            if (Tijian_Model_Banner::addData($aBanner) > 0) {
                 return $this->showMsg('banner滚动增加成功！', true);
             } else {
                 return $this->showMsg('banner滚动增加失败！', false);

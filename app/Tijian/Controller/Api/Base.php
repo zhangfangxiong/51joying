@@ -73,7 +73,7 @@ class Tijian_Controller_Api_Base extends Yaf_Controller
             'sRequest' => $params,
             'sResponse' => '',
         );
-        Model_Interfacelog::addData($data);
+        Tijian_Model_Interfacelog::addData($data);
 
     }
 
@@ -112,7 +112,7 @@ class Tijian_Controller_Api_Base extends Yaf_Controller
     public function getPlanUserIDs ($iPlanID)
     {
         $aUserIDs = [];
-        $aOrder = Model_OrderInfo::getAll(['where' => [
+        $aOrder = Tijian_Model_OrderInfo::getAll(['where' => [
             'iPlanID' => $iPlanID,
             'iStatus IN' => [0, 1]
         ]]);
@@ -136,18 +136,18 @@ class Tijian_Controller_Api_Base extends Yaf_Controller
     public function getPlanProduct ($iPlanID, $iUserID)
     {
         $aSelProduct = [];
-        $aUser = Model_User::getDetail($iUserID);
-        $aPlanProduct = Model_Physical_PlanProduct::getAll(['where' => [
+        $aUser = Tijian_Model_User::getDetail($iUserID);
+        $aPlanProduct = Tijian_Model_Physical_PlanProduct::getAll(['where' => [
             'iPlanID' => $iPlanID,
             'iProductID >' => 0,
-            'iStatus' => Model_Physical_PlanProduct::STATUS_VALID,
+            'iStatus' => Tijian_Model_Physical_PlanProduct::STATUS_VALID,
         ]]);
         if ($aPlanProduct) {
             foreach ($aPlanProduct as $key => $value) {
                 $aHrProductIDs[] = $value['iProductID'];
             }
             $sHrProductID = implode(',', $aHrProductIDs);
-            $aHrProduct = Model_Product::getAllUserProduct($iUserID, 1, $aUser['iChannel'], $sHrProductID);
+            $aHrProduct = Tijian_Model_Product::getAllUserProduct($iUserID, 1, $aUser['iChannel'], $sHrProductID);
 
             foreach ($aHrProduct as $key => $value) {
                 $aSelProduct[$value['iProductID']] = $value['sProductName'];

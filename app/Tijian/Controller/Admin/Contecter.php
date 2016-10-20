@@ -19,7 +19,7 @@ class Tijian_Controller_Admin_Contecter extends Tijian_Controller_Admin_Base
                 return null;
             }
             $aContecter['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
-            if (Model_Contecter::updData($aContecter) > 0) {
+            if (Tijian_Model_Contecter::updData($aContecter) > 0) {
                 return $this->showMsg('联系人编辑成功！', true);
             } else {
                 return $this->showMsg('联系人编辑失败！', false);
@@ -29,7 +29,7 @@ class Tijian_Controller_Admin_Contecter extends Tijian_Controller_Admin_Base
             if (empty($iID)) {
                 return $this->showMsg('参数有误！', false);
             }
-            $aContecter = Model_Contecter::getDetail($iID);
+            $aContecter = Tijian_Model_Contecter::getDetail($iID);
             if (empty($aContecter)) {
                 return $this->showMsg('该联系人不存在！', false);
             }
@@ -49,7 +49,7 @@ class Tijian_Controller_Admin_Contecter extends Tijian_Controller_Admin_Base
                 return null;
             }
             $aUser['iCreateUserID'] = $aUser['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
-            if (Model_Contecter::addData($aUser) > 0) {
+            if (Tijian_Model_Contecter::addData($aUser) > 0) {
                 return $this->showMsg('增加成功！', true);
             } else {
                 return $this->showMsg('增加失败！', false);
@@ -59,7 +59,7 @@ class Tijian_Controller_Admin_Contecter extends Tijian_Controller_Admin_Base
             if (empty($iUserID)) {
                 return $this->showMsg('参数有误！', false);
             }
-            $aUser = Model_User::getDetail($iUserID);
+            $aUser = Tijian_Model_User::getDetail($iUserID);
             if (empty($aUser)) {
                 return $this->showMsg('该用户不存在！', false);
             }

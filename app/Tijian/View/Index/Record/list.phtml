@@ -78,7 +78,7 @@ function makeTree($aTree, $aColor) {
                     <?php echo $v['aDetail'] ? $v['sMenuName'] : ($v['sProductName'] ? $v['sProductName'] : $v['sMenuName']) ?><?php echo (count($v['aDetail']) == 1 && !empty($v['aDetail'][0]['iLastProductID'])) ? '<span class="red">(已升级)</span>' : ''; ?>
                 </td>
                 <td class="text-center"><?php echo!empty($aOrderType[$v['iOrderType']]) ? $aOrderType[$v['iOrderType']] : '' ?>
-                <?php if ($v['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT || $v['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT_PLAN) {
+                <?php if ($v['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT || $v['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT_PLAN) {
                     ?>
                     <span class="red">(<?php echo!empty($aPayType[$v['iPayType']]) ? $aPayType[$v['iPayType']] : ''; ?>)</span>
                 <?php }

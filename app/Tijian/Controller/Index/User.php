@@ -36,7 +36,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
             }
         }
         
-        $iCnt = Model_User::getCnt(array(
+        $iCnt = Tijian_Model_User::getCnt(array(
             $sField => $sValue,
             'iType' => $iType,
             'iStatus !=' => 0
@@ -74,7 +74,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
             if (empty($aParam['sMobile']) || ! Util_Validate::isMobile($aParam['sMobile'])) {
                 $aErr['sMobile'] = '手机号码格式错误';
             }
-            if ($iType == Model_User::TYPE_AD) {
+            if ($iType == Tijian_Model_User::TYPE_AD) {
                 if (! Util_Validate::isCLength($aParam['sRealName'], 2, 20)) {
                     $aErr['sRealName'] = '联系人名称为2-5个汉字';
                 }
@@ -99,14 +99,14 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
             
             unset($aParam['sRePassword']);
             $aParam['iStatus'] = 2;
-            $aParam['sPassword'] = Model_User::makePassword($aParam['sPassword']);
-            $iUserID = Model_User::addData($aParam);
+            $aParam['sPassword'] = Tijian_Model_User::makePassword($aParam['sPassword']);
+            $iUserID = Tijian_Model_User::addData($aParam);
             $aParam['iUserID'] = $iUserID;
             if ($iUserID > 0) {
-                $sActiveCode = Model_VerifyCode::makeCode($aParam, Model_VerifyCode::TYPE_USER_ACTIVE);
-                $sSubject = Model_Kv::getValue('user_active_email_title');
+                $sActiveCode = Tijian_Model_VerifyCode::makeCode($aParam, Tijian_Model_VerifyCode::TYPE_USER_ACTIVE);
+                $sSubject = Tijian_Model_Kv::getValue('user_active_email_title');
                 $sActiveUrl = 'http://' . ENV_DOMAIN . '/user/active?u=' . $iUserID . '&c=' . $sActiveCode;
-                $sBody = Model_Kv::getValue('user_active_email_content');
+                $sBody = Tijian_Model_Kv::getValue('user_active_email_content');
                 $sBody = str_replace('{sActiveUrl}', $sActiveUrl, $sBody);
                 $mRet = Util_Mail::send($aParam['sEmail'], $sSubject, $sBody);
                 
@@ -135,7 +135,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
     public function regokAction ()
     {
         $iUserID = intval($this->getParam('uid'));
-        $aUser = Model_User::getDetail($iUserID);
+        $aUser = Tijian_Model_User::getDetail($iUserID);
         $sMailServer = '';
         if (empty($aUser)) {
             return $this->show404();
@@ -161,18 +161,18 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
     {
         $iUserID = (int) $this->getParam('u');
         $sCode = $this->getParam('c');
-        $aUser = Model_User::getDetail($iUserID);
+        $aUser = Tijian_Model_User::getDetail($iUserID);
         if (empty($aUser) || $aUser['iStatus'] != 2) {
             return $this->show404();
         }
         
-        $aCode = Model_VerifyCode::getCode($iUserID, Model_VerifyCode::TYPE_USER_ACTIVE, $sCode);
+        $aCode = Tijian_Model_VerifyCode::getCode($iUserID, Tijian_Model_VerifyCode::TYPE_USER_ACTIVE, $sCode);
         if (! empty($aCode)) {
-            Model_User::updStatus($iUserID, 1);
+            Tijian_Model_User::updStatus($iUserID, 1);
         }
         
         // 注册激活之后登录
-        $aCookie = Model_User::login($aUser);
+        $aCookie = Tijian_Model_User::login($aUser);
         
         $this->assign('aUser', $aUser);
         $this->setMeta('user_active', array(
@@ -200,7 +200,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
                 $aErr['sNewPassword'] = '请先登录';
             }
             
-            $aUser = Model_User::getDetail($aUser['iUserID']);
+            $aUser = Tijian_Model_User::getDetail($aUser['iUserID']);
             if (Model_User::makePassword($aParam['sOldPassword']) != $aUser['sPassword']) {
                 $aErr['sOldPassword'] = '原密码输入错误 ';
             }
@@ -208,8 +208,8 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
             if (! empty($aErr)) {
                 return $this->showMsg($aErr, false);
             }
-            $sNewPassword = Model_User::makePassword($aParam['sNewPassword']);
-            Model_User::updData(array(
+            $sNewPassword = Tijian_Model_User::makePassword($aParam['sNewPassword']);
+            Tijian_Model_User::updData(array(
                 'sPassword' => $sNewPassword,
                 'iUserID' => $aUser['iUserID']
             ));
@@ -220,7 +220,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
             if (empty($aUser)) {
                 return $this->show404();
             }
-            $aUser = Model_user::getDetail($aUser['iUserID']);
+            $aUser = Tijian_Model_User::getDetail($aUser['iUserID']);
             $this->assign('aUser', $aUser);
         }
     }
@@ -232,7 +232,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
     {
         if ($this->isPost()) {
             $aParam = $this->getParams();
-            $aUser = Model_User::getDetail($aParam['iUserID']);
+            $aUser = Tijian_Model_User::getDetail($aParam['iUserID']);
             
             $aErr = array();
             if (empty($aParam['sEmail']) || ! Util_Validate::isEmail($aParam['sEmail'])) {
@@ -241,10 +241,10 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
             if (empty($aParam['sMobile']) || ! Util_Validate::isMobile($aParam['sMobile'])) {
                 $aErr['sMobile'] = '手机号码格式不正确！';
             }
-            if ($aUser['sEmail'] != $aParam['sEmail'] && Model_User::getUserByEmail($aParam['sEmail'], $aParam['iType'], $aParam['iUserID'])) {
+            if ($aUser['sEmail'] != $aParam['sEmail'] && Tijian_Model_User::getUserByEmail($aParam['sEmail'], $aParam['iType'], $aParam['iUserID'])) {
                 $aErr['sEmail'] = '该邮箱已经被注册了!';
             }
-            if ($aUser['sMobile'] != $aParam['sMobile'] && Model_User::getUserByMobile($aParam['sMobile'], $aParam['iType'], $aParam['iUserID'])) {
+            if ($aUser['sMobile'] != $aParam['sMobile'] && Tijian_Model_User::getUserByMobile($aParam['sMobile'], $aParam['iType'], $aParam['iUserID'])) {
                 $aErr['sMobile'] = '该手机号码已经被注册了!';
             }
             if (! Util_Validate::isCLength($aParam['sCoName'], 1, 50)) {
@@ -270,7 +270,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
                 return $this->showMsg($aErr, false);
             }
             
-            Model_User::updData($aParam);
+            Tijian_Model_User::updData($aParam);
             return $this->showMsg('个人信息修改成功！', true);
         } else {
             $iType = $this->getParam('type');
@@ -278,7 +278,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
             if (empty($aUser)) {
                 return $this->show404();
             }
-            $aUser = Model_user::getDetail($aUser['iUserID']);
+            $aUser = Tijian_Model_User::getDetail($aUser['iUserID']);
             $aIndustry = Model_Domain::getOption(Model_Domain::TYPE_CO_INDUSTRY);
             
             $this->assign('aUser', $aUser);
@@ -297,7 +297,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
             $sCode = $this->getParam('code');
             $sPassword = $this->getParam('pass');
             $sRePassword = $this->getParam('repass');
-            $aUser = Model_User::getUserByMobile($sMobile, $iType);
+            $aUser = Tijian_Model_User::getUserByMobile($sMobile, $iType);
             
             $aErr = array();
             if (empty($aUser)) {
@@ -318,8 +318,8 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
                 return $this->showMsg($aErr, false);
             }
             
-            $sNewPassword = Model_User::makePassword($sPassword);
-            Model_User::updData(array(
+            $sNewPassword = Tijian_Model_User::makePassword($sPassword);
+            Tijian_Model_User::updData(array(
                 'sPassword' => $sNewPassword,
                 'iUserID' => $aUser['iUserID']
             ));
@@ -327,7 +327,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
             return $this->showMsg('密码修改成功！', true);
             
             /*
-             * $sActiveCode = Model_VerifyCode::makeCode($aUser, Model_VerifyCode::TYPE_USER_FORGET); $sSubject = Model_Kv::getValue('user_forget_email_title'); $sForgetUrl = 'http://' . ENV_DOMAIN . '/user/forgetd?u=' . $aUser['iUserID'] . '&c=' . $sActiveCode; $sBody = Model_Kv::getValue('user_forget_email_content'); $sBody = str_replace('{sForgetUrl}', $sForgetUrl, $sBody); Util_Mail::send($aUser['sEmail'], $sSubject, $sBody); return $this->showMsg('邮件已经发送到你的邮箱里！', true);
+             * $sActiveCode = Tijian_Model_VerifyCode::makeCode($aUser, Tijian_Model_VerifyCode::TYPE_USER_FORGET); $sSubject = Tijian_Model_Kv::getValue('user_forget_email_title'); $sForgetUrl = 'http://' . ENV_DOMAIN . '/user/forgetd?u=' . $aUser['iUserID'] . '&c=' . $sActiveCode; $sBody = Tijian_Model_Kv::getValue('user_forget_email_content'); $sBody = str_replace('{sForgetUrl}', $sForgetUrl, $sBody); Util_Mail::send($aUser['sEmail'], $sSubject, $sBody); return $this->showMsg('邮件已经发送到你的邮箱里！', true);
              */
         } else {
             $this->assign('iType', intval($this->getParam('iType')));
@@ -348,7 +348,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
         if ($this->isPost()) {
             $iUserID = (int) $this->getParam('u');
             $sCode = $this->getParam('c');
-            $aCode = Model_VerifyCode::getCode($iUserID, Model_VerifyCode::TYPE_USER_FORGET, $sCode);
+            $aCode = Tijian_Model_VerifyCode::getCode($iUserID, Tijian_Model_VerifyCode::TYPE_USER_FORGET, $sCode);
             if (empty($aCode)) {
                 return $this->show404();
             }
@@ -361,8 +361,8 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
                 return $this->showMsg('登录密码两次输入不一致!', false);
             }
             
-            $sNewPassword = Model_User::makePassword($aParam['sPassword']);
-            Model_User::updData(array(
+            $sNewPassword = Tijian_Model_User::makePassword($aParam['sPassword']);
+            Tijian_Model_User::updData(array(
                 'sPassword' => $sNewPassword,
                 'iUserID' => $aCode['iUserID']
             ));
@@ -371,12 +371,12 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
         } else {
             $iUserID = (int) $this->getParam('u');
             $sCode = $this->getParam('c');
-            $aUser = Model_User::getDetail($iUserID);
+            $aUser = Tijian_Model_User::getDetail($iUserID);
             if (empty($aUser)) {
                 return $this->show404();
             }
             
-            $aCode = Model_VerifyCode::getCode($iUserID, Model_VerifyCode::TYPE_USER_FORGET, $sCode);
+            $aCode = Tijian_Model_VerifyCode::getCode($iUserID, Tijian_Model_VerifyCode::TYPE_USER_FORGET, $sCode);
             if (empty($aCode)) {
                 return $this->show404();
             }
@@ -408,7 +408,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
             if (empty($sUser)) {
                 $aErr['user'] = '请输入登录邮箱';
             } else {
-                $aUser = Model_User::getUserByEmail($sUser, $iType);
+                $aUser = Tijian_Model_User::getUserByEmail($sUser, $iType);
                 if (empty($aUser)) {
                     $aErr['user'] = '该邮箱尚未注册';
                 } elseif (Model_User::makePassword($sPass) != $aUser['sPassword']) {
@@ -420,7 +420,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
                 return $this->showMsg($aErr, false);
             }
             
-            $aCookie = Model_User::login($aUser);
+            $aCookie = Tijian_Model_User::login($aUser);
             
             return $this->showMsg($aCookie, true);
         } else {
@@ -439,7 +439,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
     public function logoutAction ()
     {
         $iType = $this->getParam('type');
-        $sKey = Model_User::getUserType($iType);
+        $sKey = Tijian_Model_User::getUserType($iType);
         Util_Cookie::delete(Yaf_G::getConf($sKey, 'cookie'));
         if ($this->isPost()) {
             return $this->showMsg('登出成功！', true);
@@ -454,12 +454,12 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
     public function firstAction ()
     {
         $iUserID = (int) $this->getParam('id');
-        $aUser = Model_User::getDetail($iUserID);
+        $aUser = Tijian_Model_User::getDetail($iUserID);
         if (empty($aUser) || $aUser['iFirst'] >= 3) {
             return $this->showMsg('已处理', true);
         }
         
-        Model_User::updData(array(
+        Tijian_Model_User::updData(array(
             'iUserID' => $iUserID,
             'iFirst' => 3
         ));

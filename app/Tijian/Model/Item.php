@@ -140,8 +140,8 @@ class Tijian_Model_Item extends Tijian_Model_Base
             foreach ($aItems as $key => $value) {
                 $aGroup[$value['iParentCat']][$value['iCat']][] = $value['iItemID'];
                 if ($fDetail) {
-                    $aCat1 = Model_Product_Category::getDetail($value['iParentCat']);
-                    $aCat2 = Model_Product_Category::getDetail($value['iCat']);
+                    $aCat1 = Tijian_Model_Product_Category::getDetail($value['iParentCat']);
+                    $aCat2 = Tijian_Model_Product_Category::getDetail($value['iCat']);
                     $aGroupDetail[$aCat1['sCateName']][$aCat2['sCateName']]['sRemark'] 
                     = $value['sRemark'] ? $value['sRemark'] : $aCat1['sRemark'];
                     $aGroupDetail[$aCat1['sCateName']][$aCat2['sCateName']]['aItemNames'][] = $value['sName'];

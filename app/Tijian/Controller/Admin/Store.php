@@ -31,18 +31,18 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
         }
 
         $iCityID = $this->getParam('iCityID');
-        $where = [ 'iStatus' => Model_Region::STATUS_VALID ];
+        $where = [ 'iStatus' => Tijian_Model_Region::STATUS_VALID ];
         if ($iCityID) {
             $where['iCityID'] = $iCityID;
         }
-        $aRegions = Model_Region::getAll(['where' => $where]);     
+        $aRegions = Tijian_Model_Region::getAll(['where' => $where]);
         if ($aRegions) {
             foreach ($aRegions as $key => $value) {
                 $aRegion[$value['iRegionID']] =  $value['sRegionName'];
             }
         }
 
-        $aSupplier = Model_Type::getOption('supplier');
+        $aSupplier = Tijian_Model_Type::getOption('supplier');
         $this->aShopLevel = Yaf_G::getConf('aShopLevel', 'store');
         // print_r($aShopLevel);die;
         $aStoreCategory = Yaf_G::getConf('aStoreCategory', 'store');
@@ -67,7 +67,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
     {
         $iPage = $this->getParam('page') ? intval($this->getParam('page')) : 1;
         $aParam = $this->getParams();
-        $aWhere = [ 'iStatus >' => Model_Store::STATUS_INVALID ];
+        $aWhere = [ 'iStatus >' => Tijian_Model_Store::STATUS_INVALID ];
         if (!empty($aParam['sName'])) {
             $aWhere['sName LIKE'] = '%' . trim($aParam['sName']) . '%';
         }
@@ -84,7 +84,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
             $aWhere['iSupplierID'] = intval($aParam['iSupplierID']);
         }        
 
-        $aList = Model_Store::getList($aWhere, $iPage);
+        $aList = Tijian_Model_Store::getList($aWhere, $iPage);
         $this->assign('aList', $aList);
         $this->assign('aParam', $aParam);        
     }
@@ -96,7 +96,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
     {
         $params = $this->getParams();
         if ($params['iStoreID']) {
-            Model_Store::updData($params);
+            Tijian_Model_Store::updData($params);
         }
 
         return $this->redirect('list');
@@ -113,7 +113,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
             return $this->redirect('list');
         }
 
-        $aStore = Model_Store::getDetail($id);
+        $aStore = Tijian_Model_Store::getDetail($id);
         $this->setRegion($aStore['iCityID']);
 
         $this->assign('sOpt', 'detail');
@@ -132,7 +132,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
             return $this->showMsg('请选择需要操作的门店', false);
         }
 
-        $aStore = Model_Store::getDetail($id);
+        $aStore = Tijian_Model_Store::getDetail($id);
         if (!$aStore || !in_array($aStore['iStatus'], [1, 2])) {
             return $this->showMsg('操作的门店无效', false);
         }
@@ -145,7 +145,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
             $data['iStatus'] = 1;
         }
         
-        Model_Store::updData($data);
+        Tijian_Model_Store::updData($data);
         return $this->showMsg('操作成功', true);
     }
 
@@ -160,12 +160,12 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
                 return null;
             }
 
-            $data['sCode'] = Model_Store::initStoreCode();
-            $store = Model_Store::getStoreByName($data['sName'], $data['sShortName']);
+            $data['sCode'] = Tijian_Model_Store::initStoreCode();
+            $store = Tijian_Model_Store::getStoreByName($data['sName'], $data['sShortName']);
             if ($store) {
                return $this->showMsg('门店名称已存在', false); 
             }
-            $iStoreID = Model_Store::addData($data);
+            $iStoreID = Tijian_Model_Store::addData($data);
             if ($iStoreID) {
                 return $this->showMsg('门店新增成功', true, '/admin/store/list/');
             } else {
@@ -188,7 +188,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
                 return null;
             }
 
-            $store = Model_Store::getStoreByName($data['sName'], $data['sShortName']);          
+            $store = Tijian_Model_Store::getStoreByName($data['sName'], $data['sShortName']);
             if ($store && 
                 (   ($store['sName'] && $store['sName'] != $data['sName']) 
                     || ($store['sShortName'] && $store['sShortName'] != $data['sShortName'])
@@ -197,7 +197,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
                return $this->showMsg('门店名称已存在', false); 
             }
 
-            $iStoreID = Model_Store::updData($data);
+            $iStoreID = Tijian_Model_Store::updData($data);
             if ($iStoreID) {
                 return $this->showMsg('门店修改成功', true, '/admin/store/detail/id/'.$data['iStoreID']);
             } else {
@@ -208,7 +208,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
             if (!$id) {
                 return $this->redirect('list');
             }
-            $aStore = Model_Store::getDetail($id);
+            $aStore = Tijian_Model_Store::getDetail($id);
 
             $this->setRegion($aStore['iCityID']);            
             $this->assign('aStore', $aStore);
@@ -223,7 +223,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
         $aRegion = [];
 
         if ($iCityID) {
-            $aRegions = Model_Region::getAll(['where' => [ 
+            $aRegions = Tijian_Model_Region::getAll(['where' => [
                     'iStatus' => Tijian_Model_City::STATUS_VALID,
                     'iCityID' => $iCityID
                 ]
@@ -253,10 +253,10 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
         
         $where = [
             'iStoreID' => $id,
-            'iStatus' => Model_Contecter::STATUS_VALID,
-            'iType' => Model_Contecter::TYPE_STORE
+            'iStatus' => Tijian_Model_Contecter::STATUS_VALID,
+            'iType' => Tijian_Model_Contecter::TYPE_STORE
         ];
-        $aList = Model_Contecter::getList($where, $page);
+        $aList = Tijian_Model_Contecter::getList($where, $page);
 
         $this->assign('aList', $aList);
         $this->assign('iStoreID', $id);
@@ -274,9 +274,9 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
                 return null;
             }
 
-            $data['iType'] = Model_Contecter::TYPE_STORE;
+            $data['iType'] = Tijian_Model_Contecter::TYPE_STORE;
             $data['iStoreID'] = $data['id'];
-            $iID = Model_Contecter::addData($data);
+            $iID = Tijian_Model_Contecter::addData($data);
             if ($iID) {
                 return $this->showMsg('/admin/store/contact/id/'.$data['id'], true);
             } else {
@@ -304,8 +304,8 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
                 return null;
             }
 
-            $data['iType'] = Model_Contecter::TYPE_STORE;
-            $iUpd = Model_Contecter::updData($data);
+            $data['iType'] = Tijian_Model_Contecter::TYPE_STORE;
+            $iUpd = Tijian_Model_Contecter::updData($data);
             if ($iUpd) {
                 return $this->showMsg('/admin/store/contact/id/'.$data['id'], true);
             } else {
@@ -317,7 +317,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
                 return $this->redirect('/admin/store/list');
             }
 
-            $aContact = Model_Contecter::getDetail($id);
+            $aContact = Tijian_Model_Contecter::getDetail($id);
 
             $this->assign('aContact', $aContact);
             $this->assign('sDelUrl', '/admin/store/contact/id/'.$aContact['iStoreID']);
@@ -333,14 +333,14 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
         $page = intval($this->getParam('page'));        
         $where = [
             'iStoreID' => $id,
-            'iStatus' => Model_ProductStore::STATUS_VALID,
-            'iType' => Model_ProductStore::EXPANDPRODUCT
+            'iStatus' => Tijian_Model_ProductStore::STATUS_VALID,
+            'iType' => Tijian_Model_ProductStore::EXPANDPRODUCT
         ];
         
-        $aExpand = Model_ProductStore::getList($where, $page);
+        $aExpand = Tijian_Model_ProductStore::getList($where, $page);
         if ($aExpand['aList']) {
             foreach ($aExpand['aList'] as $key => $value) {
-                $aProduct = Model_Product::getDetail($value['iProductID']);
+                $aProduct = Tijian_Model_Product::getDetail($value['iProductID']);
                 if (!$aProduct) {
                     unset($aExpand['aList'][$key]);
                     continue;
@@ -422,18 +422,18 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
             if (empty($aParam['iID'])) {
                 return $this->showMsg('非法操作！', false);
             }
-            if (!Model_Contecter::getDetail($aParam['iID'])) {
+            if (!Tijian_Model_Contecter::getDetail($aParam['iID'])) {
                 return $this->showMsg('联系人不存在！', false);
             }
         }
 
         //验证邮箱
         if (!empty($aParam['sEmail'])) {
-            $aContecter = Model_Contecter::getRow(['where' => [
+            $aContecter = Tijian_Model_Contecter::getRow(['where' => [
                 'iStoreID' => $aParam['id'],
                 'sEmail' => $aParam['sEmail'],
-                'iType' => Model_Contecter::TYPE_STORE,
-                'iStatus >' => Model_Contecter::STATUS_INVALID
+                'iType' => Tijian_Model_Contecter::TYPE_STORE,
+                'iStatus >' => Tijian_Model_Contecter::STATUS_INVALID
             ]]); 
             if (!empty($aContecter['iID']) && $aContecter['iID'] != $aParam['iID']) {
                 return $this->showMsg('该邮箱已被注册！', false);
@@ -441,11 +441,11 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
         }
 
         if (!empty($aParam['sMobile'])) {
-            $aContecter = Model_Contecter::getRow(['where' => [
+            $aContecter = Tijian_Model_Contecter::getRow(['where' => [
                 'iStoreID' => $aParam['id'],
                 'sMobile' => $aParam['sMobile'],
-                'iType' => Model_Contecter::TYPE_STORE,
-                'iStatus >' => Model_Contecter::STATUS_INVALID
+                'iType' => Tijian_Model_Contecter::TYPE_STORE,
+                'iStatus >' => Tijian_Model_Contecter::STATUS_INVALID
             ]]); 
             if (!empty($aContecter['iID']) && $aContecter['iID'] != $aParam['iID']) {
                 return $this->showMsg('该手机已被注册！', false);
@@ -473,7 +473,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
             ]            
         ];
 
-        $aContact = Model_Store::getDetail($id);
+        $aContact = Tijian_Model_Store::getDetail($id);
 
         $this->assign('aMenu', $aMenu);
         $this->assign('iMenu', $iMenu);
@@ -518,7 +518,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
                     }
 
                     if ($supplier['sTypeName']) {
-                        $row = Model_Type::getRow(['where' => [
+                        $row = Tijian_Model_Type::getRow(['where' => [
                             'sTypeName' => $supplier['sTypeName'],
                             'iStatus' => 1
                         ]]);
@@ -536,7 +536,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
                     }
                     $supplier['sPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') .$supplier['sPassword']);
 
-                    $aSupplier = Model_User::getRow(['where' => [
+                    $aSupplier = Tijian_Model_User::getRow(['where' => [
                         'iType' => 4,
                         'iSupplierID' => $supplier['iSupplierID']
                     ]]);
@@ -544,13 +544,13 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
                         $aSupplier['sUserName'] = $supplier['sUserName'];
                         $aSupplier['sPassword'] = $supplier['sPassword'];
                         $aSupplier['iSupplierID'] = $supplier['iSupplierID'];
-                        Model_User::updData($aSupplier);
+                        Tijian_Model_User::updData($aSupplier);
                     } else {
                         $aSupplier['iType'] = 4;
                         $aSupplier['sUserName'] = $supplier['sUserName'];
                         $aSupplier['sPassword'] = $supplier['sPassword'];
                         $aSupplier['iSupplierID'] = $supplier['iSupplierID'];
-                        Model_User::addData($aSupplier);
+                        Tijian_Model_User::addData($aSupplier);
                     }
 
                     $count++;

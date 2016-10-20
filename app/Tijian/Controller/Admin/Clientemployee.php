@@ -22,14 +22,14 @@ class Tijian_Controller_Admin_ClientEmployee extends Tijian_Controller_Admin_Bas
             $aUser['iUserID'] = $aParam['iUserID'];
             $aUser['sRealName'] = $aParam['sRealName'];
             $aUser['sMobile'] = $aParam['sMobile'];
-            Model_Customer::begin();
-            if (Model_Customer::updData($aUser)) {
-                $aUserData = Model_Customer::getDetail($aParam['iUserID']);
+            Tijian_Model_Customer::begin();
+            if (Tijian_Model_Customer::updData($aUser)) {
+                $aUserData = Tijian_Model_Customer::getDetail($aParam['iUserID']);
                 $aUserCompanyDataParam['iCompanyID'] = $aUserData['iCreateUserID'];
                 $aUserCompanyDataParam['iUserID'] = $aParam['iUserID'];
-                $aUserCompanyData = Model_CustomerCompany::getRow($aUserCompanyDataParam);
+                $aUserCompanyData = Tijian_Model_CustomerCompany::getRow($aUserCompanyDataParam);
                 if (empty($aUserCompanyData)) {
-                    Model_Customer::rollback();
+                    Tijian_Model_Customer::rollback();
                     return $this->showMsg('修改失败！', false);
                 }
                 //整合用户公司表字段
@@ -43,16 +43,16 @@ class Tijian_Controller_Admin_ClientEmployee extends Tijian_Controller_Admin_Bas
                 $aUserCompany['sJobTitleName'] = $aParam['sJobTitleName'];
                 $aUserCompany['sEmail'] = $aParam['sEmail'];
                 $aUserCompany['sRemark'] = $aParam['sRemark'];
-                if (Model_CustomerCompany::updData($aUserCompany)) {
-                    Model_Customer::commit();
+                if (Tijian_Model_CustomerCompany::updData($aUserCompany)) {
+                    Tijian_Model_Customer::commit();
                     return $this->showMsg('修改成功！', true);
                 } else {
-                    Model_Customer::rollback();
+                    Tijian_Model_Customer::rollback();
                     return $this->showMsg('修改失败！', false);
                 }
 
             } else {
-                Model_Customer::rollback();
+                Tijian_Model_Customer::rollback();
                 return $this->showMsg('修改失败！', false);
             }
         } else {
@@ -60,15 +60,15 @@ class Tijian_Controller_Admin_ClientEmployee extends Tijian_Controller_Admin_Bas
             if (empty($iUserID)) {
                 return $this->showMsg('参数有误！', false);
             }
-            $aUser = Model_Customer::getDetail($iUserID);
+            $aUser = Tijian_Model_Customer::getDetail($iUserID);
             if (empty($aUser)) {
                 return $this->showMsg('该员工不存在！', false);
             }
             $aSex = Yaf_G::getConf('aSex');
             $this->assign('aSex', $aSex);
-            $this->assign('aDepartment', Model_Company_Department::getPairDepartment($aUser['iCreateUserID']));
-            $this->assign('aLevel', Model_Company_Level::getPairLevel($aUser['iCreateUserID']));
-            $this->assign('aStatus', Model_User::$aStatus);
+            $this->assign('aDepartment', Tijian_Model_Company_Department::getPairDepartment($aUser['iCreateUserID']));
+            $this->assign('aLevel', Tijian_Model_Company_Level::getPairLevel($aUser['iCreateUserID']));
+            $this->assign('aStatus', Tijian_Model_User::$aStatus);
             $this->assign('aUser', $aUser);
             $this->assign('iUserID', $aUser['iCreateUserID']);
         }
@@ -88,26 +88,26 @@ class Tijian_Controller_Admin_ClientEmployee extends Tijian_Controller_Admin_Bas
             $aUser['sRealName'] = $aParam['sRealName'];
             $aUser['sMobile'] = $aParam['sMobile'];
             $aUser['iCreateUserID'] = $aParam['iCreateUserID'];
-            $aUser['sUserName'] = Model_Customer::initUserName();
+            $aUser['sUserName'] = Tijian_Model_Customer::initUserName();
             $aUser['iLastUpdateUserID'] = $aParam['iCreateUserID'];
             $aUser['sPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $aUser['sUserName']);
-            Model_Customer::begin();
+            Tijian_Model_Customer::begin();
             if (!empty($aParam['iUserID'])) {//老用户
                 $aUser['iUserID'] = $aParam['iUserID'];
-                if (Model_Customer::updData($aUser)) {
+                if (Tijian_Model_Customer::updData($aUser)) {
                     $iUserID = $aUser['iUserID'];
                 } else {
-                    Model_Customer::rollback();
+                    Tijian_Model_Customer::rollback();
                     return $this->showMsg('添加失败！', false);
                 }
             } else {
-                $iUserID = Model_Customer::addData($aUser);
+                $iUserID = Tijian_Model_Customer::addData($aUser);
             }
 
             if ($iUserID > 0) {
                 //整合用户公司表字段
                 $aUserCompany['iUserID'] = $iUserID;
-                $aUserCompany['sUserName'] = Model_CustomerCompany::initUserName($aParam['iCreateUserID']);
+                $aUserCompany['sUserName'] = Tijian_Model_CustomerCompany::initUserName($aParam['iCreateUserID']);
                 $aUserCompany['iCompanyID'] = $aParam['iCreateUserID'];
                 $aUserCompany['sCompanyName'] = $aParam['aCreateUser']['sRealName'];
                 $aUserCompany['sCompanyCode'] = $aParam['aCreateUser']['sUserName'];
@@ -117,15 +117,15 @@ class Tijian_Controller_Admin_ClientEmployee extends Tijian_Controller_Admin_Bas
                 $aUserCompany['sJobTitleName'] = $aParam['sJobTitleName'];
                 $aUserCompany['sEmail'] = $aParam['sEmail'];
                 $aUserCompany['sRemark'] = $aParam['sRemark'];
-                if (Model_CustomerCompany::addData($aUserCompany)) {
-                    Model_Customer::commit();
+                if (Tijian_Model_CustomerCompany::addData($aUserCompany)) {
+                    Tijian_Model_Customer::commit();
                     return $this->showMsg('添加成功！', true);
                 } else {
-                    Model_Customer::rollback();
+                    Tijian_Model_Customer::rollback();
                     return $this->showMsg('添加失败！', false);
                 }
             } else {
-                Model_Customer::rollback();
+                Tijian_Model_Customer::rollback();
                 return $this->showMsg('添加失败！', false);
             }
         } else {
@@ -133,15 +133,15 @@ class Tijian_Controller_Admin_ClientEmployee extends Tijian_Controller_Admin_Bas
             if (empty($iUserID)) {
                 return $this->showMsg('参数有误！', false);
             }
-            $aUser = Model_User::getDetail($iUserID);
+            $aUser = Tijian_Model_User::getDetail($iUserID);
             if (empty($aUser)) {
                 return $this->showMsg('该员工不存在！', false);
             }
             $aSex = Yaf_G::getConf('aSex');
             $this->assign('aSex', $aSex);
-            $this->assign('aDepartment', Model_Company_Department::getPairDepartment($iUserID));
-            $this->assign('aLevel', Model_Company_Level::getPairLevel($iUserID));
-            $this->assign('aStatus', Model_User::$aStatus);
+            $this->assign('aDepartment', Tijian_Model_Company_Department::getPairDepartment($iUserID));
+            $this->assign('aLevel', Tijian_Model_Company_Level::getPairLevel($iUserID));
+            $this->assign('aStatus', Tijian_Model_User::$aStatus);
             $this->assign('iUserID', $iUserID);
         }
     }
@@ -170,7 +170,7 @@ class Tijian_Controller_Admin_ClientEmployee extends Tijian_Controller_Admin_Bas
             if (empty($aParam['id'])) {
                 return $this->showMsg('非法操作！', false);
             }
-            $aCreateUser = Model_User::getDetail($aParam['id']);
+            $aCreateUser = Tijian_Model_User::getDetail($aParam['id']);
             if (empty($aCreateUser)) {
                 return $this->showMsg('用户不存在！', false);
             }
@@ -179,7 +179,7 @@ class Tijian_Controller_Admin_ClientEmployee extends Tijian_Controller_Admin_Bas
 
             //验证身份证是否被注册
             if (!empty($aParam['sIdentityCard'])) {
-                $aUser = Model_Customer::getUserByIdentityCard($aParam['sIdentityCard']);
+                $aUser = Tijian_Model_Customer::getUserByIdentityCard($aParam['sIdentityCard']);
                 if (!empty($aUser)) {
                     $aParam['iUserID'] = $aUser['iUserID'];//用来判断是否老用户
                 }
@@ -195,7 +195,7 @@ class Tijian_Controller_Admin_ClientEmployee extends Tijian_Controller_Admin_Bas
         } elseif($iType==2) {
             //验证身份证是否被注册
             if (!empty($aParam['sIdentityCard'])) {
-                $aUser = Model_Customer::getUserByIdentityCard($aParam['sIdentityCard']);
+                $aUser = Tijian_Model_Customer::getUserByIdentityCard($aParam['sIdentityCard']);
                 if (!empty($aUser) && $aUser['iUserID'] != $aParam['iUserID']) {
                     return $this->showMsg('该身份证已被添加，请核对信息或者联系管理员！', false);
                 }

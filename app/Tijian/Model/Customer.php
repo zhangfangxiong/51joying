@@ -126,7 +126,7 @@ class Tijian_Model_Customer extends Tijian_Model_Base
     public static function setCookie($iCustomerid)
     {
         $aCustomer = self::getDetail($iCustomerid);
-        $aCUser = Model_User::getDetail($aCustomer['iCreateUserID']);
+        $aCUser = Tijian_Model_User::getDetail($aCustomer['iCreateUserID']);
         $aCustomer['iChannelID'] = $aCUser['iChannel'];
 
         Util_Cookie::delete(Yaf_G::getConf('indexuserkey', 'cookie'));
@@ -138,7 +138,7 @@ class Tijian_Model_Customer extends Tijian_Model_Base
      */
     public static function getCustomerCompanyInfo($iCustomerID, $iCompanyID){
         $sql = "select cus.sMobile, cus.sRealName, cus.iSex, cus.iMarriage, cus.iCardType, cus.sIdentityCard, com.sUserName, com.sCompanyName, com.sCompanyCode, com.sEmail".
-                " from ". self::TABLE_NAME. " as cus left join ". Model_CustomerCompany::TABLE_NAME. " as com on cus.iUserID = com.iUserID".
+                " from ". self::TABLE_NAME. " as cus left join ". Tijian_Model_CustomerCompany::TABLE_NAME. " as com on cus.iUserID = com.iUserID".
                 " where com.iUserID = $iCustomerID and com.iCreateUserID = $iCompanyID";
 
         return self::query($sql, 'row');

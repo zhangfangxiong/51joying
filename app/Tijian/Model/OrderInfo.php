@@ -84,7 +84,7 @@ class Tijian_Model_OrderInfo extends Tijian_Model_Base
         if (!empty($aRet['aList'])) {
             foreach ($aRet['aList'] as &$order) {
                 $orderID = $order['iOrderID'];
-                $order['iCardNum'] = Model_OrderProduct::getProductNumByOrderID($orderID);
+                $order['iCardNum'] = Tijian_Model_OrderProduct::getProductNumByOrderID($orderID);
             }
         }
 
@@ -205,7 +205,7 @@ class Tijian_Model_OrderInfo extends Tijian_Model_Base
             //ordercard表中新插入卡的数据
             foreach ($aOrderProduct as $key => $value) {
                 $aOrderProductParam['iAutoID'] = $value['iAutoID'];
-                if (!Model_OrderProduct::updData($aOrderProductParam)) {
+                if (!Tijian_Model_OrderProduct::updData($aOrderProductParam)) {
                     self::rollback();
                     return 0;
                 }
@@ -214,13 +214,13 @@ class Tijian_Model_OrderInfo extends Tijian_Model_Base
                     $aCardParam['sProductName'] = $value['sProductName'];
                     $aCardProductParam['iPayStatus'] = $aCardParam['iStatus'] = $aCardParam['iSendStatus'] = 1;
                     //预约表中插入数据
-                    $iCardID = Model_OrderCard::initCard($aOrder['iOrderType'], Model_OrderCard::PAYTYPE_PERSON, $aOrder['iUserID'], $aOrder['iUserType'], $value['iAutoID'], $aOrder['iOrderID'], $aCardParam);
+                    $iCardID = Tijian_Model_OrderCard::initCard($aOrder['iOrderType'], Tijian_Model_OrderCard::PAYTYPE_PERSON, $aOrder['iUserID'], $aOrder['iUserType'], $value['iAutoID'], $aOrder['iOrderID'], $aCardParam);
                     if ($iCardID <= 0) {
                         self::rollback();
                         return 0;
                     } else {
                         //ordercardproduct表插入产品
-                        $iCardProductID = Model_OrderCardProduct::initCardProduct($iCardID, $value['iProductID'], $value['sProductName'], $value['iAutoID'], $aOrder['iOrderID'],$aCardProductParam);
+                        $iCardProductID = Tijian_Model_OrderCardProduct::initCardProduct($iCardID, $value['iProductID'], $value['sProductName'], $value['iAutoID'], $aOrder['iOrderID'],$aCardProductParam);
                         if ($iCardProductID <= 0) {
                             self::rollback();
                             return 0;
@@ -243,11 +243,11 @@ class Tijian_Model_OrderInfo extends Tijian_Model_Base
                 $aOrderCardProductParam['iAutoID'] = $aProductAttr['iCardProductID'];
                 $aOrderCardProductParam['iPayStatus'] = 1;
 
-                if (Model_OrderCardProduct::updData($aOrderCardProductParam)) {
-                    Model_OrderInfo::commit();
+                if (Tijian_Model_OrderCardProduct::updData($aOrderCardProductParam)) {
+                    Tijian_Model_OrderInfo::commit();
                     return 1;//成功
                 } else {
-                    Model_OrderInfo::rollback();
+                    Tijian_Model_OrderInfo::rollback();
                     return -3;//卡产品状态更新失败
                 }
             }
@@ -264,7 +264,7 @@ class Tijian_Model_OrderInfo extends Tijian_Model_Base
             foreach ($aOrderProduct as $key => $value) {
                 $aOrderProductParam['iAutoID'] = $value['iAutoID'];
                 //更新订单产品表状态
-                if (!Model_OrderProduct::updData($aOrderProductParam)) {
+                if (!Tijian_Model_OrderProduct::updData($aOrderProductParam)) {
                     self::rollback();
                     return -2;//订单产品状态更新失败
                 }
@@ -283,11 +283,11 @@ class Tijian_Model_OrderInfo extends Tijian_Model_Base
                 $aOrderCardProductParam['iLastOrderID'] = $aProductAttr['iLastOrderID'];
                 $aOrderCardProductParam['sLastProductName'] = $aProductAttr['iLastProductName'];
                 $aOrderCardProductParam['iBookStatus'] = 0;//升级之后，退订状态已经要改成已预约，不然会预约不了
-                if (Model_OrderCardProduct::updData($aOrderCardProductParam)) {
-                    Model_OrderInfo::commit();
+                if (Tijian_Model_OrderCardProduct::updData($aOrderCardProductParam)) {
+                    Tijian_Model_OrderInfo::commit();
                     return 1;//成功
                 } else {
-                    Model_OrderInfo::rollback();
+                    Tijian_Model_OrderInfo::rollback();
                     return -3;//卡产品状态更新失败
                 }
             }
@@ -303,9 +303,9 @@ class Tijian_Model_OrderInfo extends Tijian_Model_Base
     public static function sendMailMsg ($aOrder, $type, $sProductName='')
     {   
         if ($aOrder['iUserType'] == 1) {
-            $aUser = Model_CustomerNew::getDetail($aOrder['iUserID']);
+            $aUser = Tijian_Model_CustomerNew::getDetail($aOrder['iUserID']);
         } else {
-            $aUser = Model_User::getDetail($aOrder['iUserID']);
+            $aUser = Tijian_Model_User::getDetail($aOrder['iUserID']);
         }
 
         if ($type == 1) {

@@ -131,26 +131,26 @@ class Tijian_Controller_Company_Excel extends Tijian_Controller_Company_Employee
 					$customer['sIdentityCard'] = $PHPExcel->getActiveSheet()->getCell("I".$i)->getValue();
 					$customer['sBirthDate']    = $PHPExcel->getActiveSheet()->getCell("J".$i)->getValue();
 					if (!$customer['sBirthDate']) {
-						$customer['sBirthDate'] = Model_Company_Employee::getBirthdateByID($customer['sIdentityCard']);
+						$customer['sBirthDate'] = Tijian_Model_Company_Employee::getBirthdateByID($customer['sIdentityCard']);
 					}
 				
 					$bool = $this->checkData2($customer);
 					if (!$bool) continue;
 					$customer['iCreateUserID'] = $this->enterpriseId;
 
-					$row = Model_CustomerNew::checkIsExist($customer['sRealName'], $customer['sIdentityCard']);
+					$row = Tijian_Model_CustomerNew::checkIsExist($customer['sRealName'], $customer['sIdentityCard']);
 					if ($row) {
 						$customer['iUserID'] = $row['iUserID'];
-						$aCompany = Model_Company_Company::checkIsExist($customer['iUserID'], $this->enterpriseId);
+						$aCompany = Tijian_Model_Company_Company::checkIsExist($customer['iUserID'], $this->enterpriseId);
 						if ($aCompany) {
 							continue;
 						}
 
-						Model_CustomerNew::updData($customer);
+						Tijian_Model_CustomerNew::updData($customer);
 					} else {
-						$customer['sUserName'] = Model_CustomerNew::initUserName();
+						$customer['sUserName'] = Tijian_Model_CustomerNew::initUserName();
 						$customer['sPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') .$customer['sUserName']);
-						$customer['iUserID'] = Model_CustomerNew::addData($customer);
+						$customer['iUserID'] = Tijian_Model_CustomerNew::addData($customer);
 					}
 
 					$employee = [];
@@ -163,7 +163,7 @@ class Tijian_Controller_Company_Excel extends Tijian_Controller_Company_Employee
 
 					$employee['sUserName'] = $sUserName;
 					if (!$employee['sUserName']) {
-						$employee['sUserName'] = Model_Company_Company::initUserName();
+						$employee['sUserName'] = Tijian_Model_Company_Company::initUserName();
 					}
 
 					$employee['iUserID']	   = $customer['iUserID'];
@@ -175,11 +175,11 @@ class Tijian_Controller_Company_Excel extends Tijian_Controller_Company_Employee
 					$employee['sCiicNumber']   = $PHPExcel->getActiveSheet()->getCell("M".$i)->getValue();
 					$employee['sExpNumber']    = $PHPExcel->getActiveSheet()->getCell("N".$i)->getValue();	
 					
-					$aCompanyUser = Model_User::getDetail($this->enterpriseId);
+					$aCompanyUser = Tijian_Model_User::getDetail($this->enterpriseId);
 					$employee['sCompanyName']  = $aCompanyUser['sRealName'];
 					$employee['sCompanyCode']  = $aCompanyUser['sUserName'];
 
-					Model_Company_Company::addData($employee);
+					Tijian_Model_Company_Company::addData($employee);
 
 					$count++;
 				}
@@ -267,20 +267,20 @@ class Tijian_Controller_Company_Excel extends Tijian_Controller_Company_Employee
 			return false;
 		}
 		if ($customer['sUserName']) {
-			$aCompany = Model_Company_Company::getUserByUserName($customer['sUserName'], $this->enterpriseId);
+			$aCompany = Tijian_Model_Company_Company::getUserByUserName($customer['sUserName'], $this->enterpriseId);
 			if ($aCompany) {
 				$this->log .= self::DESC_PREV.$this->desc['sRealName'].'相同员工编号已存在';
 				return false;
 			}
 		}
 
-		$aCustomer = Model_CustomerNew::getUserByIdentityCard($customer['sIdentityCard']);
+		$aCustomer = Tijian_Model_CustomerNew::getUserByIdentityCard($customer['sIdentityCard']);
 		if ($aCustomer && $aCustomer['sRealName'] != $customer['sRealName']) {
 			$this->log .= self::DESC_PREV.$this->desc['sRealName'].'相同身份证号员工已存在';
 			return false;
 		}
 		if ($aCustomer) {
-			$aCompany = Model_Company_Company::checkIsExist($aCustomer['iUserID'], $this->enterpriseId);
+			$aCompany = Tijian_Model_Company_Company::checkIsExist($aCustomer['iUserID'], $this->enterpriseId);
 			if ($aCompany) {
 				$this->log .= '员工已存在';
 				return false;
@@ -322,7 +322,7 @@ class Tijian_Controller_Company_Excel extends Tijian_Controller_Company_Employee
 				for ($i = 3; $i <= $allRow; $i++) { //第1、2行是表头,从第3行开始读取
 					$sRealName = $PHPExcel->getActiveSheet()->getCell("A".$i)->getValue();
 					$sIdentityCard = $PHPExcel->getActiveSheet()->getCell("B".$i)->getValue();	
-					$customer = Model_CustomerNew::checkIsExist($sRealName, $sIdentityCard);
+					$customer = Tijian_Model_CustomerNew::checkIsExist($sRealName, $sIdentityCard);
 					if (!$customer) {
 						$this->familylog .= $sRealName . '无此员工';
 						continue;
@@ -331,9 +331,9 @@ class Tijian_Controller_Company_Excel extends Tijian_Controller_Company_Employee
 					$where = [
 						'iUserID' => $customer['iUserID'],
 						'iCreateUserID' => $this->enterpriseId,
-						'iStatus >' => Model_Company_Employee::STATUS_INVALID
+						'iStatus >' => Tijian_Model_Company_Employee::STATUS_INVALID
 					];	
-					$aCompany = Model_Company_Company::getRow(['where' => $where]);
+					$aCompany = Tijian_Model_Company_Company::getRow(['where' => $where]);
 					if (!$aCompany) {
 						$this->familylog .= $sRealName . '无此员工';
 						continue;
@@ -358,13 +358,13 @@ class Tijian_Controller_Company_Excel extends Tijian_Controller_Company_Employee
 
 					$family['iEnterpriseID'] = $this->enterpriseId;
 					$family['iEmployeeID'] = $customer['iUserID'];
-					list($row, $desc) = Model_Company_Family::checkExist($family);
+					list($row, $desc) = Tijian_Model_Company_Family::checkExist($family);
 					if ($row) {
 						$this->familylog .= $family['sRealName'].$desc.'  \\n';
 						continue;
 					}
 					
-					Model_Company_Family::addData($family);
+					Tijian_Model_Company_Family::addData($family);
 				}
 			}
 
@@ -418,9 +418,9 @@ class Tijian_Controller_Company_Excel extends Tijian_Controller_Company_Employee
 		
 		isset($param['iStatus']) && intval($param['iStatus'])
 		? $where['iStatus'] = intval($param['iStatus']) 
-		: $where['iStatus >'] = Model_Company_Employee::STATUS_INVALID;
+		: $where['iStatus >'] = Tijian_Model_Company_Employee::STATUS_INVALID;
 		
-		$aEmployee = Model_Company_Company::getAll(['where' => $where]);
+		$aEmployee = Tijian_Model_Company_Company::getAll(['where' => $where]);
 		if (!$aEmployee) {
 			return $this->showMsg('暂无数据', false);
 		}

@@ -28,7 +28,7 @@ class Tijian_Controller_Wx_Ajax extends Yaf_Controller
     public function ajaxCheckCardAction()
     {
         $sCardNum = $this->getParam('cardnum') ? $this->getParam('cardnum') : '';
-        $aCard = Model_OrderCard::getCardByCode($sCardNum);
+        $aCard = Tijian_Model_OrderCard::getCardByCode($sCardNum);
         if (empty($sCardNum) || empty($aCard)) {
             return $this->show404('卡号不存在', false);
         }
@@ -55,7 +55,7 @@ class Tijian_Controller_Wx_Ajax extends Yaf_Controller
     public function ajaxCheckBindPhoneAction()
     {
         $sMobile = $this->getParam('phonenum') ? $this->getParam('phonenum') : '';
-        $aUser = Model_Customer::getUserByMobile ($sMobile);
+        $aUser = Tijian_Model_Customer::getUserByMobile ($sMobile);
         if (!empty($aUser['sOpenID'])) {
             return $this->show404('手机已被其他微信用户绑定', false);
         }

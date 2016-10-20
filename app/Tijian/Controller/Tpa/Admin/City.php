@@ -129,7 +129,7 @@ class Tijian_Controller_Tpa_Admin_City extends Tijian_Controller_Tpa_Admin_Base
     public function getRegionAction ()
     {
         $iCityID = $this->getParam('iCityID');
-        $aData = Model_Region::getAll(['where' => ['iCityID' => $iCityID]]);
+        $aData = Tijian_Model_Region::getAll(['where' => ['iCityID' => $iCityID]]);
 
         return $this->showMsg($aData, true);
     }

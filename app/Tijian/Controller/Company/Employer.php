@@ -48,13 +48,13 @@ class Tijian_Controller_Company_Employer extends Tijian_Controller_Company_Base
 		//公司架构设置
 		$where = [
 			'iEnterpriseID' => $this->enterpriseId,
-			'iStatus'		=> Model_Company_Department::STATUS_VALID
+			'iStatus'		=> Tijian_Model_Company_Department::STATUS_VALID
 		];
 
 		$this->departmentId ? $where['iAutoID'] = $this->departmentId : $where['iParentID'] = 0;
-		$sDeptID = $this->departmentId ? Model_Company_Department::getAllSubDeptIDs($this->departmentId) : '';
-		$aDepartment = Model_Company_Department::getRow([ 'where' => $where ]);
-		$aTree = Model_Company_Department::getTree($where);
+		$sDeptID = $this->departmentId ? Tijian_Model_Company_Department::getAllSubDeptIDs($this->departmentId) : '';
+		$aDepartment = Tijian_Model_Company_Department::getRow([ 'where' => $where ]);
+		$aTree = Tijian_Model_Company_Department::getTree($where);
 		if ($aDepartment && !$aDepartment['iParentID']) {
 			$this->departmentId = 0;
 		}
@@ -63,10 +63,10 @@ class Tijian_Controller_Company_Employer extends Tijian_Controller_Company_Base
 		}
 		
 		//当前机构员工
-		$aEmployee = Model_Company_Company::getEmployeeByDeptID($this->enterpriseId, $sDeptID, $this->page);
+		$aEmployee = Tijian_Model_Company_Company::getEmployeeByDeptID($this->enterpriseId, $sDeptID, $this->page);
 		if ($aEmployee['aList']) {
 			foreach ($aEmployee['aList'] as $key => &$value) {
-				$aCustomer = Model_CustomerNew::getDetail($value['iUserID']);
+				$aCustomer = Tijian_Model_CustomerNew::getDetail($value['iUserID']);
 				$value['sRealName'] = $aCustomer['sRealName'];
 				$value['sMobile'] = $aCustomer['sMobile'];
 			}
@@ -90,11 +90,11 @@ class Tijian_Controller_Company_Employer extends Tijian_Controller_Company_Base
 			}
 
 			//机构是否已经存在(同企业+同名称)
-			$row  = Model_Company_Department::checkExist($this->enterpriseId, $aDept);
+			$row  = Tijian_Model_Company_Department::checkExist($this->enterpriseId, $aDept);
 			if ($row) {
 				$msg = '机构已经存在';
 			} else {
-				$addID = Model_Company_Department::addDept($aDept);
+				$addID = Tijian_Model_Company_Department::addDept($aDept);
 				$msg   = $addID ? '新增成功' : '新增失败';			
 			}
 
@@ -125,11 +125,11 @@ class Tijian_Controller_Company_Employer extends Tijian_Controller_Company_Base
 			}
 
 			//机构是否已经存在(同名+同级)
-			$row  = Model_Company_Department::checkExist($this->enterpriseId, $aDept);
+			$row  = Tijian_Model_Company_Department::checkExist($this->enterpriseId, $aDept);
 			if ($row && $row['iAutoID'] != $aDept['iAutoID']) {
 				$msg = '机构已经存在';
 			} else {
-				$update = Model_Company_Department::updDept($aDept);
+				$update = Tijian_Model_Company_Department::updDept($aDept);
 				$msg    = $update ? '修改成功' : '修改失败';			
 			}
 			
@@ -140,8 +140,8 @@ class Tijian_Controller_Company_Employer extends Tijian_Controller_Company_Base
 				$this->redirect('/company/employer/index');
 			}
 
-			$aDept = Model_Company_Department::getDetail($this->departmentId);
-			if (isset($aDept['iStatus']) && $aDept['iStatus'] != Model_Company_Department::STATUS_VALID) {
+			$aDept = Tijian_Model_Company_Department::getDetail($this->departmentId);
+			if (isset($aDept['iStatus']) && $aDept['iStatus'] != Tijian_Model_Company_Department::STATUS_VALID) {
 				$aDept = [];
 			}
 

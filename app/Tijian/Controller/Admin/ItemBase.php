@@ -36,9 +36,9 @@ class Tijian_Controller_Admin_ItemBase extends Tijian_Controller_Admin_Base
 	{
 		parent::actionBefore();
 
-		$aCate = Model_Product_Category::getAll([
+		$aCate = Tijian_Model_Product_Category::getAll([
 			'where' => [
-				'iStatus' => Model_Product_Category::STATUS_VALID
+				'iStatus' => Tijian_Model_Product_Category::STATUS_VALID
 			]
 		]);
 		if ($aCate) {
@@ -53,7 +53,7 @@ class Tijian_Controller_Admin_ItemBase extends Tijian_Controller_Admin_Base
 			}
 		}
 
-		$aSupplier = Model_Type::getOption('supplier');
+		$aSupplier = Tijian_Model_Type::getOption('supplier');
 		if ($aSupplier) {
 			foreach ($aSupplier as $key => $value) {
 				$this->supplier[$key] = $value;
@@ -73,9 +73,9 @@ class Tijian_Controller_Admin_ItemBase extends Tijian_Controller_Admin_Base
 			}
 		}
 
-		$aItem = Model_Item::getAll([
+		$aItem = Tijian_Model_Item::getAll([
 			'where' => [
-				'iStatus' => Model_Item::STATUS_VALID
+				'iStatus' => Tijian_Model_Item::STATUS_VALID
 			]
 		]);
 		if ($aItem) {
@@ -85,9 +85,9 @@ class Tijian_Controller_Admin_ItemBase extends Tijian_Controller_Admin_Base
 			}
 		}
 
-		$aStore = Model_Store::getAll([
+		$aStore = Tijian_Model_Store::getAll([
 			'where' => [
-				'iStatus' => Model_Store::STATUS_VALID
+				'iStatus' => Tijian_Model_Store::STATUS_VALID
 			]
 		]);
 		if ($aStore) {
@@ -96,9 +96,9 @@ class Tijian_Controller_Admin_ItemBase extends Tijian_Controller_Admin_Base
 			}
 		}
 
-		$aAddition = Model_Addtion::getAll([
+		$aAddition = Tijian_Model_Addtion::getAll([
 			'where' => [
-				'iStatus' => Model_Addtion::STATUS_VALID
+				'iStatus' => Tijian_Model_Addtion::STATUS_VALID
 			]
 		]);
 		if ($aAddition) {

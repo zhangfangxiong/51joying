@@ -42,7 +42,7 @@ class Tijian_Model_Product extends Tijian_Model_Base
      */
     public static function mergeBase(&$aProduct, $aUser, $iChannelType)
     {
-        $aUserProductBase = Model_UserProductBase::getUserProductBase($aProduct['iProductID'], $aUser['iCreateUserID'], $iChannelType, $aUser['iChannel']);
+        $aUserProductBase = Tijian_Model_UserProductBase::getUserProductBase($aProduct['iProductID'], $aUser['iCreateUserID'], $iChannelType, $aUser['iChannel']);
         $aProduct = array_merge($aProduct, $aUserProductBase);
     }
 
@@ -289,7 +289,7 @@ AND (
      */
     public static function getUserViewlist($iProductID, $iType, $iChannelID)
     {
-        $sSql = 'SELECT c.sRealName,c.sUserName,b.iAutoID,b.iUserID FROM ' . Model_ProductChannel::TABLE_NAME . ' a,' . Model_ProductViewRange::TABLE_NAME . ' b,' . Model_User::TABLE_NAME . ' c WHERE a.iProductID=' . $iProductID . ' AND a.iType=' . $iType . ' AND a.iChannelID=' . $iChannelID . ' AND a.iAutoID=b.iProductChannelID AND a.iStatus=1 AND b.iStatus=1 AND b.iUserID=c.iUserID AND a.iViewRange = b.iViewRange ORDER BY b.iCreateTime DESC';
+        $sSql = 'SELECT c.sRealName,c.sUserName,b.iAutoID,b.iUserID FROM ' . Tijian_Model_ProductChannel::TABLE_NAME . ' a,' . Tijian_Model_ProductViewRange::TABLE_NAME . ' b,' . Tijian_Model_User::TABLE_NAME . ' c WHERE a.iProductID=' . $iProductID . ' AND a.iType=' . $iType . ' AND a.iChannelID=' . $iChannelID . ' AND a.iAutoID=b.iProductChannelID AND a.iStatus=1 AND b.iStatus=1 AND b.iUserID=c.iUserID AND a.iViewRange = b.iViewRange ORDER BY b.iCreateTime DESC';
         return self::query($sSql);
     }
 
@@ -306,12 +306,12 @@ AND (
         if (empty($aProduct)) {
             return [];
         }
-        if ($iType == Model_ProductChannel::TYPE_COMPANY && empty($aProduct['iCanCompany'])) {
+        if ($iType == Tijian_Model_ProductChannel::TYPE_COMPANY && empty($aProduct['iCanCompany'])) {
             return [];
-        } elseif ($iType == Model_ProductChannel::TYPE_INDIVIDUAL && empty($aProduct['iCanIndividual'])) {
+        } elseif ($iType == Tijian_Model_ProductChannel::TYPE_INDIVIDUAL && empty($aProduct['iCanIndividual'])) {
             return [];
         }
-        $aChannel = Model_ProductChannel::getData($iProductID, $iType, $iChannel);
+        $aChannel = Tijian_Model_ProductChannel::getData($iProductID, $iType, $iChannel);
         if (empty($aChannel)) {
             return [];
         }
@@ -325,12 +325,12 @@ AND (
         if (empty($aChannel['iViewRange'])) {//全部可视
             $aUserParam['iStatus >'] = 0;
             $aUserParam['iChannel'] = $iChannel;
-            $aData = Model_User::getList($aUserParam, $iPage, 'iCreateTime Desc', $iPageSize);
+            $aData = Tijian_Model_User::getList($aUserParam, $iPage, 'iCreateTime Desc', $iPageSize);
         } elseif ($aChannel['iViewRange'] == 1) {//部分可视
             $aCanViewUserParam['iProductChannelID'] = $aChannel['iAutoID'];
             $aCanViewUserParam['iViewRange'] = $aChannel['iViewRange'];
             $aCanViewUserParam['iStatus'] = 1;
-            $aData = Model_ProductViewRange::getList($aCanViewUserParam, $iPage, 'iCreateTime Desc', $iPageSize);
+            $aData = Tijian_Model_ProductViewRange::getList($aCanViewUserParam, $iPage, 'iCreateTime Desc', $iPageSize);
             if (!empty($aData['aList'])) {
                 //组装客户数据
                 $iUserIDs = [];
@@ -339,7 +339,7 @@ AND (
                 }
                 $aUserParam['where']['iStatus >'] = 0;
                 $aUserParam['where']['iUserID IN'] = $iUserIDs;
-                $aCanViewUser = Model_User::getAll($aUserParam, true);
+                $aCanViewUser = Tijian_Model_User::getAll($aUserParam, true);
                 foreach ($aData['aList'] as $key => $value) {
                     if (!empty($aCanViewUser[$value['iUserID']])) {
                         $aData['aList'][$key]['sRealName'] = $aCanViewUser[$value['iUserID']]['sRealName'];
@@ -357,11 +357,11 @@ AND (
             $aNoUserParam['iProductChannelID'] = $aChannel['iAutoID'];
             $aNoUserParam['iViewRange'] = $aChannel['iViewRange'];
             $aNoUserParam['iStatus'] = 1;
-            $aNoUser = Model_ProductViewRange::getPair($aNoUserParam, 'iAutoID', 'iUserID');
+            $aNoUser = Tijian_Model_ProductViewRange::getPair($aNoUserParam, 'iAutoID', 'iUserID');
             if (!empty($aNoUser)) {
                 $aUserParam['iUserID NOT IN'] = array_values($aNoUser);
             }
-            $aData = Model_User::getList($aUserParam, $iPage, 'iCreateTime Desc', $iPageSize);
+            $aData = Tijian_Model_User::getList($aUserParam, $iPage, 'iCreateTime Desc', $iPageSize);
         }
         return $aData;
     }

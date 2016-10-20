@@ -35,10 +35,10 @@ class Tijian_Controller_Tpa_Admin_Dept extends Tijian_Controller_Tpa_Admin_Base
         
         $this->departmentId = $this->getParam('iDeptID') ? intval($this->getParam('iDeptID')) : 1;
         if ($this->departmentId) {
-            $this->aDept = Model_Tpa_Dept::getDetail($this->departmentId);
+            $this->aDept = Tijian_Model_Tpa_Dept::getDetail($this->departmentId);
         }
         
-        $aTree = Model_Tpa_Dept::getTree();
+        $aTree = Tijian_Model_Tpa_Dept::getTree();
         
         $this->assign('aTree', $aTree);    
         $this->assign('iDeptID', $this->departmentId);
@@ -53,11 +53,11 @@ class Tijian_Controller_Tpa_Admin_Dept extends Tijian_Controller_Tpa_Admin_Base
     {
         $page = max(intval($this->getParam('page')), 1);
         
-        $sDeptIDs = Model_Tpa_Dept::getSubDeptIDs($this->departmentId);
+        $sDeptIDs = Tijian_Model_Tpa_Dept::getSubDeptIDs($this->departmentId);
         $sDeptIDs ? $sDeptIDs .= ',' . $this->departmentId : $sDeptIDs = $this->departmentId;
         
         $aWhere = ['iDeptID IN' => $sDeptIDs];
-        $aAdmin = Model_Tpa_Admin::getList($aWhere, $page);
+        $aAdmin = Tijian_Model_Tpa_Admin::getList($aWhere, $page);
         $aAdmin = $this->getAdminBaseInfoList($aAdmin);
         
         $this->assign('aAdmin', $aAdmin);
@@ -75,7 +75,7 @@ class Tijian_Controller_Tpa_Admin_Dept extends Tijian_Controller_Tpa_Admin_Base
                 return;
             }
             
-            $addID = Model_Tpa_Dept::addData($aDept);
+            $addID = Tijian_Model_Tpa_Dept::addData($aDept);
             $msg   = $addID ? '新增机构成功' : '新增机构失败';
             
             return $this->showMsg($msg, true);
@@ -86,7 +86,7 @@ class Tijian_Controller_Tpa_Admin_Dept extends Tijian_Controller_Tpa_Admin_Base
 
             $aDept['iParentID'] = $this->departmentId;
             $aDept['iAutoID'] = $this->departmentId;
-            $aDept['sNumber'] = Model_Tpa_Dept::initDeptCode();
+            $aDept['sNumber'] = Tijian_Model_Tpa_Dept::initDeptCode();
             $this->assign('aDept', $aDept);
         }
     }
@@ -104,7 +104,7 @@ class Tijian_Controller_Tpa_Admin_Dept extends Tijian_Controller_Tpa_Admin_Base
                 return;
             }
             
-            $update = Model_Tpa_Dept::updData($aDept);
+            $update = Tijian_Model_Tpa_Dept::updData($aDept);
             $msg    = $update ? '修改成功' : '修改失败';			
 
             return $this->showMsg($msg, true);

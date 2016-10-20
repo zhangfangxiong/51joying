@@ -27,16 +27,16 @@ class Tijian_Controller_Supplier_System extends Tijian_Controller_Supplier_Base
 			
 			$where = [
 				'iUserID' => $this->aCurrUser['iUserID'],
-				'iType' => Model_User::TYPE_SUPPLIER,
-				'iStatus' => Model_User::STATUS_TYPE_NORMAL			
+				'iType' => Tijian_Model_User::TYPE_SUPPLIER,
+				'iStatus' => Tijian_Model_User::STATUS_TYPE_NORMAL
 			];			
-			$aUser = Model_User::getRow([
+			$aUser = Tijian_Model_User::getRow([
 				'where' => $where
 			]);
 			if ($aUser) {
 				if ($aUser['sPassword'] == md5(Yaf_G::getConf('cryptkey', 'cookie') .$sOldPwd)) {
 					$where['sPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $sNewPwd);
-					$result = Model_User::updData($where);	
+					$result = Tijian_Model_User::updData($where);
 				} else {
 					return $this->showMsg('旧密码错误', false);
 				}		

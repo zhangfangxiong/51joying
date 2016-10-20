@@ -25,7 +25,7 @@ class Tijian_Model_UserProductStore extends Tijian_Model_Base
             'where' => $aWhere
         ));
         if (empty($aData)) {
-            $aData = Model_ProductStore::getProductStores($iProductID, Model_ProductStore::EXPANDPRODUCT);
+            $aData = Tijian_Model_ProductStore::getProductStores($iProductID, Tijian_Model_ProductStore::EXPANDPRODUCT);
         }
         return $aData;
     }
@@ -51,10 +51,10 @@ class Tijian_Model_UserProductStore extends Tijian_Model_Base
         if (empty($aData['aList'])) {//未同步过
             $aWhere = array(
                 'iProductID' => $iProductID,
-                'iType' => Model_ProductStore::EXPANDPRODUCT
+                'iType' => Tijian_Model_ProductStore::EXPANDPRODUCT
             );
             $aWhere = array_merge($aWhere, $aParam);
-            $aData = Model_ProductStore::getList($aWhere, $iPage, $sOrder);
+            $aData = Tijian_Model_ProductStore::getList($aWhere, $iPage, $sOrder);
         } elseif (!empty($aParam)) {//同步过且有参数
             $aWhere = array_merge($aWhere, $aParam);
             $aData = self::getList($aWhere, $iPage, $sOrder);
@@ -101,7 +101,7 @@ class Tijian_Model_UserProductStore extends Tijian_Model_Base
             'where' => $aWhere
         ));
         if (empty($aData) && !empty($fUpper)) {
-            $aData = Model_ProductStore::getDataByStoreID($iProductID, $iStoreID, Model_ProductStore::EXPANDPRODUCT);
+            $aData = Tijian_Model_ProductStore::getDataByStoreID($iProductID, $iStoreID, Tijian_Model_ProductStore::EXPANDPRODUCT);
         }
         return $aData;
     }

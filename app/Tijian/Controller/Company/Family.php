@@ -102,11 +102,11 @@ class Tijian_Controller_Company_Family extends Tijian_Controller_Company_Base
 				return;
 			}
 
-			$aEmployee = Model_Company_Company::getRow([
+			$aEmployee = Tijian_Model_Company_Company::getRow([
 				'where' => [
 					'iCreateUserID' => $this->enterpriseId,
 					'iUserID' => $aFamily['iEmployeeID'],
-					'iStatus >'	=> Model_Company_Company::STATUS_INVALID
+					'iStatus >'	=> Tijian_Model_Company_Company::STATUS_INVALID
 				]
 			]);
 			if (!$aEmployee) {
@@ -117,12 +117,12 @@ class Tijian_Controller_Company_Family extends Tijian_Controller_Company_Base
 			}
 			
 			//家属是否存在(企业+证件号)
-			list($row, $desc) = Model_Company_Family::checkExist($aFamily);
+			list($row, $desc) = Tijian_Model_Company_Family::checkExist($aFamily);
 			if ($row) {
 				$msg = $desc.'员工家属已经存在!';
 				$bool = false;
 			} else {
-				$addID = Model_Company_Family::addData($aFamily);
+				$addID = Tijian_Model_Company_Family::addData($aFamily);
 				$msg   = $addID ? '新增成功' : '新增失败';	
 				$bool  = $addID ? true : false;					
 			}
@@ -147,12 +147,12 @@ class Tijian_Controller_Company_Family extends Tijian_Controller_Company_Base
 			}
 
 			//家属是否存在(企业+证件号)
-			list($row, $desc) = Model_Company_Family::checkExist($aFamily);
+			list($row, $desc) = Tijian_Model_Company_Family::checkExist($aFamily);
 			if ($row && $row['iAutoID'] != $aFamily['iAutoID']) {
 				$msg = $desc.'家属已经存在!';
 				$bool = false;						
 			} else {
-				$update = Model_Company_Family::updData($aFamily);
+				$update = Tijian_Model_Company_Family::updData($aFamily);
 				$msg    = $update ? '修改成功' : '修改失败';
 				$bool = $update ? true : false;			
 			}
@@ -165,8 +165,8 @@ class Tijian_Controller_Company_Family extends Tijian_Controller_Company_Base
 				return $this->showMsg('家属ID'.self::ERROR, false);
 			}
 
-			$aFamily = Model_Company_Family::getDetail($this->familyId);
-			if (isset($aFamily['iStatus']) && $aFamily['iStatus'] != Model_Company_Family::STATUS_VALID) {
+			$aFamily = Tijian_Model_Company_Family::getDetail($this->familyId);
+			if (isset($aFamily['iStatus']) && $aFamily['iStatus'] != Tijian_Model_Company_Family::STATUS_VALID) {
 				$aFamily = [];
 			}
 
@@ -187,9 +187,9 @@ class Tijian_Controller_Company_Family extends Tijian_Controller_Company_Base
 		}
 
 		$aFamily['iAutoID'] = $iFamilyID;
-		$aFamily['iStatus'] = Model_Company_Family::STATUS_INVALID;
+		$aFamily['iStatus'] = Tijian_Model_Company_Family::STATUS_INVALID;
 
-		$update = Model_Company_Family::updData($aFamily);
+		$update = Tijian_Model_Company_Family::updData($aFamily);
 		$msg    = $update ? '删除成功' : '删除失败';
 		$bool = $update ? true : false;	
 

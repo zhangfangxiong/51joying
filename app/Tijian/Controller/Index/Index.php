@@ -24,7 +24,7 @@ class Tijian_Controller_Index_Index extends Tijian_Controller_Index_Base
     {
         $this->_frame = 'pcbasic.phtml';
 
-        $aFaq = Model_Faq::getList([], 1, 'iCreateTime Desc');
+        $aFaq = Tijian_Model_Faq::getList([], 1, 'iCreateTime Desc');
         $this->assign('aFaq', $aFaq);
     }
 
@@ -33,12 +33,12 @@ class Tijian_Controller_Index_Index extends Tijian_Controller_Index_Base
         $this->_frame = 'pcbasic.phtml';
 
         $id = $this->getParam('id');
-        $aNews = Model_Faq::getDetail($id);
+        $aNews = Tijian_Model_Faq::getDetail($id);
         if (!$id || !$aNews) {
             return $this->redirect('index2');
         }
 
-        $aFaq = Model_Faq::getList([], 1, 'iCreateTime Desc');
+        $aFaq = Tijian_Model_Faq::getList([], 1, 'iCreateTime Desc');
         
         $this->assign('aFaq', $aFaq);
         $this->assign('aNews', $aNews);

@@ -142,7 +142,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
 		//公司编号
 		if (! empty($aParam['sCoCode'])) {
 			$where = array('sCompanyCode' => addslashes($aParam['sCoCode']));
-			$userIDs = Model_CustomerCompany::getCol(['where' => $where, 'group' => 'iUserID'], 'iUserID');
+			$userIDs = Tijian_Model_CustomerCompany::getCol(['where' => $where, 'group' => 'iUserID'], 'iUserID');
 
 			if($userIDs) {
 				$aWhere[] = 'p.iUserID in (' . implode(",", $userIDs) . ')';
@@ -153,7 +153,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
 		//公司名称
 		if (! empty($aParam['sCoName'])) {
 			$where = array('sCompanyName' => addslashes($aParam['sCoCode']));
-			$userIDs = Model_CustomerCompany::getCol(['where' => $where, 'group' => 'iUserID'], 'iUserID');
+			$userIDs = Tijian_Model_CustomerCompany::getCol(['where' => $where, 'group' => 'iUserID'], 'iUserID');
 			if($userIDs) {
 				$aWhere[] = 'p.iUserID in (' . implode(",", $userIDs) . ')';
 			}else {//查不到情况
@@ -333,7 +333,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
 
         $iOrderID = 0;
         if ($aCard) {
-            $aOP = Model_OrderProduct::getDetail($aCard['iOPID']);
+            $aOP = Tijian_Model_OrderProduct::getDetail($aCard['iOPID']);
             $iOrderID = $aOP['iOrderID'];
         }
 
@@ -404,7 +404,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
         if ($iCreateUserType == self::PAYTYPE_COMPANY) {
             $aCardParam['iCompanyID'] = $iCreateUserID;
         } else {
-            $aCustomer = Model_Customer::getDetail($iCreateUserID);
+            $aCustomer = Tijian_Model_Customer::getDetail($iCreateUserID);
             $aCardParam['iCompanyID'] = $aCustomer['iCreateUserID'];
         }
 
@@ -524,10 +524,10 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
         $iOrderType = $data['stype'] == 2 ? 4 : 3; //4.体检计划  3.体检产品
 
         if ($iOrderType == 4) {        
-            $aPlanProduct = Model_Physical_PlanProduct::getAll([
+            $aPlanProduct = Tijian_Model_Physical_PlanProduct::getAll([
                 'where' => [
                     'iPlanID' => $data['iPlanID'],
-                    'iStatus' => Model_Physical_PlanProduct::STATUS_VALID,
+                    'iStatus' => Tijian_Model_Physical_PlanProduct::STATUS_VALID,
                 ]
             ]);
             if ($aPlanProduct) {
@@ -538,7 +538,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                 }
             }
             foreach ($data['aUserID'] as $key => $value) {
-                $card = Model_OrderCard::getRow(['where' => [
+                $card = Tijian_Model_OrderCard::getRow(['where' => [
                     'iPlanID' => $data['iPlanID'],
                     'iUserID' => $value,
                     'iStatus IN' => ['-99', 1]
@@ -548,7 +548,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                 } 
 
                 //已预约的体检产品和计划都不能修改(未预约 预约失败 退订的非升级产品可以修改)
-                $aAMOCP = Model_OrderCardProduct::getAll([
+                $aAMOCP = Tijian_Model_OrderCardProduct::getAll([
                     'where' => [
                         'iCardID' => $card['iAutoID'],
                     ]
@@ -603,31 +603,31 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                     $aCard['iUseAll'] = 1;
                 }
 
-                Model_OrderCard::updData($aCard);
+                Tijian_Model_OrderCard::updData($aCard);
                 $aIDs[] = $card['iAutoID'];
-                $aUser = Model_User::getDetail($iCreateUserID);
+                $aUser = Tijian_Model_User::getDetail($iCreateUserID);
                 if (!$iProductID) {
                     foreach ($aPlanProductID as $sk => $sv) {
-                        $aMOCP = Model_OrderCardProduct::getRow([
+                        $aMOCP = Tijian_Model_OrderCardProduct::getRow([
                             'where' => [
                                 'iProductID' => $sv,
                                 'iCardID' => $card['iAutoID'],
                             ]
                         ]);
-                        $aProduct = Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
+                        $aProduct = Tijian_Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
                         if ($aMOCP && $aMOCP['iStatus'] != 3) {
                             $aMOCP['iStatus'] = 1;
                             $aMOCP['sProductName'] = $aProduct['sProductName'];
-                            Model_OrderCardProduct::updData($aMOCP);
+                            Tijian_Model_OrderCardProduct::updData($aMOCP);
                         } 
                         if (!$aMOCP) {
-                            Model_OrderCardProduct::initCardProduct($card['iAutoID'], $sv, $aProduct['sProductName'], 0, 0);
+                            Tijian_Model_OrderCardProduct::initCardProduct($card['iAutoID'], $sv, $aProduct['sProductName'], 0, 0);
                         }
                     }
                 } else {
                     if ($aAMOCP) {
                         foreach ($aPlanProductID as $sk => $sv) {
-                            $aCP = Model_OrderCardProduct::getRow([
+                            $aCP = Tijian_Model_OrderCardProduct::getRow([
                                 'where' => [
                                     'iProductID' => $sv,
                                     'iCardID' => $card['iAutoID'],
@@ -644,9 +644,9 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                                     } else {
                                         $aCP['iStatus'] = 1;
                                     }
-                                    $aProduct = Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
+                                    $aProduct = Tijian_Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
                                     $aCP['sProductName'] = $aProduct['sProductName'];
-                                    Model_OrderCardProduct::updData($aCP);  
+                                    Tijian_Model_OrderCardProduct::updData($aCP);
                                 }
                             } else {
                                 if ($sv != $iProductID) { 
@@ -658,8 +658,8 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                                 } else {
                                     $aCP['iStatus'] = 1;
                                 }
-                                $aProduct = Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
-                                Model_OrderCardProduct::initCardProduct($card['iAutoID'], $sv, $aProduct['sProductName'], 0, 0, $aCP);
+                                $aProduct = Tijian_Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
+                                Tijian_Model_OrderCardProduct::initCardProduct($card['iAutoID'], $sv, $aProduct['sProductName'], 0, 0, $aCP);
                             }
                         }
                     } else {
@@ -668,18 +668,18 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                             if ($sv != $iProductID) {
                                 continue;
                             }
-                            $aProduct = Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
-                            Model_OrderCardProduct::initCardProduct($card['iAutoID'], $sv, $aProduct['sProductName'], 0, 0, $aCP);
+                            $aProduct = Tijian_Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
+                            Tijian_Model_OrderCardProduct::initCardProduct($card['iAutoID'], $sv, $aProduct['sProductName'], 0, 0, $aCP);
                         }
                     }
                 }
                 
             }
         } else {
-            $aUser = Model_User::getDetail($iCreateUserID);
+            $aUser = Tijian_Model_User::getDetail($iCreateUserID);
             foreach ($data['aUserID'] as $key => $value) {
                 $iProductID = $data['iHRProductID'];
-                $aProduct = Model_UserProductBase::getUserProductBase($iProductID, $iCreateUserID, 1, $aUser['iChannelID']);
+                $aProduct = Tijian_Model_UserProductBase::getUserProductBase($iProductID, $iCreateUserID, 1, $aUser['iChannelID']);
 
                 $iSex = $data['aAttribute'][$value];
                 $iPayType = $data['aPayType'][$value];
@@ -697,7 +697,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                 $iCardID = self::initCard($iOrderType, $iPayType, $iCreateUserID, $iCreateUserType,0, 0, $aCard);
                 $aIDs[] = $iCardID;
 
-                $iOCPID = Model_OrderCardProduct::initCardProduct($iCardID, $iProductID, $aProduct['sProductName'], 0, 0);
+                $iOCPID = Tijian_Model_OrderCardProduct::initCardProduct($iCardID, $iProductID, $aProduct['sProductName'], 0, 0);
             }
         }
 
@@ -711,16 +711,16 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
      */
     public static function addItem ($iPlanID, $iProductID)
     {
-        $aCard = Model_OrderCard::getAll(['where' => [
+        $aCard = Tijian_Model_OrderCard::getAll(['where' => [
             'iPlanID' => $iPlanID,
             'iStatus' => 1
         ]]);
 
-        $aPP = Model_Physical_PlanProduct::getPlanProduct($iPlanID);
+        $aPP = Tijian_Model_Physical_PlanProduct::getPlanProduct($iPlanID);
         if ($iProductID && $aCard) {
             foreach ($aCard as $key => $value) {
                 $param = [];
-                $aCP = Model_OrderCardProduct::getAll(['where' => [
+                $aCP = Tijian_Model_OrderCardProduct::getAll(['where' => [
                     'iCardID' => $value['iAutoID'],
                     // 'iStatus' => 1
                 ]]);
@@ -729,7 +729,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                 }
                 $iCP = count($aCP);
 
-                $row = Model_OrderCardProduct::getRow(['where' => [
+                $row = Tijian_Model_OrderCardProduct::getRow(['where' => [
                     'iProductID' => $iProductID,
                     'iCardID' => $value['iAutoID'],
                     // 'iStatus >' => 0
@@ -754,8 +754,8 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                     }
                 }
 
-                $aProduct = Model_UserProductBase::getUserProductBase($iProductID, $iCreateUserID, 1, $aUser['iChannelID']);
-                Model_OrderCardProduct::initCardProduct($value['iAutoID'], $iProductID, $aProduct['sProductName'], 0, 0, $param);
+                $aProduct = Tijian_Model_UserProductBase::getUserProductBase($iProductID, $iCreateUserID, 1, $aUser['iChannelID']);
+                Tijian_Model_OrderCardProduct::initCardProduct($value['iAutoID'], $iProductID, $aProduct['sProductName'], 0, 0, $param);
             }
         }
     }
@@ -766,7 +766,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
      */
     public static function checkIsUsed ($iPlanID, $iProductID)
     {
-        $aCard = Model_OrderCard::getAll(['where' => [
+        $aCard = Tijian_Model_OrderCard::getAll(['where' => [
             'iPlanID' => $iPlanID,
             'iStatus' => 1
         ]]);
@@ -776,7 +776,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                 $aCardID[] = $value['iAutoID'];
             }
 
-            $aMOCP = Model_OrderCardProduct::getAll(['where' => [
+            $aMOCP = Tijian_Model_OrderCardProduct::getAll(['where' => [
                 'iCardID IN' => $aCardID,
                 'iProductID' => $iProductID,
                 'iBookStatus >' => 0,
@@ -796,7 +796,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
      */
     public static function delItem ($iPlanID, $iProductID)
     {
-        $aCard = Model_OrderCard::getAll(['where' => [
+        $aCard = Tijian_Model_OrderCard::getAll(['where' => [
             'iPlanID' => $iPlanID,
             'iStatus' => 1
         ]]);
@@ -804,14 +804,14 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
         if ($iProductID && $aCard) {
             foreach ($aCard as $key => $value) {
                 $param = [];
-                $row = Model_OrderCardProduct::getRow(['where' => [
+                $row = Tijian_Model_OrderCardProduct::getRow(['where' => [
                     'iProductID' => $iProductID,
                     'iCardID' => $value['iAutoID'],
                     'iStatus <' => 3
                 ]]);
                 if ($row) {
                     // $row['iStatus'] = 0;
-                    Model_OrderCardProduct::realDelData($row['iAutoID']);
+                    Tijian_Model_OrderCardProduct::realDelData($row['iAutoID']);
                 }
             }
         }
@@ -820,7 +820,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
     //通过order_card表主键获得相关卡人人员信息
     public static function getCardinfoByIDs($iCardIDs){
         $sql = "select card.*, c.sRealName, c.iUserID, c.sMobile, c.sEmail personEmail from ". self::TABLE_NAME. " as card".
-            " left join ". Model_Customer::TABLE_NAME. " as c on card.iUserID = c.iUserID".
+            " left join ". Tijian_Model_Customer::TABLE_NAME. " as c on card.iUserID = c.iUserID".
             " where card.iAutoID in($iCardIDs)";
 
         return self::query($sql);
@@ -842,7 +842,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
         $where = [];
         $aParam['sStartDate'] ? $where['iOrderTime >='] = strtotime($aParam['sStartDate']) : '';
         $aParam['sEndDate'] ? $where['iOrderTime <'] = strtotime($aParam['sEndDate']) : '';
-        isset($aParam['iStatus']) && ($aParam['iStatus'] != -1) ? $where['iBookStatus'] = $aParam['iStatus'] : $where['iBookStatus >'] = Model_Physical_Product::STATUS_UNCONFIRM;
+        isset($aParam['iStatus']) && ($aParam['iStatus'] != -1) ? $where['iBookStatus'] = $aParam['iStatus'] : $where['iBookStatus >'] = Tijian_Model_Physical_Product::STATUS_UNCONFIRM;
         // 排序及整理
         $aParent = $aParentID = [];
         if ($aList['aList']) {
@@ -857,7 +857,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                 $aParent[0][$key]['aDetail'] = [];
                 if ($aMenu['iOrderType'] != 3) {
                     if ($aMenu['iOrderType'] == 4 && $aMenu['iPlanID'] > 0) {
-                        $aPlan = Model_Physical_Plan::getDetail($aMenu['iPlanID']);
+                        $aPlan = Tijian_Model_Physical_Plan::getDetail($aMenu['iPlanID']);
                         if ($aPlan['iStatus'] != 1) {
                             unset($aParent[0][$key]);
                             continue;
@@ -873,7 +873,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                     if (!$where['iBookStatus']) {
                         $where['iBookStatus !='] = 4;
                     }
-                    $aCP = Model_OrderCardProduct::getAll(['where' => $where]);
+                    $aCP = Tijian_Model_OrderCardProduct::getAll(['where' => $where]);
                     if ($aCP) {
                         foreach ($aCP as $k => &$v) {
                             $desc = '';
@@ -885,9 +885,9 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                             $aParent[$aMenu['iAutoID']][$k]['sCardCode'] = $aMenu['sCardCode'];
                             $aParent[$aMenu['iAutoID']][$k]['sUrl'] = '';
 
-                            $iChannelType = ($aMenu['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT || $aMenu['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT_PLAN) ? 1 : 2;
-                            $aCreateUser = Model_User::getDetail($aMenu['iCreateUserID']);
-                            $aProduct = Model_UserProductBase::getUserProductBase($v['iProductID'], $aMenu['iCreateUserID'], $iChannelType, $aCreateUser['iChannel']);
+                            $iChannelType = ($aMenu['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT || $aMenu['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT_PLAN) ? 1 : 2;
+                            $aCreateUser = Tijian_Model_User::getDetail($aMenu['iCreateUserID']);
+                            $aProduct = Tijian_Model_UserProductBase::getUserProductBase($v['iProductID'], $aMenu['iCreateUserID'], $iChannelType, $aCreateUser['iChannel']);
                             $aParent[$aMenu['iAutoID']][$k]['sProductCode'] = !empty($aProduct['sProductCode']) ? $aProduct['sProductCode'] : '';
                             $aParent[$aMenu['iAutoID']][$k]['sBookStatus'] = !empty(self::$aStatus[$v['iBookStatus']]) ? self::$aStatus[$v['iBookStatus']] : '';
                             $aParent[$aMenu['iAutoID']][$k]['sUseStatus'] = 1 == $v['iUseStatus'] ? '已使用' : '未使用';
@@ -899,7 +899,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                             if ($v['iLastProductID'] > 0) {
                                 $desc = '(已升级)';
                             }
-                            Model_Refund::ifCanRefund($aMenu,$v);
+                            Tijian_Model_Refund::ifCanRefund($aMenu,$v);
                             $aParent[$aMenu['iAutoID']][$k]['iRefunding'] = $v['iRefunding'];
                             $aParent[$aMenu['iAutoID']][$k]['iRefundID'] = $v['iRefundID'];
                             $aParent[$aMenu['iAutoID']][$k]['iCanRefund'] = $v['iCanRefund'];
@@ -923,7 +923,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                         $where['iBookStatus !='] = 4;
                     }                    
                     $desc = '';
-                    $aCP = Model_OrderCardProduct::getRow(['where' => $where]);
+                    $aCP = Tijian_Model_OrderCardProduct::getRow(['where' => $where]);
                     if ($aCP['iLastProductID'] > 0) {
                         // $desc = '(已升级)';
                     }
@@ -942,7 +942,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                         $aParent[0][$key]['iCardID'] = $aMenu['iAutoID']; 
                         $aParent[0][$key]['iLastProductID'] = $aCP['iLastProductID'];
 
-                        Model_Refund::ifCanRefund($aMenu,$aCP);
+                        Tijian_Model_Refund::ifCanRefund($aMenu,$aCP);
                         $aParent[0][$key]['iRefunding'] = $aCP['iRefunding'];
                         $aParent[0][$key]['iRefundID'] = $aCP['iRefundID'];
                         $aParent[0][$key]['iCanRefund'] = $aCP['iCanRefund'];
@@ -985,9 +985,9 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
      */
     public static function checkIsPayOrAppoinment ($aCard)
     {
-        if ($aCard['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT 
-        || $aCard['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT_PLAN) {
-            $aCP = Model_OrderCardProduct::getAllCardProduct($aCard['iAutoID']);
+        if ($aCard['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT
+        || $aCard['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT_PLAN) {
+            $aCP = Tijian_Model_OrderCardProduct::getAllCardProduct($aCard['iAutoID']);
             if ($aCP) {
                 foreach ($aCP as $key => $value) {
                     if ($value['iPayStatus'] == 1 || in_array($value['iBookStatus'], [1, 2, 5])) {
@@ -1010,13 +1010,13 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
         $aCard = self::getDetail($iCardID);
         if ($aCard['iSex'] != $iSex) {
             //性别不符
-            $aCardProductID = Model_OrderCardProduct::getProductByCardIDs($aCard['iAutoID']);
+            $aCardProductID = Tijian_Model_OrderCardProduct::getProductByCardIDs($aCard['iAutoID']);
             if (!empty($aCardProductID)) {
-                $iChannelType = ($aCard['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT 
-                    || $aCard['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT_PLAN)
+                $iChannelType = ($aCard['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT
+                    || $aCard['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT_PLAN)
                     ? 1 : 2;
                 foreach ($aCardProductID as $key => $value) {
-                    $aProduct = Model_UserProductBase::getUserProductBase($value, $aCard['iCompanyID'], $iChannelType, $iChannelID);
+                    $aProduct = Tijian_Model_UserProductBase::getUserProductBase($value, $aCard['iCompanyID'], $iChannelType, $iChannelID);
                     if (!empty($aProduct)) {
                         if (!empty($aProduct['iNeedSex'])) {
                             return '该卡含有仅支持'.$aSex[$aCard['iSex']].'的产品套餐和您的性别不符！';
@@ -1046,10 +1046,10 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
         $iOrderType = $data['stype'] == 2 ? 4 : 3; //4.体检计划  3.体检产品
 
         if ($iOrderType == 4) { 
-            $aPlanProduct = Model_Physical_PlanProduct::getAll([
+            $aPlanProduct = Tijian_Model_Physical_PlanProduct::getAll([
                 'where' => [
                     'iPlanID' => $data['iPlanID'],
-                    'iStatus' => Model_Physical_PlanProduct::STATUS_VALID,
+                    'iStatus' => Tijian_Model_Physical_PlanProduct::STATUS_VALID,
                 ]
             ]);
             if ($aPlanProduct) {
@@ -1063,7 +1063,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
             foreach ($data['aUserID'] as $key => $value) {
                 //入职体检可以多次 年度体检只能一次
                 if ($data['aPhysicalType'][$value] == 1) {
-                    $card = Model_OrderCard::getRow(['where' => [
+                    $card = Tijian_Model_OrderCard::getRow(['where' => [
                         'iPlanID' => $data['iPlanID'],
                         'iPhysicalType' => 1,
                         'iUserID' => $value,
@@ -1077,7 +1077,7 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                 $aCard = [
                     'iUserID'       => $value,
                     'iPlanID'       => $data['iPlanID'],
-                    'sCardCode'     => Model_OrderCard::initCardCode(),
+                    'sCardCode'     => Tijian_Model_OrderCard::initCardCode(),
                     'iOrderType'    => 4,
                     'iSex'          => $data['aAttribute'][$value],
                     'iPaperReport'  => $data['aPaperReport'][$value],
@@ -1099,11 +1099,11 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                     'iCreateUserType' => $data['iCreateUserType']
                 ];
 
-                $iCardID = Model_OrderCard::addData($aCard);
+                $iCardID = Tijian_Model_OrderCard::addData($aCard);
                 $aIDs[] = $iCardID;
                 
                 //已预约的体检产品和计划都不能修改(未预约 预约失败 退订的非升级产品可以修改)
-                $aAMOCP = Model_OrderCardProduct::getAll([
+                $aAMOCP = Tijian_Model_OrderCardProduct::getAll([
                     'where' => [
                         'iCardID' => $iCardID,
                     ]
@@ -1132,10 +1132,10 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                 }
 
                 $iProductID = $data['aProductID'][$value]; 
-                $aUser = Model_User::getDetail($iCreateUserID);
+                $aUser = Tijian_Model_User::getDetail($iCreateUserID);
                 if ($aAMOCP) {
                     foreach ($aPlanProductID as $sk => $sv) {
-                        $aCP = Model_OrderCardProduct::getRow([
+                        $aCP = Tijian_Model_OrderCardProduct::getRow([
                             'where' => [
                                 'iProductID' => $sv,
                                 'iCardID' => $iCardID,
@@ -1147,14 +1147,14 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                         if ($aCP) {
                             if ($aCP['iStatus'] != 3) {
                                 $aCP['iStatus'] = 1;
-                                $aProduct = Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
+                                $aProduct = Tijian_Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
                                 $aCP['sProductName'] = $aProduct['sProductName'];
-                                Model_OrderCardProduct::updData($aCP);  
+                                Tijian_Model_OrderCardProduct::updData($aCP);
                             }
                         } else {
                             $aCP['iStatus'] = 1;
-                            $aProduct = Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
-                            Model_OrderCardProduct::initCardProduct($iCardID, $sv, $aProduct['sProductName'], 0, 0, $aCP);
+                            $aProduct = Tijian_Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
+                            Tijian_Model_OrderCardProduct::initCardProduct($iCardID, $sv, $aProduct['sProductName'], 0, 0, $aCP);
                         }
                     }
                 } else {
@@ -1163,8 +1163,8 @@ class Tijian_Model_OrderCard extends Tijian_Model_Base
                         if ($sv != $iProductID) {
                             continue;
                         }
-                        $aProduct = Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
-                        Model_OrderCardProduct::initCardProduct($iCardID, $sv, $aProduct['sProductName'], 0, 0, $aCP);
+                        $aProduct = Tijian_Model_UserProductBase::getUserProductBase($sv, $iCreateUserID, 1, $aUser['iChannelID']);
+                        Tijian_Model_OrderCardProduct::initCardProduct($iCardID, $sv, $aProduct['sProductName'], 0, 0, $aCP);
                     }
                 }
             }

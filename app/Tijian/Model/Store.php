@@ -1,6 +1,6 @@
 <?php
 
-class Tijian_Model_Store extends Tijian_Model_Base
+class Model_Store extends Tijian_Model_Base
 {
     const TABLE_NAME = 't_store';
 
@@ -196,7 +196,7 @@ class Tijian_Model_Store extends Tijian_Model_Base
      */
     public static function getAllProductStore ($iProductID, $iChannelType, $iCreateUserID, $iChannelID, $aParam = [])
     {
-        $aWhere = ['iStatus >' => Model_Store::STATUS_INVALID];
+        $aWhere = ['iStatus >' => Tijian_Model_Store::STATUS_INVALID];
         if ($aParam['iCityID'] > 0) {
             $aWhere['iCityID'] = intval($aParam['iCityID']);
         }
@@ -206,17 +206,17 @@ class Tijian_Model_Store extends Tijian_Model_Base
         if (!empty($aParam['iSupplierID'])) {
             $aWhere['iSupplierID'] = intval($aParam['iSupplierID']);
         }
-        $aStore = Model_Store::getPair($aWhere, 'iStoreID', 'sName');
+        $aStore = Tijian_Model_Store::getPair($aWhere, 'iStoreID', 'sName');
         if (empty($aStore)) {
             return [];
         }
 
         $aStoreParam['iStoreID IN'] = array_keys($aStore);
-        $aData = Model_UserProductStore::getUserProductStore($iProductID, $iCreateUserID, $iChannelType, $iChannelID, $aStoreParam);
+        $aData = Tijian_Model_UserProductStore::getUserProductStore($iProductID, $iCreateUserID, $iChannelType, $iChannelID, $aStoreParam);
         if (!empty($aData)) {
             //组装需要数据
             foreach ($aData as $key => $value) {
-                $aStores[] = Model_Store::getDetail($value['iStoreID']);
+                $aStores[] = Tijian_Model_Store::getDetail($value['iStoreID']);
             }
         }
 
@@ -229,7 +229,7 @@ class Tijian_Model_Store extends Tijian_Model_Base
      */
     public static function getProductStore ($iProductID, $iChannelType, $iCreateUserID, $iChannelID, $iPage, $aParam = [])
     {
-        $aWhere = ['iStatus >' => Model_Store::STATUS_INVALID];
+        $aWhere = ['iStatus >' => Tijian_Model_Store::STATUS_INVALID];
         if ($aParam['iCityID'] > 0) {
             $aWhere['iCityID'] = intval($aParam['iCityID']);
         }
@@ -239,17 +239,17 @@ class Tijian_Model_Store extends Tijian_Model_Base
         if (!empty($aParam['iSupplierID'])) {
             $aWhere['iSupplierID'] = intval($aParam['iSupplierID']);
         }
-        $aStore = Model_Store::getPair($aWhere, 'iStoreID', 'sName');
+        $aStore = Tijian_Model_Store::getPair($aWhere, 'iStoreID', 'sName');
         if (empty($aStore)) {
             return [];
         }
 
         $aStoreParam['iStoreID IN'] = array_keys($aStore);
-        $aData = Model_UserProductStore::getUserProductStoreList($iProductID, $iCreateUserID, $iChannelType, $iChannelID, $iPage, $aStoreParam);
+        $aData = Tijian_Model_UserProductStore::getUserProductStoreList($iProductID, $iCreateUserID, $iChannelType, $iChannelID, $iPage, $aStoreParam);
         if (!empty($aData['aList'])) {
             //组装需要数据
             foreach ($aData['aList'] as $key => $value) {
-                $aStores['aList'][] = Model_Store::getDetail($value['iStoreID']);
+                $aStores['aList'][] = Tijian_Model_Store::getDetail($value['iStoreID']);
             }
             $aStores['aPager'] = $aData['aPager'];
         }
@@ -268,17 +268,17 @@ class Tijian_Model_Store extends Tijian_Model_Base
     public static function getStoreSupplier ($iProductID, $iCreateUserID, $iChannelType, $iChannelID)
     {        
         $aSupplierID = $aSupplier = [];
-        $aStore = Model_UserProductStore::getUserProductStore($iProductID, $iCreateUserID, $iChannelType, $iChannelID);
+        $aStore = Tijian_Model_UserProductStore::getUserProductStore($iProductID, $iCreateUserID, $iChannelType, $iChannelID);
         if ($aStore) {
             foreach ($aStore as $key => $value) {
-                $store = Model_Store::getDetail($value['iStoreID']);
+                $store = Tijian_Model_Store::getDetail($value['iStoreID']);
                 if ($store['iSupplierID'] && !in_array($store['iSupplierID'], $aSupplierID)) {
                     $aSupplierID[] = $store['iSupplierID'];
                 }
             }
 
             if ($aSupplierID) {
-                $aSuppliers = Model_Type::getListByPKIDs($aSupplierID);
+                $aSuppliers = Tijian_Model_Type::getListByPKIDs($aSupplierID);
                 foreach ($aSuppliers as $key => $value) {
                     $aSupplier[$value['iTypeID']] = $value['sTypeName'];
                 }

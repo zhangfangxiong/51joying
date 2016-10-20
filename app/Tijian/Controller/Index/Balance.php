@@ -46,7 +46,7 @@ class Tijian_Controller_Index_Balance extends Tijian_Controller_Index_Account
             'aList' => []
         ];
         foreach ($aParam['cartnum'] as $key => $value) {
-            $aProduct = Model_UserProductBase::getUserProductBase($key, $this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID']);
+            $aProduct = Tijian_Model_UserProductBase::getUserProductBase($key, $this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID']);
             if (empty($aProduct)) {
                 return $this->show404('购物车中有不存在或已下架的产品，不能结算', false);
             }
@@ -99,17 +99,17 @@ class Tijian_Controller_Index_Balance extends Tijian_Controller_Index_Account
         if (!empty($aMsg)) {
             return $this->show404($aMsg, false);
         }
-        $aProduct = Model_Product::getAllUserProduct($this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID'], implode(',', $aProductID), false, 'iProductID');
+        $aProduct = Tijian_Model_Product::getAllUserProduct($this->aUser['iCreateUserID'], 2, $this->aUser['iChannelID'], implode(',', $aProductID), false, 'iProductID');
 
         //以下为各种情况分析
         $iUserID = $this->aUser['iUserID'];
-        $iUserType = Model_OrderInfo::PRESON;
-        $iOrderType = Model_OrderInfo::ELECTRONICCARD;
+        $iUserType = Tijian_Model_OrderInfo::PRESON;
+        $iOrderType = Tijian_Model_OrderInfo::ELECTRONICCARD;
         $sConsignee = $aParam['sConsignee'];
         $sMobile = $aParam['sMobile'];
         $sProductAmount = $aData['sAllTotalPrice'];
         $aOrderProductParam = [];
-        $sOrderCode = Model_OrderInfo::initOrderCode($iUserType);
+        $sOrderCode = Tijian_Model_OrderInfo::initOrderCode($iUserType);
         $aOrderParam['iIfInv'] = $aParam['iIfInv'];
         $aOrderParam['sAddress'] = $aParam['sAddress'];
         $aOrderParam['sZipcode'] = $aParam['sZipcode'];
@@ -119,18 +119,18 @@ class Tijian_Controller_Index_Balance extends Tijian_Controller_Index_Account
         $aOrderParam['sZipcode'] = $aParam['sZipcode'];
 
         //入库操作
-        Model_OrderInfo::begin();
+        Tijian_Model_OrderInfo::begin();
         //入orderinfo表
-        if ($iOrderID = Model_OrderInfo::initOrder($iUserID, $iUserType, $iOrderType, $sConsignee, $sMobile, $sProductAmount, $aOrderParam, $sOrderCode)) {
+        if ($iOrderID = Tijian_Model_OrderInfo::initOrder($iUserID, $iUserType, $iOrderType, $sConsignee, $sMobile, $sProductAmount, $aOrderParam, $sOrderCode)) {
             foreach ($aProductID as $key => $value) {
                 $aOrderProductParam['iSex'] = $aParam['aProductSex'][$value];//选择的性别
                 //入orderproduct表
-                if (!Model_OrderProduct::initOrder($iOrderID, $aProduct[$value]['iProductID'], 
+                if (!Tijian_Model_OrderProduct::initOrder($iOrderID, $aProduct[$value]['iProductID'],
                     $aProduct[$value]['sProductName'], $aParam['cartnum'][$value], 
                     $aProduct[$value][$this->aPriceKey[$aParam['aProductSex'][$value]]],
                     $aProduct[$value][$this->aPriceKey[$aParam['aProductSex'][$value]]] * $aParam['cartnum'][$value],
-                    Model_OrderInfo::ELECTRONICCARD, $aOrderProductParam)) {
-                    Model_OrderInfo::rollback();
+                    Tijian_Model_OrderInfo::ELECTRONICCARD, $aOrderProductParam)) {
+                    Tijian_Model_OrderInfo::rollback();
                     $aMsg = [
                         'msg' => '生成订单失败，请稍后重试！',
                     ];
@@ -138,17 +138,17 @@ class Tijian_Controller_Index_Balance extends Tijian_Controller_Index_Account
                 }
             }
         } else {
-            Model_OrderInfo::rollback();
+            Tijian_Model_OrderInfo::rollback();
             $aMsg = [
                 'msg' => '生成订单失败，请稍后重试！',
             ];
             return $this->show404($aMsg, false);
         }
 
-        Model_OrderInfo::commit();
+        Tijian_Model_OrderInfo::commit();
         
         //清空购物车
-        Model_Cart::flushCart($this->iCurrUserID);
+        Tijian_Model_Cart::flushCart($this->iCurrUserID);
         $aMsg = [
             'iCreateTime' => time(),
             'sOrderCode' => $sOrderCode,
@@ -178,11 +178,11 @@ class Tijian_Controller_Index_Balance extends Tijian_Controller_Index_Account
         if (empty($aParam['ordercode'])) {
             return $this->showMsg('你没有订购任何产品！', false);
         }
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($aParam['ordercode']);
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($aParam['ordercode']);
         if ($aOrder['iPayStatus']) {
             return $this->showMsg('该订单已支付！', false);
         }
-        $aOrderProduct = Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
+        $aOrderProduct = Tijian_Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
         $this->assign('aOrder', $aOrder);
         $this->assign('aOrderProduct', $aOrderProduct);
         $this->assign('sTitle', '订单支付');
@@ -195,15 +195,15 @@ class Tijian_Controller_Index_Balance extends Tijian_Controller_Index_Account
         if (empty($aParam['ordercode'])) {
             return $this->showMsg('订单不存在', false);
         }
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($aParam['ordercode']);
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($aParam['ordercode']);
         if (!$aOrder['iPayStatus']) {
             return $this->showMsg('该订单未支付！', false);
         }
-        $aOrderProduct = Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
+        $aOrderProduct = Tijian_Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
         if (!empty($aOrderProduct)) {//组装卡号数据
             foreach ($aOrderProduct as $key => $value) {
                 $aCardParam['iOPID'] = $value['iAutoID'];
-                $aOrderProduct[$key]['aCardList'] = Model_OrderCard::getPair($aCardParam,'sCardCode','iStatus');
+                $aOrderProduct[$key]['aCardList'] = Tijian_Model_OrderCard::getPair($aCardParam,'sCardCode','iStatus');
             }
         }
         $this->assign('aOrder', $aOrder);
@@ -218,7 +218,7 @@ class Tijian_Controller_Index_Balance extends Tijian_Controller_Index_Account
         if (empty($aParam['sOrderCode']) || empty($aParam['sProductAmount'])) {
             return $this->showMsg('参数有误', false);
         }
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($aParam['sOrderCode']);
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($aParam['sOrderCode']);
         if (empty($aOrder)) {
             return $this->showMsg('没有对应的订单', false);
         }
@@ -228,10 +228,10 @@ class Tijian_Controller_Index_Balance extends Tijian_Controller_Index_Account
         if ($aOrder['iPayStatus'] == 1) {
             return $this->showMsg('已支付过该订单', false);
         }
-        $aOrderProduct = Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
+        $aOrderProduct = Tijian_Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
         //检查订单中产品是否有效
         foreach ($aOrderProduct as $key => $value) {
-            $aProduct = Model_Product::getDetail($value['iProductID']);
+            $aProduct = Tijian_Model_Product::getDetail($value['iProductID']);
             $aOrderProduct[$key]['iAttribute'] = $aProduct['iAttribute'];
             //检查是否存在该商品
             if (empty($aProduct)) {
@@ -257,7 +257,7 @@ class Tijian_Controller_Index_Balance extends Tijian_Controller_Index_Account
             $aOrderParam['iPayChannel'] = 2;
             $aOrderParam['sMoneyPaid'] = $aOrderParam['sOrderAmount'] = $aParam['sProductAmount'];//已支付金额,应支付金额
             //ordercard表中新插入卡的数据
-            Model_OrderProduct::begin();
+            Tijian_Model_OrderProduct::begin();
             foreach ($aOrderProduct as $key => $value) {
                 //2,预约表中插入数据
                 $aOrderCardParam['iOPID'] = $value['iAutoID'];
@@ -265,9 +265,9 @@ class Tijian_Controller_Index_Balance extends Tijian_Controller_Index_Account
                 $aOrderCardParam['sProductName'] = $value['sProductName'];
                 $aOrderCardParam['iProductID'] = $value['iProductID'];
                 for ($i = 0; $i < $value['iProductNumber']; $i++) {
-                    $aOrderCardParam['sCardCode'] = Model_OrderCard::initCardCode();
-                    if (!Model_OrderCard::addData($aOrderCardParam)) {
-                        Model_OrderInfo::rollback();
+                    $aOrderCardParam['sCardCode'] = Tijian_Model_OrderCard::initCardCode();
+                    if (!Tijian_Model_OrderCard::addData($aOrderCardParam)) {
+                        Tijian_Model_OrderInfo::rollback();
                         $aMsg = [
                             'msg' => '生成订单失败，请稍后重试！',
                         ];
@@ -275,11 +275,11 @@ class Tijian_Controller_Index_Balance extends Tijian_Controller_Index_Account
                     }
                 }
             }
-            if (!Model_OrderInfo::updData($aOrderParam)) {
-                Model_OrderProduct::rollback();
+            if (!Tijian_Model_OrderInfo::updData($aOrderParam)) {
+                Tijian_Model_OrderProduct::rollback();
                 return $this->showMsg('支付失败!请联系管理员', false);
             }
-            Model_OrderProduct::commit();
+            Tijian_Model_OrderProduct::commit();
             return $this->showMsg('支付成功！', true);
         }
         return $this->showMsg('支付接口出错，请稍后重试!', false);

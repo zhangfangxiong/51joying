@@ -24,7 +24,7 @@ class Tijian_Model_UserProductAddtion extends Tijian_Model_Base
             'where' => $aWhere
         ));
         if (empty($aData)) {
-            $aData = Model_ProductAddtion::getProductAddtions($iProductID, Model_ProductAddtion::EXPANDPRODUCT);
+            $aData = Tijian_Model_ProductAddtion::getProductAddtions($iProductID, Tijian_Model_ProductAddtion::EXPANDPRODUCT);
         }
         return $aData;
     }

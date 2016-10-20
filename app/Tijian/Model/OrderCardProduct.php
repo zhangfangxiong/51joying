@@ -125,8 +125,8 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
         $sLimit = 'LIMIT ' . ($iPage - 1) * $iPageSize . ',' . $iPageSize;
 
         $sSQL = 'SELECT p.*, c.sRealName as sRealName, c.sMobile, card.iUserID, card.iCreateUserID, card.iCreateUserType, card.sStartDate, card.sEndDate FROM ' . self::TABLE_NAME . ' AS p
-                LEFT JOIN '. Model_OrderCard::TABLE_NAME. ' as card on p.iCardID = card.iAutoID
-    			 LEFT JOIN '.Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
+                LEFT JOIN '. Tijian_Model_OrderCard::TABLE_NAME. ' as card on p.iCardID = card.iAutoID
+    			 LEFT JOIN '.Tijian_Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
     			 ' . $sWhere . ' ' . $sOrder . ' ' . $sLimit;
 
         $aRet['aList'] = self::getOrm()->query($sSQL);
@@ -139,7 +139,7 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
                 $card['sEmail'] = "";
 
                 if(!empty($card['iUserID']) && !empty($card['iCreateUserID']) && 2 == intval($card['iCreateUserType'])) {
-                    $company = Model_CustomerCompany::getRow(['where' => ['iUserID' => $card['iUserID'], 'iCreateUserID' => $card['iCreateUserID']]]);
+                    $company = Tijian_Model_CustomerCompany::getRow(['where' => ['iUserID' => $card['iUserID'], 'iCreateUserID' => $card['iCreateUserID']]]);
                     if(!empty($company)) {
                         $card['sCompanyName'] = $company['sCompanyName'];
                         $card['sCompanyCode'] = $company['sCompanyCode'];
@@ -156,8 +156,8 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
         } else {
             unset($aParam['limit'], $aParam['order']);
             $sCntSQL = 'SELECT count(*) as total FROM ' . self::TABLE_NAME . ' AS p
-                        LEFT JOIN '. Model_OrderCard::TABLE_NAME. ' as card on p.iCardID = card.iAutoID
-    			        LEFT JOIN '.Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
+                        LEFT JOIN '. Tijian_Model_OrderCard::TABLE_NAME. ' as card on p.iCardID = card.iAutoID
+    			        LEFT JOIN '.Tijian_Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
     			        ' . $sWhere;
             $ret = self::getOrm()->query($sCntSQL);
             $aRet['iTotal'] = $ret[0]['total'];
@@ -176,9 +176,9 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
         $sLimit = 'LIMIT ' . ($iPage - 1) * $iPageSize . ',' . $iPageSize;
 
         $sSQL = 'SELECT p.*,s.sName as sStroeName,s.sAddress, c.sRealName as sUserName,card.iUserID, card.iCreateUserID, card.iCreateUserType FROM ' . self::TABLE_NAME . ' AS p
-                 LEFT JOIN '. Model_OrderCard::TABLE_NAME. ' card on p.iCardID = card.iAutoID
+                 LEFT JOIN '. Tijian_Model_OrderCard::TABLE_NAME. ' card on p.iCardID = card.iAutoID
     			 LEFT JOIN t_store AS s ON s.iStoreID=p.iStoreID
-    			 LEFT JOIN '.Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
+    			 LEFT JOIN '.Tijian_Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
     			' . $sWhere . ' ' . $sOrder . ' ' . $sLimit;
 
         $aRet['aList'] = self::query($sSQL);
@@ -188,7 +188,7 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
                 $row['sCoName'] = '';
 
                 if(!empty($row['iCreateUserType']) && 2 == intval($row['iCreateUserType'])) {
-                    $company = Model_CustomerCompany::getRow(['where' => ['iUserID' => $row['iUserID'], 'iCreateUserID' => $row['iCreateUserID']]]);
+                    $company = Tijian_Model_CustomerCompany::getRow(['where' => ['iUserID' => $row['iUserID'], 'iCreateUserID' => $row['iCreateUserID']]]);
                     if(!empty($company)) {
                         $row['sCoName'] = $company['sCompanyName'];
                     }
@@ -202,9 +202,9 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
         } else {
             unset($aParam['limit'], $aParam['order']);
             $sCntSQL = 'SELECT count(*) total FROM ' . self::TABLE_NAME . ' AS p
-                 LEFT JOIN '. Model_OrderCard::TABLE_NAME. ' card on p.iCardID = card.iAutoID
+                 LEFT JOIN '. Tijian_Model_OrderCard::TABLE_NAME. ' card on p.iCardID = card.iAutoID
     			 LEFT JOIN t_store AS s ON s.iStoreID=p.iStoreID
-    			 LEFT JOIN '.Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
+    			 LEFT JOIN '.Tijian_Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
     			' . $sWhere;
 
             $ret = self::query($sCntSQL);
@@ -233,9 +233,9 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
         $sLimit = 'LIMIT ' . ($iPage - 1) * $iPageSize . ',' . $iPageSize;
 
         $sSQL = 'SELECT p.*,s.sName as sStroeName,s.sAddress, c.sRealName as sUserName,card.iUserID, card.iCreateUserID, card.iCreateUserType FROM ' . self::TABLE_NAME . ' AS p
-                 LEFT JOIN '. Model_OrderCard::TABLE_NAME. ' card on p.iCardID = card.iAutoID
+                 LEFT JOIN '. Tijian_Model_OrderCard::TABLE_NAME. ' card on p.iCardID = card.iAutoID
     			 LEFT JOIN t_store AS s ON s.iStoreID=p.iStoreID
-    			 LEFT JOIN '.Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
+    			 LEFT JOIN '.Tijian_Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
     			' . $sWhere . ' ' . $sOrder . ' ' . $sLimit;
 
         $aRet['aList'] = self::query($sSQL);
@@ -245,7 +245,7 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
                 $row['sCoName'] = '';
 
                 if(!empty($row['iCreateUserType']) && 2 == intval($row['iCreateUserType'])) {
-                    $company = Model_CustomerCompany::getRow(['where' => ['iUserID' => $row['iUserID'], 'iCreateUserID' => $row['iCreateUserID']]]);
+                    $company = Tijian_Model_CustomerCompany::getRow(['where' => ['iUserID' => $row['iUserID'], 'iCreateUserID' => $row['iCreateUserID']]]);
                     if(!empty($company)) {
                         $row['sCoName'] = $company['sCompanyName'];
                     }
@@ -259,9 +259,9 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
         } else {
             unset($aParam['limit'], $aParam['order']);
             $sCntSQL = 'SELECT count(*) total FROM ' . self::TABLE_NAME . ' AS p
-                 LEFT JOIN '. Model_OrderCard::TABLE_NAME. ' card on p.iCardID = card.iAutoID
+                 LEFT JOIN '. Tijian_Model_OrderCard::TABLE_NAME. ' card on p.iCardID = card.iAutoID
     			 LEFT JOIN t_store AS s ON s.iStoreID=p.iStoreID
-    			 LEFT JOIN '.Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
+    			 LEFT JOIN '.Tijian_Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
     			' . $sWhere;
 
             $ret = self::query($sCntSQL);
@@ -297,7 +297,7 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
         }
 
         if (! empty($aParam['sUserName'])) {
-            $customerCompany = Model_CustomerCompany::getRow(['where' => ['sUserName' => addslashes($aParam['sUserName'])]]);
+            $customerCompany = Tijian_Model_CustomerCompany::getRow(['where' => ['sUserName' => addslashes($aParam['sUserName'])]]);
             if(!empty($customerCompany)) {
                 $aWhere[] = 'c.iUserID=' . $customerCompany['iUserID'];
             }
@@ -305,7 +305,7 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
         //公司编号
         if (! empty($aParam['sCoCode'])) {
             $where = array('sCompanyCode' => addslashes($aParam['sCoCode']));
-            $userIDs = Model_CustomerCompany::getCol(['where' => $where, 'group' => 'iUserID'], 'iUserID');
+            $userIDs = Tijian_Model_CustomerCompany::getCol(['where' => $where, 'group' => 'iUserID'], 'iUserID');
 
             if($userIDs) {
                 $aWhere[] = 'card.iCreateUserID in (' . implode(",", $userIDs) . ') and card.iCreateUserType = 2';
@@ -316,7 +316,7 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
         //公司名称
         if (! empty($aParam['sCoName'])) {
             $where = array('sCompanyName' => addslashes($aParam['sCoCode']));
-            $userIDs = Model_CustomerCompany::getCol(['where' => $where, 'group' => 'iUserID'], 'iUserID');
+            $userIDs = Tijian_Model_CustomerCompany::getCol(['where' => $where, 'group' => 'iUserID'], 'iUserID');
             if($userIDs) {
                 $aWhere[] = 'card.iCreateUserID in (' . implode(",", $userIDs) . ') and card.iCreateUserType = 2';
             }else {//查不到情况
@@ -399,8 +399,8 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
     //通过order_card_product表主键获得相关卡人人员信息
     public static function getCardinfoByIDs($iocpIDs){
         $sql = "select ocp.*, c.sRealName, c.iUserID, c.sMobile, card.iCreateUserID, card.sCardCode, card.sStartDate, card.sEndDate from ". self::TABLE_NAME. " as ocp".
-                " left join ". Model_OrderCard::TABLE_NAME. " as card on ocp.iCardID = card.iAutoID".
-                " left jion ". Model_Customer::TABLE_NAME. " as c on card.iUserID = c.iUserID".
+                " left join ". Tijian_Model_OrderCard::TABLE_NAME. " as card on ocp.iCardID = card.iAutoID".
+                " left jion ". Tijian_Model_Customer::TABLE_NAME. " as c on card.iUserID = c.iUserID".
                 " where ocp.iAutoID in($iocpIDs)";
 
         return self::query($sql);
@@ -412,9 +412,9 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
     public static function getCardProductInfo($iCardID){
         $sql = "select ocp.*, store.sName, store.sAddress, p.iProductID, p.sProductCode, p.sProductName, c.iSex, c.iMarriage from ". self::TABLE_NAME.
             " as ocp left join ".Model_Store::TABLE_NAME. " as store on ocp.iStoreID = store.iStoreID".
-            " left join ". Model_Product::TABLE_NAME. " as p on ocp.iProductID = p.iProductID".
-            " left join ". Model_OrderCard::TABLE_NAME. " as card on ocp.iCardID = card.iAutoID".
-            " left join ". Model_Customer::TABLE_NAME. " as c on card.iUserID = c.iUserID".
+            " left join ". Tijian_Model_Product::TABLE_NAME. " as p on ocp.iProductID = p.iProductID".
+            " left join ". Tijian_Model_OrderCard::TABLE_NAME. " as card on ocp.iCardID = card.iAutoID".
+            " left join ". Tijian_Model_Customer::TABLE_NAME. " as c on card.iUserID = c.iUserID".
             " where ocp.iCardID = $iCardID and ocp.iStatus in(1, 3)";
 
         return self::query($sql);
@@ -443,14 +443,14 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
         $content = Yaf_G::getConf('ordermail', 'physical');
         $msg  = Yaf_G::getConf('ordermsg', 'physical');
 
-        $aCP = Model_OrderCardProduct::getDetail($iCPID);
-        $aStore = Model_Store::getDetail($aCP['iStoreID']);
+        $aCP = Tijian_Model_OrderCardProduct::getDetail($iCPID);
+        $aStore = Tijian_Model_Store::getDetail($aCP['iStoreID']);
 
         if (!$iUserID) {
-            $aCard = Model_OrderCard::getDetail($aCP['iCardID']);
+            $aCard = Tijian_Model_OrderCard::getDetail($aCP['iCardID']);
             $iUserID = $aCard['iUserID'];
         }
-        $aCustomer = Model_CustomerNew::getDetail($iUserID);    
+        $aCustomer = Tijian_Model_CustomerNew::getDetail($iUserID);
         
         $content = preg_replace('/\【员工姓名\】/', $aCustomer['sRealName'], $content);
         $content = preg_replace('/\【体检日期\】/', date('Y-m-d', $aCP['iOrderTime']), $content);
@@ -478,14 +478,14 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
         $content = Yaf_G::getConf('ordercanclemail', 'physical');
         $msg  = Yaf_G::getConf('ordercanclemsg', 'physical');
 
-        $aCP = Model_OrderCardProduct::getDetail($iCPID);
-        $aStore = Model_Store::getDetail($aCP['iStoreID']);
+        $aCP = Tijian_Model_OrderCardProduct::getDetail($iCPID);
+        $aStore = Tijian_Model_Store::getDetail($aCP['iStoreID']);
 
         if (!$iUserID) {
-            $aCard = Model_OrderCard::getDetail($aCP['iCardID']);
+            $aCard = Tijian_Model_OrderCard::getDetail($aCP['iCardID']);
             $iUserID = $aCard['iUserID'];
         }
-        $aCustomer = Model_CustomerNew::getDetail($iUserID);    
+        $aCustomer = Tijian_Model_CustomerNew::getDetail($iUserID);
         
         $content = preg_replace('/\【员工姓名\】/', $aCustomer['sRealName'], $content);
         $content = preg_replace('/\【体检日期\】/', date('Y-m-d', $iOrderTime), $content);
@@ -511,7 +511,7 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
         $content = Yaf_G::getConf('reportmail', 'physical');
         $msg  = Yaf_G::getConf('reportmsg', 'physical');
 
-        $aCustomer = Model_CustomerNew::getDetail($aCard['iUserID']);
+        $aCustomer = Tijian_Model_CustomerNew::getDetail($aCard['iUserID']);
     
         $content = preg_replace('/\【员工姓名\】/', $aCustomer['sRealName'], $content);
         $content = preg_replace('/\【体检卡号\】/', $aCard['sCardCode'], $content);

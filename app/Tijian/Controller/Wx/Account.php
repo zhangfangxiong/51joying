@@ -33,7 +33,7 @@ class Tijian_Controller_Wx_Account extends Tijian_Controller_Wx_Base
             if (empty($sRealName)) {
                 return $this->show404('真实性别不能为空！', false);
             }
-            $aUser = Model_Customer::getUserByIdentityCard($sIdCard);
+            $aUser = Tijian_Model_Customer::getUserByIdentityCard($sIdCard);
             if (!empty($aUser) && $aUser['sRealName'] != $sRealName) {
                 return $this->show404('该身份证已被他人绑定，且真实姓名和您不一致！', false);
             }
@@ -43,16 +43,16 @@ class Tijian_Controller_Wx_Account extends Tijian_Controller_Wx_Base
                 $aUserParam['sIdentityCard'] = $sIdCard;
                 $aUserParam['sRealName'] = $sRealName;
                 $aCookie['sOpenID'] = $aUserParam['sOpenID'] = $sOpenID;
-                $aCookie['sUserName'] = $aUserParam['sUserName'] = Model_Customer::initUserName();
+                $aCookie['sUserName'] = $aUserParam['sUserName'] = Tijian_Model_Customer::initUserName();
                 $aUserParam['sPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $aUserParam['sUserName']);
                 $aUserParam['sBirthDate'] = substr($sIdCard, 6, 8);
-                $aCreateUser = Model_User::getUserByUserName($this->sCompanyName, 2);
+                $aCreateUser = Tijian_Model_User::getUserByUserName($this->sCompanyName, 2);
                 if (empty($aCreateUser)) {
                     return $this->show404('请先在admin后台添加一个用户名为“registers”的hr用户', false);
                 }
                 $aUserParam['iCreateUserID'] = $aCreateUser['iUserID'];
                 $aUserParam['iChannel'] = $aCreateUser['iChannel'];
-                if ($aCookie['iUserID'] = Model_Customer::addData($aUserParam)) {
+                if ($aCookie['iUserID'] = Tijian_Model_Customer::addData($aUserParam)) {
                     //设置cookie
                     // Util_Cookie::set(Yaf_G::getConf('wxuserkey', 'cookie'), $aUserParam);
                     Util_Cookie::set(Yaf_G::getConf('wxuserkey', 'cookie'), $aCookie);
@@ -67,7 +67,7 @@ class Tijian_Controller_Wx_Account extends Tijian_Controller_Wx_Base
                 $aCookie['sOpenID'] = $aUserParam['sOpenID'] = $sOpenID;
                 $aUserParam['sBirthDate'] = substr($sIdCard, 6, 8);
                 $aCookie['sUserName'] = $aUser['sUserName'];
-                if (Model_Customer::updData($aUserParam)) {
+                if (Tijian_Model_Customer::updData($aUserParam)) {
                     //设置cookie
                     Util_Cookie::set(Yaf_G::getConf('wxuserkey', 'cookie'), $aCookie);
                     return $this->show404('绑定成功', true);
@@ -98,7 +98,7 @@ class Tijian_Controller_Wx_Account extends Tijian_Controller_Wx_Base
 
             $aUserParam['iUserID'] = $this->aUser['iUserID'];
             $aUserParam['sMobile'] = $sMobile;
-            if (Model_Customer::updData($aUserParam)) {
+            if (Tijian_Model_Customer::updData($aUserParam)) {
                 return $this->show404('绑定成功', true);
             } else {
                 return $this->show404('绑定失败', false);
@@ -119,7 +119,7 @@ class Tijian_Controller_Wx_Account extends Tijian_Controller_Wx_Base
         if (!empty($this->aUser['iCityID'])) {
             $aRegionParam['where']['iCityID'] = $this->aUser['iCityID'];
         }
-        $aRegion = Model_Region::getPair($aRegionParam, 'iRegionID', 'sRegionName');
+        $aRegion = Tijian_Model_Region::getPair($aRegionParam, 'iRegionID', 'sRegionName');
         $this->assign('id', $aParam['id']);
         $this->assign('aCitys', $aCitys);
         $this->assign('aRegion', $aRegion);
@@ -134,7 +134,7 @@ class Tijian_Controller_Wx_Account extends Tijian_Controller_Wx_Base
     {
         $aParam = $this->getParams();
         if ($this->isPost()) {
-            if (Model_Customer::updData($aParam)) {
+            if (Tijian_Model_Customer::updData($aParam)) {
                 return $this->show404('个人信息编辑成功！', true);
             }
             return $this->show404('编辑失败!', false);
@@ -144,7 +144,7 @@ class Tijian_Controller_Wx_Account extends Tijian_Controller_Wx_Base
             if (!empty($this->aUser['iCityID'])) {
                 $aRegionParam['where']['iCityID'] = $this->aUser['iCityID'];
             }
-            $aRegion = Model_Region::getPair($aRegionParam, 'iRegionID', 'sRegionName');
+            $aRegion = Tijian_Model_Region::getPair($aRegionParam, 'iRegionID', 'sRegionName');
             $this->assign('id', $aParam['id']);
             $this->assign('aCitys', $aCitys);
             $this->assign('aRegion', $aRegion);

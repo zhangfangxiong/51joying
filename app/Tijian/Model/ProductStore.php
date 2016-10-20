@@ -1,6 +1,6 @@
 <?php
 
-class Tijian_Model_ProductStore extends Tijian_Model_Base
+class Model_ProductStore extends Tijian_Model_Base
 {
     const TABLE_NAME = 't_product_store';
 

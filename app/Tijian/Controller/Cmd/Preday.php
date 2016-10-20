@@ -14,7 +14,7 @@ class Tijian_Controller_Cmd_Preday extends Tijian_Controller_Cmd_Base
     		'iOrderTime <' => time() + 16*60*60 //提前16h发送
     	];
 
-        $aCP = Model_OrderCardProduct::getAll(['where' => $where]);
+        $aCP = Tijian_Model_OrderCardProduct::getAll(['where' => $where]);
         $aCardID = [];
         $aUserID = [];
         $sCardIDs = '';
@@ -32,7 +32,7 @@ class Tijian_Controller_Cmd_Preday extends Tijian_Controller_Cmd_Base
                 $sCardIDs = implode(',', $aCardID);
             }
 
-            $aCard =  Model_OrderCard::getListByPKIDs($sCardIDs);
+            $aCard =  Tijian_Model_OrderCard::getListByPKIDs($sCardIDs);
             if ($aCard) {
                 foreach ($aCard as $key => $value) {
                     if ($value['iUserID']) {
@@ -46,7 +46,7 @@ class Tijian_Controller_Cmd_Preday extends Tijian_Controller_Cmd_Base
             }
 
             if ($sUserIDs) {
-                $aEmpolyee = Model_CustomerNew::getListByPKIDs($sUserIDs);
+                $aEmpolyee = Tijian_Model_CustomerNew::getListByPKIDs($sUserIDs);
                 if ($aEmpolyee) {
                     foreach ($aEmpolyee as $key => $value) {
                         $aUsers[$value['iUserID']]['sRealName'] = $value['sRealName'];
@@ -56,13 +56,13 @@ class Tijian_Controller_Cmd_Preday extends Tijian_Controller_Cmd_Base
 
                 $tmp = [];
                 foreach ($aCP as $key => $value) {
-                    $card = Model_OrderCard::getDetail($value['iCardID']);
+                    $card = Tijian_Model_OrderCard::getDetail($value['iCardID']);
                     $tmp['sRealName'] = $aUsers[$card['iUserID']]['sRealName'];                    
                     $tmp['sMobile'] = $aUsers[$card['iUserID']]['sMobile'];
                     $tmp['sPhysicalDate'] = date('Y-m-d', $value['iOrderTime']);
                     $tmp['sProductName'] = $value['sProductName'];
 
-                    $aStore = Model_Store::getDetail($value['iStoreID']);
+                    $aStore = Tijian_Model_Store::getDetail($value['iStoreID']);
                     $tmp['sStoreName'] = $aStore['sName'];
                     $tmp['sAddress'] = $aStore['sAddress'];
                     

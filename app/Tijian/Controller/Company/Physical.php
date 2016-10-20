@@ -45,8 +45,8 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 	public function listAction ()
 	{
 		$page = $this->getParam('page');
-		$aUser = Model_User::getDetail($this->enterpriseId);
-		$aHrProduct = Model_Product::getUserViewProductList($this->enterpriseId, 1, $aUser['iChannel'], $page);
+		$aUser = Tijian_Model_User::getDetail($this->enterpriseId);
+		$aHrProduct = Tijian_Model_Product::getUserViewProductList($this->enterpriseId, 1, $aUser['iChannel'], $page);
 		$this->assign('aHrProduct', $aHrProduct);
 		$this->setMenu(0);
 	}
@@ -65,7 +65,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 		//先找出最近三个月的员工 然后去过滤该些员工
 		$where = [
 			'iCreateUserID' => $this->enterpriseId,
-			'iStatus' => Model_Company_Company::STATUS_VALID
+			'iStatus' => Tijian_Model_Company_Company::STATUS_VALID
 		];
 		$iIsAll = intval($this->getParam('iIsAll'));
 		if (!$iIsAll) {
@@ -77,7 +77,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 
 		$this->getParam('sRealName') ? $where['sRealName'] = $this->getParam('sRealName') : '';
 		if ($where['sRealName']) {
-			$sIDs = Model_CustomerNew::getCustomerIDsByName($where['sRealName']);
+			$sIDs = Tijian_Model_CustomerNew::getCustomerIDsByName($where['sRealName']);
 			if ($sIDs) {
 				$where['iUserID IN'] = $sIDs;
 			} else {
@@ -86,7 +86,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 		}
 		$this->getParam('iDeptID') ? $where['iDeptID'] = $this->getParam('iDeptID') : '';
 		$this->getParam('iJobGradeID') ? $where['iJobGradeID'] = $this->getParam('iJobGradeID') : '';
-		$aEmpolyee = Model_Company_Company::getAll([
+		$aEmpolyee = Tijian_Model_Company_Company::getAll([
 			'where' => $where
 		]);
 		$aEmpolyee = $this->setEmployeeData($aEmpolyee);
@@ -106,7 +106,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 	 */
 	public function getUserOrderInfo ($iPlanID, $iUserID)
 	{
-		$aCard = Model_OrderCard::getRow(['where' => [
+		$aCard = Tijian_Model_OrderCard::getRow(['where' => [
 			'iPlanID' => $iPlanID,
 			'iUserID' => $iUserID,
 			'iStatus IN' => ['-99', 1] 
@@ -116,7 +116,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 			$aCard['iProductID'] = 0;
 			$aCard['iCardID'] = $aCard['iAutoID'];
 			if ($aCard['iUseType'] == 1) {
-				$aCP = Model_OrderCardProduct::getAll(['where' => [
+				$aCP = Tijian_Model_OrderCardProduct::getAll(['where' => [
 					'iCardID' => $aCard['iAutoID'],
 					'iStatus >' => 0
 				]]);
@@ -155,14 +155,14 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 
 			//判断选择的人性别和卡性别是否一致
 			foreach ($data['aUserID'] as $key => $value) {
-				$aUser = Model_CustomerNew::getDetail($value);
+				$aUser = Tijian_Model_CustomerNew::getDetail($value);
 				$iSex = $aUser['iSex'] != 1 ? ($aUser['iSex'] == 2 && $aUser['iMarriage'] == 1) ? 2 : 3 : 1;
 				if ($iSex != $data['aAttribute'][$value]) {
 					// return $this->showMsg('卡产品性别必须和体检人性别婚姻状况一致', false);
 				}
 			}
 						
-			$sID = Model_OrderCard::createCard($data, $this->enterpriseId);
+			$sID = Tijian_Model_OrderCard::createCard($data, $this->enterpriseId);
 			$opt = $this->getParam('opt');
 			if ($data['iSend'] == 1) {
 				$url = '/company/physical/send?ids='.$sID;
@@ -183,7 +183,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 				if (!$iPlanID) {
 					return $this->redirect('/company/physical/list');
 				}
-				$aPlan = Model_Physical_Plan::getDetail($iPlanID);
+				$aPlan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
 		        if (!$aPlan) {
 		            return $this->redirect('/company/physical/list');
 		        }
@@ -206,7 +206,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 
 			if ($type == 2) {
 				$aSelProduct = $this->getPlanProduct($iPlanID);
-				$aEmployee = Model_CustomerNew::getListByPKIDs($ids);
+				$aEmployee = Tijian_Model_CustomerNew::getListByPKIDs($ids);
 				foreach ($aEmployee as $key => $value) {
 					$aOrderInfo = $this->getUserOrderInfo($iPlanID, $value['iUserID']);
 					// print_r($aOrderInfo);die;
@@ -231,7 +231,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 													? $aOrderInfo['iCardID'] : 0;
 				}
 			} else {
-				$aEmployee = Model_CustomerNew::getListByPKIDs($ids);
+				$aEmployee = Tijian_Model_CustomerNew::getListByPKIDs($ids);
 				foreach ($aEmployee as $key => $value) {
 					$aEmployee[$key]['iPayType'] = 2;
 					$aEmployee[$key]['iProductID'] = $iHRProductID;
@@ -268,13 +268,13 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 		}
 
 		$enterprise = '';
-		$aEnterprise = Model_User::getDetail($this->enterpriseId);
+		$aEnterprise = Tijian_Model_User::getDetail($this->enterpriseId);
 		if ($aEnterprise) {
 			$enterprise = $aEnterprise['sRealName'];
 		}
 
 		$userIds = [];
-		$aPhysical = Model_OrderCard::getListByPKIDs($ids);
+		$aPhysical = Tijian_Model_OrderCard::getListByPKIDs($ids);
 		if ($aPhysical) {
 			foreach ($aPhysical as $key => $value) {
 				$userIds[] = $value['iUserID'];
@@ -284,13 +284,13 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 		$aUsers = [];
 		$aEmpolyee = [];
 		if ($userIds) {
-			$aEmpolyee = Model_CustomerNew::getListByPKIDs($userIds);
+			$aEmpolyee = Tijian_Model_CustomerNew::getListByPKIDs($userIds);
 			if ($aEmpolyee) {
 				foreach ($aEmpolyee as $key => $value) {
 					$aUsers[$value['iUserID']]['sRealName'] = $value['sRealName'];
 					$aUsers[$value['iUserID']]['sMobile'] = $value['sMobile'];
 
-					$aCompany = Model_Company_Company::checkIsExist($value['iUserID'], $this->enterpriseId);
+					$aCompany = Tijian_Model_Company_Company::checkIsExist($value['iUserID'], $this->enterpriseId);
 					$aUsers[$value['iUserID']]['sEmail'] = $aCompany['sEmail'];
 					$aUsers[$value['iUserID']]['sUserName'] = $aCompany['sUserName'];
 					$aUsers[$value['iUserID']]['sPassword'] = $aCompany['sUserName'];
@@ -396,7 +396,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 				$data = [];
 				$data['iAutoID'] = $tmp['iAutoID'];
 				$data['iSendMsg'] = 1;
-				Model_OrderCard::updData($data);
+				Tijian_Model_OrderCard::updData($data);
 			}
 		}
 
@@ -426,7 +426,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 				$data = [];
 				$data['iAutoID'] = $tmp['iAutoID'];
 				$data['iSendEMail'] = 1;
-				Model_OrderCard::updData($data);
+				Tijian_Model_OrderCard::updData($data);
 			}
 		}		
 	}
@@ -545,7 +545,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 
             $aPlan['iHRID'] = $this->enterpriseId;
             $aPlan['iStatus'] = 0;
-            if ($iLastInsertID = Model_Physical_Plan::addData($aPlan)) {
+            if ($iLastInsertID = Tijian_Model_Physical_Plan::addData($aPlan)) {
                 $sNextUrl = '/company/physical/plannext/id/' . $iLastInsertID;
                 return $this->showMsg($sNextUrl, true);
             } else {
@@ -566,16 +566,16 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
         if (empty($iPlanID)) {
             return $this->showMsg('参数有误', $iPlanID);
         }
-        $aPlan = Model_Physical_Plan::getDetail($iPlanID);
+        $aPlan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
         $aHasItem = [];//该产品已包含的单项
         if (empty($aPlan)) {
             return $this->showMsg('该体检计划不存在!', false);
         }
 
-        $aPlanProduct = Model_Physical_PlanProduct::getAll([
+        $aPlanProduct = Tijian_Model_Physical_PlanProduct::getAll([
        		'where' => [
        			'iPlanID' => $iPlanID,
-				'iStatus' => Model_Physical_PlanProduct::STATUS_VALID,
+				'iStatus' => Tijian_Model_Physical_PlanProduct::STATUS_VALID,
        		]
        	]);
 		$iProductIDs = '';
@@ -589,13 +589,13 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 			}
 
 			if ($iProductIDs) {
-				$aUser = Model_User::getDetail($this->enterpriseId);
-				$aHasItem = Model_Product::getAllUserProduct($this->enterpriseId,1,$aUser['iChannel'],$iProductIDs);
+				$aUser = Tijian_Model_User::getDetail($this->enterpriseId);
+				$aHasItem = Tijian_Model_Product::getAllUserProduct($this->enterpriseId,1,$aUser['iChannel'],$iProductIDs);
 				if($aHasItem) {
 					foreach ($aHasItem as $key => $value) {
-						$aProduct = Model_Product::getDetail($value['iProductID']);
+						$aProduct = Tijian_Model_Product::getDetail($value['iProductID']);
 						if ($aProduct) {
-							$aHasStore = Model_ProductStore::getProductStores($value['iProductID'], Model_ProductStore::BASEPRODUCT);
+							$aHasStore = Tijian_Model_ProductStore::getProductStores($value['iProductID'], Tijian_Model_ProductStore::BASEPRODUCT);
 							$aHasItem[$key]['sProductCode'] = $aProduct['sProductCode'];
 							$aHasItem[$key]['sProductName'] = $aProduct['sProductName'];
 							$aHasItem[$key]['iCount'] = count($aHasStore);
@@ -605,13 +605,13 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 			}
        	}
 
-		$aUser = Model_User::getDetail($this->enterpriseId);
-		$aHrProduct = Model_Product::getUserViewProductList($this->enterpriseId, 1,$aUser['iChannel'],$iPage,false,$iProductIDs,'iUpdateTime DESC', 10, ['id' => $id]);
+		$aUser = Tijian_Model_User::getDetail($this->enterpriseId);
+		$aHrProduct = Tijian_Model_Product::getUserViewProductList($this->enterpriseId, 1,$aUser['iChannel'],$iPage,false,$iProductIDs,'iUpdateTime DESC', 10, ['id' => $id]);
         if ($aHrProduct['aList']) {
         	foreach ($aHrProduct['aList'] as $key => $value) {
-        		$aProduct = Model_Product::getDetail($value['iProductID']);
+        		$aProduct = Tijian_Model_Product::getDetail($value['iProductID']);
 				if ($aProduct) {
-					$aHasStore = Model_ProductStore::getProductStores($value['iProductID'], Model_ProductStore::BASEPRODUCT);
+					$aHasStore = Tijian_Model_ProductStore::getProductStores($value['iProductID'], Tijian_Model_ProductStore::BASEPRODUCT);
 					$aHrProduct['aList'][$key]['iCount'] = count($aHasStore);
 				}
         	}
@@ -647,7 +647,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     		'iHRID' => $this->enterpriseId,
     		'sPlanName' => $aParam['sPlanName'],
         ];
-        $aPlan = Model_Physical_Plan::getRow([
+        $aPlan = Tijian_Model_Physical_Plan::getRow([
         	'where' => $where
         ]);
         if ($type == 2 && $aPlan) {
@@ -676,7 +676,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
         if (empty($sItemID)) {
             return $this->showMsg('请先选择产品', false);
         }
-        $aPlan = Model_Physical_Plan::getDetail($iPlanID);
+        $aPlan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
         if (empty($aPlan)) {
             return $this->showMsg('该体检计划不存在!', false);
         }
@@ -685,17 +685,17 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
         $aItemIDs = explode(',', $sItemID);
         foreach ($aItemIDs as $key => $value) {
         	$aParam['iProductID'] = $value;
-        	$aRow = Model_Physical_PlanProduct::getRow([
+        	$aRow = Tijian_Model_Physical_PlanProduct::getRow([
         		'where' => [
         			'iPlanID' => $iPlanID,
         			'iProductID' => $value,
-        			'iStatus' => Model_Physical_PlanProduct::STATUS_VALID
+        			'iStatus' => Tijian_Model_Physical_PlanProduct::STATUS_VALID
         		]
         	]);
         	if (!$aRow) {
-        		Model_Physical_PlanProduct::addData($aParam);
+        		Tijian_Model_Physical_PlanProduct::addData($aParam);
         		//添加产品后对card_product表添加产品
-        		Model_OrderCard::addItem($iPlanID, $value);
+        		Tijian_Model_OrderCard::addItem($iPlanID, $value);
         	}
         }
 
@@ -724,35 +724,35 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
             return $this->showMsg('请先选择产品', false);
         }
 
-        $aPlan = Model_Physical_Plan::getDetail($iPlanID);
+        $aPlan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
         if (empty($aPlan)) {
             return $this->showMsg('该体检计划不存在!', false);
         }
 
         $aItemIDs = explode(',', $sItemID);
         foreach ($aItemIDs as $key => $value) {
-        	$bool = Model_OrderCard::checkIsUsed($iPlanID, $value);
+        	$bool = Tijian_Model_OrderCard::checkIsUsed($iPlanID, $value);
         	if ($bool) {
         		return $this->showMsg('删除产品存在用户已经预约, 不可删除', false);
         	}
         }
 
         foreach ($aItemIDs as $key => $value) {
-        	$aRow = Model_Physical_PlanProduct::getRow([
+        	$aRow = Tijian_Model_Physical_PlanProduct::getRow([
         		'where' => [
         			'iPlanID' => $iPlanID,
         			'iProductID' => $value,
         			'iHRID' => $this->enterpriseId,
-        			'iStatus' => Model_Physical_PlanProduct::STATUS_VALID
+        			'iStatus' => Tijian_Model_Physical_PlanProduct::STATUS_VALID
         		]
         	]);
         	if ($aRow) {
         		$aParam['iAutoID'] = $aRow['iAutoID'];
-        		$aParam['iStatus'] = Model_Physical_PlanProduct::STATUS_INVALID;
-        		Model_Physical_PlanProduct::updData($aParam);
+        		$aParam['iStatus'] = Tijian_Model_Physical_PlanProduct::STATUS_INVALID;
+        		Tijian_Model_Physical_PlanProduct::updData($aParam);
 
         		//删除产品后对card_product表添加产品
-        		Model_OrderCard::delItem($iPlanID, $value);
+        		Tijian_Model_OrderCard::delItem($iPlanID, $value);
         	}
         }
 
@@ -770,14 +770,14 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
         if (empty($iPlanID)) {
         	return $this->redirect('/company/physical/list');
         }
-        $aPlan = Model_Physical_Plan::getDetail($iPlanID);
+        $aPlan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
         if (empty($aPlan)) {
         	return $this->redirect('/company/physical/list');
         }
         
         $where = [
 			'iCreateUserID' => $this->enterpriseId,
-			'iStatus' => Model_Company_Company::STATUS_VALID
+			'iStatus' => Tijian_Model_Company_Company::STATUS_VALID
 		];
 		$iIsAll = intval($this->getParam('iIsAll'));
 		if (!$iIsAll) {
@@ -789,7 +789,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 
 		$this->getParam('sRealName') ? $where['sRealName'] = $this->getParam('sRealName') : '';
 		if ($where['sRealName']) {
-			$sIDs = Model_CustomerNew::getCustomerIDsByName($where['sRealName']);
+			$sIDs = Tijian_Model_CustomerNew::getCustomerIDsByName($where['sRealName']);
 			if ($sIDs) {
 				$where['iUserID IN'] = $sIDs;
 			} else {
@@ -800,10 +800,10 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 		$this->getParam('iJobGradeID') ? $where['iJobGradeID'] = $this->getParam('iJobGradeID') : '';
 		
 		$aHasItem = [];
-        $aOrder = Model_OrderCard::getAll([
+        $aOrder = Tijian_Model_OrderCard::getAll([
        		'where' => [
        			'iPlanID' => $iPlanID,
-       			'iOrderType' => Model_Physical_Product::TYPE_PRODUCT_PLAN,
+       			'iOrderType' => Tijian_Model_Physical_Product::TYPE_PRODUCT_PLAN,
 				'iStatus IN' => ['-99', 1]
        		]
        	]);
@@ -818,7 +818,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 			}
 
 			if ($iUserIDs) {
-				$aHasItem = Model_Company_Company::getAll(['where' => [
+				$aHasItem = Tijian_Model_Company_Company::getAll(['where' => [
 						'iUserID IN' => $iUserIDs,
 						'iCreateUserID' => $this->enterpriseId
 					]
@@ -832,7 +832,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 			}
        	}
 
-  		$aEmpolyee = Model_Company_Company::getList($where, $iPage);
+  		$aEmpolyee = Tijian_Model_Company_Company::getList($where, $iPage);
 		$aEmpolyee['aList'] = $this->setEmployeeData($aEmpolyee['aList']);
 
         $this->assign('iPlanID', $iPlanID);
@@ -851,7 +851,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
         if (empty($iPlanID)) {
             return $this->showMsg('参数有误', false);
         }
-        $aPlan = Model_Physical_Plan::getDetail($iPlanID);
+        $aPlan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
         if (empty($aPlan)) {
             return $this->showMsg('该体检计划不存在!', false);
         }
@@ -866,13 +866,13 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
         $iOrderType = 4;
         $iCreateUserType = 2;
         foreach ($aItemIDs as $key => $value) {
-        	$aCustomer = Model_CustomerNew::getDetail($value);
+        	$aCustomer = Tijian_Model_CustomerNew::getDetail($value);
 			$sProductAmount = 0;
 			$aOrder = [
 				'iOrderStatus' => 0,
 				'iPlanID' => $iPlanID
 			];
-			$iCardID = Model_OrderCard::initCard($iOrderType, 0, $this->enterpriseId, $iCreateUserType, 0, 0, ['iUserID' => $value, 'iStatus' => '-99', 'iPlanID' => $iPlanID]);
+			$iCardID = Tijian_Model_OrderCard::initCard($iOrderType, 0, $this->enterpriseId, $iCreateUserType, 0, 0, ['iUserID' => $value, 'iStatus' => '-99', 'iPlanID' => $iPlanID]);
         }
 
         return $this->showMsg('添加成功！', true);
@@ -900,17 +900,17 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
             return $this->showMsg('请先选择员工', false);
         }
 
-        $aPlan = Model_Physical_Plan::getDetail($iPlanID);
+        $aPlan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
         if (empty($aPlan)) {
             return $this->showMsg('该体检计划不存在!', false);
         }
 
         $aItemIDs = explode(',', $sItemID);
         foreach ($aItemIDs as $key => $value) {
-        	$aRow = Model_OrderCard::getRow([
+        	$aRow = Tijian_Model_OrderCard::getRow([
         		'where' => [
         			'iPlanID' => $iPlanID,
-        			'iOrderType' => Model_Physical_Product::TYPE_PRODUCT_PLAN,
+        			'iOrderType' => Tijian_Model_Physical_Product::TYPE_PRODUCT_PLAN,
         			'iUserID' => $value,
         			'iStatus IN' => ['-99', '1']
         		]
@@ -918,7 +918,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
         	if ($aRow) {
         		$aParam['iAutoID'] = $aRow['iAutoID'];
         		$aParam['iStatus'] = 0;
-        		Model_OrderCard::updData($aParam);
+        		Tijian_Model_OrderCard::updData($aParam);
         	}
         }
 
@@ -962,7 +962,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     	: '';
 
     	if (isset($where['sRealName']) && $where['sRealName']) {
-    		$row = Model_CustomerNew::getAll([
+    		$row = Tijian_Model_CustomerNew::getAll([
     			'where' => [
     				'sRealName LIKE' => '%' . $where['sRealName'] . '%',
     			]
@@ -982,10 +982,10 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     			$where['iUserID IN'] = $userid;
     		}
 
-    		$aEmployees = Model_Company_Company::getAll([
+    		$aEmployees = Tijian_Model_Company_Company::getAll([
     			'where' => [
     				'iCreateUserID' => $this->enterpriseId,
-    				'iStatus >' => Model_Company_Company::STATUS_INVALID,
+    				'iStatus >' => Tijian_Model_Company_Company::STATUS_INVALID,
     				'iUserID IN' => $userid
     			]
     		]);
@@ -996,10 +996,10 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     			return;
     		}	
     	} else {
-    		$aEmployees = Model_Company_Company::getAll([
+    		$aEmployees = Tijian_Model_Company_Company::getAll([
     			'where' => [
     				'iCreateUserID' => $this->enterpriseId,
-    				'iStatus >' => Model_Company_Company::STATUS_INVALID
+    				'iStatus >' => Tijian_Model_Company_Company::STATUS_INVALID
     			]
     		]);
     		$aUserIDs = [];
@@ -1027,7 +1027,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     	$aCardID = [];
     	$sCardID = '';
     	if (isset($where1['iBookStatus'])) {
-    		$aCP = Model_OrderCardProduct::getAll(['where' => $where1]);
+    		$aCP = Tijian_Model_OrderCardProduct::getAll(['where' => $where1]);
     		if ($aCP) {
     			foreach ($aCP as $key => $value) {
     				if ($value['iCardID']) {
@@ -1038,10 +1038,10 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     				$sCardID = implode(',', $aCardID);
     				$where['iAutoID IN'] = $sCardID;
 
-    				$aCard = Model_OrderCard::getList($where, $page, 'iUpdateTime Desc');
+    				$aCard = Tijian_Model_OrderCard::getList($where, $page, 'iUpdateTime Desc');
 			    	if ($aCard['aList']) {
 			    		foreach ($aCard['aList'] as $key => $value) {
-			    			$aUser = Model_CustomerNew::getDetail($value['iUserID']);
+			    			$aUser = Tijian_Model_CustomerNew::getDetail($value['iUserID']);
 			    			$aCard['aList'][$key]['sRealName'] = $aUser['sRealName'];
 			    			$aCard['aList'][$key]['sMobile'] = $aUser['sMobile'];
 			    			$aCard['aList'][$key]['sNotice'] = (1 == $value['iSendEMail']) ? '已发送' : '未发送';
@@ -1053,10 +1053,10 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     			} 
     		} 		
     	} else {
-    		$aCard = Model_OrderCard::getList($where, $page, 'iUpdateTime Desc');
+    		$aCard = Tijian_Model_OrderCard::getList($where, $page, 'iUpdateTime Desc');
 	    	if ($aCard['aList']) {
 	    		foreach ($aCard['aList'] as $key => $value) {
-	    			$aUser = Model_CustomerNew::getDetail($value['iUserID']);
+	    			$aUser = Tijian_Model_CustomerNew::getDetail($value['iUserID']);
 	    			$aCard['aList'][$key]['sRealName'] = $aUser['sRealName'];
 	    			$aCard['aList'][$key]['sMobile'] = $aUser['sMobile'];
 	    			$aCard['aList'][$key]['sNotice'] = (1 == $value['iSendEMail']) ? '已发送' : '未发送';
@@ -1078,7 +1078,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     public function getBookStatus ($iCardID)
     {
     	$aBookStatus = [];
-    	$aCP = Model_OrderCardProduct::getAll(['where' => [
+    	$aCP = Tijian_Model_OrderCardProduct::getAll(['where' => [
     		'iCardID' => $iCardID,
     		'iProductID >' => 0,
     		'iStatus IN' => [1, 3]
@@ -1110,9 +1110,9 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     			$data['iMarriage'] = $params['iMarriage'];
     			$data['sIdentityCard'] = $params['sIdentityCard'];
     			$data['sMobile'] = $params['sMobile'];
-    			Model_CustomerNew::updData($data);
+    			Tijian_Model_CustomerNew::updData($data);
 
-    			$aCompany = Model_Company_Company::getRow(['where' => [
+    			$aCompany = Tijian_Model_Company_Company::getRow(['where' => [
 		    		'iUserID' => $params['iUserID'],
 		    		'iCreateUserID' => $this->enterpriseId
 		    	]]);
@@ -1120,18 +1120,18 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 		    		$data2['iAutoID'] = $aCompany['iAutoID'];
 		    		$data2['sUserName'] = $params['sUserName'];
     				$data2['sEmail'] = $params['sEmail'];	
-    				Model_Company_Company::updData($data2);
+    				Tijian_Model_Company_Company::updData($data2);
 		    	}
     		}
 
     		if ($params['id']) {
-    			$aCard = Model_OrderCard::getDetail($params['id']);
+    			$aCard = Tijian_Model_OrderCard::getDetail($params['id']);
 		    	if (!$aCard) {
 		    		$this->showMsg('体检卡号不存在', false);
 		    	}
 
 		    	// 检查产品是否已付款或者已预约 不能更改
-		    	$bool = Model_OrderCard::checkIsPayOrAppoinment($aCard);
+		    	$bool = Tijian_Model_OrderCard::checkIsPayOrAppoinment($aCard);
 		    	if (!$bool) {
 		    		return $this->showMsg('该卡已预约或已支付，不能更改', false);
 		    	}
@@ -1142,7 +1142,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     			$card['iPhysicalType'] = $params['iPhysicalType'];
     			$card['iPaperReport'] = $params['iPaperReport'];
     			$card['iPayType'] = $params['iPayType'];
-    			Model_OrderCard::updData($card);
+    			Tijian_Model_OrderCard::updData($card);
     			return $this->showMsg('保存成功', true);
     		} else {
     			$this->showMsg('体检订单不存在', false);
@@ -1151,7 +1151,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     		$id = intval($this->getParam('id'));
     		$type = intval($this->getParam('type'));
 
-    		$aProduct = $aCard = Model_OrderCard::getDetail($id);
+    		$aProduct = $aCard = Tijian_Model_OrderCard::getDetail($id);
 	    	if (!$id || !$aCard) {
 	    		$this->redirect('/physical/record');
 	    	}
@@ -1162,10 +1162,10 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 	    	
 	    	$iProductID = 0;
 	    	if ($aCard['iPlanID'] > 0) {
-	    		$aPlan = Model_Physical_Plan::getDetail($aCard['iPlanID']);
+	    		$aPlan = Tijian_Model_Physical_Plan::getDetail($aCard['iPlanID']);
 	    		$aHrItem = $this->getPlanProduct($aCard['iPlanID']);
 	    	} else {
-	    		$mocp = Model_OrderCardProduct::getRow(['where' => [
+	    		$mocp = Tijian_Model_OrderCardProduct::getRow(['where' => [
 	    			'iCardID' => $aCard['iAutoID'],
 	    			'iStatus' => 1
 	    		]]);
@@ -1177,7 +1177,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 	    	$aProduct['sPlanName'] = isset($aPlan['sPlanName']) ? $aPlan['sPlanName'] : '--';
 
 	    	$aAppointmen = [];
-	    	$aCP = Model_OrderCardProduct::getAll(['where' => [
+	    	$aCP = Tijian_Model_OrderCardProduct::getAll(['where' => [
 	    		'iCardID' => $id,
 	    		'iProductID >' => 0,
 	    		'iStatus IN' => [1, 3]
@@ -1188,7 +1188,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 	    			$aAppointment[$key]['iBookStatus'] = $value['iBookStatus'];
 	    			$aAppointment[$key]['iUseStatus'] = $this->getStatus($value['iStatus'], $value['iUseStatus']);
 
-	    			$aStore = $value['iStoreID'] ? Model_Store::getDetail($value['iStoreID']) : [];
+	    			$aStore = $value['iStoreID'] ? Tijian_Model_Store::getDetail($value['iStoreID']) : [];
 	    			$aAppointment[$key]['sStoreName'] = isset($aStore['sName']) ? $aStore['sName'] : '--';
 	    			
 	    			$aAppointment[$key]['sPhysicalDate'] = $value['iPhysicalTime']
@@ -1197,9 +1197,9 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 	    			$aAppointment[$key]['sCreateDate'] = $value['iBookStatus'] ? ($value['iReserveTime'] ? date('Y-m-d H:i:s', $value['iReserveTime']) : '') : '';
 
 	    			if ($aCard['iPayType'] == 1) {
-	    				$product = Model_Product::getDetail($value['iProductID']);
+	    				$product = Tijian_Model_Product::getDetail($value['iProductID']);
 
-	    				$product = Model_UserProductBase::getUserProductBase($value['iProductID'], $this->enterpriseId, 1, $this->enterprise['iChannel']);
+	    				$product = Tijian_Model_UserProductBase::getUserProductBase($value['iProductID'], $this->enterpriseId, 1, $this->enterprise['iChannel']);
 	    				$aAppointment[$key]['sCost'] = @$product[$this->sexPrice[$aCard['iSex']]];
 	    			} else {
 	    				$aAppointment[$key]['sCost'] = 0;	
@@ -1211,7 +1211,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 					$data['hospid'] = $aStore['sStoreCode'];			
 					// $data['iPhysicalType'] = $aCard['iPhysicalType'];
 					$sData = json_encode($data);
-					$supplier = Model_Type::getDetail($aStore['iSupplierID']);
+					$supplier = Tijian_Model_Type::getDetail($aStore['iSupplierID']);
 					if (isset($aSupplier[$supplier['sCode']])) {
 						$classname = $aSupplier[$supplier['sCode']]['classname'];
 						$aAppointment[$key]['sDPUrl'] 
@@ -1220,8 +1220,8 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 		    	}	
 	    	}
 
-	    	$aEmployee = Model_CustomerNew::getDetail($aCard['iUserID']);
-	    	$aCompany = Model_Company_Company::getRow(['where' => [
+	    	$aEmployee = Tijian_Model_CustomerNew::getDetail($aCard['iUserID']);
+	    	$aCompany = Tijian_Model_Company_Company::getRow(['where' => [
 	    		'iUserID' => $aCard['iUserID'],
 	    		'iCreateUserID' => $this->enterpriseId
 	    	]]);
@@ -1278,7 +1278,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 		!empty($params['sPlanName']) ? $where['sPlanName'] = $params['sPlanName'] : '';
 		isset($params['iStatus']) && ($params['iStatus'] != '-1') ? $where['iStatus'] = intval($params['iStatus']) : '';
 
-    	$aPlan = Model_Physical_Plan::getList($where, $page, 'iUpdateTime Desc');
+    	$aPlan = Tijian_Model_Physical_Plan::getList($where, $page, 'iUpdateTime Desc');
     	if ($aPlan['aList']) {
     		foreach ($aPlan['aList'] as $key => $value) {
     			$aPlan['aList'][$key]['sPublishTime'] = date('Y-m-d H:i:s',$value['iCreateTime']);
@@ -1320,7 +1320,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     public function planDetailAction ()
     {
     	$iPlanID = $this->getParam('id');
-    	$aPlan = Model_Physical_Plan::getDetail($iPlanID);
+    	$aPlan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
 
     	if ($this->isPost()) {
     		$aData = $this->_checkClientData(2);    		
@@ -1328,10 +1328,10 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
                 return null;
             }
             if (1 == $aData['iStatus']) {
-            	// Model_Physical_Plan::sendPlan($aData['iAutoID']);
+            	// Tijian_Model_Physical_Plan::sendPlan($aData['iAutoID']);
             }
 
-    		$updID = Model_Physical_Plan::updData($aData);
+    		$updID = Tijian_Model_Physical_Plan::updData($aData);
     		if ($updID) {
     			$this->showMsg('保存成功', true);
     		} else {
@@ -1425,12 +1425,12 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     public function sendhrplanAction ()
     {
     	$iPlanID = intval($this->getParam('planId'));
-    	$aPlan = Model_Physical_Plan::getDetail($iPlanID);
+    	$aPlan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
     	if (!$aPlan) {
     		return $this->showMsg('体检计划不存在', false);
     	}
 
-    	$p = Model_Physical_Plan::sendPlan($iPlanID);
+    	$p = Tijian_Model_Physical_Plan::sendPlan($iPlanID);
     	if ($p = 0) {
     		return $this->showMsg('发送存在延迟，请稍后确认', false);
     	}
@@ -1462,7 +1462,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     	if (!$iPlanID) {
     		return false;
     	} else {
-    		$aPlan = Model_Physical_Plan::getDetail($iPlanID);
+    		$aPlan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
     		if ($this->enterpriseId != $aPlan['iHRID']) {
     			return false;
     		}
@@ -1471,18 +1471,18 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     		$where['iPlanID'] = $iPlanID;
 	    	$where['iPhysicalType'] = 2 == $aParam['iType'] ? 2 : 1;
 
-	    	$aCard = Model_OrderCard::getAll(['where' => $where]);
+	    	$aCard = Tijian_Model_OrderCard::getAll(['where' => $where]);
 	    	if ($where['iPhysicalType'] == 1) {
 	    		$content = Yaf_G::getConf('yearlynotice', 'physical');
 	    	} else {
 	    		$content = Yaf_G::getConf('jobnotice', 'physical');
 	    	}
 
-	    	$aCompany = Model_User::getDetail($this->enterpriseId);
+	    	$aCompany = Tijian_Model_User::getDetail($this->enterpriseId);
 	    	$together = '';
 	    	foreach ($aCard as $key => $value) {
 	    		$tmp = $content;
-	    		$aUser = Model_CustomerNew::getDetail($value['iUserID']);
+	    		$aUser = Tijian_Model_CustomerNew::getDetail($value['iUserID']);
 	    		$tmp = preg_replace('/\【员工姓名\】/', $aUser['sRealName'], $tmp);
 				$tmp = preg_replace('/\【公司名称\】/', $aCompany['sRealName'], $tmp);
 				$tmp = preg_replace('/\【体检卡号\】/', $value['sCardCode'], $tmp);
@@ -1531,10 +1531,10 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     	isset($params['iStatus']) && ($params['iStatus'] != -1) ? $where['iBookStatus'] = $params['iStatus']
     	: '';
 
-		$aEmployees = Model_Company_Company::getAll([
+		$aEmployees = Tijian_Model_Company_Company::getAll([
 			'where' => [
 				'iCreateUserID' => $this->enterpriseId,
-				'iStatus >' => Model_Company_Company::STATUS_INVALID
+				'iStatus >' => Tijian_Model_Company_Company::STATUS_INVALID
 			]
 		]);
 
@@ -1559,7 +1559,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 		$sUserIDs = implode(',', $aUserIDs);
 		$where1['iUserID IN'] = $sUserIDs;
 		
-		$aCard = Model_OrderCard::getAll(['where' => $where1]);
+		$aCard = Tijian_Model_OrderCard::getAll(['where' => $where1]);
 		if ($aCard) {
 			$aCardID = [];
 			foreach ($aCard as $key => $value) {
@@ -1577,11 +1577,11 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     	
 
     	if ($params['isexport']) {
-    		$aCP = Model_OrderCardProduct::getAll(['where' => $where]);
+    		$aCP = Tijian_Model_OrderCardProduct::getAll(['where' => $where]);
     		if ($aCP) {
 	    		foreach ($aCP as $key => &$value) {
-					$card = Model_OrderCard::getDetail($value['iCardID']);  				
-					$aUser = Model_CustomerNew::getDetail($card['iUserID']);
+					$card = Tijian_Model_OrderCard::getDetail($value['iCardID']);
+					$aUser = Tijian_Model_CustomerNew::getDetail($card['iUserID']);
 
 					$value['sRealName'] = $aUser['sRealName'];
 					$value['sReserveTime'] = $value['iReserveTime'] ? date('Y-m-d H:i:s', $value['iReserveTime']) : '';
@@ -1591,11 +1591,11 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 	    	}
     		$this->exportMonthly($aCP);
     	} else {
-    		$aCP = Model_OrderCardProduct::getList($where, $page);
+    		$aCP = Tijian_Model_OrderCardProduct::getList($where, $page);
 	    	if ($aCP['aList']) {
 	    		foreach ($aCP['aList'] as $key => &$value) {
-					$card = Model_OrderCard::getDetail($value['iCardID']);  				
-					$aUser = Model_CustomerNew::getDetail($card['iUserID']);
+					$card = Tijian_Model_OrderCard::getDetail($value['iCardID']);
+					$aUser = Tijian_Model_CustomerNew::getDetail($card['iUserID']);
 
 					$value['sRealName'] = $aUser['sRealName'];
 					$value['sReserveTime'] = $value['iReserveTime'] ? date('Y-m-d H:i:s', $value['iReserveTime']) : '';
@@ -1695,10 +1695,10 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
      */
     public function seriousAction ()
     {
-    	$aEmployees = Model_Company_Company::getAll([
+    	$aEmployees = Tijian_Model_Company_Company::getAll([
             'where' => [
                 'iCreateUserID' => $this->enterpriseId,
-                'iStatus >' => Model_Company_Company::STATUS_INVALID
+                'iStatus >' => Tijian_Model_Company_Company::STATUS_INVALID
             ]
         ]);
 
@@ -1720,7 +1720,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
         $sUserIDs = implode(',', $aUserIDs);
         $where1['iUserID IN'] = $sUserIDs;
         
-        $aCard = Model_OrderCard::getAll(['where' => $where1]);
+        $aCard = Tijian_Model_OrderCard::getAll(['where' => $where1]);
         if ($aCard) {
             $aCardID = [];
             foreach ($aCard as $key => $value) {
@@ -1736,11 +1736,11 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
         $where['iIsSerious'] = 1;
         $where['iCardID IN'] = $sCardID;
 
-    	$aCP = Model_OrderCardProduct::getList($where, $page);
+    	$aCP = Tijian_Model_OrderCardProduct::getList($where, $page);
     	if ($aCP['aList']) {
     		foreach ($aCP['aList'] as $key => &$value) {
-				$card = Model_OrderCard::getDetail($value['iCardID']);  				
-				$aUser = Model_CustomerNew::getDetail($card['iUserID']);
+				$card = Tijian_Model_OrderCard::getDetail($value['iCardID']);
+				$aUser = Tijian_Model_CustomerNew::getDetail($card['iUserID']);
 
 				$value['sRealName'] = $aUser['sRealName'];
 				$value['sReserveTime'] = $value['iReserveTime'] ? date('Y-m-d H:i:s', $value['iReserveTime']) : '';

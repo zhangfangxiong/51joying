@@ -26,7 +26,7 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
     public function listAction()
     {
         //购物车信息
-        $aChart = Model_Cart::getCart($this->iCurrUserID);
+        $aChart = Tijian_Model_Cart::getCart($this->iCurrUserID);
         $this->assign('aChart', $aChart);
         $iPage = $this->getParam('page') ? intval($this->getParam('page')) : 1;
         $t = $this->getParam('t');
@@ -55,7 +55,7 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
     public function getRegionAction()
     {
         $iCityID = $this->getParam('iCityID');
-        $aData = Model_Region::getAll(['where' => ['iCityID' => $iCityID]]);
+        $aData = Tijian_Model_Region::getAll(['where' => ['iCityID' => $iCityID]]);
 
         return $this->show404($aData, true);
     }
@@ -67,7 +67,7 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
     public function getStoreListAction()
     {
         $iPage = $this->getParam('page') ? intval($this->getParam('page')) : 1;
-        $aWhere = ['iStatus >' => Model_Store::STATUS_INVALID];
+        $aWhere = ['iStatus >' => Tijian_Model_Store::STATUS_INVALID];
 
         $aParam['iCityID'] = $this->getParam('iCityID');
         $aParam['iRegionID'] = $this->getParam('iRegionID');
@@ -83,11 +83,11 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
             $aWhere['iSupplierID'] = intval($aParam['iSupplierID']);
         }
 
-        $aRegion = Model_Region::getPair(['where' => ['iStatus' => 1]], 'iRegionID', 'sRegionName');
+        $aRegion = Tijian_Model_Region::getPair(['where' => ['iStatus' => 1]], 'iRegionID', 'sRegionName');
         $aCity = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         $aCreditLevel = Yaf_G::getConf('aShopLevel', 'store');
 
-        $aData = Model_Store::getList($aWhere, $iPage);
+        $aData = Tijian_Model_Store::getList($aWhere, $iPage);
         if (!empty($aData['aList'])) {
             //组装需要数据
             foreach ($aData['aList'] as $key => $value) {
@@ -113,11 +113,11 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
             return $this->show404('参数不全', false);
         }
 
-        $aProduct = Model_UserProductBase::getUserProductBase($iProductID, $this->aUser['iCreateUserID'], $iChannelType, $this->aUser['iChannel']);
+        $aProduct = Tijian_Model_UserProductBase::getUserProductBase($iProductID, $this->aUser['iCreateUserID'], $iChannelType, $this->aUser['iChannel']);
         if (empty($aProduct)) {
             return $this->show404('产品不存在', false);
         }
-        $aWhere = ['iStatus >' => Model_Store::STATUS_INVALID];
+        $aWhere = ['iStatus >' => Tijian_Model_Store::STATUS_INVALID];
 
         $aParam['iCityID'] = $this->getParam('iCityID');
         $aParam['iRegionID'] = $this->getParam('iRegionID');
@@ -133,9 +133,9 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
             $aWhere['iSupplierID'] = intval($aParam['iSupplierID']);
         }
 
-        $aStore = Model_Store::getPair($aWhere, 'iStoreID', 'sName');
+        $aStore = Tijian_Model_Store::getPair($aWhere, 'iStoreID', 'sName');
 
-        $aRegion = Model_Region::getPair(['where' => ['iStatus' => 1]], 'iRegionID', 'sRegionName');
+        $aRegion = Tijian_Model_Region::getPair(['where' => ['iStatus' => 1]], 'iRegionID', 'sRegionName');
         $aCity = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
         if (empty($aStore)) {
             $aData['aList'] = [];
@@ -143,11 +143,11 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         }
         $aStoreParam['iStoreID IN'] = array_keys($aStore);
 
-        $aData = Model_UserProductStore::getUserProductStoreList($iProductID, $this->aUser['iCreateUserID'], $iChannelType, $this->aUser['iChannel'], $iPage, $aStoreParam);
+        $aData = Tijian_Model_UserProductStore::getUserProductStoreList($iProductID, $this->aUser['iCreateUserID'], $iChannelType, $this->aUser['iChannel'], $iPage, $aStoreParam);
         if (!empty($aData['aList'])) {
             //组装需要数据
             foreach ($aData['aList'] as $key => $value) {
-                $aStore = Model_Store::getDetail($value['iStoreID']);
+                $aStore = Tijian_Model_Store::getDetail($value['iStoreID']);
                 $aStore['sRegionName'] = !empty($aRegion[$aStore['iRegionID']]) ? $aRegion[$aStore['iRegionID']] : '';
                 $aStore['sCityName'] = !empty($aCity[$aStore['iCityID']]) ? $aCity[$aStore['iCityID']] : '';
                 $aData['aList'][$key]['detail'] = $aStore;
@@ -163,14 +163,14 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
             return $this->show404('参数不全', false);
         }
 
-        $aProduct = Model_UserProductBase::getUserProductBase($aParam['id'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel'], true);
+        $aProduct = Tijian_Model_UserProductBase::getUserProductBase($aParam['id'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel'], true);
         if (empty($aProduct)) {
             return $this->show404('产品不存在', false);
         }
         $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
-        $aSupplier = Model_Type::getOption('supplier');
+        $aSupplier = Tijian_Model_Type::getOption('supplier');
         //购物车信息
-        $aChart = Model_Cart::getCart($this->iCurrUserID);
+        $aChart = Tijian_Model_Cart::getCart($this->iCurrUserID);
         $this->assign('iProductID', $aProduct['iProductID']);
         $this->assign('aProduct', $aProduct);
         $this->assign('aSupplier', $aSupplier);
@@ -187,12 +187,12 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         if (empty($aParam['id'])) {
             return $this->show404('参数不全', false);
         }
-        $aData = Model_UserProductBase::getUserProductBase($aParam['id'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel'], true);
+        $aData = Tijian_Model_UserProductBase::getUserProductBase($aParam['id'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel'], true);
         if (empty($aData)) {
             return $this->show404('产品不存在', false);
         }
         //获取门店数目
-        $aProductStore = Model_UserProductStore::getUserProductStore($aData['iProductID'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
+        $aProductStore = Tijian_Model_UserProductStore::getUserProductStore($aData['iProductID'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
         $aTmp = [];
         foreach ($aProductStore as $key => $value) {
             $aTmp[$value['iAutoID']] = $value['iStoreID'];
@@ -201,8 +201,8 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         $aData['iStoreNum'] = count($aProductStore);
         //获取门店包含的代理商
         if (!empty($aProductStore)) {
-            $aSupplier = Model_Type::getOption('supplier');
-            $aSupplierID = Model_Store::getSupplierByStores($aProductStore);
+            $aSupplier = Tijian_Model_Type::getOption('supplier');
+            $aSupplierID = Tijian_Model_Store::getSupplierByStores($aProductStore);
             $aSupplierName = [];
             if (!empty($aSupplierID)) {
                 foreach ($aSupplierID as $key => $value) {
@@ -213,17 +213,17 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
             $aData['sSupplierName'] = $sSupplierName;
         }
         //获取该产品包含的单项
-        $aItem = Model_ProductItem::getProductItems($aData['iProductID'], Model_ProductItem::EXPANDPRODUCT, null, true);
+        $aItem = Tijian_Model_ProductItem::getProductItems($aData['iProductID'], Tijian_Model_ProductItem::EXPANDPRODUCT, null, true);
         if (!empty($aItem)) {
             $sItem = implode(',', $aItem);
-            $aItemCat = Model_Item::setGroupByCategory($sItem, true);
+            $aItemCat = Tijian_Model_Item::setGroupByCategory($sItem, true);
         } else {
             $aItemCat = [];
         }
         //购物车信息
-        $aChart = Model_Cart::getCart($this->iCurrUserID);
+        $aChart = Tijian_Model_Cart::getCart($this->iCurrUserID);
         $aCitys = Tijian_Model_City::getPair(['where' => ['iStatus' => Tijian_Model_City::STATUS_VALID]], 'iCityID', 'sCityName');
-        $aSupplier = Model_Type::getOption('supplier');
+        $aSupplier = Tijian_Model_Type::getOption('supplier');
         $this->assign('aSupplier', $aSupplier);
         $this->assign('aCitys', $aCitys);
         $this->assign('aItemCat', $aItemCat);
@@ -245,11 +245,11 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         }
         $iProductID = $aParam['id'];
 
-        $aData = Model_UserProductBase::getUserProductBase($iProductID, $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
+        $aData = Tijian_Model_UserProductBase::getUserProductBase($iProductID, $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
         if (empty($aData)) {
             return $this->show404('产品不存在', false);
         }
-        if ($aCart = Model_Cart::addCart($iProductID, $this->iCurrUserID)) {
+        if ($aCart = Tijian_Model_Cart::addCart($iProductID, $this->iCurrUserID)) {
             return $this->show404($aCart, true);
         } else {
             return $this->show404('加入失败', false);
@@ -264,7 +264,7 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
             return $this->show404('参数不全', false);
         }
         $iProductID = $aParam['id'];
-        if (Model_Cart::deleteCart($iProductID, $this->iCurrUserID)) {
+        if (Tijian_Model_Cart::deleteCart($iProductID, $this->iCurrUserID)) {
             return $this->show404('删除成功', true);
         } else {
             return $this->show404('删除失败', false);
@@ -274,13 +274,13 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
     //购物车列表
     public function cartListAction()
     {
-        $aCart = Model_Cart::getCart($this->iCurrUserID);
+        $aCart = Tijian_Model_Cart::getCart($this->iCurrUserID);
         if (!empty($aCart)) {
             foreach ($aCart as $key => $value) {
-                $aDetail = Model_UserProductBase::getUserProductBase($key, $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
+                $aDetail = Tijian_Model_UserProductBase::getUserProductBase($key, $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
                 if (empty($aDetail) || $aDetail['iStatus'] != 1) {//如果不存在该产品或已下架，删除该条购物车
                     unset($aCart[$key]);
-                    Model_Cart::deleteCart($key, $this->iCurrUserID);
+                    Tijian_Model_Cart::deleteCart($key, $this->iCurrUserID);
                 } else {
                     $aCart[$key]['detail'] = $aDetail;
                 }
@@ -304,7 +304,7 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
             'aList' => []
         ];
         foreach ($aParam['cartnum'] as $key => $value) {
-            $aProduct = Model_UserProductBase::getUserProductBase($key, $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
+            $aProduct = Tijian_Model_UserProductBase::getUserProductBase($key, $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
             //$aProduct['iStatus'] = 2;
             if (empty($aProduct)) {
                 return $this->show404('购物车中有不存在或已下架的产品，不能结算', false);
@@ -383,16 +383,16 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         if (!empty($aMsg)) {
             return $this->show404($aMsg, false);
         }
-        $aProduct = Model_Product::getAllUserProduct($this->aUser['iCreateUserID'], 2, $this->aUser['iChannel'], implode(',', $aParam['aProduct']['iProductID']), false, 'iProductID');
+        $aProduct = Tijian_Model_Product::getAllUserProduct($this->aUser['iCreateUserID'], 2, $this->aUser['iChannel'], implode(',', $aParam['aProduct']['iProductID']), false, 'iProductID');
         //以下为各种情况分析
         $iUserID = $this->aUser['iUserID'];
-        $iUserType = Model_OrderInfo::PRESON;
-        $iOrderType = Model_OrderInfo::ELECTRONICCARD;
+        $iUserType = Tijian_Model_OrderInfo::PRESON;
+        $iOrderType = Tijian_Model_OrderInfo::ELECTRONICCARD;
         $sConsignee = $aParam['sConsignee'];
         $sMobile = $aParam['sMobile'];
         $sProductAmount = 0;
         $aOrderProductParam = [];
-        $sOrderCode = Model_OrderInfo::initOrderCode($iUserType);
+        $sOrderCode = Tijian_Model_OrderInfo::initOrderCode($iUserType);
         $aOrderParam['iIfInv'] = $aParam['iIfInv'];
         $aOrderParam['sAddress'] = $aParam['sAddress'];
         $aOrderParam['sZipcode'] = $aParam['sZipcode'];
@@ -413,14 +413,14 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         }
 
         //入库操作
-        Model_OrderInfo::begin();
+        Tijian_Model_OrderInfo::begin();
         //入orderinfo表
-        if ($iOrderID = Model_OrderInfo::initOrder($iUserID, $iUserType, $iOrderType, $sConsignee, $sMobile, $sProductAmount, $aOrderParam, $sOrderCode)) {
+        if ($iOrderID = Tijian_Model_OrderInfo::initOrder($iUserID, $iUserType, $iOrderType, $sConsignee, $sMobile, $sProductAmount, $aOrderParam, $sOrderCode)) {
             foreach ($aParam['aProduct']['iProductID'] as $key => $value) {
                 $aOrderProductParam['iSex'] = $aParam['aProduct']['iSex'][$key];//选择的性别
                 //入orderproduct表
-                if (!Model_OrderProduct::initOrder($iOrderID, $aProduct[$value]['iProductID'], $aProduct[$value]['sProductName'], $aParam['aProduct']['iProductNumber'][$key], $aParam['aProduct']['sPrice'][$key], $aParam['aProduct']['sPrice'][$key] * $aParam['aProduct']['iProductNumber'][$key], Model_OrderInfo::ELECTRONICCARD, $aOrderProductParam)) {
-                    Model_OrderInfo::rollback();
+                if (!Tijian_Model_OrderProduct::initOrder($iOrderID, $aProduct[$value]['iProductID'], $aProduct[$value]['sProductName'], $aParam['aProduct']['iProductNumber'][$key], $aParam['aProduct']['sPrice'][$key], $aParam['aProduct']['sPrice'][$key] * $aParam['aProduct']['iProductNumber'][$key], Tijian_Model_OrderInfo::ELECTRONICCARD, $aOrderProductParam)) {
+                    Tijian_Model_OrderInfo::rollback();
                     $aMsg = [
                         'msg' => '生成订单失败，请稍后重试！',
                     ];
@@ -428,15 +428,15 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
                 }
             }
         } else {
-            Model_OrderInfo::rollback();
+            Tijian_Model_OrderInfo::rollback();
             $aMsg = [
                 'msg' => '生成订单失败，请稍后重试！',
             ];
             return $this->show404($aMsg, false);
         }
-        Model_OrderInfo::commit();
+        Tijian_Model_OrderInfo::commit();
         //清空购物车
-        Model_Cart::flushCart($this->iCurrUserID);
+        Tijian_Model_Cart::flushCart($this->iCurrUserID);
         $aMsg = [
             'iCreateTime' => time(),
             'sOrderCode' => $sOrderCode,
@@ -452,11 +452,11 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         if (empty($aParam['ordercode'])) {
             return $this->show404('你没有订购任何产品！', false);
         }
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($aParam['ordercode']);
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($aParam['ordercode']);
         if ($aOrder['iPayStatus']) {
             return $this->show404('该订单已支付！', false);
         }
-        $aOrderProduct = Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
+        $aOrderProduct = Tijian_Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
         $this->assign('aOrder', $aOrder);
         $this->assign('aOrderProduct', $aOrderProduct);
         $this->assign('sTitle', '订单支付');
@@ -469,14 +469,14 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         if (empty($aParam['ordercode'])) {
             return $this->show404('订单不存在', false);
         }
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($aParam['ordercode']);
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($aParam['ordercode']);
         if (!$aOrder['iPayStatus']) {
             return $this->show404('该订单未支付！', false);
         }
-        $aOrderProduct = Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
+        $aOrderProduct = Tijian_Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
         if (!empty($aOrderProduct)) {//组装卡号数据
             foreach ($aOrderProduct as $key => &$value) {
-                if ($aOrder['iOrderType'] == Model_OrderInfo::ORDERTYPE_UPGRADE) {
+                if ($aOrder['iOrderType'] == Tijian_Model_OrderInfo::ORDERTYPE_UPGRADE) {
                     if (count($aOrderProduct) != 1) {
                         return $this->show404('该订单有误！', false);
                     }
@@ -489,16 +489,16 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
                     $aCardParam['iOPID'] = $value['iAutoID'];
                 }
 
-                $value['aCardList'] = Model_OrderCard::getAll($aCardParam);
+                $value['aCardList'] = Tijian_Model_OrderCard::getAll($aCardParam);
 
                 if (!empty($value['aCardList'])) {
                     foreach ($value['aCardList'] as $k => $val) {
                         $aCardProductParam['iStatus >'] = 0;
                         $aCardProductParam['iCardID'] = $val['iAutoID'];
-                        $value['aCardList'][$k]['aProductList'] = Model_OrderCardProduct::getAll($aCardProductParam);
+                        $value['aCardList'][$k]['aProductList'] = Tijian_Model_OrderCardProduct::getAll($aCardProductParam);
                         if (!empty($value['aCardList'][$k]['aProductList'])) {
                             foreach ($value['aCardList'][$k]['aProductList'] as $a => $b) {
-                                $aProduct = Model_UserProductBase::getUserProductBase($b['iProductID'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
+                                $aProduct = Tijian_Model_UserProductBase::getUserProductBase($b['iProductID'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
                                 $value['aCardList'][$k]['aProductList'][$a] = array_merge($aProduct, $value['aCardList'][$k]['aProductList'][$a]);
                             }
                         }
@@ -519,7 +519,7 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         if (empty($aParam['sOrderCode']) || empty($aParam['sProductAmount'])) {
             return $this->show404('参数有误', false);
         }
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($aParam['sOrderCode']);
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($aParam['sOrderCode']);
         if (empty($aOrder)) {
             return $this->show404('没有对应的订单', false);
         }
@@ -529,10 +529,10 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         if ($aOrder['iPayStatus'] == 1) {
             return $this->show404('已支付过该订单', false);
         }
-        $aOrderProduct = Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
+        $aOrderProduct = Tijian_Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
         //检查订单中产品是否有效
         foreach ($aOrderProduct as $key => $value) {
-            $aProduct = Model_UserProductBase::getUserProductBase($value['iProductID'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
+            $aProduct = Tijian_Model_UserProductBase::getUserProductBase($value['iProductID'], $this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
             $aOrderProduct[$key]['iAttribute'] = $aProduct['iAttribute'];
             //检查是否存在该商品
             if (empty($aProduct)) {
@@ -555,14 +555,14 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         $iPage = $this->getParam('page') ? intval($this->getParam('page')) : 1;
         $aWhere = array(
             'iUserID' => $this->iCurrUserID,
-            'iUserType' => Model_OrderInfo::PRESON,
+            'iUserType' => Tijian_Model_OrderInfo::PRESON,
             'iOrderStatus' => 1
         );
-        $aOrder = Model_OrderInfo::getList($aWhere, $iPage);
+        $aOrder = Tijian_Model_OrderInfo::getList($aWhere, $iPage);
         if (!empty($aOrder['aList'])) {
             foreach ($aOrder['aList'] as $key => $value) {
                 //组装需要数据
-                $aOrder['aList'][$key]['iTotalNum'] = Model_OrderProduct::getProductNumByOrderID($value['iOrderID']);
+                $aOrder['aList'][$key]['iTotalNum'] = Tijian_Model_OrderProduct::getProductNumByOrderID($value['iOrderID']);
             }
         }
         $t = $this->getParam('t');
@@ -582,14 +582,14 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         if (empty($aParam['ordercode'])) {
             return $this->show404('订单不存在', false);
         }
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($aParam['ordercode']);
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($aParam['ordercode']);
         if (!empty($aOrder['iPayStatus'])) {
             return $this->show404('该订单已支付，不能取消！', false);
         }
-        if($aOrder['iUserType'] == Model_OrderInfo::PRESON && $aOrder['iUserID'] == $this->iCurrUserID) {
+        if($aOrder['iUserType'] == Tijian_Model_OrderInfo::PRESON && $aOrder['iUserID'] == $this->iCurrUserID) {
             $aOrderParam['iOrderID'] = $aOrder['iOrderID'];
             $aOrderParam['iOrderStatus'] = 2;//取消
-            if (Model_OrderInfo::updData($aOrderParam)) {
+            if (Tijian_Model_OrderInfo::updData($aOrderParam)) {
                 return $this->show404('取消成功！', true);
             } else {
                 return $this->show404('取消失败，请稍后再试！', false);

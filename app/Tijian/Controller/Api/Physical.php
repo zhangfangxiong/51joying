@@ -48,7 +48,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $company = Model_User::getRow(['where' => ['sUserName' => $sComNo]]);
+        $company = Tijian_Model_User::getRow(['where' => ['sUserName' => $sComNo]]);
         if(empty($company)) {
             $this->_aResult['code'] = 2004;
             $this->_aResult['msg'] = $this->codeMsg[2004];
@@ -56,7 +56,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $plan = Model_Physical_Plan::getDetail($iPlanID);
+        $plan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
         if(empty($plan) || $company['iUserID'] != $plan['iHRID']) {
             $this->_aResult['code'] = 1070;
             $this->_aResult['msg'] = $this->codeMsg[1070];
@@ -64,7 +64,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $cards = Model_OrderCard::getCardByPlan($iPlanID, 1);
+        $cards = Tijian_Model_OrderCard::getCardByPlan($iPlanID, 1);
         if(empty($cards)) {
             $this->_aResult['data'] = array();
             return $this->showMsg($this->_aResult, true);
@@ -89,7 +89,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $company = Model_User::getRow(['where' => ['sUserName' => $sComNo]]);
+        $company = Tijian_Model_User::getRow(['where' => ['sUserName' => $sComNo]]);
         if(empty($company)) {
             $this->_aResult['code'] = 2004;
             $this->_aResult['msg'] = $this->codeMsg[2004];
@@ -102,7 +102,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             'sEndDate <=' => $sEndDate,
             'iCreateUserID' => $company['iUserID']
         );
-        $cards = Model_OrderCard::getAll(['where' =>$where]);
+        $cards = Tijian_Model_OrderCard::getAll(['where' =>$where]);
 
         $this->_aResult['data'] = $this->getPhysicalInfo($cards, $company['iUserID']);
 
@@ -122,7 +122,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $company = Model_User::getRow(['where' => ['sUserName' => $sComNo]]);
+        $company = Tijian_Model_User::getRow(['where' => ['sUserName' => $sComNo]]);
         if(empty($company)) {
             $this->_aResult['code'] = 2004;
             $this->_aResult['msg'] = $this->codeMsg[2004];
@@ -134,7 +134,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             'sPlanSerialNumber' => $sTiJianEmployeeID,
             'iCreateUserID' => $company['iUserID']
         );
-        $cards = Model_OrderCard::getAll(['where' =>$where]);
+        $cards = Tijian_Model_OrderCard::getAll(['where' =>$where]);
 
         $this->_aResult['data'] = $this->getPhysicalInfo($cards, $company['iUserID']);
 
@@ -146,7 +146,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
     {
         $company = $this->_checkCompany(1);
 
-        $error = Model_User::addData($company);
+        $error = Tijian_Model_User::addData($company);
         if ($error > 0) {
             $this->_aResult['code'] = 1000;
             $this->_aResult['msg'] = $this->codeMsg[1000];
@@ -181,7 +181,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
                 return $this->showMsg($this->_aResult, true);
             }
 
-            $company = Model_User::getRow(['where' => ['sUserName' => $params['ComNo']]]);
+            $company = Tijian_Model_User::getRow(['where' => ['sUserName' => $params['ComNo']]]);
             if(!empty($company)) {
                 $this->_aResult['code'] = 1005;
                 $this->_aResult['msg'] = $this->codeMsg[1005];
@@ -206,7 +206,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
                 return $this->showMsg($this->_aResult, true);
             }
 
-            $company = Model_User::getRow(['where' => ['sUserName' => $params['ComNo']]]);
+            $company = Tijian_Model_User::getRow(['where' => ['sUserName' => $params['ComNo']]]);
             if(empty($company)) {
                 $this->_aResult['code'] = 2004;
                 $this->_aResult['msg'] = $this->codeMsg[2004];
@@ -217,7 +217,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
 
         //验证邮箱
         if (!empty($params['Email'])) {
-            $aUser = Model_User::getUserByEmail($params['Email'], Model_User::TYPE_HR);
+            $aUser = Tijian_Model_User::getUserByEmail($params['Email'], Tijian_Model_User::TYPE_HR);
             if (!empty($aUser)) {
                 $this->_aResult['code'] = 2001;
                 $this->_aResult['msg'] = $this->codeMsg[2001];
@@ -228,7 +228,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
 
         //验证手机是否被注册
         if (!empty($params['Mobile'])) {
-            $aUser = Model_User::getUserByMobile($params['Mobile'], Model_User::TYPE_HR);
+            $aUser = Tijian_Model_User::getUserByMobile($params['Mobile'], Tijian_Model_User::TYPE_HR);
             if (!empty($aUser)) {
                 $this->_aResult['code'] = 2002;
                 $this->_aResult['msg'] = $this->codeMsg[2002];
@@ -257,15 +257,15 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
                 'sAFMangerMobile' => $params['ManagerMobile'],
                 'iSendMassage' => intval($params['IsSendToHr']),
                 'iRoleID' => $iRoleID,
-                'iType' => Model_User::TYPE_HR,
-                'iIsCheck' => Model_User::ISCHECK,
+                'iType' => Tijian_Model_User::TYPE_HR,
+                'iIsCheck' => Tijian_Model_User::ISCHECK,
                 'sPassword' => md5(Yaf_G::getConf('cryptkey', 'cookie') . $params['ComNo']),
                 'iCreateUserID' => -99,
                 'iStatus' => 2,//默认锁定
                 'iChannel' => 2 //渠道默认为上海AF
             );
         }else {
-            $curCompany = Model_User::getRow(['where' => ['sUserName' => $params['ComNo']]]);
+            $curCompany = Tijian_Model_User::getRow(['where' => ['sUserName' => $params['ComNo']]]);
             $company = array(
                 'sUserName' => $params['ComNo'],
                 'sRealName' => ( !empty($params['NameCN']) ) ? $params['NameCN'] : $curCompany['sRealName'],
@@ -295,7 +295,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
     {
         $company = $this->_checkCompany(false);
 
-        $error = Model_User::updList("sUserName = '". $company['sUserName']. "'", $company);
+        $error = Tijian_Model_User::updList("sUserName = '". $company['sUserName']. "'", $company);
 
         if ($error > 0) {
             $this->_aResult['code'] = 1000;
@@ -323,7 +323,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $company = Model_User::getRow(['where' => array('sUserName' => $sComNo)]);
+        $company = Tijian_Model_User::getRow(['where' => array('sUserName' => $sComNo)]);
 
         if(empty($company)) {
             $this->_aResult['code'] = 2004;
@@ -334,7 +334,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             $iUserID = $company['iUserID'];
         }
 
-        $exist = Model_Physical_Plan::getRow([
+        $exist = Tijian_Model_Physical_Plan::getRow([
             'where' => [
                 'iHRID' => $iUserID,
                 'sPlanName' => $sPlanName,
@@ -355,7 +355,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             'iStatus' => 1,
             'iCreateID' => -99
         );
-        $iPlanID = Model_Physical_Plan::addData($plan);
+        $iPlanID = Tijian_Model_Physical_Plan::addData($plan);
 
         if ($iPlanID > 0) {
             $this->_aResult['code'] = 1000;
@@ -384,7 +384,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
         }
 
         //验证体检计划
-        $plan = Model_Physical_Plan::getDetail($iPlanID);
+        $plan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
         if(empty($plan) || -99 != $plan['iCreateID'] ) {
             $this->_aResult['code'] = 1070;
             $this->_aResult['msg'] = $this->codeMsg[1070];
@@ -393,7 +393,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
         }
 
         //验证产品
-        $product = Model_Product::getRow([
+        $product = Tijian_Model_Product::getRow([
             'where' => [
                 'sProductCode' => $sProductNo,
             ]
@@ -406,7 +406,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
         }
 
         //验证计划对应产品
-        $planProduct = Model_Physical_PlanProduct::getRow(['where' => array(//接口创建的体检计划只能绑定一个产品
+        $planProduct = Tijian_Model_Physical_PlanProduct::getRow(['where' => array(//接口创建的体检计划只能绑定一个产品
             'iPlanID' => $iPlanID,
         )]);
         if(!empty($planProduct)) {
@@ -417,9 +417,9 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
         }
 
         //验证产品是否能被该公司看到
-        $company = Model_User::getRow(['where' => array('sUserName' => $sComNo)]);
+        $company = Tijian_Model_User::getRow(['where' => array('sUserName' => $sComNo)]);
         //取得该公司能看到的所有产品
-        $procom = Model_Product::getAllUserProduct($company['iUserID'], Model_ProductChannel::TYPE_COMPANY, $company['iChannel']);
+        $procom = Tijian_Model_Product::getAllUserProduct($company['iUserID'], Tijian_Model_ProductChannel::TYPE_COMPANY, $company['iChannel']);
 
         if(!empty($procom)) {
             $comCodes = array();
@@ -445,7 +445,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             'iProductID' => $product['iProductID'],
             'iStatus' => 1
         );
-        $error = Model_Physical_PlanProduct::addData($data);
+        $error = Tijian_Model_Physical_PlanProduct::addData($data);
 
         if ($error > 0) {
             $this->_aResult['code'] = 1000;
@@ -479,8 +479,8 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $product = Model_Product::getProductByCode($sProductNo);
-        $company = Model_User::getUserByUserName($sComNo, Model_User::TYPE_HR);
+        $product = Tijian_Model_Product::getProductByCode($sProductNo);
+        $company = Tijian_Model_User::getUserByUserName($sComNo, Tijian_Model_User::TYPE_HR);
 
         if(empty($product)) {
             $this->_aResult['code'] = 1040;
@@ -496,7 +496,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $planProduct = Model_Physical_PlanProduct::getRow(['where' => array('iPlanID' => $iPlanID, 'iProductID' => $product['iProductID'])]);
+        $planProduct = Tijian_Model_Physical_PlanProduct::getRow(['where' => array('iPlanID' => $iPlanID, 'iProductID' => $product['iProductID'])]);
         if(empty($planProduct)) {
             $this->_aResult['code'] = 2006;
             $this->_aResult['msg'] = $this->codeMsg[2006];
@@ -530,7 +530,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             $iCreateUserType = 2;
             $seriaNumber = Util_Tools::uniStringGen();
 
-            $customer = Model_CustomerCompany::getRow(['where' => ['sUserName' => $employee['EmployeeNo'], 'iStatus' => 1]]);
+            $customer = Tijian_Model_CustomerCompany::getRow(['where' => ['sUserName' => $employee['EmployeeNo'], 'iStatus' => 1]]);
             if( empty($customer) ) {
                 $customer = $this->addEmployee($employee);
             }
@@ -542,11 +542,11 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
                 return $this->showMsg($this->_aResult, true);
             }
 
-            $card = Model_OrderCard::getAll([
+            $card = Tijian_Model_OrderCard::getAll([
                 'where' => [
                     'iUserID' => $customer['iUserID'],
                     'iCreateUserID' => $company['iUserID'],
-                    'iOrderType' => Model_Physical_Product::TYPE_PRODUCT_PLAN,
+                    'iOrderType' => Tijian_Model_Physical_Product::TYPE_PRODUCT_PLAN,
                     'iPhysicalType' => 1,
                     'iTiJianYear' => intval($employee['TiJianYear']),
                     'iStatus IN' => ['-99', 1],
@@ -561,7 +561,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
                 return $this->showMsg($this->_aResult, true);
             }
 
-//            Model_OrderCard::initCard($iOrderType, 0, $company['iUserID'], $iCreateUserType, 0, 0, ['iUserID' => $customer['iUserID'], 'iStatus' => '-99', 'iPlanID' => $iPlanID, 'sPlanSerialNumber' => $seriaNumber, 'iResoure' => 1, 'sThirdOrderNum' => $employee['ThirdOrderNum'], 'iTiJianYear' => $employee['TiJianYear']]);
+//            Tijian_Model_OrderCard::initCard($iOrderType, 0, $company['iUserID'], $iCreateUserType, 0, 0, ['iUserID' => $customer['iUserID'], 'iStatus' => '-99', 'iPlanID' => $iPlanID, 'sPlanSerialNumber' => $seriaNumber, 'iResoure' => 1, 'sThirdOrderNum' => $employee['ThirdOrderNum'], 'iTiJianYear' => $employee['TiJianYear']]);
 
             $attribute = 1;
             if($employee['Sex'] == "女" && $employee['Marital'] == "未婚") {
@@ -591,7 +591,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
         }
 
 
-        $r = Model_OrderCard::createCard2($data, $company['iUserID']);
+        $r = Tijian_Model_OrderCard::createCard2($data, $company['iUserID']);
 
         $this->_aResult['TiJianEmployeeID'] = $seriaNumber;
         $this->_aResult['r'] =  $r;
@@ -612,7 +612,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $plan = Model_Physical_Plan::getDetail($iPlanID);
+        $plan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
         if(empty($plan)) {
             $this->_aResult['code'] = 1070;
             $this->_aResult['msg'] = $this->codeMsg[1070];
@@ -620,13 +620,13 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $aEnterprise = Model_User::getDetail($plan['iHRID']);
+        $aEnterprise = Tijian_Model_User::getDetail($plan['iHRID']);
         if ($aEnterprise) {
             $enterprise = $aEnterprise['sUserName'];
         }
 
         $userIds = [];
-        $aPhysical = Model_OrderCard::getCardByPlan($iPlanID, $iSentType);
+        $aPhysical = Tijian_Model_OrderCard::getCardByPlan($iPlanID, $iSentType);
 
         if (empty($aPhysical)) {
             $this->_aResult['code'] = 1070;
@@ -642,13 +642,13 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
         $aUsers = [];
         $aEmpolyee = [];
         if ($userIds) {
-            $aEmpolyee = Model_CustomerNew::getListByPKIDs($userIds);
+            $aEmpolyee = Tijian_Model_CustomerNew::getListByPKIDs($userIds);
             if ($aEmpolyee) {
                 foreach ($aEmpolyee as $key => $value) {
                     $aUsers[$value['iUserID']]['sRealName'] = $value['sRealName'];
                     $aUsers[$value['iUserID']]['sMobile'] = $value['sMobile'];
 
-                    $aCompany = Model_Company_Company::checkIsExist($value['iUserID'], $plan['iHRID']);
+                    $aCompany = Tijian_Model_Company_Company::checkIsExist($value['iUserID'], $plan['iHRID']);
                     $aUsers[$value['iUserID']]['sEmail'] = !empty($aCompany) ? $aCompany['sEmail'] : "";
                 }
             }
@@ -660,7 +660,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
                 $data = [];
                 $data['iAutoID'] = $value['iAutoID'];
                 $data['iSendEMail'] = 1;
-                Model_OrderCard::updData($data);
+                Tijian_Model_OrderCard::updData($data);
             }
         }
 
@@ -670,7 +670,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
     //9：获取所有通用体检产品信息
     public function getTiJianProductListAction ()
     {
-        $products = Model_Product::getAll(['where' => ['iStatus' => 1]]);
+        $products = Tijian_Model_Product::getAll(['where' => ['iStatus' => 1]]);
         $this->_aResult['data'] = array();
 
         if(!empty($products)) {
@@ -707,7 +707,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $product = Model_Product::getRow(['where' => ['sProductCode' => $sProductNo, 'iType' => 2]]);
+        $product = Tijian_Model_Product::getRow(['where' => ['sProductCode' => $sProductNo, 'iType' => 2]]);
         if(empty($product)) {
             $this->_aResult['code'] = 1040;
             $this->_aResult['msg'] = $this->codeMsg[1040];
@@ -716,14 +716,14 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
         }
 
         $iProductID = $product['iProductID'];
-        $items = Model_Item::getProductItemsByID($iProductID);
+        $items = Tijian_Model_Item::getProductItemsByID($iProductID);
         $this->_aResult['data'] = array();
 
         if(!empty($items)) {
             foreach($items as $item) {
                 $catName = '';
                 $iCat = $item['iCat'];
-                $category = Model_Product_Category::getDetail($iCat);
+                $category = Tijian_Model_Product_Category::getDetail($iCat);
                 if(!empty($category)) {
                     $catName = $category['sCateName'];
                 }
@@ -754,7 +754,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $product = Model_Product::getRow(['where' => ['sProductCode' => $sProductNo, 'iType' => 2]]);
+        $product = Tijian_Model_Product::getRow(['where' => ['sProductCode' => $sProductNo, 'iType' => 2]]);
         if(empty($product)) {
             $this->_aResult['code'] = 1040;
             $this->_aResult['msg'] = $this->codeMsg[1040];
@@ -763,7 +763,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
         }
 
         $iProductID = $product['iProductID'];
-        $items = Model_Addtion::getProductAddtions($iProductID);
+        $items = Tijian_Model_Addtion::getProductAddtions($iProductID);
         $this->_aResult['data'] = array();
 
         if(!empty($items)) {
@@ -797,7 +797,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $product = Model_Product::getRow(['where' => ['sProductCode' => $sProductNo, 'iType' => 2]]);
+        $product = Tijian_Model_Product::getRow(['where' => ['sProductCode' => $sProductNo, 'iType' => 2]]);
         if(empty($product)) {
             $this->_aResult['code'] = 1040;
             $this->_aResult['msg'] = $this->codeMsg[1040];
@@ -806,7 +806,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
         }
 
         $iProductID = $product['iProductID'];
-        $prostore = Model_ProductStore::getProductStores($iProductID, Model_ProductStore::EXPANDPRODUCT);
+        $prostore = Tijian_Model_ProductStore::getProductStores($iProductID, Tijian_Model_ProductStore::EXPANDPRODUCT);
 
         $storeIDs = array();
         if(!empty($prostore)) {
@@ -818,19 +818,19 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
         $this->_aResult['data'] = array();
         $stores = array();
         if(!empty($storeIDs)) {
-            $stores = Model_Store::getAll(['where' => ['iStoreID in' => $storeIDs]]);
+            $stores = Tijian_Model_Store::getAll(['where' => ['iStoreID in' => $storeIDs]]);
         }
 
         if(!empty($stores)) {
             foreach($stores as $store){
                 $iSupplierID = $store['iSupplierID'];
-                $aSupplier = Model_Type::getDetail($iSupplierID);
+                $aSupplier = Tijian_Model_Type::getDetail($iSupplierID);
                 $supplierName = !empty($aSupplier) ? $aSupplier['sTypeName'] : '';
 
                 $acity = Tijian_Model_City::getDetail(intval($store['iCityID']));
                 $city = !empty($acity) ? $acity['sCityName'] : '';
 
-                $aRegioin = Model_Region::getDetail(intval($store['iRegionID']));
+                $aRegioin = Tijian_Model_Region::getDetail(intval($store['iRegionID']));
                 $region = !empty($aRegioin) ? $aRegioin['sRegionName'] : '';
 
                 $this->_aResult['data'][] = array(
@@ -862,24 +862,24 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
         $where = array('iStatus' => 1);
 
         if(!empty($sSupplierType) && isset($aSupplierName[$sSupplierType])) {
-            $supplier = Model_Type::getRow(['where' => ['sClass' => 'supplier', 'sCode' => $aSupplierName[$sSupplierType]]]);
+            $supplier = Tijian_Model_Type::getRow(['where' => ['sClass' => 'supplier', 'sCode' => $aSupplierName[$sSupplierType]]]);
             if(!empty($supplier)) {
                 $where['iSupplierID'] = $supplier['iTypeID'];
             }
         }
 
         $this->_aResult['data'] = array();
-        $stores = Model_Store::getAll($where);
+        $stores = Tijian_Model_Store::getAll($where);
         if(!empty($stores)) {
             foreach($stores as $store){
                 $iSupplierID = $store['iSupplierID'];
-                $aSupplier = Model_Type::getDetail($iSupplierID);
+                $aSupplier = Tijian_Model_Type::getDetail($iSupplierID);
                 $supplierName = !empty($aSupplier) ? $aSupplier['sTypeName'] : '';
 
                 $acity = Tijian_Model_City::getDetail(intval($store['iCityID']));
                 $city = !empty($acity) ? $acity['sCityName'] : '';
 
-                $aRegioin = Model_Region::getDetail(intval($store['iRegionID']));
+                $aRegioin = Tijian_Model_Region::getDetail(intval($store['iRegionID']));
                 $region = !empty($aRegioin) ? $aRegioin['sRegionName'] : '';
 
                 $this->_aResult['data'][] = array(
@@ -910,11 +910,11 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $card = Model_OrderCard::getRow(['where' => ['sPlanSerialNumber' => $sTiJianEmployeeID]]);
+        $card = Tijian_Model_OrderCard::getRow(['where' => ['sPlanSerialNumber' => $sTiJianEmployeeID]]);
         if(!empty($card)) {
             $iCardID = $card['iAutoID'];
 
-            Model_OrderCardProduct::updList("iCardID =". $iCardID, ['iBookStatus' => 4]);
+            Tijian_Model_OrderCardProduct::updList("iCardID =". $iCardID, ['iBookStatus' => 4]);
         }
 
         return $this->showMsg($this->_aResult, true);
@@ -939,7 +939,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $product = Model_Product::getRow(['where' => ['sProductCode' => $sOldProductNo, 'iType' => 2]]);
+        $product = Tijian_Model_Product::getRow(['where' => ['sProductCode' => $sOldProductNo, 'iType' => 2]]);
         if(empty($product)) {
             $this->_aResult['code'] = 1040;
             $this->_aResult['msg'] = $this->codeMsg[1040];
@@ -947,7 +947,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $company = Model_User::getRow(['where' => ['sUserName' => $sComNo]]);
+        $company = Tijian_Model_User::getRow(['where' => ['sUserName' => $sComNo]]);
         if(empty($company)) {
             $this->_aResult['code'] = 2004;
             $this->_aResult['msg'] = $this->codeMsg[2004];
@@ -958,12 +958,12 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
         $iProductID = $product['iProductID'];
         $iCompanyID = $company['iUserID'];
 
-        Model_UserProductBase::updList("iUserID = $iCompanyID AND iProductID = $iProductID and iType = 1 and iChannelID = 2", array('sAlias' => $sNewProductName));
-        Model_UserProductStore::updList("iUserID = $iCompanyID AND iProductID = $iProductID and iType = 1 and iChannelID = 2", array('iStatus' => 0));
+        Tijian_Model_UserProductBase::updList("iUserID = $iCompanyID AND iProductID = $iProductID and iType = 1 and iChannelID = 2", array('sAlias' => $sNewProductName));
+        Tijian_Model_UserProductStore::updList("iUserID = $iCompanyID AND iProductID = $iProductID and iType = 1 and iChannelID = 2", array('iStatus' => 0));
 
         $aShopList = explode(',', $sShopList);
         foreach($aShopList as $shopCode) {
-            $shop = Model_Store::getRow(['where' => ['sCode' => $shopCode]]);
+            $shop = Tijian_Model_Store::getRow(['where' => ['sCode' => $shopCode]]);
             if(!empty($shop)) {
                 $iStoreID = $shop['iStoreID'];
 
@@ -975,7 +975,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
                     'iCreateUserID' => -99,
                     'iLastUpdateUserID' => -99
                 );
-                Model_UserProductStore::addData($data);
+                Tijian_Model_UserProductStore::addData($data);
             }else {
                 continue;
             }
@@ -1001,7 +1001,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $card = Model_OrderCard::getRow(['where' => ['sPlanSerialNumber' => $sTiJianEmployeeID]]);
+        $card = Tijian_Model_OrderCard::getRow(['where' => ['sPlanSerialNumber' => $sTiJianEmployeeID]]);
 
         if(empty($card)) {
             $this->_aResult['code'] = 2008;
@@ -1010,7 +1010,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        $customer = Model_CustomerCompany::getRow(['where' => ['iUserID' => $card['iUserID'], 'iCreateUserID' => $card['iCreateUserID'], 'iStatus' => 1]]);
+        $customer = Tijian_Model_CustomerCompany::getRow(['where' => ['iUserID' => $card['iUserID'], 'iCreateUserID' => $card['iCreateUserID'], 'iStatus' => 1]]);
         $data = array();
         if(!empty($sEmail)) {
             $data['sEmail'] = $sEmail;
@@ -1026,10 +1026,10 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             return $this->showMsg($this->_aResult, true);
         }
 
-        Model_Customer::updData(array('iUserID' => $customer['iUserID'], 'sMobile' => $data['sMobile']));
+        Tijian_Model_Customer::updData(array('iUserID' => $customer['iUserID'], 'sMobile' => $data['sMobile']));
 
         unset($data['sMobile']);
-        Model_CustomerCompany::updList("sUserName = '". $customer['sUserName']. "'", $data);
+        Tijian_Model_CustomerCompany::updList("sUserName = '". $customer['sUserName']. "'", $data);
 
         return $this->showMsg($this->_aResult, true);
     }
@@ -1043,8 +1043,8 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
                 $iCardID = $card['iAutoID'];
                 $iCustomerID = $card['iUserID'];
 
-                $cardprosInfo = Model_OrderCardProduct::getCardProductInfo($iCardID);
-                $customerInfo = Model_Customer::getCustomerCompanyInfo($iCustomerID, $iCompanyID);
+                $cardprosInfo = Tijian_Model_OrderCardProduct::getCardProductInfo($iCardID);
+                $customerInfo = Tijian_Model_Customer::getCustomerCompanyInfo($iCustomerID, $iCompanyID);
 
                 $physicalInfo = array();
                 if(!empty($cardprosInfo)) {
@@ -1064,7 +1064,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
                                 'iStoreID' => $cardInfo['iStoreID'],
                                 'iSex' => $iSexMar
                             );
-                            $productStore = Model_StoreCode::getRow(['where' => $where]);
+                            $productStore = Tijian_Model_StoreCode::getRow(['where' => $where]);
 
                             if(!empty($productStore)) {
                                 $salePrice = $productStore['sSupplierPrice'];
@@ -1105,8 +1105,8 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
     }
 
     public function addEmployee($employee){
-        $company = Model_User::getUserByUserName($employee['ComNo'], Model_User::TYPE_HR);
-        $existCustomer = Model_Customer::getRow(['where' => ['sIdentityCard' => $employee['IdNum']]]);
+        $company = Tijian_Model_User::getUserByUserName($employee['ComNo'], Tijian_Model_User::TYPE_HR);
+        $existCustomer = Tijian_Model_Customer::getRow(['where' => ['sIdentityCard' => $employee['IdNum']]]);
 
         $customer = array();
         $iUserID = 0;
@@ -1114,7 +1114,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             $customer = $existCustomer;
             $iUserID = $customer['iUserID'];
         }else {
-            $sUserName = Model_Customer::initUserName();
+            $sUserName = Tijian_Model_Customer::initUserName();
             $customer = array(
                 'iType' => 1,
                 'sMobile' => $employee['Mobile'],
@@ -1129,7 +1129,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
                 'sBirthDate' => $employee['Birthday']
             );
 
-            $iUserID = Model_Customer::addData($customer);
+            $iUserID = Tijian_Model_Customer::addData($customer);
         }
 
         $customerCompany = array(
@@ -1141,7 +1141,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
             'iCreateUserID' => $company['iUserID'],
             'sEmail' => $employee['Email']
         );
-        $iccID = Model_CustomerCompany::addData($customerCompany);
+        $iccID = Tijian_Model_CustomerCompany::addData($customerCompany);
 
         return $customerCompany;
     }
@@ -1158,7 +1158,7 @@ class Tijian_Controller_Api_Physical extends Tijian_Controller_Api_Base
 //            'sRequest' => $params,
 //            'sResponse' => '',
 //        );
-//        Model_Interfacelog::addData($data);
+//        Tijian_Model_Interfacelog::addData($data);
 //
 //    }
 }

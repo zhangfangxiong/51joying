@@ -25,7 +25,7 @@
                     <div class="form-group clearfix">
                         <span
                             class="list-label">体检卡类型：</span><?php echo !empty($aOrderType[$value['iOrderType']]) ? $aOrderType[$value['iOrderType']] : '' ?>
-                        <?php if ($value['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT || $value['iOrderType'] == Model_OrderCard::ORDERTYPE_PRODUCT_PLAN) {
+                        <?php if ($value['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT || $value['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT_PLAN) {
                             ?>
                             <span
                                 class="red">(<?php echo !empty($aPayType[$value['iPayType']]) ? $aPayType[$value['iPayType']] : ''; ?>
@@ -284,8 +284,8 @@
         getLocalTime: function (nS) {
             return new Date(parseInt(nS) * 1000).toLocaleString().substr(0, 10);
         },
-        PRODUCT:<?php echo Model_OrderCard::ORDERTYPE_PRODUCT; ?>,
-        PRODUCT_PLAN:<?php echo Model_OrderCard::ORDERTYPE_PRODUCT_PLAN; ?>,
+        PRODUCT:<?php echo Tijian_Model_OrderCard::ORDERTYPE_PRODUCT; ?>,
+        PRODUCT_PLAN:<?php echo Tijian_Model_OrderCard::ORDERTYPE_PRODUCT_PLAN; ?>,
         initList: function () {
             commonObj.moreUrl = "/wx/appointment/cardlist";//设置下拉分页url
             commonObj.appendId = "cardList";

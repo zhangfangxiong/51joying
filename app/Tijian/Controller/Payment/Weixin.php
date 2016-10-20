@@ -8,9 +8,9 @@ class Tijian_Controller_Payment_Weixin extends Tijian_Controller_Index_Base
     public function payAction ()
     {
         $sOrderCode = $this->getParam('ordercode');
-        $subject = Model_Pay::SUBJECT;
-        $body = Model_Pay::BODY;
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($sOrderCode);
+        $subject = Tijian_Model_Pay::SUBJECT;
+        $body = Tijian_Model_Pay::BODY;
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($sOrderCode);
         //判断订单是否存在
         if (empty($aOrder)) {
             return $this->showMsg('该订单不存在！', false);
@@ -21,7 +21,7 @@ class Tijian_Controller_Payment_Weixin extends Tijian_Controller_Index_Base
         }
         $total_fee = $aOrder['sProductAmount'];
         //判断订单是否已支付
-        if(Model_Pay::checkPay($sOrderCode)) {
+        if(Tijian_Model_Pay::checkPay($sOrderCode)) {
             return $this->showMsg('该订单已经支付，订单支付状态有误，请联系管理员！', false);
         }
         //echo $body;die;
@@ -50,7 +50,7 @@ class Tijian_Controller_Payment_Weixin extends Tijian_Controller_Index_Base
             'sData' => json_encode($aParam, JSON_UNESCAPED_UNICODE),
             'iStatus' => 0
         );
-        return Model_Pay::logPay($aData);
+        return Tijian_Model_Pay::logPay($aData);
     }
     
     /**
@@ -66,9 +66,9 @@ class Tijian_Controller_Payment_Weixin extends Tijian_Controller_Index_Base
     {
         $this->logPay($data);
         //更改订单状态
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($data['attach']);
-        $aOrderProduct = Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
-        Model_OrderInfo::paySeccuss($aOrder, $aOrderProduct,$data['transaction_id'], 2, $data['total_fee']/100);
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($data['attach']);
+        $aOrderProduct = Tijian_Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
+        Tijian_Model_OrderInfo::paySeccuss($aOrder, $aOrderProduct,$data['transaction_id'], 2, $data['total_fee']/100);
         return false;
     }
 }

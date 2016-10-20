@@ -50,11 +50,11 @@ class Tijian_Controller_Company_Level extends Tijian_Controller_Company_Base
 			}
 
 			//职级是否已经存在(同名+同企业)
-			$bool  = Model_Company_Level::checkExist($this->enterpriseId, $aLevel);
+			$bool  = Tijian_Model_Company_Level::checkExist($this->enterpriseId, $aLevel);
 			if ($bool) {
 				$msg = '职级已经存在';
 			} else {
-				$addID = Model_Company_Level::addLevel($aLevel);
+				$addID = Tijian_Model_Company_Level::addLevel($aLevel);
 				$msg   = $addID ? '新增成功' : '新增失败';			
 			}
 
@@ -76,11 +76,11 @@ class Tijian_Controller_Company_Level extends Tijian_Controller_Company_Base
 			}
 
 			//职级是否已经存在(同名+同企业)
-			$row  = Model_Company_Level::checkExist($this->enterpriseId, $aLevel);
+			$row  = Tijian_Model_Company_Level::checkExist($this->enterpriseId, $aLevel);
 			if ($row && $row['iAutoID'] != $aLevel['iAutoID']) {
 				$msg = '职级已经存在';
 			} else {
-				$update = Model_Company_Level::updLevel($aLevel);
+				$update = Tijian_Model_Company_Level::updLevel($aLevel);
 				$msg    = $update ? '修改成功' : '修改失败';			
 			}
 			
@@ -92,8 +92,8 @@ class Tijian_Controller_Company_Level extends Tijian_Controller_Company_Base
 				return $this->showMsg('职级ID'.self::ERROR, false);
 			}
 
-			$aLevel = Model_Company_Level::getDetail($this->levelId);
-			if (isset($aLevel['iStatus']) && $aLevel['iStatus'] != Model_Company_Level::STATUS_VALID) {
+			$aLevel = Tijian_Model_Company_Level::getDetail($this->levelId);
+			if (isset($aLevel['iStatus']) && $aLevel['iStatus'] != Tijian_Model_Company_Level::STATUS_VALID) {
 				$aLevel = [];
 			}
 

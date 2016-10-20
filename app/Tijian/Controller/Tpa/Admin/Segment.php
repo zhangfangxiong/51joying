@@ -82,7 +82,7 @@ class Tijian_Controller_Tpa_Admin_Segment extends Tijian_Controller_Tpa_Admin_Ba
 	{
 		$where = $this->checkListParam();
 		$page = max($this->getParam('page'), 1);
-		$aList = Model_Tpa_Segment::getList($where, $page);
+		$aList = Tijian_Model_Tpa_Segment::getList($where, $page);
 
 		if ($aList['iTotal'] > 0) {
 			foreach ($aList['aList'] as $key => &$value) {
@@ -106,7 +106,7 @@ class Tijian_Controller_Tpa_Admin_Segment extends Tijian_Controller_Tpa_Admin_Ba
 		$data['sDealDate'] = date('Y-m-d', time());
 		$data['iNormal'] = $this->getParam('iNormal');
 
-		list($data['iStart'], $data['iEnd']) = Model_Tpa_Segment::getSegmentRange($data['sDealDate']);
+		list($data['iStart'], $data['iEnd']) = Tijian_Model_Tpa_Segment::getSegmentRange($data['sDealDate']);
 		$data['sSegmentFrom'] = $data['sDealDate'] . $this->aSegmentNormal[$data['iNormal']] . $data['iStart'];
 		$data['sSegmentTo'] = $data['sDealDate'] . $this->aSegmentNormal[$data['iNormal']] . $data['iEnd'];
 
@@ -122,8 +122,8 @@ class Tijian_Controller_Tpa_Admin_Segment extends Tijian_Controller_Tpa_Admin_Ba
 		if ($this->isPost()) {
 			$data['iAssignedUserID'] = $this->getParam('iAssignedUserID');
 			$data['iCreateUserID'] = $this->iCreateUserID;
-			$data['iStatus'] = Model_Tpa_Segment::STATUS_ASSIGNED;
-			Model_Tpa_Segment::addData($where);
+			$data['iStatus'] = Tijian_Model_Tpa_Segment::STATUS_ASSIGNED;
+			Tijian_Model_Tpa_Segment::addData($where);
 
 			return $this->showMsg('成功指派', true);
 		}

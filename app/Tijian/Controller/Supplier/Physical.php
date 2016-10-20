@@ -25,15 +25,15 @@ class Tijian_Controller_Supplier_Physical extends Tijian_Controller_Supplier_Bas
 
 		$where = [
 			'iStoreID IN' => $this->sStoreIDs,
-			'iPreStatus' => Model_OrderCardProduct::STATUS_VALID,
+			'iPreStatus' => Tijian_Model_OrderCardProduct::STATUS_VALID,
 		];
 		$page  = $this->getParam('page') ? intval($this->getParam('page')) : 1;
 		$param = $this->getParams();
 		
 		if (!empty($param['sRealName'])) {
-			$aUser = Model_CustomerNew::getAll(['where' => [
+			$aUser = Tijian_Model_CustomerNew::getAll(['where' => [
 				'sRealName LIKE' => '%' . strval($param['sRealName']) . '%',
-				'iStatus >' => Model_CustomerNew::STATUS_INVALID
+				'iStatus >' => Tijian_Model_CustomerNew::STATUS_INVALID
 			]]);
 			if ($aUser) {
 				foreach ($aUser as $k => $v) {
@@ -41,7 +41,7 @@ class Tijian_Controller_Supplier_Physical extends Tijian_Controller_Supplier_Bas
 				}
 				if (!empty($aUserIDs)) {
 					$sUserIDs = implode(',', $aUserIDs);
-					$aOrders = Model_OrderCard::getAll(['where' => [
+					$aOrders = Tijian_Model_OrderCard::getAll(['where' => [
 						'iUserID IN' => $sUserIDs,
 					]]);
 					if ($aOrders) {
@@ -64,14 +64,14 @@ class Tijian_Controller_Supplier_Physical extends Tijian_Controller_Supplier_Bas
 		? $where['iOrderTime <='] = strtotime($param['sEndDate'] .' 23:59:59') : '';
 
 		('-1' == $param['iStatus'])	|| !isset($param['iStatus'])	
-		? $where['iBookStatus >'] = Model_Physical_Product::STATUS_UNCONFIRM
+		? $where['iBookStatus >'] = Tijian_Model_Physical_Product::STATUS_UNCONFIRM
 		: $where['iBookStatus '] = intval($param['iStatus']);		
 		
-		$aList = Model_OrderCardProduct::getList($where, $page, 'iUpdateTime Desc');
+		$aList = Tijian_Model_OrderCardProduct::getList($where, $page, 'iUpdateTime Desc');
 		if ($aList['aList']) {
 			foreach ($aList['aList'] as $key => $value) {
-				$aCard = Model_OrderCard::getDetail($value['iCardID']);
-				$userInfo = Model_CustomerNew::getDetail($aCard['iUserID']);
+				$aCard = Tijian_Model_OrderCard::getDetail($value['iCardID']);
+				$userInfo = Tijian_Model_CustomerNew::getDetail($aCard['iUserID']);
 				if (!$userInfo) {
 					unset($aList['aList'][$key]);
 					continue;
@@ -83,7 +83,7 @@ class Tijian_Controller_Supplier_Physical extends Tijian_Controller_Supplier_Bas
         		$aList['aList'][$key]['sCreateTime'] = $value['iReserveTime'] ? date('Y-m-d H:i:s', $value['iReserveTime']) : '';
         		$aList['aList'][$key]['sStatus'] = $this->aStatus[$value['iBookStatus']];
 
-        		$storeInfo = Model_Store::getDetail($value['iStoreID']);
+        		$storeInfo = Tijian_Model_Store::getDetail($value['iStoreID']);
         		$aList['aList'][$key]['sStoreName'] = $storeInfo['sName'];
 			}
 		}
@@ -101,12 +101,12 @@ class Tijian_Controller_Supplier_Physical extends Tijian_Controller_Supplier_Bas
 	{
 		if ($this->isPost()) {
     		$params = $this->getParams();
-    		$aPhysical = Model_OrderCardProduct::getDetail($params['id']);
-    		if ($aPhysical && $aPhysical['iStatus'] > Model_Physical_Product::STATUS_UNCONFIRM) {
+    		$aPhysical = Tijian_Model_OrderCardProduct::getDetail($params['id']);
+    		if ($aPhysical && $aPhysical['iStatus'] > Tijian_Model_Physical_Product::STATUS_UNCONFIRM) {
     			$data['iAutoID'] = $params['id'];
     			$data['iIsSerious'] = $params['iIsSerious'];
     			$data['sSeriousRemark'] = $params['sSeriousRemark'];
-    			Model_OrderCardProduct::updData($data);
+    			Tijian_Model_OrderCardProduct::updData($data);
     			return $this->showMsg('提交成功', true, '/supplier/physical/detail/id/'.$params['id']);
     		} else {
     			return $this->showMsg('无此信息', false, '/supplier/physical/list');
@@ -117,16 +117,16 @@ class Tijian_Controller_Supplier_Physical extends Tijian_Controller_Supplier_Bas
 	    		$this->redirect('/supplier/physical/list');
 	    	}
 
-	    	$aDetail = Model_OrderCardProduct::getDetail($id);	    
-	    	if ($aDetail && $aDetail['iStatus'] > Model_Physical_Product::STATUS_UNCONFIRM) {
-    			$aOrder = Model_OrderInfo::getDetail($aDetail['iOrderID']);
-    			$aCard = Model_OrderCard::getDetail($aDetail['iCardID']);
+	    	$aDetail = Tijian_Model_OrderCardProduct::getDetail($id);
+	    	if ($aDetail && $aDetail['iStatus'] > Tijian_Model_Physical_Product::STATUS_UNCONFIRM) {
+    			$aOrder = Tijian_Model_OrderInfo::getDetail($aDetail['iOrderID']);
+    			$aCard = Tijian_Model_OrderCard::getDetail($aDetail['iCardID']);
     			$aDetail['sOrderCode'] = $aOrder['sOrderCode'];
     	
-			    $storeInfo = Model_Store::getDetail($aDetail['iStoreID']);
+			    $storeInfo = Tijian_Model_Store::getDetail($aDetail['iStoreID']);
 			    $aDetail['sStoreName'] = $storeInfo['sName'];
 
-			    $userInfo = Model_CustomerNew::getDetail($aCard['iUserID']);
+			    $userInfo = Tijian_Model_CustomerNew::getDetail($aCard['iUserID']);
 				$aDetail['sRealName'] = $userInfo['sRealName'];
 				$aDetail['sSex'] = ($userInfo['iSex'] == 2) ? '女' : '男';
 				$aDetail['sMarriage'] = ($userInfo['iMarriage'] == 2) ? '已婚' : '未婚';
@@ -158,7 +158,7 @@ class Tijian_Controller_Supplier_Physical extends Tijian_Controller_Supplier_Bas
 	{
 		$id = $this->getParam('id');
 		$type = $this->getParam('type');
-		$aPhysical = Model_OrderCardProduct::getDetail($id);
+		$aPhysical = Tijian_Model_OrderCardProduct::getDetail($id);
 		if ($aPhysical && $aPhysical['iBookStatus'] >= 1) {
 			$data['iAutoID'] = $id;
 			$data['iBookStatus'] = $type;
@@ -169,14 +169,14 @@ class Tijian_Controller_Supplier_Physical extends Tijian_Controller_Supplier_Bas
 			if ($type == 5) {
 				$data['iReportTime'] = time();
 				if ($aPhysical) {
-					$aCard = Model_OrderCard::getDetail($aPhysical['iCardID']);
+					$aCard = Tijian_Model_OrderCard::getDetail($aPhysical['iCardID']);
 					//年度体检报告发送短信
 					if (1 == $aCard['iPhysicalType']) {
-						Model_OrderCardProduct::sendReportMailMsg($aCard);	
+						Tijian_Model_OrderCardProduct::sendReportMailMsg($aCard);
 					}					
 				}				
 			}
-			Model_OrderCardProduct::updData($data);
+			Tijian_Model_OrderCardProduct::updData($data);
 			
 			return $this->showMsg('确认成功', true, '/supplier/physical/detail/id/'. $id);
 		} else {

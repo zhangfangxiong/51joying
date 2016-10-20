@@ -18,11 +18,11 @@ class Tijian_Model_Employee extends Tijian_Model_User
             'iType' => $aUser['iType'],
             'sRealName' => $aUser['sRealName']
         );
-        $sKey = Model_User::getUserType($aUser['iType']);
+        $sKey = Tijian_Model_User::getUserType($aUser['iType']);
         $expire = Yaf_G::getConf('frontexpire', 'cookie');
         Util_Cookie::set(Yaf_G::getConf($sKey, 'cookie'), $aCookie, $expire);
         
-        $sKey = Model_User::getUserType($aUser['iType'] == Model_User::TYPE_AD ? Model_User::TYPE_MEDIA : Model_User::TYPE_AD);
+        $sKey = Tijian_Model_User::getUserType($aUser['iType'] == Tijian_Model_User::TYPE_AD ? Tijian_Model_User::TYPE_MEDIA : Tijian_Model_User::TYPE_AD);
         Util_Cookie::delete(Yaf_G::getConf($sKey, 'cookie'));
         
         return $aCookie;

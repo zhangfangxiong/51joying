@@ -1,6 +1,6 @@
 <?php
 
-class Plugin_Test extends Yaf_Plugin
+class Tijian_Plugin_Test extends Yaf_Plugin
 {
 
     public function routerStartup (Yaf_Request_Abstract $request, Yaf_Response_Abstract $response)

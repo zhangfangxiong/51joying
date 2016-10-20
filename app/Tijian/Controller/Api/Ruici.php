@@ -26,7 +26,7 @@ class Tijian_Controller_Api_Ruici extends Tijian_Controller_Api_Supplier
 
         $this->totken = '';
 
-        $aTotken = Model_Kv::getDetail("ruici_token");
+        $aTotken = Tijian_Model_Kv::getDetail("ruici_token");
         $iServerUpdateTime = date('Y-m-d'). " 00:00:00";
         $iServerUpdateTime = strtotime($iServerUpdateTime);
 
@@ -47,7 +47,7 @@ class Tijian_Controller_Api_Ruici extends Tijian_Controller_Api_Supplier
                     $this->token = $result['Info'];
                 }
 
-                Model_kv::setValue('ruici_token', $this->token);
+                Tijian_Model_Kv::setValue('ruici_token', $this->token);
             }
         }
 

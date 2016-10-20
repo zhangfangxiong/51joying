@@ -39,17 +39,17 @@ class Tijian_Controller_Company_Mail extends Tijian_Controller_Company_Base
 				return $this->showMsg('邮件内容不完整', false);
 			}	
 		} else {
-			$mail = Model_Kv::getValue(self::MAIL_KEY.$this->enterpriseId);
+			$mail = Tijian_Model_Kv::getValue(self::MAIL_KEY.$this->enterpriseId);
 			if (!$mail) {
 				$mail = Yaf_G::getConf('mail', 'employee');
 			}
 			$employeeId = intval($this->getParam('employeeId'));
 			if ($employeeId) {
-				$aEmployee = Model_CustomerNew::getDetail($employeeId);
-				$row = Model_Company_Company::checkIsExist($aEmployee['iUserID'], $this->enterpriseId);
+				$aEmployee = Tijian_Model_CustomerNew::getDetail($employeeId);
+				$row = Tijian_Model_Company_Company::checkIsExist($aEmployee['iUserID'], $this->enterpriseId);
 				$aEmployee['sEmail'] = $row['sEmail'];
 				$aEmployee['iStatus'] = $row['iStatus'];
-				if ($aEmployee && $aEmployee['iStatus'] == Model_Company_Employee::STATUS_VALID) {
+				if ($aEmployee && $aEmployee['iStatus'] == Tijian_Model_Company_Employee::STATUS_VALID) {
 					$aMail['title']    = $this->enterprise['sCoName'].'-弹性福利平台员工账号';
 					$aMail['sendto']   = $aEmployee['sEmail'];
 					
@@ -60,7 +60,7 @@ class Tijian_Controller_Company_Mail extends Tijian_Controller_Company_Base
 
 					// $employee['iAutoID'] = $row['iAutoID'];
 					$row['iSendStatus'] = 1;
-					Model_Company_Company::updData($row);
+					Tijian_Model_Company_Company::updData($row);
 				}
 
 				$aMail['employeeId'] = $employeeId;
@@ -74,14 +74,14 @@ class Tijian_Controller_Company_Mail extends Tijian_Controller_Company_Base
 	 */
 	public function setMultiMailAction ()
 	{
-		$mail = Model_Kv::getValue(self::MAIL_KEY.$this->enterpriseId);
+		$mail = Tijian_Model_Kv::getValue(self::MAIL_KEY.$this->enterpriseId);
 		if (!$mail) {
 			$mail = Yaf_G::getConf('mail', 'employee');
 		}
 		
 		$where = [
 			'iCreateUserID' => $this->enterpriseId,
-			'iStatus >' => Model_Company_Company::STATUS_INVALID
+			'iStatus >' => Tijian_Model_Company_Company::STATUS_INVALID
 		];
 		$this->getParam('iLevelID') ? $where['iJobGradeID'] = intval($this->getParam('iLevelID')) : '';
 		$this->getParam('iDeptID') ? $where['iDeptID']      = intval($this->getParam('iDeptID')) : '';
@@ -97,7 +97,7 @@ class Tijian_Controller_Company_Mail extends Tijian_Controller_Company_Base
 		$this->getParam('iSendStatus') 
 		? $where['iSendStatus'] = intval($this->getParam('iSendStatus')) : '';
 
-		$aList = Model_Company_Company::getAll(['where' => $where]);
+		$aList = Tijian_Model_Company_Company::getAll(['where' => $where]);
 		$aList = $this->setEmployeeData($aList);
 
 		$sIDs = '';
@@ -135,10 +135,10 @@ class Tijian_Controller_Company_Mail extends Tijian_Controller_Company_Base
 				return $this->showMsg('员工ID'.self::ERROR, false);
 			}
 			
-			$aEmployees = Model_CustomerNew::getListByPKIDs($aEmployeeID);
+			$aEmployees = Tijian_Model_CustomerNew::getListByPKIDs($aEmployeeID);
 			if ($aEmployees) {
 				foreach ($aEmployees as $key => &$value) {
-					$row = Model_Company_Company::checkIsExist($value['iUserID'], $this->enterpriseId);
+					$row = Tijian_Model_Company_Company::checkIsExist($value['iUserID'], $this->enterpriseId);
 					if (!$row) {
 						unset($aEmployees[$key]);
 						continue;
@@ -152,11 +152,11 @@ class Tijian_Controller_Company_Mail extends Tijian_Controller_Company_Base
 			if ($aEmployees) {
 				foreach ($aEmployees as $key => $value) {
 					$emp = [];
-					$mail = Model_Kv::getValue(self::MAIL_KEY.$this->enterpriseId);
+					$mail = Tijian_Model_Kv::getValue(self::MAIL_KEY.$this->enterpriseId);
 					if (!$mail) {
 						$mail = Yaf_G::getConf('sMail');
 					}
-					if ($value['iStatus'] == Model_Company_Company::STATUS_VALID 
+					if ($value['iStatus'] == Tijian_Model_Company_Company::STATUS_VALID
 						&& !empty($value['sRealName']) && !empty($value['sEmail'])
 						&& !empty($value['sUserName'])) {
 						$mail  = preg_replace('/\[收件人\]/', $value['sRealName'], $mail);
@@ -167,7 +167,7 @@ class Tijian_Controller_Company_Mail extends Tijian_Controller_Company_Base
 
 						$emp['iAutoID'] = $value['iCompanyAutoID'];
 						$emp['iSendStatus'] = 1;
-						Model_Company_Company::updData($emp);
+						Tijian_Model_Company_Company::updData($emp);
 					}
 				}
 

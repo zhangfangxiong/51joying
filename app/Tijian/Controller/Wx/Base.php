@@ -102,7 +102,7 @@ class Tijian_Controller_Wx_Base extends Yaf_Controller
         if ($this->aUser['iCreateUserID'] == $aCreateUser['iUserID']) {
             return [];
         }
-        $aProductList = Model_Product::getAllUserProduct($this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
+        $aProductList = Tijian_Model_Product::getAllUserProduct($this->aUser['iCreateUserID'], 2, $this->aUser['iChannel']);
         return $aProductList;
     }
 
@@ -115,7 +115,7 @@ class Tijian_Controller_Wx_Base extends Yaf_Controller
     public function getAllUserCanViewProduct($iPage = 1, $sProductID)
     {
         $aCreateUser = $this->getCreatUser();
-        $aProductList = Model_Product::getUserViewProductList($aCreateUser['iCreateUserID'], 2, $aCreateUser['iChannel'], $iPage, false, $sProductID);
+        $aProductList = Tijian_Model_Product::getUserViewProductList($aCreateUser['iCreateUserID'], 2, $aCreateUser['iChannel'], $iPage, false, $sProductID);
         return $aProductList;
     }
 
@@ -125,7 +125,7 @@ class Tijian_Controller_Wx_Base extends Yaf_Controller
     protected function getCreatUser()
     {
         if (empty($this->aCreateUser)) {
-            $this->aCreateUser = Model_User::getUserByUserName($this->sCompanyName, 2);
+            $this->aCreateUser = Tijian_Model_User::getUserByUserName($this->sCompanyName, 2);
         }
         return $this->aCreateUser;
     }
@@ -144,10 +144,10 @@ class Tijian_Controller_Wx_Base extends Yaf_Controller
 
         $this->_assignUrl();
         $this->iCurrUserID = $this->aUser['iUserID'];
-        $aUser = Model_Customer::getDetail($this->aUser['iUserID']);
+        $aUser = Tijian_Model_Customer::getDetail($this->aUser['iUserID']);
 
         //加入创建人和渠道信息
-        $aCreateUser = Model_User::getDetail($aUser['iCreateUserID']);
+        $aCreateUser = Tijian_Model_User::getDetail($aUser['iCreateUserID']);
         if ($aUser) {
             $this->aUser['iCreateUserID'] = $aCreateUser['iUserID'];
             $this->aUser['iChannel'] = $aCreateUser['iChannel'];
@@ -156,8 +156,8 @@ class Tijian_Controller_Wx_Base extends Yaf_Controller
 
         $this->assign('aUser', $aUser);
         $this->assign('sStaticRoot', 'http://' . Yaf_G::getConf('static', 'domain'));
-        $this->assign('aCommonLang', Model_Lang::getCommonLang());
-        $this->assign('aMenu', Model_Lang::getWxMenu());
+        $this->assign('aCommonLang', Tijian_Model_Lang::getCommonLang());
+        $this->assign('aMenu', Tijian_Model_Lang::getWxMenu());
         $this->assign('iHomeIcon', 1);
         $this->assign('sTitle', 'error');
     }
@@ -214,18 +214,18 @@ class Tijian_Controller_Wx_Base extends Yaf_Controller
             $aParam = $this->getParams();
             if (!empty($aParam['idcard']) && !empty($aParam['realname'])) {//卡绑定的post过程
 
-            } elseif (isset($aParam['state']) && isset($aParam['code']) && Model_WxUser::STATE == $aParam['state']) {
+            } elseif (isset($aParam['state']) && isset($aParam['code']) && Tijian_Model_WxUser::STATE == $aParam['state']) {
                 $aParams['appid'] = self::$_appid;
                 $aParams['secret'] = self::$_appsecret;
                 $aParams['code'] = $aParam['code'];
                 //通过code获取openid
-                $aData = Model_WxUser::getAccessTokenByCode($aParams);
+                $aData = Tijian_Model_WxUser::getAccessTokenByCode($aParams);
                 if (isset($aData['errcode']) && $aData['errcode'] > 0) {
                     return $this->show404($aData['errmsg'], false);
                 }
                 $this->sCurrOpenID = $aData['openid'];
                 //通过openid获取用户信息
-                $aUser = Model_Customer::getUserByOpenID($this->sCurrOpenID);
+                $aUser = Tijian_Model_Customer::getUserByOpenID($this->sCurrOpenID);
                 if (empty($aUser)) {
                     if ($this->sRedirectAction != $this->_request->getActionName()) {// 跳转到绑定身份证页面
                         return $this->redirect('/wx/account/bindidcard/');
@@ -242,7 +242,7 @@ class Tijian_Controller_Wx_Base extends Yaf_Controller
                 //获取微信授权code
                 $aParam['appid'] = self::$_appid;
                 $aParam['redirect_uri'] = $this->getCurrUrl();
-                Model_WxUser::oauth($aParam);
+                Tijian_Model_WxUser::oauth($aParam);
             }
         }
     }
@@ -283,7 +283,7 @@ class Tijian_Controller_Wx_Base extends Yaf_Controller
             $tokenParamArr['secret'] = self::$_appsecret;
             $tokenParamArr['grant_type'] = 'client_credential';
             $tokenUrl .= "?" . http_build_query($tokenParamArr);
-            $data = Model_WxBase::curl($tokenUrl, false);
+            $data = Tijian_Model_WxBase::curl($tokenUrl, false);
             $data = json_decode($data, true);
             $oCache->set($sTokenKey, $data['access_token'], 7000);
             $sAccesstoken = $data['access_token'];
@@ -300,7 +300,7 @@ class Tijian_Controller_Wx_Base extends Yaf_Controller
         $sUrl = self::GETWEIXINIPURL;
         $sAccessToken = self::getAccessToken();
         $sUrl .= "?access_token=" . $sAccessToken;
-        $sData = Model_WxBase::curl($sUrl, false);
+        $sData = Tijian_Model_WxBase::curl($sUrl, false);
 
         return $sData;
     }
@@ -438,7 +438,7 @@ class Tijian_Controller_Wx_Base extends Yaf_Controller
             $tokenParamArr['type'] = self::JSONTYPE;
             $tokenParamArr['access_token'] = self::getAccessToken();
             $sticketUrl .= "?" . http_build_query($tokenParamArr);
-            $data = Model_WxBase::curl($sticketUrl, false);
+            $data = Tijian_Model_WxBase::curl($sticketUrl, false);
             $data = json_decode($data, true);
             $oCache->set($sJsApiTicket, $data['ticket'], 7000);
             $JsApiTicket = $data['ticket'];

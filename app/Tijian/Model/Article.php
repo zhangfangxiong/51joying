@@ -44,7 +44,7 @@ class Tijian_Model_Article extends Tijian_Model_Base
      */
     public static function getTags($sClass)
     {
-        return Model_Type::getOption(self::getClass($sClass, 'sTag'));
+        return Tijian_Model_Type::getOption(self::getClass($sClass, 'sTag'));
     }
     
     /**
@@ -54,7 +54,7 @@ class Tijian_Model_Article extends Tijian_Model_Base
      */
     public static function getAuthors($sClass)
     {
-        return Model_Type::getOption(self::getClass($sClass, 'sAuthor'));
+        return Tijian_Model_Type::getOption(self::getClass($sClass, 'sAuthor'));
     }
     
     /**
@@ -64,7 +64,7 @@ class Tijian_Model_Article extends Tijian_Model_Base
      */
     public static function getCategorys($sClass)
     {
-        return Model_Type::getOption(self::getClass($sClass, 'sCategory'));
+        return Tijian_Model_Type::getOption(self::getClass($sClass, 'sCategory'));
     }
 
     /**
@@ -203,7 +203,7 @@ class Tijian_Model_Article extends Tijian_Model_Base
             $aData[$sTodayField] = date('Ymd000001');
         }
         
-        return Model_Article::updData($aData);
+        return Tijian_Model_Article::updData($aData);
     }
 
     /**

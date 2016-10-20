@@ -53,8 +53,8 @@
             <div>
                 <div class="col-sm-3 list-caozuo">
                     <label>快递单号：</label>
-                    <input <?php echo (!empty($iType) && $iType == Model_Tpa_Express::TYPESELF) ? '' : 'disabled' ?>
-                        placeholder="<?php echo (!empty($iType) && $iType == Model_Tpa_Express::TYPESELF) ? '请输入快递单号' : '自动生成快递单号' ?>"
+                    <input <?php echo (!empty($iType) && $iType == Tijian_Model_Tpa_Express::TYPESELF) ? '' : 'disabled' ?>
+                        placeholder="<?php echo (!empty($iType) && $iType == Tijian_Model_Tpa_Express::TYPESELF) ? '请输入快递单号' : '自动生成快递单号' ?>"
                         type="text"
                         value="<?php echo !empty($aParam['sExpressCode']) ? $aParam['sExpressCode'] : '' ?>"
                         class="form-control" name="sExpressCode">

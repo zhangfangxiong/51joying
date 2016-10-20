@@ -16,9 +16,9 @@ class Tijian_Controller_Payment_Alipay extends Tijian_Controller_Index_Base
     {
 
         $sOrderCode = $this->getParam('ordercode');
-        $subject = Model_Pay::SUBJECT;
-        $body = Model_Pay::BODY;
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($sOrderCode);
+        $subject = Tijian_Model_Pay::SUBJECT;
+        $body = Tijian_Model_Pay::BODY;
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($sOrderCode);
         //判断订单是否存在
         if (empty($aOrder)) {
             return $this->show404('该订单不存在！', false);
@@ -29,7 +29,7 @@ class Tijian_Controller_Payment_Alipay extends Tijian_Controller_Index_Base
         }
         $total_fee = $aOrder['sProductAmount'];
         //判断订单是否已支付
-        if(Model_Pay::checkPay($sOrderCode)) {
+        if(Tijian_Model_Pay::checkPay($sOrderCode)) {
             return $this->show404('该订单已经支付，订单支付状态有误，请联系管理员！', false);
         }
         
@@ -53,7 +53,7 @@ class Tijian_Controller_Payment_Alipay extends Tijian_Controller_Index_Base
             'sData' => json_encode($aParam, JSON_UNESCAPED_UNICODE),
             'iStatus' => 0
         );
-        return Model_Pay::logPay($aData);
+        return Tijian_Model_Pay::logPay($aData);
     }
     
     /**
@@ -69,25 +69,25 @@ class Tijian_Controller_Payment_Alipay extends Tijian_Controller_Index_Base
             $iPayID = $this->logPay($aParam);
 
             //更改订单状态
-            $aOrder = Model_OrderInfo::getOrderByOrderCode($aParam['out_trade_no']);
-            $aOrderProduct = Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
-            Model_OrderInfo::paySeccuss($aOrder, $aOrderProduct,$aParam['trade_no'], 1, $aParam['buyer_email']/100);
+            $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($aParam['out_trade_no']);
+            $aOrderProduct = Tijian_Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
+            Tijian_Model_OrderInfo::paySeccuss($aOrder, $aOrderProduct,$aParam['trade_no'], 1, $aParam['buyer_email']/100);
 
-            $aPay = Model_Pay::getDetail($iPayID);
-            $aOrder = Model_OrderInfo::getRow(['where' => ['sOrderCode' => $aPay['sMyOrderID']]]);
+            $aPay = Tijian_Model_Pay::getDetail($iPayID);
+            $aOrder = Tijian_Model_OrderInfo::getRow(['where' => ['sOrderCode' => $aPay['sMyOrderID']]]);
             if (in_array($aOrder['iOrderType'], [3, 4, 5])) {
-                $aOP = Model_OrderProduct::getRow(['where' => [
+                $aOP = Tijian_Model_OrderProduct::getRow(['where' => [
                     'iOrderID' => $aOrder['iOrderID']
                 ]]);
-                $aCP = Model_OrderCardProduct::getRow(['where' => [
+                $aCP = Tijian_Model_OrderCardProduct::getRow(['where' => [
                     'iOrderID' => $aOrder['iOrderID']
                 ]]);
                 
-                Model_OrderInfo::sendMailMsg($aOrder, 1, $aCP['sProductName']);
+                Tijian_Model_OrderInfo::sendMailMsg($aOrder, 1, $aCP['sProductName']);
                 $aAttr = json_decode($aOP['sProductAttr'], true);
                 $url = '/order/buyfourth/id/'.$aAttr['iCardID'].'/pid/'.$aCP['iProductID'].'/sid/'.$aAttr['iStoreID'];
             } else {
-                Model_OrderInfo::sendMailMsg($aOrder, 2);
+                Tijian_Model_OrderInfo::sendMailMsg($aOrder, 2);
                 $url = "/payment/pay/success/id/" . $iPayID . '.html';    
 
             }

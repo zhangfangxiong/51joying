@@ -50,7 +50,7 @@ class Tijian_Controller_Admin_Role extends Tijian_Controller_Admin_Base
         $this->assign('sSupplierRoleName', Tijian_Model_Role::SUPPLIERROLENAME);
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
-        $this->assign('aType', Model_User::$aType);
+        $this->assign('aType', Tijian_Model_User::$aType);
         $this->assign('aStatus', Tijian_Model_Role::$aStatus);
     }
 
@@ -83,7 +83,7 @@ class Tijian_Controller_Admin_Role extends Tijian_Controller_Admin_Base
             $this->assign('aRole', $aRole);
             $this->assign('aPermissionList', Tijian_Model_Permission::getAllPermissions());
             $this->assign('aMenuList', Tijian_Model_Menu::getMenus());
-            $this->assign('aType', Model_User::$aType);
+            $this->assign('aType', Tijian_Model_User::$aType);
             $this->assign('iType', !empty($iType) ? $iType : $aRole['iType']);
             $this->assign('aStatus', Tijian_Model_Role::$aStatus);
         }
@@ -113,7 +113,7 @@ class Tijian_Controller_Admin_Role extends Tijian_Controller_Admin_Base
         } else {
             $this->assign('aPermissionList', Tijian_Model_Permission::getAllPermissions());
             $this->assign('aMenuList', Tijian_Model_Menu::getMenus());
-            $this->assign('aType', Model_User::$aType);
+            $this->assign('aType', Tijian_Model_User::$aType);
             $this->assign('iType', $iType);
             $this->assign('aStatus', Tijian_Model_Role::$aStatus);
         }

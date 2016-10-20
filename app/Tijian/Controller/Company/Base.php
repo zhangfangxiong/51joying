@@ -43,10 +43,10 @@ class Tijian_Controller_Company_Base extends Tijian_Controller_Admin_Base
 				$this->enterpriseId = $iHrID;				
 			}
 
- 			$row = Model_User::getRow(['where' => [
+ 			$row = Tijian_Model_User::getRow(['where' => [
  				'iUserID' => $this->enterpriseId,
  				'iCustomerManager' => $this->aCurrUser['iUserID'],
- 				'iStatus >' => Model_Company_Department::STATUS_INVALID
+ 				'iStatus >' => Tijian_Model_Company_Department::STATUS_INVALID
  			]]);
 
  			if (!$row) {
@@ -60,31 +60,31 @@ class Tijian_Controller_Company_Base extends Tijian_Controller_Admin_Base
 			$this->enterpriseId = intval($this->aCurrUser['iUserID']);	
 		}	
 
-		$aUser = Model_User::getDetail($this->enterpriseId);
-		if (!$this->enterpriseId || !$aUser || $aUser['iStatus'] == Model_User::STATUS_INVALID 
-			|| $aUser['iType'] != Model_User::TYPE_HR) {
+		$aUser = Tijian_Model_User::getDetail($this->enterpriseId);
+		if (!$this->enterpriseId || !$aUser || $aUser['iStatus'] == Tijian_Model_User::STATUS_INVALID
+			|| $aUser['iType'] != Tijian_Model_User::TYPE_HR) {
 			return $this->showMsg('不存在该企业', false);
 		}
 
-		$aDept = Model_Company_Department::getRow([
+		$aDept = Tijian_Model_Company_Department::getRow([
 			'where' => [
 				'iEnterpriseID' => $this->enterpriseId,
 				'iParentID'     => 0,
-				'iStatus'		=> Model_Company_Department::STATUS_VALID
+				'iStatus'		=> Tijian_Model_Company_Department::STATUS_VALID
 			]
 		]);		
 
 		$data['iEnterpriseID'] = $this->enterpriseId;
 		$data['sDeptName'] = $aUser['sRealName'];
 		if (!$aDept) {			
-			$this->deptAutoId = Model_Company_Department::addData($data);
+			$this->deptAutoId = Tijian_Model_Company_Department::addData($data);
 			if (!$this->deptAutoId) {
 				return $this->showMsg('操作失败,请重试', false);
 			}
 		} else if($aDept['sDeptName'] != $aUser['sRealName']) {
 			$data['iAutoID']  = $aDept['iAutoID'];
 			$this->deptAutoId = $aDept['iAutoID'];		
-			Model_Company_Department::updData($data);
+			Tijian_Model_Company_Department::updData($data);
 		} else {
 			$this->deptAutoId = $aDept['iAutoID'];
 		}
@@ -102,11 +102,11 @@ class Tijian_Controller_Company_Base extends Tijian_Controller_Admin_Base
 	public function setBasicData()
 	{
 		$where = [ 
-			'iStatus' => Model_Company_Level::STATUS_VALID,
+			'iStatus' => Tijian_Model_Company_Level::STATUS_VALID,
 			'iEnterpriseID' => $this->enterpriseId 
 		];
 		
-		$this->aLevel = Model_Company_Level::getAll([
+		$this->aLevel = Tijian_Model_Company_Level::getAll([
 			'where' => $where
 		]);
 		if ($this->aLevel) {
@@ -115,7 +115,7 @@ class Tijian_Controller_Company_Base extends Tijian_Controller_Admin_Base
 			}
 		}		
 
-		$dept = Model_Company_Department::getAll([
+		$dept = Tijian_Model_Company_Department::getAll([
 			'where' => $where
 		]);
 		if ($dept) {
@@ -142,7 +142,7 @@ class Tijian_Controller_Company_Base extends Tijian_Controller_Admin_Base
 	{
 		if ($aEmployee) {
 			foreach ($aEmployee as $key => &$value) {
-				$aCustomer = Model_CustomerNew::getDetail($value['iUserID']);
+				$aCustomer = Tijian_Model_CustomerNew::getDetail($value['iUserID']);
 				$value['sRealName'] = $aCustomer['sRealName'];
 				$value['sMobile'] = $aCustomer['sMobile'];
 				$value['iSex'] = $aCustomer['iSex'];
@@ -167,21 +167,21 @@ class Tijian_Controller_Company_Base extends Tijian_Controller_Admin_Base
 		$aAppointment = [];
 		$where = [
 			'iCreateUserID' => $iHRID,			
-			'iStatus' => Model_OrderCard::STATUS_VALID,
+			'iStatus' => Tijian_Model_OrderCard::STATUS_VALID,
 
 		];
 		if ($iPlanID) {
 			$where['iPlanID'] = $iPlanID;
 		}
 
-		$aOrder = Model_OrderCard::getAll(['where' => $where]);
+		$aOrder = Tijian_Model_OrderCard::getAll(['where' => $where]);
 		if ($aOrder) {
 			foreach ($aOrder as $key => $value) {
 				$aCardID[] = $value['iAutoID'];
 			}
 			if ($aCardID) {
 				$sCardID = implode(',', $aCardID);
-				$aAppointment = Model_OrderCardProduct::getAll(['where' => [
+				$aAppointment = Tijian_Model_OrderCardProduct::getAll(['where' => [
 					'iCardID IN'  => $sCardID,
 					'iPhysicalTime >' => strtotime("-3 Months")
 				]]);
@@ -194,7 +194,7 @@ class Tijian_Controller_Company_Base extends Tijian_Controller_Admin_Base
 				}
 			}
 			if ($aCardIDs) {
-				$aCards = Model_OrderCard::getListByPKIDs($aCardIDs);
+				$aCards = Tijian_Model_OrderCard::getListByPKIDs($aCardIDs);
 				if ($aCards) {
 					foreach ($aCards as $key => $value) {
 						if ($value['iUserID']) {
@@ -219,7 +219,7 @@ class Tijian_Controller_Company_Base extends Tijian_Controller_Admin_Base
 	public function getPlanUserIDs ($iPlanID)
 	{
 		$aUserIDs = [];
-		$aOrder = Model_OrderCard::getAll(['where' => [
+		$aOrder = Tijian_Model_OrderCard::getAll(['where' => [
         	'iPlanID' => $iPlanID,
         	'iStatus IN' => ['-99', 1]
         ]]);
@@ -264,18 +264,18 @@ class Tijian_Controller_Company_Base extends Tijian_Controller_Admin_Base
 	public function getPlanProduct ($iPlanID)
 	{
 		$aSelProduct = [];
-		$aUser = Model_User::getDetail($this->enterpriseId);
-		$aPlanProduct = Model_Physical_PlanProduct::getAll(['where' => [
+		$aUser = Tijian_Model_User::getDetail($this->enterpriseId);
+		$aPlanProduct = Tijian_Model_Physical_PlanProduct::getAll(['where' => [
 			'iPlanID' => $iPlanID,
 			'iProductID >' => 0,
-			'iStatus' => Model_Physical_PlanProduct::STATUS_VALID,
+			'iStatus' => Tijian_Model_Physical_PlanProduct::STATUS_VALID,
 		]]);
 		if ($aPlanProduct) {
 			foreach ($aPlanProduct as $key => $value) {
 				$aHrProductIDs[] = $value['iProductID'];
 			}
 			$sHrProductID = implode(',', $aHrProductIDs);
-			$aHrProduct = Model_Product::getAllUserProduct($this->enterpriseId, 1, $aUser['iChannel'], $sHrProductID);
+			$aHrProduct = Tijian_Model_Product::getAllUserProduct($this->enterpriseId, 1, $aUser['iChannel'], $sHrProductID);
 
 			foreach ($aHrProduct as $key => $value) {
 				$aSelProduct[$value['iProductID']] = $value['sProductName'];
@@ -291,7 +291,7 @@ class Tijian_Controller_Company_Base extends Tijian_Controller_Admin_Base
 	public function getPlanOrder ($iPlanID)
 	{
 		$aOrderIDs = [];
-		$aOrder = Model_OrderInfo::getAll(['where' => [
+		$aOrder = Tijian_Model_OrderInfo::getAll(['where' => [
         	'iPlanID' => $iPlanID,
         	'iOrderType' => 4,
         	'iStatus IN' => [0, 1]

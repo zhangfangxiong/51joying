@@ -11,7 +11,7 @@ class Tijian_Controller_Admin_Front extends Tijian_Controller_Admin_Base
     public function __call ($sMethod, $aArg)
     {
         $sClass = str_replace('Action', '', $sMethod);
-        $aClass = Model_Front::getClass($sClass);
+        $aClass = Tijian_Model_Front::getClass($sClass);
         if (empty($aClass)) {
             parent::__call($sMethod, $aArg);
             return false;
@@ -28,9 +28,9 @@ class Tijian_Controller_Admin_Front extends Tijian_Controller_Admin_Base
     public function delAction ()
     {
         $iAutoID = $this->getParam('id');
-        $aFront = Model_Front::getDetail($iAutoID);
-        $sClassName = Model_Front::getClass($aFront['sClass'], 'title');
-        $iRet = Model_Front::delData($iAutoID);
+        $aFront = Tijian_Model_Front::getDetail($iAutoID);
+        $sClassName = Tijian_Model_Front::getClass($aFront['sClass'], 'title');
+        $iRet = Tijian_Model_Front::delData($iAutoID);
         if ($iRet == 1) {
             return $this->showMsg($sClassName . '删除成功！', true);
         } else {
@@ -47,8 +47,8 @@ class Tijian_Controller_Admin_Front extends Tijian_Controller_Admin_Base
             $sClass = $this->getParam('class', '');
         }
         
-        $aClass = Model_Front::getClass($sClass);
-        $aList = Model_Front::getFronts($sClass);
+        $aClass = Tijian_Model_Front::getClass($sClass);
+        $aList = Tijian_Model_Front::getFronts($sClass);
         $this->assign('aList', $aList);
         $this->assign('aClass', $aClass);
         $this->assign('sClass', $sClass);
@@ -66,22 +66,22 @@ class Tijian_Controller_Admin_Front extends Tijian_Controller_Admin_Base
                 return null;
             }
             
-            $aClass = Model_Front::getClass($aFront['sClass']);
+            $aClass = Tijian_Model_Front::getClass($aFront['sClass']);
             $aFront['iAutoID'] = intval($this->getParam('iAutoID'));
-            $aOldType = Model_Front::getDetail($aFront['iAutoID']);
+            $aOldType = Tijian_Model_Front::getDetail($aFront['iAutoID']);
             if (empty($aOldType)) {
                 return $this->showMsg($aClass['sName'] . '不存在！', false);
             }
-            if (1 == Model_Front::updData($aFront)) {
+            if (1 == Tijian_Model_Front::updData($aFront)) {
                 return $this->showMsg($aClass['sName'] . '信息更新成功！', true);
             } else {
                 return $this->showMsg($aClass['sName'] . '信息更新失败！', false);
             }
         } else {
             $iAutoID = intval($this->getParam('id'));
-            $aFront = Model_Front::getDetail($iAutoID);
+            $aFront = Tijian_Model_Front::getDetail($iAutoID);
             $sClass = $aFront['sClass'];
-            $aClass = Model_Front::getClass($sClass);
+            $aClass = Tijian_Model_Front::getClass($sClass);
             $this->assign('aFront', $aFront);
             $this->assign('aClass', $aClass);
             $this->assign('sClass', $sClass);
@@ -99,16 +99,16 @@ class Tijian_Controller_Admin_Front extends Tijian_Controller_Admin_Base
                 return null;
             }
             
-            $aClass = Model_Front::getClass($aFront['sClass']);
-            $aFront['iOrder'] = Model_Front::getNextOrder($aFront['sClass'], $aFront['iCityID']);
-            if (Model_Front::addData($aFront) > 0) {
+            $aClass = Tijian_Model_Front::getClass($aFront['sClass']);
+            $aFront['iOrder'] = Tijian_Model_Front::getNextOrder($aFront['sClass'], $aFront['iCityID']);
+            if (Tijian_Model_Front::addData($aFront) > 0) {
                 return $this->showMsg($aClass['sName'] . '增加成功！', true);
             } else {
                 return $this->showMsg($aClass['sName'] . '增加失败！', false);
             }
         } else {
             $sClass = $this->getParam('class', '');
-            $aClass = Model_Front::getClass($sClass);    
+            $aClass = Tijian_Model_Front::getClass($sClass);
             
             $this->assign('aClass', $aClass);
             $this->assign('sClass', $sClass);
@@ -124,8 +124,8 @@ class Tijian_Controller_Admin_Front extends Tijian_Controller_Admin_Base
     {
         $iAutoID = $this->getParam('id');
         $iDirect = $this->getParam('direct');
-        $aFront = Model_Front::getDetail($iAutoID);
-        $iCnt = Model_Front::changeOrder($aFront, $iDirect);
+        $aFront = Tijian_Model_Front::getDetail($iAutoID);
+        $iCnt = Tijian_Model_Front::changeOrder($aFront, $iDirect);
         return $this->showMsg($iCnt, true);
     }
 
@@ -137,7 +137,7 @@ class Tijian_Controller_Admin_Front extends Tijian_Controller_Admin_Base
     public function _checkData ($sType = 'add')
     {
         $sClass = $this->getParam('sClass', '');
-        $aClass = Model_Front::getClass($sClass);
+        $aClass = Tijian_Model_Front::getClass($sClass);
         $aRow = array();
         $aRow['sClass'] = $aClass['sClass'];
         $aRow['sSourceID'] = $this->getParam('sSourceID', '');

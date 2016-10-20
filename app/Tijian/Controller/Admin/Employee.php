@@ -9,7 +9,7 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
     public function infoAction ()
     {
         $iEmployeeID = $this->aCurrUser['iEmployeeID'];
-        $aUser = Model_Employee::getDetail($iEmployeeID);
+        $aUser = Tijian_Model_Employee::getDetail($iEmployeeID);
         $aUser['aCityID'] = explode(',', $aUser['sCityID']);
         $aUser['aRoleID'] = explode(',', $aUser['sRoleID']);
         $this->assign('aUser', $aUser);
@@ -25,12 +25,12 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
         if ($this->isPost()) {
             $sOldPass = $this->getParam('oldpass');
             $sNewPass = $this->getParam('newpass');
-            $aUser = Model_Employee::getDetail($this->aCurrUser['iEmployeeID']);
+            $aUser = Tijian_Model_Employee::getDetail($this->aCurrUser['iEmployeeID']);
             $sCryptkey = Yaf_G::getConf('cryptkey', 'cookie');
             if ($aUser['sPassword'] != md5($sCryptkey . $sOldPass)) {
                 return $this->showMsg('旧密码不正确！', false);
             }
-            Model_Employee::updData(array(
+            Tijian_Model_Employee::updData(array(
                 'iEmployeeID' => $this->aCurrUser['iEmployeeID'],
                 'sPassword' => md5($sCryptkey . $sNewPass)
             ));
@@ -45,7 +45,7 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
     public function delAction ()
     {
         $iEmployeeID = intval($this->getParam('id'));
-        $iRet = Model_Employee::delData($iEmployeeID);
+        $iRet = Tijian_Model_Employee::delData($iEmployeeID);
         if ($iRet == 1) {
             return $this->showMsg('用户删除成功！', true);
         } else {
@@ -82,7 +82,7 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
             $aWhere['sWhere'] = 'FIND_IN_SET("' . $aParam['iRoleID'] . '",sRoleID)';
         }
         
-        $aList = Model_Employee::getList($aWhere, $iPage, $this->getParam('sOrder', ''));
+        $aList = Tijian_Model_Employee::getList($aWhere, $iPage, $this->getParam('sOrder', ''));
         foreach ($aList['aList'] as $k => $aUser) {
             if ($aUser['sRoleID'] == - 1) {
                 $aList['aList'][$k]['sRoleName'] = '管理员';
@@ -112,23 +112,23 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
                 return null;
             }
             $aUser['iEmployeeID'] = intval($this->getParam('iEmployeeID'));
-            $aOldUser = Model_Employee::getDetail($aUser['iEmployeeID']);
+            $aOldUser = Tijian_Model_Employee::getDetail($aUser['iEmployeeID']);
             if (empty($aOldUser)) {
                 return $this->showMsg('用户不存在！', false);
             }
             if ($aOldUser['sEmployeeName'] != $aUser['sEmployeeName']) {
-                if (Model_Employee::getEmployeeByName($aUser['sEmployeeName'])) {
+                if (Tijian_Model_Employee::getEmployeeByName($aUser['sEmployeeName'])) {
                     return $this->showMsg('用户已经存在！', false);
                 }
             }
-            if (1 == Model_Employee::updData($aUser)) {
+            if (1 == Tijian_Model_Employee::updData($aUser)) {
                 return $this->showMsg('用户信息更新成功！', true);
             } else {
                 return $this->showMsg('用户信息更新失败！', false);
             }
         } else {
             $iEmployeeID = intval($this->getParam('id'));
-            $aUser = Model_Employee::getDetail($iEmployeeID);
+            $aUser = Tijian_Model_Employee::getDetail($iEmployeeID);
             $aUser['aCityID'] = explode(',', $aUser['sCityID']);
             $aUser['aRoleID'] = explode(',', $aUser['sRoleID']);
             $this->assign('aUser', $aUser);
@@ -147,10 +147,10 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
             if (empty($aUser)) {
                 return null;
             }
-            if (Model_Employee::getEmployeeByName($aUser['sEmployeeName'])) {
+            if (Tijian_Model_Employee::getEmployeeByName($aUser['sEmployeeName'])) {
                 return $this->showMsg('用户已经存在！', false);
             }
-            if (Model_Employee::addData($aUser) > 0) {
+            if (Tijian_Model_Employee::addData($aUser) > 0) {
                 return $this->showMsg('用户增加成功！', true);
             } else {
                 return $this->showMsg('用户增加失败！', false);
@@ -257,7 +257,7 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
             $aWhere['sSQL LIKE'] = '%' . $aParam['sSQL'] . '%';
         }
         
-        $aList = Model_ActionLog::getList($aWhere, $iPage, $this->getParam('sOrder', ''));
+        $aList = Tijian_Model_ActionLog::getList($aWhere, $iPage, $this->getParam('sOrder', ''));
         $this->assign('aList', $aList);
         $this->assign('aParam', $aParam);
         $this->assign('aType', array(

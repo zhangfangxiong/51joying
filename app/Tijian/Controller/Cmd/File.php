@@ -13,9 +13,9 @@ class Tijian_Controller_Cmd_File extends Tijian_Controller_Cmd_Base
     {
         $oStorage = new File_Storage();
         $sHost = $this->getParam('host');
-        $iCnt = Model_File::query('SELECT COUNT(*) FROM t_file', 'one');
+        $iCnt = Tijian_Model_File::query('SELECT COUNT(*) FROM t_file', 'one');
         for ($i = 0; $i < $iCnt; $i += 200) {
-            $aList = Model_File::query("SELECT * FROM t_file LIMIT $i,200");
+            $aList = Tijian_Model_File::query("SELECT * FROM t_file LIMIT $i,200");
             foreach ($aList as $aRow) {
                 $sFileKey = $aRow['sKey'] . '.' . $aRow['sExt'];
                 $sUrl = $sHost . '/view/' . $sFileKey;

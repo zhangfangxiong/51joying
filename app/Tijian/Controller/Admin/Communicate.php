@@ -20,7 +20,7 @@ class Tijian_Controller_Admin_Communicate extends Tijian_Controller_Admin_Base
             }
             $aCommunicate['iTime'] = strtotime($aCommunicate['iTime']);
             $aCommunicate['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
-            if (Model_Communicate::updData($aCommunicate) > 0) {
+            if (Tijian_Model_Communicate::updData($aCommunicate) > 0) {
                 return $this->showMsg('沟通记录编辑成功！', true);
             } else {
                 return $this->showMsg('沟通记录编辑失败！', false);
@@ -30,7 +30,7 @@ class Tijian_Controller_Admin_Communicate extends Tijian_Controller_Admin_Base
             if (empty($iID)) {
                 return $this->showMsg('参数有误！', false);
             }
-            $aCommunicate = Model_Communicate::getDetail($iID);
+            $aCommunicate = Tijian_Model_Communicate::getDetail($iID);
             if (empty($aCommunicate)) {
                 return $this->showMsg('该沟通记录不存在！', false);
             }
@@ -55,7 +55,7 @@ class Tijian_Controller_Admin_Communicate extends Tijian_Controller_Admin_Base
             }
             $aCommunicate['iTime'] = strtotime($aCommunicate['iTime']);
             $aCommunicate['iCreateUserID'] = $aCommunicate['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
-            if (Model_Communicate::addData($aCommunicate) > 0) {
+            if (Tijian_Model_Communicate::addData($aCommunicate) > 0) {
                 return $this->showMsg('增加成功！', true);
             } else {
                 return $this->showMsg('增加失败！', false);
@@ -65,7 +65,7 @@ class Tijian_Controller_Admin_Communicate extends Tijian_Controller_Admin_Base
             if (empty($iUserID)) {
                 return $this->showMsg('参数有误！', false);
             }
-            $aUser = Model_User::getDetail($iUserID);
+            $aUser = Tijian_Model_User::getDetail($iUserID);
             if (empty($aUser)) {
                 return $this->showMsg('该用户不存在！', false);
             }

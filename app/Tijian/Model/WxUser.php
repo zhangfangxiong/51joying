@@ -148,13 +148,13 @@ class Tijian_Model_WxUser extends Tijian_Model_WxBase
     public static function getUserInfoByOpenID($sToken, $sOpenID,$scope=0)
     {
         //获取本站用户信息
-        $aData = Model_Customer::getUserByOpenID($sOpenID);
+        $aData = Tijian_Model_Customer::getUserByOpenID($sOpenID);
         if (empty($aData)) {
             //插入新数据
             $aData['sOpenID'] = $sOpenID;
-            $aData['iType'] = Model_Customer::TYPE_WX;
-            $aData['sUserName'] = Model_Customer::initUserName();
-            $aData['iUserID'] = Model_Customer::addData($aData);
+            $aData['iType'] = Tijian_Model_Customer::TYPE_WX;
+            $aData['sUserName'] = Tijian_Model_Customer::initUserName();
+            $aData['iUserID'] = Tijian_Model_Customer::addData($aData);
             if (empty($aData['iUserID'])) {
                 return [];
             }

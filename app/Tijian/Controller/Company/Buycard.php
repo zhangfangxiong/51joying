@@ -18,8 +18,8 @@ class Tijian_Controller_Company_BuyCard extends Tijian_Controller_Company_Base
 	public function listAction()
 	{
 		$iPage = $this->getParam('page') ? intval($this->getParam('page')) : 1;
-		$aUser = Model_User::getDetail($this->enterpriseId);
-		$aCardList = Model_Product::getUserViewProductList($this->enterpriseId, 1, $aUser['iChannel'], $iPage,false,'','iPCard DESC');
+		$aUser = Tijian_Model_User::getDetail($this->enterpriseId);
+		$aCardList = Tijian_Model_Product::getUserViewProductList($this->enterpriseId, 1, $aUser['iChannel'], $iPage,false,'','iPCard DESC');
 		$this->assign('aCardList',$aCardList);
 		$this->assign('aCardType',Yaf_G::getConf('aPCard', 'product'));
 		$this->assign('aCardStatus',Yaf_G::getConf('aStatus', 'product'));
@@ -33,10 +33,10 @@ class Tijian_Controller_Company_BuyCard extends Tijian_Controller_Company_Base
 	{
 		$iPage = intval($this->getParam('page'));
 		$aParam['iUserID'] = $this->enterpriseId;
-		$aParam['iUserType'] = Model_OrderInfo::HR;
+		$aParam['iUserType'] = Tijian_Model_OrderInfo::HR;
 		$aParam['iPayStatus'] = -1;
 
-		$aList = Model_OrderInfo::getPhisycalList($aParam, $iPage);
+		$aList = Tijian_Model_OrderInfo::getPhisycalList($aParam, $iPage);
 		$this->assign('aPayStatus', Util_Common::getConf('aPayStatus', 'order'));
 		$this->assign('aPayType', Util_Common::getConf('aPayType', 'order'));
 		$this->assign('aGenStatus', Util_Common::getConf('aGenStatus', 'order'));
@@ -52,11 +52,11 @@ class Tijian_Controller_Company_BuyCard extends Tijian_Controller_Company_Base
 	public function buyDetailAction(){
 		$iOrderID = intval($this->getParam('id'));
 
-		$orderDetail = Model_OrderInfo::getDetail($iOrderID);
+		$orderDetail = Tijian_Model_OrderInfo::getDetail($iOrderID);
 		$where = array(
 			'iOrderID' => $iOrderID
 		);
-		$products = Model_OrderProduct::getAll(['where' => $where]);
+		$products = Tijian_Model_OrderProduct::getAll(['where' => $where]);
 
 		$this->assign('aPayStatus', Util_Common::getConf('aPayStatus', 'order'));
 		$this->assign('aPayType', Util_Common::getConf('aPayType', 'order'));
@@ -86,12 +86,12 @@ class Tijian_Controller_Company_BuyCard extends Tijian_Controller_Company_Base
 				3=>'iWomanPrice2'
 			];
 
-			$aUser = Model_User::getDetail($this->enterpriseId);
-			$aProduct = Model_Product::getAllUserProduct($this->enterpriseId, 1, $aUser['iChannel'], implode(',',$aParam['aProductID']),false,'iProductID');
+			$aUser = Tijian_Model_User::getDetail($this->enterpriseId);
+			$aProduct = Tijian_Model_Product::getAllUserProduct($this->enterpriseId, 1, $aUser['iChannel'], implode(',',$aParam['aProductID']),false,'iProductID');
 
 			//以下为各种情况分析
 			$iUserID = $this->enterpriseId;
-			$iUserType = Model_OrderInfo::HR;
+			$iUserType = Tijian_Model_OrderInfo::HR;
 			$iOrderType = $aParam['iOrderType'];
 			$sConsignee = $aParam['sConsignee'];
 			$sMobile = $aParam['sMobile'];
@@ -107,7 +107,7 @@ class Tijian_Controller_Company_BuyCard extends Tijian_Controller_Company_Base
 			$aOrderParam['sAddress'] = $aParam['sAddress'];
 			$aOrderParam['sZipcode'] = $aParam['sZipcode'];
 
-			if ($iOrderType == Model_OrderInfo::REALCARD) {
+			if ($iOrderType == Tijian_Model_OrderInfo::REALCARD) {
 
 				foreach ($aParam['aProductID'] as $key => $value) {
 					if (empty($aProduct[$value]['iPCard'])) {
@@ -124,7 +124,7 @@ class Tijian_Controller_Company_BuyCard extends Tijian_Controller_Company_Base
 				if (empty($aParam['sZipcode'])) {
 					return $this->showMsg('购买实物卡，必须填写邮编！',false);
 				}
-			} elseif ($iOrderType == Model_OrderInfo::ELECTRONICCARD) {
+			} elseif ($iOrderType == Tijian_Model_OrderInfo::ELECTRONICCARD) {
 				if (empty($aParam['sEmail'])) {
 					return $this->showMsg('购买电子卡，必须填写邮箱！',false);
 				}
@@ -145,7 +145,7 @@ class Tijian_Controller_Company_BuyCard extends Tijian_Controller_Company_Base
 			//计算体检卡名称和价格
 			if (!empty($aParam['extenditem'])) {//一张卡内包含多个体检套餐
 				$aParam['extenditem'][] = $aParam['aProductID'][0];//把原有产品插进来
-				$aProductExtend = Model_Product::getAllUserProduct($this->enterpriseId, 1, $aUser['iChannel'], implode(',',$aParam['extenditem']),false,'iProductID');
+				$aProductExtend = Tijian_Model_Product::getAllUserProduct($this->enterpriseId, 1, $aUser['iChannel'], implode(',',$aParam['extenditem']),false,'iProductID');
 				foreach ($aProductExtend as $key => $value) {
 					$sProductAmount = $aParam['iUseType'] == 1 ? max($value[$aPriceKey[$aParam['aProductSex'][0]]],$sProductAmount) : $sProductAmount + $value[$aPriceKey[$aParam['aProductSex'][0]]];
 					$sProductName .= $aParam['iUseType'] == 1 ? $value['sProductName'].'/' : $value['sProductName'].'+';
@@ -170,18 +170,18 @@ class Tijian_Controller_Company_BuyCard extends Tijian_Controller_Company_Base
 			}
 
 			//入库操作
-			Model_OrderInfo::begin();
+			Tijian_Model_OrderInfo::begin();
 			//入orderinfo表
-			if ($iOrderID = Model_OrderInfo::initOrder($iUserID,$iUserType,$iOrderType,$sConsignee,$sMobile,$sProductAmount,$aOrderParam)) {
+			if ($iOrderID = Tijian_Model_OrderInfo::initOrder($iUserID,$iUserType,$iOrderType,$sConsignee,$sMobile,$sProductAmount,$aOrderParam)) {
 					$aOrderProductParam['iCardType'] = $aParam['iCardType'];//实体卡种类
 
 				if (!empty($aParam['extenditem'])) {
 					//入orderproduct表
 					$aOrderProductParam['iPCard'] = $aProduct[$aParam['aProductID'][0]]['iPCard'];//实体卡类型
 					$aOrderProductParam['iSex'] = $aParam['aProductSex'][0];//选择的性别
-					if (!Model_OrderProduct::initOrder($iOrderID,0,$sProductName,$aParam['aProductNumber'][0],$sProductAmount/$aParam['aProductNumber'][0],$sProductAmount,$iOrderType,$aOrderProductParam))
+					if (!Tijian_Model_OrderProduct::initOrder($iOrderID,0,$sProductName,$aParam['aProductNumber'][0],$sProductAmount/$aParam['aProductNumber'][0],$sProductAmount,$iOrderType,$aOrderProductParam))
 					{
-						Model_OrderInfo::rollback();
+						Tijian_Model_OrderInfo::rollback();
 						return $this->showMsg('购买失败！',false);
 					}
 				} else {
@@ -189,24 +189,24 @@ class Tijian_Controller_Company_BuyCard extends Tijian_Controller_Company_Base
 						$aOrderProductParam['iPCard'] = $aProduct[$value]['iPCard'];//实体卡类型
 						$aOrderProductParam['iSex'] = $aParam['aProductSex'][$key];//选择的性别
 						//入orderproduct表
-						if (!Model_OrderProduct::initOrder($iOrderID,$aProduct[$value]['iProductID'],$aProduct[$value]['sProductName'],$aParam['aProductNumber'][$key],$aParam['aProductPrice'][$key]/$aParam['aProductNumber'][$key],$aParam['aProductPrice'][$key],$iOrderType,$aOrderProductParam))
+						if (!Tijian_Model_OrderProduct::initOrder($iOrderID,$aProduct[$value]['iProductID'],$aProduct[$value]['sProductName'],$aParam['aProductNumber'][$key],$aParam['aProductPrice'][$key]/$aParam['aProductNumber'][$key],$aParam['aProductPrice'][$key],$iOrderType,$aOrderProductParam))
 						{
-							Model_OrderInfo::rollback();
+							Tijian_Model_OrderInfo::rollback();
 							return $this->showMsg('购买失败！',false);
 						}
 					}
 				}
 			} else {
-				Model_OrderInfo::rollback();
+				Tijian_Model_OrderInfo::rollback();
 				return $this->showMsg('购买失败！',false);
 			}
-			Model_OrderInfo::commit();
+			Tijian_Model_OrderInfo::commit();
 			return $this->showMsg('购买申请已提交，待审核后发送至您的邮箱或邮寄到您所填的地址！',true,'/company/buycard/buylist/');
 		} else {
 			$sPid = $this->getParam('pid') ? trim($this->getParam('pid'),',') : '';
-			$aUser = Model_User::getDetail($this->enterpriseId);
-			$aCardList = Model_Product::getAllUserProduct($this->enterpriseId, 1, $aUser['iChannel'], $sPid);
-			$aAllCardList = count(explode(',',$sPid)) > 1 ? [] : Model_Product::getAllUserProduct($this->enterpriseId, 1, $aUser['iChannel']);
+			$aUser = Tijian_Model_User::getDetail($this->enterpriseId);
+			$aCardList = Tijian_Model_Product::getAllUserProduct($this->enterpriseId, 1, $aUser['iChannel'], $sPid);
+			$aAllCardList = count(explode(',',$sPid)) > 1 ? [] : Tijian_Model_Product::getAllUserProduct($this->enterpriseId, 1, $aUser['iChannel']);
 			$this->assign('aCardList',$aCardList);
 			$this->assign('aAllCardList',$aAllCardList);
 			$this->assign('aCardType',Yaf_G::getConf('aCardType', 'product'));

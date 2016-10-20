@@ -12,9 +12,9 @@ class Tijian_Controller_Payment_Wxjs extends Tijian_Controller_Wx_Base
         if (empty($sOrderCode)) {
             return $this->show404('你没有订购任何产品！', false);
         }
-        $subject = Model_Pay::SUBJECT;
-        $body = Model_Pay::BODY;
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($sOrderCode);
+        $subject = Tijian_Model_Pay::SUBJECT;
+        $body = Tijian_Model_Pay::BODY;
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($sOrderCode);
         //判断订单是否存在
         if (empty($aOrder)) {
             return $this->show404('该订单不存在！', false);
@@ -25,13 +25,13 @@ class Tijian_Controller_Payment_Wxjs extends Tijian_Controller_Wx_Base
         }
         $total_fee = $aOrder['sProductAmount'];
         //判断订单是否已支付
-        if(Model_Pay::checkPay($sOrderCode)) {
+        if(Tijian_Model_Pay::checkPay($sOrderCode)) {
             return $this->show404('该订单已经支付，订单支付状态有误，请联系管理员！', false);
         }
         $aData = Payment_Weixin::jspay($this->aUser['sOpenID'],$sOrderCode, $body, $total_fee);
         $this->assign('aData',$aData);
 
-        $aOrderProduct = Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
+        $aOrderProduct = Tijian_Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
         $this->assign('aOrder', $aOrder);
         $this->assign('aOrderProduct', $aOrderProduct);
         $this->assign('sTitle', '订单支付');
@@ -43,9 +43,9 @@ class Tijian_Controller_Payment_Wxjs extends Tijian_Controller_Wx_Base
         if (empty($sOrderCode)) {
             return $this->show404('你没有订购任何产品！', false);
         }
-        $subject = Model_Pay::SUBJECT;
-        $body = Model_Pay::BODY;
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($sOrderCode);
+        $subject = Tijian_Model_Pay::SUBJECT;
+        $body = Tijian_Model_Pay::BODY;
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($sOrderCode);
         //判断订单是否存在
         if (empty($aOrder)) {
             return $this->show404('该订单不存在！', false);
@@ -56,13 +56,13 @@ class Tijian_Controller_Payment_Wxjs extends Tijian_Controller_Wx_Base
         }
         $total_fee = $aOrder['sProductAmount'];
         //判断订单是否已支付
-        if(Model_Pay::checkPay($sOrderCode)) {
+        if(Tijian_Model_Pay::checkPay($sOrderCode)) {
             return $this->show404('该订单已经支付，订单支付状态有误，请联系管理员！', false);
         }
         $aData = Payment_Weixin::jspay($this->aUser['sOpenID'],$sOrderCode, $body, $total_fee);
         $this->assign('aData',$aData);
 
-        $aOrderProduct = Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
+        $aOrderProduct = Tijian_Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
         $this->assign('aOrder', $aOrder);
         $this->assign('aOrderProduct', $aOrderProduct);
         $this->assign('sTitle', '订单支付');
@@ -75,9 +75,9 @@ class Tijian_Controller_Payment_Wxjs extends Tijian_Controller_Wx_Base
         if (empty($sOrderCode)) {
             return $this->show404('你没有订购任何产品！', false);
         }
-        $subject = Model_Pay::SUBJECT;
-        $body = Model_Pay::BODY;
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($sOrderCode);
+        $subject = Tijian_Model_Pay::SUBJECT;
+        $body = Tijian_Model_Pay::BODY;
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($sOrderCode);
         //判断订单是否存在
         if (empty($aOrder)) {
             return $this->show404('该订单不存在！', false);
@@ -88,16 +88,16 @@ class Tijian_Controller_Payment_Wxjs extends Tijian_Controller_Wx_Base
         }
         $total_fee = $aOrder['sProductAmount'];
         //判断订单是否已支付
-        if(Model_Pay::checkPay($sOrderCode)) {
+        if(Tijian_Model_Pay::checkPay($sOrderCode)) {
             return $this->show404('该升级订单已经支付，订单支付状态有误，请联系管理员！', false);
         }
-        $aOrderProduct = Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
+        $aOrderProduct = Tijian_Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
         if (empty($aOrderProduct) || count($aOrderProduct) != 1) {
             return $this->show404('该升级订单中产品信息有误，请联系管理员！', false);
         }
         $aProductAttr = json_decode($aOrderProduct[0]['sProductAttr'],true);
         //判断原卡内产品是否已预约
-        $aCardProduct = Model_OrderCardProduct::getCardProduct($aProductAttr['iCardID'], $aProductAttr['iLastProductID']);
+        $aCardProduct = Tijian_Model_OrderCardProduct::getCardProduct($aProductAttr['iCardID'], $aProductAttr['iLastProductID']);
         if (!empty($aCardProduct['iBookStatus']) && $aCardProduct['iBookStatus'] != 3) {
             return $this->show404('该升级订单中原产品已经预约，不能升级', false);
         }
@@ -106,7 +106,7 @@ class Tijian_Controller_Payment_Wxjs extends Tijian_Controller_Wx_Base
         $this->assign('aOrderProduct', $aOrderProduct);
         $this->assign('aProductAttr', $aProductAttr);
         $this->assign('aData',$aData);
-        $this->assign('sTitle', $aOrder['iOrderType'] == Model_OrderInfo::ORDERTYPE_UPGRADE ? '套餐升级支付' : '套餐支付');
+        $this->assign('sTitle', $aOrder['iOrderType'] == Tijian_Model_OrderInfo::ORDERTYPE_UPGRADE ? '套餐升级支付' : '套餐支付');
         $this->assign('iHomeIcon', 0);
     }
 
@@ -126,7 +126,7 @@ class Tijian_Controller_Payment_Wxjs extends Tijian_Controller_Wx_Base
             'sData' => json_encode($aParam, JSON_UNESCAPED_UNICODE),
             'iStatus' => 0
         );
-        return Model_Pay::logPay($aData);
+        return Tijian_Model_Pay::logPay($aData);
     }
     
     /**
@@ -142,9 +142,9 @@ class Tijian_Controller_Payment_Wxjs extends Tijian_Controller_Wx_Base
     {
         $this->logPay($data);
         //更改订单状态
-        $aOrder = Model_OrderInfo::getOrderByOrderCode($data['attach']);
-        $aOrderProduct = Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
-        Model_OrderInfo::paySeccuss($aOrder, $aOrderProduct,$data['transaction_id'], 2, $data['total_fee']/100);
+        $aOrder = Tijian_Model_OrderInfo::getOrderByOrderCode($data['attach']);
+        $aOrderProduct = Tijian_Model_OrderProduct::getProductByOrderID($aOrder['iOrderID']);
+        Tijian_Model_OrderInfo::paySeccuss($aOrder, $aOrderProduct,$data['transaction_id'], 2, $data['total_fee']/100);
         return false;
     }
 }

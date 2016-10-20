@@ -11,7 +11,7 @@ class Tijian_Controller_Cmd_Pay extends Tijian_Controller_Cmd_Base
 {
     public function checkpayAction ()
     {
-        $aList = Model_Pay::query('SELECT * FROM t_pay WHERE iStatus=0 LIMIT 100');
+        $aList = Tijian_Model_Pay::query('SELECT * FROM t_pay WHERE iStatus=0 LIMIT 100');
         $oCtl = new Controller_Payment_Weixin();
         foreach ($aList as $aRow) {
             $data = json_decode($aRow['sData'], true);

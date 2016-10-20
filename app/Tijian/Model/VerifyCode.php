@@ -19,7 +19,7 @@ class Tijian_Model_VerifyCode extends Tijian_Model_Base
     {
         $sCryptkey = Util_Common::getConf('cryptkey', 'passwd');
         $sActiveCode = md5($sCryptkey . $aUser['sEmail'] . $aUser['iType'] . time());
-        Model_VerifyCode::addData(array(
+        Tijian_Model_VerifyCode::addData(array(
             'iUserID' => $aUser['iUserID'],
             'iType' => $iType,
             'sCode' => $sActiveCode

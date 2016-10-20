@@ -42,7 +42,7 @@ class Tijian_Model_Tpa_Menu extends Tijian_Model_Tpa_Base
 
         // 权限判断
         if ($iAdminID > 0) {
-            $aMenuPermission = Model_Tpa_Permission::getMenuPermissions($iAdminID);
+            $aMenuPermission = Tijian_Model_Tpa_Permission::getMenuPermissions($iAdminID);
         }
         
         // 是否查找当前菜单

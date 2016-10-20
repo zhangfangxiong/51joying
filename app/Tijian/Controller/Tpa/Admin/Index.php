@@ -53,23 +53,23 @@ class Tijian_Controller_Tpa_Admin_Index extends Tijian_Controller_Tpa_Admin_Base
         $sPassword = $this->getParam('password');
         $bRemember = $this->getParam('remember');
         $iType = $this->getParam('type') ? intval($this->getParam('type')) : 1;//可以各个后台登陆
-        $aUser = Model_Tpa_Admin::getUserByUserName($sAdminName,$iType);
+        $aUser = Tijian_Model_Tpa_Admin::getUserByUserName($sAdminName,$iType);
         if (empty($aUser)) {
             return $this->showMsg('帐号不存在！', false);
         }
-        if ($aUser['iIsCheck'] == Model_Tpa_Admin::NOCHECK) {
+        if ($aUser['iIsCheck'] == Tijian_Model_Tpa_Admin::NOCHECK) {
             return $this->showMsg('帐号待审核！', false);
         }
-        if ($aUser['iIsCheck'] == Model_Tpa_Admin::REFUSE) {
+        if ($aUser['iIsCheck'] == Tijian_Model_Tpa_Admin::REFUSE) {
             return $this->showMsg('帐号未审核通过！', false);
         }
-        if ($aUser['iStatus'] == Model_Tpa_Admin::STATUS_TYPE_LOCK) {
+        if ($aUser['iStatus'] == Tijian_Model_Tpa_Admin::STATUS_TYPE_LOCK) {
             return $this->showMsg('帐号被禁用！', false);
         }
-        if ($aUser['iStatus'] == Model_Tpa_Admin::STATUS_TYPE_LEAVE) {
+        if ($aUser['iStatus'] == Tijian_Model_Tpa_Admin::STATUS_TYPE_LEAVE) {
             return $this->showMsg('该员工已离职！', false);
         }
-        if ($aUser['iStatus'] == Model_Tpa_Admin::STATUS_TYPE_DELETE) {
+        if ($aUser['iStatus'] == Tijian_Model_Tpa_Admin::STATUS_TYPE_DELETE) {
             return $this->showMsg('该账号已删除！', false);
         }
         if ($aUser['sPassword'] != md5(Yaf_G::getConf('cryptkey', 'cookie', 'tpa') . $sPassword)) {

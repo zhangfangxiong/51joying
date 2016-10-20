@@ -170,6 +170,6 @@ class Tijian_Controller_Api_Supplier extends Yaf_Controller
             'sResponse' => $sResponse,
         );
 
-        Model_Interfacelog::addData($data);
+        Tijian_Model_Interfacelog::addData($data);
     }
 }

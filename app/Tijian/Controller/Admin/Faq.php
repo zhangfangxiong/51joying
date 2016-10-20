@@ -22,7 +22,7 @@ class Tijian_Controller_Admin_Faq extends Tijian_Controller_Admin_Base
 		$iPage = $this->getParam('page') ? intval($this->getParam('page')) : 1;
         
         $aParam = $this->getParams();
-        $aWhere = [	'iStatus' => Model_Faq::STATUS_VALID ];
+        $aWhere = [	'iStatus' => Tijian_Model_Faq::STATUS_VALID ];
         if (!empty($aParam['sTitle'])) {
             $aWhere['sTitle LIKE'] = '%' . trim($aParam['sTitle']) . '%';
         }
@@ -47,7 +47,7 @@ class Tijian_Controller_Admin_Faq extends Tijian_Controller_Admin_Base
             $aWhere['iIsTop'] = $aParam['iIsTop'];
         }
         
-        $aFaq = Model_Faq::getList($aWhere, $iPage);
+        $aFaq = Tijian_Model_Faq::getList($aWhere, $iPage);
 
         if (!empty($aFaq['aList'])) {
             foreach ($aFaq['aList'] as $key => $value) {
@@ -76,7 +76,7 @@ class Tijian_Controller_Admin_Faq extends Tijian_Controller_Admin_Base
 				return null;
 			}
 			
-			if (Model_Faq::addData($aData) > 0) {
+			if (Tijian_Model_Faq::addData($aData) > 0) {
                 return $this->showMsg('增加成功！', true);
             } else {
                 return $this->showMsg('增加失败！', false);
@@ -94,7 +94,7 @@ class Tijian_Controller_Admin_Faq extends Tijian_Controller_Admin_Base
             if (empty($aFaq)) {
                 return null;
             }
-            if (Model_Faq::updData($aFaq) > 0) {
+            if (Tijian_Model_Faq::updData($aFaq) > 0) {
                 return $this->showMsg('修改成功！', true);
             } else {
                 return $this->showMsg('修改失败！', false);
@@ -102,7 +102,7 @@ class Tijian_Controller_Admin_Faq extends Tijian_Controller_Admin_Base
         } else {
             $id = $this->getParam('id');
             
-            $aFaq = Model_Faq::getDetail($id);
+            $aFaq = Tijian_Model_Faq::getDetail($id);
             if (empty($aFaq)) {
                 return $this->showMsg('该问答不存在！', false);
             }
@@ -167,7 +167,7 @@ class Tijian_Controller_Admin_Faq extends Tijian_Controller_Admin_Base
             if (empty($aParam['iAutoID'])) {
                 return $this->showMsg('非法操作！', false);
             }
-            if (!Model_Faq::getDetail($aParam['iAutoID'])) {
+            if (!Tijian_Model_Faq::getDetail($aParam['iAutoID'])) {
                 return $this->showMsg('问答不存在！', false);
             }
         }
