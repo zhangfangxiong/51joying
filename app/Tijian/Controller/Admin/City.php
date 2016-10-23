@@ -97,8 +97,7 @@ class Tijian_Controller_Admin_City extends Tijian_Controller_Admin_Base
         $sCityName = $this->getParam('sCityName');
         $sCityCode = $this->getParam('sCityCode');
         $iFrontShow = $this->getParam('iFrontShow');
-        $iBackendShow = $this->getParam('iBackendShow');
-        
+
         if (! Util_Validate::isLength($sCityName, 2, 20)) {
             return $this->showMsg('城市名称长度范围为2到20个字！', false);
         }
@@ -108,15 +107,11 @@ class Tijian_Controller_Admin_City extends Tijian_Controller_Admin_Base
         if (! Util_Validate::isRange($iFrontShow, 0, 1)) {
             return $this->showMsg('城市前台是否启用输入不合法！', false);
         }
-        if (! Util_Validate::isRange($iBackendShow, 0, 1)) {
-            return $this->showMsg('城市后台是否启用输入不合法！', false);
-        }
         
         $aRow = array(
             'sCityName' => $sCityName,
             'sCityCode' => $sCityCode,
             'iFrontShow' => $iFrontShow,
-            'iBackendShow' => $iBackendShow
         );
         
         return $aRow;

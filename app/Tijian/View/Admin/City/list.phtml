@@ -12,7 +12,6 @@
 				<th class="text-center">城市名称</th>
 				<th class="text-center">城市代码</th>
 				<th class="text-center">前台启用状态</th>
-				<th class="text-center">后台启用状态</th>
 				<th class="text-center">操作</th>
 			</tr>
 		</thead>
@@ -23,7 +22,6 @@
 				<td class="text-center"><?php echo $v['sCityName']?></td>
 				<td class="text-center"><?php echo $v['sCityCode']?></td>
 				<td class="text-center"><?php echo $v['iFrontShow']?'是':'否'?></td>
-				<td class="text-center"><?php echo $v['iBackendShow']?'是':'否'?></td>
 				<td class="text-center">
 					<a href="/admin/city/edit?id=<?php echo $v['iCityID']?>" title="编辑"><i
 						class="fa fa-pencil fa-large"></i></a> <a class="city_delete"

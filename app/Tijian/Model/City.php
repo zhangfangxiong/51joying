@@ -61,12 +61,6 @@ class Tijian_Model_City extends Tijian_Model_Base
             'iStatus' => 1
         );
         
-        if ($iType == 0) {
-            $aWhere['iBackendShow'] = 1;
-        } else {
-            $aWhere['iFrontShow'] = 1;
-        }
-        
         return self::getPair(array(
             'where' => $aWhere,
             // 'order' => 'iOrder ASC'

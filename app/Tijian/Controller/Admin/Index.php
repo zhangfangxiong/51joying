@@ -164,7 +164,7 @@ class Tijian_Controller_Admin_Index extends Tijian_Controller_Admin_Base
         
         $iCityID = $this->getParam('id');
         $aCity = Tijian_Model_City::getDetail($iCityID);
-        if (empty($aCity) || $aCity['iBackendShow'] == 0 || $aCity['iStatus'] == 0) {
+        if (empty($aCity) || $aCity['iStatus'] == 0) {
             return $this->showMsg('城市不存在或未开放！', false);
         }
         $aUser = Tijian_Model_User::getDetail($this->aCurrUser['iUserID']);
