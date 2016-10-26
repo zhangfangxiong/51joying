@@ -46,11 +46,11 @@
            <input type="submit" name="" value="获取验证码" id="verify_nb"  class="verify_gr">
            <input name="iPhoneCode" type="text" id="verify" placeholder="验证码" style="width:216px"/>
            <button id="login" type="button">登录</button>
-           <a href="/index/account/register" class=""><button type="button" id="forget">免费注册</button></a>
+           <a href="/tijian/index/account/register" class=""><button type="button" id="forget">免费注册</button></a>
            </div> 
            <div class="switch">
-              <a id="main_hlLogin" href="/index/account/pblogin"><button type="button">帐号登录</button></a>
-              <a id="main_hlLogin" href="/index/account/cdlogin"><button type="button">体检卡登录</button></a>
+              <a id="main_hlLogin" href="/tijian/index/account/pblogin"><button type="button">帐号登录</button></a>
+              <a id="main_hlLogin" href="/tijian/index/account/cdlogin"><button type="button">体检卡登录</button></a>
            </div>
            <div class="tl_nb"><img src="<?php echo $sStaticRoot?>/backend/img/tp_number_bl.png" /></div>
            <!-- normal end -->
@@ -72,10 +72,10 @@
 </body>
 
 <script type="text/javascript">
-var UcenterUrl = '/index/record/list';
+var UcenterUrl = '/tijian/index/record/list';
 function codeChange()
 {
-    var CodeUrl = '/index/account/sendcode/type/<?php echo $iCodeType ?>/mobile/';
+    var CodeUrl = '/tijian/index/account/sendcode/type/<?php echo $iCodeType ?>/mobile/';
     var Mobile = $('#verify').val();
     if (!Mobile) {
         alert('请输入手机号');

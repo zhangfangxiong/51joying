@@ -1,6 +1,6 @@
 <div class="pheader clearfix"><?php echo $sTypeName?>列表</div>
 <div class="pbody clearfix">
-	<form class="form-inline search-form" role="form" method="post" id="myform" action="/admin/field/list.html">
+	<form class="form-inline search-form" role="form" method="post" id="myform" action="/tijian/admin/field/list.html">
         <div class="row sousuo_now">
             <div class="form-group">
                 <label><?php echo $sTypeName?>：</label>
@@ -37,8 +37,8 @@
     			<td class="text-center"><?php echo $v['iOrder']?></td>
     			<td class="text-center"><?php echo date('Y-m-d H:i:s' , $v['iCreateTime'])?></td>
     			<td class="text-center">
-    			    <a href="/admin/field/edit?id=<?php echo $v['iAutoID']?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
-    			    <a class="field_delete" href="/admin/field/del?id=<?php echo $v['iAutoID']?>" role="button" data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a>
+    			    <a href="/tijian/admin/field/edit?id=<?php echo $v['iAutoID']?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
+    			    <a class="field_delete" href="/tijian/admin/field/del?id=<?php echo $v['iAutoID']?>" role="button" data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a>
     			</td>
     		</tr>
         <?php }?>
@@ -64,6 +64,6 @@ $('.field_delete').click(function() {
 	return false;
 });
 $('#field_add').click(function(){
-	location.href = '/admin/field/add/type/<?php echo $sType?>.html';
+	location.href = '/tijian/admin/field/add/type/<?php echo $sType?>.html';
 });
 </script>

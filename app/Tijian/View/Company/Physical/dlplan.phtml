@@ -32,7 +32,7 @@
         </div>
         
         <div class="btn-toolbar text-center col-sm-12">
-            <a  href='/company/physical/downloadplan/iPlanID/<?php echo $iPlanID ?>' class="btn btn-primary downLoadbtn">下载</a>
+            <a  href='/tijian/company/physical/downloadplan/iPlanID/<?php echo $iPlanID ?>' class="btn btn-primary downLoadbtn">下载</a>
         </div>      
     </form>
 </div>
@@ -49,7 +49,7 @@ $(function() {
         $('#content2').show();;
     });
 
-    var url = '/company/physical/downloadplan/iPlanID/<?php echo $iPlanID ?>';
+    var url = '/tijian/company/physical/downloadplan/iPlanID/<?php echo $iPlanID ?>';
 
     $('.surl').click(function(){    
         $('.downLoadbtn').attr('href', url + '/iIsAll/' + $(this).val() + '/iType/' + $('.turl:checked').val());

@@ -24,7 +24,7 @@
                     <td class="text-center"><?php echo !empty($value['sJobPhone']) ? $value['sJobPhone'] : '' ?></td>
                     <td class="text-center"><?php echo !empty($value['sMobile']) ? $value['sMobile'] : '' ?></td>
                     <td class="text-center">
-                        <a href="/admin/contecter/edit?id=<?php echo !empty($value['iID']) ? $value['iID'] : '' ?>" title="编辑"><i
+                        <a href="/tijian/admin/contecter/edit?id=<?php echo !empty($value['iID']) ? $value['iID'] : '' ?>" title="编辑"><i
                                 class="fa fa-pencil fa-large"></i></a>
                     </td>
                 </tr>
@@ -36,7 +36,7 @@
 </div>
 <script>
     $('#contecter_add').click(function () {
-        location.href = '/admin/contecter/add?id=<?php echo !empty($iUserID) ? $iUserID : 0 ?>';
+        location.href = '/tijian/admin/contecter/add?id=<?php echo !empty($iUserID) ? $iUserID : 0 ?>';
         return false;
     });
 </script>

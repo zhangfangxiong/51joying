@@ -13,7 +13,7 @@ class Tijian_Model_Tpa_Permission extends Tijian_Model_Tpa_Base
      */
     public static function delData ($iPermissionID)
     {
-        $oOrm = self::getOrm();
+        $oOrm = self::getDbh();
         $oOrm->setPKIDValue($iPermissionID);
         return $oOrm->delData();
     }

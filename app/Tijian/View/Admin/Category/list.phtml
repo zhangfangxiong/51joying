@@ -2,9 +2,9 @@
 
 <div class="pbody clearfix">
     <?php if (!$iMenu) {?>
-    <a class="text-right btn btn-default" href='/admin/category/add'>新增大类</a>
+    <a class="text-right btn btn-default" href='/tijian/admin/category/add'>新增大类</a>
     <?php } else {?>
-    <a class="text-right btn btn-default" href='/admin/category/add?type=1'>新增分类</a>
+    <a class="text-right btn btn-default" href='/tijian/admin/category/add?type=1'>新增分类</a>
     <?php } ?>
     <table class="table table-bordered table-hover">
         <thead>
@@ -29,8 +29,8 @@
                     <?php }?>
                     <td class="text-center"><?php echo $value['iCount'] ?></td>
                     <td class="text-center">
-                        <a href="/admin/category/edit?id=<?php echo $value['iAutoID'] ?>">修改</a>
-                        <a class='user_delete' href="javascript:;"  data-url="/admin/category/del?type=<?php echo $iMenu?>&&id=<?php echo $value['iAutoID']?>">删除</a>
+                        <a href="/tijian/admin/category/edit?id=<?php echo $value['iAutoID'] ?>">修改</a>
+                        <a class='user_delete' href="javascript:;"  data-url="/tijian/admin/category/del?type=<?php echo $iMenu?>&&id=<?php echo $value['iAutoID']?>">删除</a>
                     </td>
                 </tr>
             <?php }

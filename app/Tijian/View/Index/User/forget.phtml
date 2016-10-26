@@ -10,7 +10,7 @@
 				    <label class="error mobile" style="display: none"></label>
 				</div>
                 <div style="height: 42px;">
-					<span class="r"><a href="javascript:;" style="padding-left: 1em;"><img class="verifyimage" src="/verify/image/type/3" alt=""></a></span>
+					<span class="r"><a href="javascript:;" style="padding-left: 1em;"><img class="verifyimage" src="/tijian/index/verify/image/type/3" alt=""></a></span>
 					<div class="input_text">
 						<span class="l_4 png"></span>
 						<input type="text" name="imgcode" id ="imgcode" class="login_text r" placeholder="请输入验证码">
@@ -60,7 +60,7 @@ $(function() {
 			return false;
 		}
 
-		$.post('/verify/sms.html', {'mobile':mobile, 'type':9, 'code': imgcode}, function(ret){
+		$.post('/tijian/index/verify/sms.html', {'mobile':mobile, 'type':9, 'code': imgcode}, function(ret){
 			alert(ret.data);
 			$('.verifyimage').click();
 		});
@@ -81,7 +81,7 @@ $(function() {
 	    $.post(form.action?form.action:location.href, $(form).serialize(), function(ret){
 	        if (ret.status) {
 	        	alert(ret.data);
-	        	location.href = '/user/login/?type=' + type;
+	        	location.href = '/tijian/index/user/login/?type=' + type;
 			} else {
 				$(form).find('label.error').hide();
 	        	for (var key in ret.data) {

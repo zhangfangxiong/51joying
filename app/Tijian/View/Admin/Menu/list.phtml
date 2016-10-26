@@ -32,10 +32,10 @@ function makeTree($aTree, $aColor) {
     			<td align="left"><?php echo $v['sUrl'];?></td>
     			<td align="center"><?php echo $v['sIcon']?'<i class="fa '.$v['sIcon'].'"></i>':'-';?></td>
     			<td class="text-center">
-    				<a onclick="return menu_move(this,0);" href="/admin/menu/move?id=<?php echo $v['iMenuID']?>&direct=0" title="上移"><i class="fa fa-arrow-up fa-large"></i></a>
-    				<a onclick="return menu_move(this,1);" href="/admin/menu/move?id=<?php echo $v['iMenuID']?>&direct=1" title="下移"><i class="fa fa-arrow-down fa-large"></i></a>
-    				<a href="/admin/menu/edit?id=<?php echo $v['iMenuID'];?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
-    				<a href="/admin/menu/del?id=<?php echo $v['iMenuID'];?>"  role="button" class="menu_del" title="删除"><i class="fa fa-trash fa-large"></i></a>
+    				<a onclick="return menu_move(this,0);" href="/tijian/admin/menu/move?id=<?php echo $v['iMenuID']?>&direct=0" title="上移"><i class="fa fa-arrow-up fa-large"></i></a>
+    				<a onclick="return menu_move(this,1);" href="/tijian/admin/menu/move?id=<?php echo $v['iMenuID']?>&direct=1" title="下移"><i class="fa fa-arrow-down fa-large"></i></a>
+    				<a href="/tijian/admin/menu/edit?id=<?php echo $v['iMenuID'];?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
+    				<a href="/tijian/admin/menu/del?id=<?php echo $v['iMenuID'];?>"  role="button" class="menu_del" title="删除"><i class="fa fa-trash fa-large"></i></a>
     			</td>
     		</tr>
 <?php
@@ -47,7 +47,7 @@ function makeTree($aTree, $aColor) {
 ?>
 <script>
 $('#menu_add').click(function(){
-	location.href = '/admin/menu/add';
+	location.href = '/tijian/admin/menu/add';
 });
 $('.menu_del').click(function() {
 	var url = this.href;

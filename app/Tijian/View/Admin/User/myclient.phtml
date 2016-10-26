@@ -5,7 +5,7 @@
 </style>
 <div class="pheader clearfix">我的客户</div>
 <div class="pbody clearfix">
-    <form class="form-inline search-form" role="form" method="post" id="myform" action="/admin/user/myclient">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/tijian/admin/user/myclient">
         <div class="row">
 
             <div class="form-group col-sm-3">
@@ -85,13 +85,13 @@
                     <td class="text-center"><?php echo !empty($aChannel[$aUser['iChannel']]) ? $aChannel[$aUser['iChannel']] : '' ?></td>
                     <td class="text-center"><?php echo !empty($aIsCheck[$aUser['iIsCheck']]) ? $aIsCheck[$aUser['iIsCheck']] : '' ?></td>
                     <td class="text-center">
-                        <a href="/admin/user/clientinfo?id=<?php echo $aUser['iUserID'] ?>" title="查看详情"><i
+                        <a href="/tijian/admin/user/clientinfo?id=<?php echo $aUser['iUserID'] ?>" title="查看详情"><i
                                 class="fa fa-eye fa-large"></i></a>
-                        <a href="/admin/user/editclient?id=<?php echo $aUser['iUserID'] ?>" title="编辑"><i
+                        <a href="/tijian/admin/user/editclient?id=<?php echo $aUser['iUserID'] ?>" title="编辑"><i
                                 class="fa fa-pencil fa-large"></i></a>
                         <?php if ($aUser['iIsCheck'] != 0) { ?>
-                        <a href="/company/index/index/iCookieHRID/<?php echo $aUser['iUserID'] ?>">进入操作</a>
-                        <!-- <a href="/company/employer/index/iCookieHRID/<?php echo $aUser['iUserID'] ?>">进入操作</a> -->
+                        <a href="/tijian/company/index/index/iCookieHRID/<?php echo $aUser['iUserID'] ?>">进入操作</a>
+                        <!-- <a href="/tijian/company/employer/index/iCookieHRID/<?php echo $aUser['iUserID'] ?>">进入操作</a> -->
                         <?php } else {
                             echo "请先审核";
                         }?>

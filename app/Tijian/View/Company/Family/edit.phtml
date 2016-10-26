@@ -87,7 +87,7 @@
 
         <div class="btn-toolbar text-center col-sm-12">
             <button id="save" class="btn btn-primary">保存</button>
-            <a class="text-right btn btn-default" href='/company/employee/detail?iEmployeeID=<?php echo $aFamily['iEmployeeID']?>'>取消</a>
+            <a class="text-right btn btn-default" href='/tijian/company/employee/detail?iEmployeeID=<?php echo $aFamily['iEmployeeID']?>'>取消</a>
         </div>
     </form>
 </div>
@@ -99,7 +99,7 @@ $(function() {
         $.post(form.action, $(form).serialize(), function(ret){
             alert(ret.data);
             if (ret.status) {
-               location.href = '/company/employee/detail?iEmployeeID=<?php echo $aFamily['iEmployeeID']?>';
+               location.href = '/tijian/company/employee/detail?iEmployeeID=<?php echo $aFamily['iEmployeeID']?>';
             }
         }, 'json');
         return false;

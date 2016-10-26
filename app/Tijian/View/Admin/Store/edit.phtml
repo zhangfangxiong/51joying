@@ -227,10 +227,10 @@
 
 		<div class="btn-toolbar text-center col-sm-12">
 		<?php if (!empty($sOpt) && $sOpt == 'detail') { ?>
-	    	<a class="text-right btn btn-primary" href='/admin/store/edit/id/<?php echo $aStore['iStoreID']?>'>修改</a>        
+	    	<a class="text-right btn btn-primary" href='/tijian/admin/store/edit/id/<?php echo $aStore['iStoreID']?>'>修改</a>
 		<?php } else { ?>		
         	<button id="save" class="btn btn-primary">保存</button>
-        	<a id="cancel" class="btn btn-primary" href="/admin/store/list.html">取消</a>
+        	<a id="cancel" class="btn btn-primary" href="/tijian/admin/store/list.html">取消</a>
         <?php } ?>
         </div>
     </form>
@@ -287,7 +287,7 @@ $(function() {
 	$('#iCityID').on('change',function(){
         var cid = $(this).find('option:selected').val();
         $('#iRegionID').empty();
-        $.post('/admin/city/getregion', {iCityID: cid}, function(ret){
+        $.post('/tijian/admin/city/getregion', {iCityID: cid}, function(ret){
             if (ret.status) {
                 $('#iRegionID').append('<option value="0">全部</option>');
                 $.each(ret.data, function(i,e) {

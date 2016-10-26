@@ -4,6 +4,7 @@ class Tijian_Model_Customer extends Tijian_Model_Base
 {
 
     const TABLE_NAME = 't_customer_new';
+    const PK_FIELD = 'iUserID';
     
     const TYPE_USER = 1;
     const TYPE_PC = 2;

@@ -337,7 +337,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
         $aRelationLevel = Yaf_G::getConf('aRelationLevel');
         $aCreditLevel = Yaf_G::getConf('aCreditLevel');
         $aChannel = Yaf_G::getConf('aChannel');
-        $aCustomerManager = Tijian_Model_User::getPairUser(Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
+        $aCustomerManager = Tijian_Model_User::getPairUser(Tijian_Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
         $this->assign('aIsCheck', Tijian_Model_User::$aIsCheck);
@@ -375,14 +375,14 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
             $aWhere['iChannel'] = intval($aParam['iChannel']);
         }
         $aWhere['iType'] = Tijian_Model_User::TYPE_HR;
-        $aWhere['iIsCheck IN'] = [Model_User::NOCHECK, Tijian_Model_User::REFUSE];
+        $aWhere['iIsCheck IN'] = [Tijian_Model_User::NOCHECK, Tijian_Model_User::REFUSE];
 
         $aData = Tijian_Model_User::getList($aWhere, $iPage);
         $aProperty = Yaf_G::getConf('aProperty');
         $aRelationLevel = Yaf_G::getConf('aRelationLevel');
         $aCreditLevel = Yaf_G::getConf('aCreditLevel');
         $aChannel = Yaf_G::getConf('aChannel');
-        $aCustomerManager = Tijian_Model_User::getPairUser(Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
+        $aCustomerManager = Tijian_Model_User::getPairUser(Tijian_Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
         $this->assign('aIsCheck', Tijian_Model_User::$aIsCheck);
@@ -426,7 +426,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
         $aRelationLevel = Yaf_G::getConf('aRelationLevel');
         $aCreditLevel = Yaf_G::getConf('aCreditLevel');
         $aChannel = Yaf_G::getConf('aChannel');
-        $aCustomerManager = Tijian_Model_User::getPairUser(Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
+        $aCustomerManager = Tijian_Model_User::getPairUser(Tijian_Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
         $this->assign('aIsCheck', Tijian_Model_User::$aIsCheck);
@@ -462,7 +462,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
         $aIsCheck = Tijian_Model_User::$aIsCheck;
         $aParam['where']['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
         $aParam['where']['iType'] = Tijian_Model_User::TYPE_HR;
-        $aCustomerManager = Tijian_Model_User::getPairUser(Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
+        $aCustomerManager = Tijian_Model_User::getPairUser(Tijian_Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
         $aUser['iLockUser'] = ($aUser['iStatus'] == Tijian_Model_User::STATUS_TYPE_LOCK) ? 1 : 0;
         $this->assign('aIndustry', $aIndustry);
         $this->assign('aProperty', $aProperty);
@@ -854,7 +854,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
                 return $this->showMsg('该用户不存在！', false);
             }
             $sCheckStatus = $aParam['iIsCheck'] == 1 ? '通过' : '拒绝';
-            if (Model_User::updData($aParam)) {
+            if (Tijian_Model_User::updData($aParam)) {
                 if (!empty($aParam['iIfSendAccount'])) {
                     //发送账号todo
                 }
@@ -887,7 +887,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
             $aIsCheck = Tijian_Model_User::$aIsCheck;
             $aParam['where']['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
             $aParam['where']['iType'] = Tijian_Model_User::TYPE_ADMIN;
-            $aCustomerManager = Tijian_Model_User::getPairUser(Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
+            $aCustomerManager = Tijian_Model_User::getPairUser(Tijian_Model_User::TYPE_ADMIN, Tijian_Model_User::STATUS_TYPE_NORMAL);
             $aUser['iLockUser'] = ($aUser['iStatus'] == Tijian_Model_User::STATUS_TYPE_LOCK) ? 1 : 0;
             $this->assign('aIndustry', $aIndustry);
             $this->assign('aProperty', $aProperty);
@@ -1122,33 +1122,33 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
     {
         $aMenu = [
             1 => [
-                'url' => '/admin/user/clientinfo',
+                'url' => '/tijian/admin/user/clientinfo',
                 'name' => '客户信息',
             ],
             2 => [
-                'url' => '/admin/user/contecterinfo',
+                'url' => '/tijian/admin/user/contecterinfo',
                 'name' => '联系人信息',
             ],
             3 => [
-                'url' => '/admin/user/communicate',
+                'url' => '/tijian/admin/user/communicate',
                 'name' => '沟通纪录',
             ],
             4 => [
-                'url' => '/admin/user/clientproduct',
+                'url' => '/tijian/admin/user/clientproduct',
                 'name' => '定制产品',
             ],
             5 => [
-                'url' => '/admin/user/clientemployee',
+                'url' => '/tijian/admin/user/clientemployee',
                 'name' => '员工信息',
             ],
             /**
             6 => [
-                'url' => '/admin/user/clientorder',
+                'url' => '/tijian/admin/user/clientorder',
                 'name' => '订单信息',
             ],
              */
             7 => [
-                'url' => '/admin/user/clientplan',
+                'url' => '/tijian/admin/user/clientplan',
                 'name' => '体检计划',
             ]
         ];

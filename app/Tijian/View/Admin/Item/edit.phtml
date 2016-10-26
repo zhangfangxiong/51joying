@@ -110,7 +110,7 @@ $(function() {
 $('#iParentCat').on('change',function(){
     var cid = $(this).find('option:selected').val();
     $('#iCat').empty();
-    $.post('/admin/category/getsubcate', {iCateID: cid}, function(ret){
+    $.post('/tijian/admin/category/getsubcate', {iCateID: cid}, function(ret){
         console.log(ret);
         if (ret.status) {
             $('#iCat').append('<option value="0">请选择</option>');
@@ -126,7 +126,7 @@ $('#iParentCat').on('change',function(){
 
 $('#iCat').on('change',function(){
     var cid = $(this).find('option:selected').val();
-    $.post('/admin/category/getremark', {iCateID: cid}, function(ret){
+    $.post('/tijian/admin/category/getremark', {iCateID: cid}, function(ret){
         console.log(ret);
         if (ret.status) {
             $('#sMark').val('');

@@ -50,7 +50,7 @@
             </div>           
 
             <div class="form-group col-sm-5">        
-                <a class="text-right btn btn-primary" href='/admin/store/add'>新增供应商门店</a>        
+                <a class="text-right btn btn-primary" href='/tijian/admin/store/add'>新增供应商门店</a>
                 <input type="submit" id="formbtn" class="btn btn-primary" value="查询">
             </div>
         </div>
@@ -85,10 +85,10 @@
                         </select>
                     </td>
                     <td class="text-center">
-                        <a href="/admin/store/detail/id/<?php echo $aStore['iStoreID']?>">查看</a>
+                        <a href="/tijian/admin/store/detail/id/<?php echo $aStore['iStoreID']?>">查看</a>
                         <a class="user_delete" href="javascript:;" 
                         data-text= "<?php echo 1 == $aStore['iStatus'] ? '停用' : '启用';?>"
-                        data-url="/admin/store/stop?id=<?php echo $aStore['iStoreID'] ?>"><?php echo 1 == $aStore['iStatus'] ? '停用' : '<font color="red"><B>启用</B></font>';?></a>
+                        data-url="/tijian/admin/store/stop?id=<?php echo $aStore['iStoreID'] ?>"><?php echo 1 == $aStore['iStatus'] ? '停用' : '<font color="red"><B>启用</B></font>';?></a>
                     </td>
                 </tr>
             <?php }
@@ -122,13 +122,13 @@
     var score = $('.iShopLevel').change(function() {
         $id = $(this).data('id');
         $score = $(this).children('option:selected').val();
-        window.location.href='/admin/store/updscore?iStoreID='+$id+'&&iShopLevel='+$score;
+        window.location.href='/tijian/admin/store/updscore?iStoreID='+$id+'&&iShopLevel='+$score;
     });
 
     $('#iCityID').on('change',function(){
         var cid = $(this).find('option:selected').val();
         $('#iRegionID').empty();
-        $.post('/admin/city/getregion', {iCityID: cid}, function(ret){
+        $.post('/tijian/admin/city/getregion', {iCityID: cid}, function(ret){
             if (ret.status) {
                 $('#iRegionID').append('<option value="0">全部</option>');
                 $.each(ret.data, function(i,e) {

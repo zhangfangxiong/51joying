@@ -50,10 +50,10 @@ function makeTree($aTree, $aColor, $aClass) {
     			<?php }?>
     			<td align="center"><?php echo $v['sRemark'];?></td>
     			<td class="text-center">
-    				<a onclick="return type_move(this,0);" href="/admin/type/move?id=<?php echo $v['iTypeID']?>&direct=0" title="上移"><i class="fa fa-arrow-up fa-large"></i></a>
-    				<a onclick="return type_move(this,1);" href="/admin/type/move?id=<?php echo $v['iTypeID']?>&direct=1" title="下移"><i class="fa fa-arrow-down fa-large"></i></a>
-    				<a href="/admin/type/edit?id=<?php echo $v['iTypeID'];?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
-    				<a href="/admin/type/del?id=<?php echo $v['iTypeID'];?>"  role="button" class="type_del" title="删除"><i class="fa fa-trash fa-large"></i></a>
+    				<a onclick="return type_move(this,0);" href="/tijian/admin/type/move?id=<?php echo $v['iTypeID']?>&direct=0" title="上移"><i class="fa fa-arrow-up fa-large"></i></a>
+    				<a onclick="return type_move(this,1);" href="/tijian/admin/type/move?id=<?php echo $v['iTypeID']?>&direct=1" title="下移"><i class="fa fa-arrow-down fa-large"></i></a>
+    				<a href="/tijian/admin/type/edit?id=<?php echo $v['iTypeID'];?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
+    				<a href="/tijian/admin/type/del?id=<?php echo $v['iTypeID'];?>"  role="button" class="type_del" title="删除"><i class="fa fa-trash fa-large"></i></a>
     			</td>
     		</tr>
 <?php
@@ -70,7 +70,7 @@ function makeTree($aTree, $aColor, $aClass) {
 </style>
 <script>
 $('#type_add').click(function(){
-	location.href = '/admin/type/add<?php echo empty($sClass)?'.html':"/class/$sClass.html"?>';
+	location.href = '/tijian/admin/type/add<?php echo empty($sClass)?'.html':"/class/$sClass.html"?>';
 	return false;
 });
 $('.type_del').click(function() {

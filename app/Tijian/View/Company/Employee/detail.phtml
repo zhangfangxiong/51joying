@@ -101,15 +101,15 @@
     </div>
 
     <div class="text-center">
-        <a class="btn btn-default" href='/company/employee/edit/iEmployeeID/<?php echo $aEmployee['iUserID']?>'>修改</a>
-        <a class="btn btn-default" href='/company/employee/list'>返回</a>
+        <a class="btn btn-default" href='/tijian/company/employee/edit/iEmployeeID/<?php echo $aEmployee['iUserID']?>'>修改</a>
+        <a class="btn btn-default" href='/tijian/company/employee/list'>返回</a>
     </div>
 <?php }?>
 </div>
 
 <hr>
 <div class="clearfix">员工家属信息
-    <a class="text-right btn btn-default" href='/company/family/add/iEmployeeID/<?php echo $aEmployee['iUserID'];?>'>添加</a>
+    <a class="text-right btn btn-default" href='/tijian/company/family/add/iEmployeeID/<?php echo $aEmployee['iUserID'];?>'>添加</a>
     
     <div class="pbody clearfix">
         <table class="table table-bordered table-hover">
@@ -133,8 +133,8 @@
                         <td class="text-center"><?php echo $val['sDocumentNumber'] ?></td>
                         <td class="text-center"><?php echo $val['sBirthDate'] ?></td>
                         <td class="text-center">
-                            <a href="/company/family/edit?iFamilyID=<?php echo $val['iAutoID'] ?>" title="">修改</a>
-                            <a class="user_delete" href="javascript:;" data-url="/company/family/del?iFamilyID=<?php echo $val['iAutoID'] ?>" title="删除">删除</a>                  
+                            <a href="/tijian/company/family/edit?iFamilyID=<?php echo $val['iAutoID'] ?>" title="">修改</a>
+                            <a class="user_delete" href="javascript:;" data-url="/tijian/company/family/del?iFamilyID=<?php echo $val['iAutoID'] ?>" title="删除">删除</a>
                         </td>
                     </tr>
                 <?php }
@@ -150,7 +150,7 @@ $(function() {
         $.post(form.action, $(form).serialize(), function(ret){
             alert(ret.data);
             if (ret.status) {
-               location.href = '/company/employee/detail?iEmployeeID=<?php echo $aFamily['iEmployeeID']?>';
+               location.href = '/tijian/company/employee/detail?iEmployeeID=<?php echo $aFamily['iEmployeeID']?>';
             }
         }, 'json');
         return false;

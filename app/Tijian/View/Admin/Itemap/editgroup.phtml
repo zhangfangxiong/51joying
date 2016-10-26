@@ -131,8 +131,8 @@
         <?php echo !empty($aItem['aPager']) ? $aItem['aPager'] : '' ?>
 
         <div class="btn-toolbar text-center">
-            <input id='save' type="button" value="完成" data-url="/admin/itemap/editgroup/" class="btn btn-primary">
-            <button id="cancel" class="btn" onclick="location.href='/admin/itemap/group';return false;">
+            <input id='save' type="button" value="完成" data-url="/tijian/admin/itemap/editgroup/" class="btn btn-primary">
+            <button id="cancel" class="btn" onclick="location.href='/tijian/admin/itemap/group';return false;">
                 取消
             </button>
         </div>
@@ -297,7 +297,7 @@
             }
 
             $.ajax({
-                url : '/admin/itemap/ajaxedit',
+                url : '/tijian/admin/itemap/ajaxedit',
                 type : 'post',
                 data : {
                     iAddtionID : id,

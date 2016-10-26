@@ -215,7 +215,7 @@
             <input type="hidden" name="iIsCheck" id="iIsCheck" value="0">
             <button id="agree" class="btn btn-primary">通过</button>
             <button id="fefuse" class="btn btn-primary">拒绝</button>
-            <button id="cancel" class="btn" onclick="location.href='/admin/user/clientcheck/';return false;">返回</button>
+            <button id="cancel" class="btn" onclick="location.href='/tijian/admin/user/clientcheck/';return false;">返回</button>
         </div>
     </form>
 </div>
@@ -231,7 +231,7 @@
                     $.post(form.action, $(form).serialize(), function (ret) {
                         alert(ret.data);
                         if (ret.status) {
-                            location.href = '/admin/user/clientcheck/';
+                            location.href = '/tijian/admin/user/clientcheck/';
                         }
                     }, 'json');
                     return false;
@@ -247,7 +247,7 @@
                     $.post(form.action, $(form).serialize(), function (ret) {
                         alert(ret.data);
                         if (ret.status) {
-                            location.href = '/admin/user/clientcheck/';
+                            location.href = '/tijian/admin/user/clientcheck/';
                         }
                     }, 'json');
                     return false;

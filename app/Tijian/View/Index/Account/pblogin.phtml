@@ -47,13 +47,13 @@
            <!-- id="sCode" -->
           <img width="80" height="36" class="l" id="verify_nb" alt="看不清楚.点击更换" style="cursor: pointer; margin-left:5px;" src=".">
           <button id="login" type="button">登录</button>
-           <a href="/index/account/register" class=""><button type="button" id="forget">免费注册</button></a>           
-           <a href="/index/account/forgetpwd" class=""><button type="button" id="forget">忘记密码</button></a>
+           <a href="/tijian/index/account/register" class=""><button type="button" id="forget">免费注册</button></a>
+           <a href="/tijian/index/account/forgetpwd" class=""><button type="button" id="forget">忘记密码</button></a>
            </div>
 
            <div class="switch">
-              <a id="main_hlLogin" href="/index/account/cdlogin"><button type="button">体检卡登录</button></a>
-              <a id="main_hlLogin" href="/index/account/idlogin"><button type="button">身份证登录</button></a>
+              <a id="main_hlLogin" href="/tijian/index/account/cdlogin"><button type="button">体检卡登录</button></a>
+              <a id="main_hlLogin" href="/tijian/index/account/idlogin"><button type="button">身份证登录</button></a>
            </div>
            <div class="tl_nb"><img src="<?php echo $sStaticRoot?>/backend/img/tp_number_bl.png" /></div>
            
@@ -74,8 +74,8 @@
 </body>
 
 <script>
-var CodeUrl = '/index/verify/image?type=<?php echo $iCodeType ?>';
-var UcenterUrl = '/index/record/list';
+var CodeUrl = '/tijian/index/verify/image?type=<?php echo $iCodeType ?>';
+var UcenterUrl = '/tijian/index/record/list';
 function codeChange()
 {
     $('#verify_nb').attr('src',CodeUrl+'&'+Math.random());

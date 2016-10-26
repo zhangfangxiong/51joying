@@ -13,7 +13,7 @@ class Tijian_Model_Product extends Tijian_Model_Base
     {
         return self::getAll(array(
             'where' => array(
-                'iStatus>' => 0,
+                'iStatus >' => 0,
                 'iParentID' => 0,
                 'iType' => self::TYPE_BASE
             )
@@ -27,7 +27,7 @@ class Tijian_Model_Product extends Tijian_Model_Base
     {
         return self::getAll(array(
             'where' => array(
-                'iStatus>' => 0,
+                'iStatus >' => 0,
                 'iParentID IN' => $aProductID,
                 'iType' => self::TYPE_EXPAND
             )
@@ -209,7 +209,7 @@ AND (
 
         $sSQL .= ' Order by c.' . $sOrder;
         $sSQL .= ' Limit ' . ($iPage - 1) * $iPageSize . ',' . $iPageSize;
-        $aData = self::getOrm()->query($sSQL);
+        $aData = self::getDbh()->query($sSQL);
 
         foreach ($aData as $key => &$value) {
             //价格特殊处理
@@ -227,7 +227,7 @@ AND (
             $aRet ['iTotal'] = count($aRet ['aList']);
             $aRet ['aPager'] = null;
         } else {
-            $ret = self::getOrm()->query($sCntSQL);
+            $ret = self::getDbh()->query($sCntSQL);
             $aRet ['iTotal'] = $ret [0] ['total'];
             $aRet ['aPager'] = Util_Page::getPage($aRet ['iTotal'], $iPage, $iPageSize, '', self::_getNewsPageParam($aParam));
         }
@@ -258,13 +258,13 @@ AND (
 
         $sSQL .= ' Order by ' . $sOrder;
         $sSQL .= ' Limit ' . ($iPage - 1) * $iPageSize . ',' . $iPageSize;
-        $aRet ['aList'] = self::getOrm()->query($sSQL);
+        $aRet ['aList'] = self::getDbh()->query($sSQL);
         if ($iPage == 1 && count($aRet ['aList']) < $iPageSize) {
             $aRet ['iTotal'] = count($aRet ['aList']);
             $aRet ['aPager'] = null;
         } else {
             unset ($aParam ['limit'], $aParam ['order']);
-            $ret = self::getOrm()->query($sCntSQL);
+            $ret = self::getDbh()->query($sCntSQL);
             $aRet ['iTotal'] = $ret [0] ['total'];
             $aRet ['aPager'] = Util_Page::getPage($aRet ['iTotal'], $iPage, $iPageSize, '', self::_getNewsPageParam($aParam));
         }

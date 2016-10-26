@@ -7,11 +7,11 @@
         <div class="loginbox">
             <h3 class="clearfix title-login" style="text-align:right; padding-right:30px;">
                 <span class="l"></span>
-                <a id="main_hlLoginMobile" href="/index/account/identitycardlogin">身份证登录</a>
+                <a id="main_hlLoginMobile" href="/tijian/index/account/identitycardlogin">身份证登录</a>
                 <span style="font-size:14px;">/</span>
-                <a id="main_hlLogin" href="/index/account/publiclogin">用户名登录</a>
+                <a id="main_hlLogin" href="/tijian/index/account/publiclogin">用户名登录</a>
                 <span style="font-size:14px;">/</span>
-                <a id="main_hlLogin" href="/index/account/medicalcardlogin">体检卡登录</a>
+                <a id="main_hlLogin" href="/tijian/index/account/medicalcardlogin">体检卡登录</a>
             </h3>
             <!-- normal start -->
             <div class="input-container">
@@ -42,7 +42,7 @@
             </div>
             <!-- normal end -->
             <div class="login_uniom" style="padding-left:88px;">
-                <a href="/index/account/register" class="btn-forgot green">免费注册</a>
+                <a href="/tijian/index/account/register" class="btn-forgot green">免费注册</a>
                 <span style="display:none" title="1.如您是企业员工用户，请联系您公司的HR，使用贵公司的专用地址进行登录  2.如果您是网站注册用户，可点击【忘记密码】来进行密码重置操作。">无法登录？</span>
             </div>
         </div>
@@ -79,10 +79,10 @@
         timer1();
     }
 
-    var UcenterUrl = '/index/web/list';
+    var UcenterUrl = '/tijian/index/web/list';
     function codeChange()
     {
-        var CodeUrl = '/index/account/sendcode/type/<?php echo $iCodeType ?>/mobile/';
+        var CodeUrl = '/tijian/index/account/sendcode/type/<?php echo $iCodeType ?>/mobile/';
         var Mobile = $('#sMobile').val();
         if (!Mobile) {
             alert('请输入手机号');

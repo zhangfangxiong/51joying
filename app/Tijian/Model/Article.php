@@ -152,14 +152,14 @@ class Tijian_Model_Article extends Tijian_Model_Base
 
         $sSQL = 'SELECT * FROM ' . self::TABLE_NAME . $sWhere . ' ' . $sOrder . ' ' . $sLimit;
 //         echo $sSQL;exit;
-        $aRet['aList'] = self::getOrm()->query($sSQL);
+        $aRet['aList'] = self::getDbh()->query($sSQL);
         if ($iPage == 1 && count($aRet['aList']) < $iPageSize) {
             $aRet['iTotal'] = count($aRet['aList']);
             $aRet['aPager'] = null;
         } else {
             unset($aParam['limit'], $aParam['order']);
             $sCntSQL = 'SELECT COUNT(*) as total FROM ' . self::TABLE_NAME . $sWhere;
-            $ret = self::getOrm()->query($sCntSQL);
+            $ret = self::getDbh()->query($sCntSQL);
             $aRet['iTotal'] = $ret[0]['total'];
             $aRet['aPager'] = Util_Page::getPage($aRet['iTotal'], $iPage, $iPageSize, '', $aParam); // update by cjj 2015-02-13 分页增加query 参数
         }

@@ -57,7 +57,7 @@
         var iOrderID = $('#iOrderID').val();
         var sCardCode = $('#sCardCode').val();
 
-        var url = '/admin/order/updateinfo';
+        var url = '/tijian/admin/order/updateinfo';
         $.post(url, {iOrderID: iOrderID, sCardCode: sCardCode, iStatus: 1}, function (ret) {
             if (ret.data.code) {
                 location.reload();

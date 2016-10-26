@@ -146,9 +146,9 @@
 				<td class="text-center"><?php echo ((isset($v['iUpdateTime']) && $v['iUpdateTime'] > 0) ? (date('Y-m-d H:i:s' , $v['iUpdateTime'])) : '');?></td>
 				<td class="text-center"><?php echo ((isset($v['iCreateTime']) && $v['iCreateTime'] > 0) ? (date('Y-m-d H:i:s' , $v['iCreateTime'])) : '');?></td>
 				<td class="text-center">
-					<a href="/admin/finance/edit?id=<?php echo $v['iAutoID']?>"
+					<a href="/tijian/admin/finance/edit?id=<?php echo $v['iAutoID']?>"
 						title="编辑"><i class="fa fa-pencil fa-large"></i></a>
-					<!-- <a class="finance_delete" href="/admin/finance/del?id=<?php echo $v['iAutoID']?>" role="button" data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a> -->
+					<!-- <a class="finance_delete" href="/tijian/admin/finance/del?id=<?php echo $v['iAutoID']?>" role="button" data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a> -->
 				</td>
 			</tr>
         <?php }?>
@@ -158,14 +158,14 @@
 </div>
 <script>
 $("#formquerybtn").bind("click", function() {  
-    var url = "/admin/finance/list.html";  
+    var url = "/tijian/admin/finance/list.html";
     //更改form的action  
     $("#myform").attr("action", url);  
     //触发submit事件，提交表单   
     $("#myform").submit();  
 });
 $("#formquerybtn1").bind("click", function() {
-	var url = "/admin/finance/list.html";
+	var url = "/tijian/admin/finance/list.html";
 	//更改form的action
 	$("#myform1").attr("action", url);
 	//触发submit事件，提交表单
@@ -173,7 +173,7 @@ $("#formquerybtn1").bind("click", function() {
 });
 
 $("#formquerybtn2").bind("click", function() {
-	var url = "/admin/finance/list.html";
+	var url = "/tijian/admin/finance/list.html";
 	//更改form的action
 	$("#myform2").attr("action", url);
 	//触发submit事件，提交表单
@@ -181,7 +181,7 @@ $("#formquerybtn2").bind("click", function() {
 });
 
 $("#formexplodebtn").bind("click", function() {  
-    var url = "/admin/finance/explode.html";  
+    var url = "/tijian/admin/finance/explode.html";
     //更改form的action  
     $("#myform").attr("action", url);  
     //触发submit事件，提交表单   
@@ -199,6 +199,6 @@ $('.finance_delete').click(function() {
 	return false;
 });
 $('#finance_add').click(function(){
-	location.href = '/admin/finance/add';
+	location.href = '/tijian/admin/finance/add';
 });
 </script>

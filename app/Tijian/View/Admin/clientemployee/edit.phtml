@@ -131,7 +131,7 @@
     $(function () {
         $("#myform").validate({
             submitHandler: function (form) {
-                var url = '/admin/user/clientemployee/?id=<?php echo !empty($iUserID)?$iUserID:''?>';
+                var url = '/tijian/admin/user/clientemployee/?id=<?php echo !empty($iUserID)?$iUserID:''?>';
                 $.post(form.action, $(form).serialize(), function (ret) {
                     alert(ret.data);
                     if (ret.status) {

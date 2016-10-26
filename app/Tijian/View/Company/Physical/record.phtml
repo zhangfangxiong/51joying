@@ -65,7 +65,7 @@
                     <td class="text-center"><?php echo $aUser['sOperateTime'] ?></td>
                     <td class="text-center"><?php echo $aUser['sNotice'] ?></td>
                     <td class="text-center">
-                        <a href="/company/physical/detail/id/<?php echo $aUser['iAutoID'] ?>" title="查看详情">查看</a>                      
+                        <a href="/tijian/company/physical/detail/id/<?php echo $aUser['iAutoID'] ?>" title="查看详情">查看</a>
                     </td>
                 </tr>
             <?php }
@@ -113,7 +113,7 @@
         }
         select_item=select_item.substring(0,select_item.length-1);
 
-        window.location.href = '/company/physical/send/ids/'+select_item;
+        window.location.href = '/tijian/company/physical/send/ids/'+select_item;
     });
 
     $('#news_all_check').click(function() {

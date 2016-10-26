@@ -118,10 +118,10 @@
     			<td class="text-center"><?php echo $v['iPayStatus']?></td>
     			<td class="text-center"><?php echo $v['iStatus']?></td>
 				<td class="text-center">
-    			    <a href="/admin/ad/edit?id=<?php echo $v['iAdID']?>" title=""><i class="fa fa-pencil fa-large"></i></a>
-<!--    			    <a href="/admin/mediaorder/list.html?iAdID=--><?php //echo $v['iAdID']?><!--" title="资源列表"><i class="fa fa-list fa-large"></i></a>-->
-    			    <a href="/admin/ad/show.html?id=<?php echo $v['iAdID']?>" title="详情"><i class="fa fa-th-large fa-large"></i></a>
-    			     <a class="ad_delete" href="/admin/ad/del?id=<?php echo $v['iAdID']?>" role="button" data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a>
+    			    <a href="/tijian/admin/ad/edit?id=<?php echo $v['iAdID']?>" title=""><i class="fa fa-pencil fa-large"></i></a>
+<!--    			    <a href="/tijian/admin/mediaorder/list.html?iAdID=--><?php //echo $v['iAdID']?><!--" title="资源列表"><i class="fa fa-list fa-large"></i></a>-->
+    			    <a href="/tijian/admin/ad/show.html?id=<?php echo $v['iAdID']?>" title="详情"><i class="fa fa-th-large fa-large"></i></a>
+    			     <a class="ad_delete" href="/tijian/admin/ad/del?id=<?php echo $v['iAdID']?>" role="button" data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a>
     			</td>
     		</tr>
         <?php }?>
@@ -131,63 +131,63 @@
 </div>
 <script>
 $("#formquerybtn").bind("click", function() {  
-    var url = "/admin/ad/list.html";  
+    var url = "/tijian/admin/ad/list.html";
     //更改form的action  
     $("#myform").attr("action", url);  
     //触发submit事件，提交表单   
     $("#myform").submit();  
 });
 $("#formquerybtn1").bind("click", function() {
-	var url = "/admin/ad/list.html";
+	var url = "/tijian/admin/ad/list.html";
 	//更改form的action
 	$("#myform1").attr("action", url);
 	//触发submit事件，提交表单
 	$("#myform1").submit();
 });
 $("#formquerybtn2").bind("click", function() {
-	var url = "/admin/ad/list.html";
+	var url = "/tijian/admin/ad/list.html";
 	//更改form的action
 	$("#myform2").attr("action", url);
 	//触发submit事件，提交表单
 	$("#myform2").submit();
 });
 $("#formquerybtn1").bind("click", function() {
-	var url = "/admin/ad/list.html";
+	var url = "/tijian/admin/ad/list.html";
 	//更改form的action
 	$("#myform1").attr("action", url);
 	//触发submit事件，提交表单
 	$("#myform1").submit();
 });
 $("#formquerybtn2").bind("click", function() {
-	var url = "/admin/ad/list.html";
+	var url = "/tijian/admin/ad/list.html";
 	//更改form的action
 	$("#myform2").attr("action", url);
 	//触发submit事件，提交表单
 	$("#myform2").submit();
 });
 $("#formquerybtn3").bind("click", function() {
-	var url = "/admin/ad/list.html";
+	var url = "/tijian/admin/ad/list.html";
 	//更改form的action
 	$("#myform3").attr("action", url);
 	//触发submit事件，提交表单
 	$("#myform3").submit();
 });
 $("#formquerybtn4").bind("click", function() {
-	var url = "/admin/ad/list.html";
+	var url = "/tijian/admin/ad/list.html";
 	//更改form的action
 	$("#myform4").attr("action", url);
 	//触发submit事件，提交表单
 	$("#myform4").submit();
 });
 $("#formquerybtn5").bind("click", function() {
-	var url = "/admin/ad/list.html";
+	var url = "/tijian/admin/ad/list.html";
 	//更改form的action
 	$("#myform5").attr("action", url);
 	//触发submit事件，提交表单
 	$("#myform5").submit();
 });
 $("#formexplodebtn").bind("click", function() {  
-    var url = "/admin/ad/explode.html";  
+    var url = "/tijian/admin/ad/explode.html";
     //更改form的action  
     $("#myform").attr("action", url);  
     //触发submit事件，提交表单   
@@ -205,6 +205,6 @@ $('.ad_delete').click(function() {
 	return false;
 });
 $('#ad_add').click(function(){
-	location.href = '/admin/ad/add';
+	location.href = '/tijian/admin/ad/add';
 });
 </script>

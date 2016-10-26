@@ -142,7 +142,7 @@
             arr[<?php echo $key ?>] = $('#<?php echo $key ?>_' + id).val();
         <?php $k++; }?>
         $.ajax({
-            url : '/admin/item/savename',
+            url : '/tijian/admin/item/savename',
             type : 'post',
             data : {
                 itemId : id,
@@ -180,7 +180,7 @@
 
     function submitExcel() {
         $.ajax({
-            url : '/admin/item/excelname',
+            url : '/tijian/admin/item/excelname',
             type : 'post',
             data : {
                 file : $('#sFileKeyExt').val()        

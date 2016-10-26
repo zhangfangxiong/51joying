@@ -7,7 +7,7 @@
     	<button class="btn btn-primary" id="permission_make">
     		<i class="fa fa-cloud-download"></i> 生成权限点
     	</button>
-    	<form class="form-inline" style="float: right" role="form" method="post" action="/admin/permission/list/">
+    	<form class="form-inline" style="float: right" role="form" method="post" action="/tijian/admin/permission/list/">
         	<input type="text" name="qkey" class="form-control input-sm" value="<?php echo $oRequest->getParam('qkey')?>">
         	<input type="submit" class="btn btn-primary" value="搜索">
     	</form>
@@ -30,8 +30,8 @@
     			<td><?php echo $aPermission['sPermissionName']?></td>
     			<td><?php echo $aPermission['sPath']?></td>
     			<td class="text-center">
-    			    <a href="/admin/permission/edit?id=<?php echo $aPermission['iPermissionID']?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
-    			    <a class="permission_delete" href="/admin/permission/del?id=<?php echo $aPermission['iPermissionID']?>" role="button" data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a>
+    			    <a href="/tijian/admin/permission/edit?id=<?php echo $aPermission['iPermissionID']?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
+    			    <a class="permission_delete" href="/tijian/admin/permission/del?id=<?php echo $aPermission['iPermissionID']?>" role="button" data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a>
     			</td>
     		</tr>
         <?php }?>
@@ -58,10 +58,10 @@ $('.permission_delete').click(function() {
 	return false;
 });
 $('#permission_add').click(function(){
-	location.href = '/admin/permission/add';
+	location.href = '/tijian/admin/permission/add';
 });
 $('#permission_make').click(function(){
-	$.get('/admin/permission/make', function(ret){
+	$.get('/tijian/admin/permission/make', function(ret){
 		alert(ret.data);
 	    if (ret.status) {
 		    location.reload();

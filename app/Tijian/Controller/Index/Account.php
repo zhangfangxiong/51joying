@@ -25,7 +25,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
     {
         $this->_frame = 'pcmenu.phtml';
         if (!$this->iCurrUserID) {
-            return $this->redirect('/index/account/cdlogin');
+            return $this->redirect('/tijian/index/account/cdlogin');
         }
 
         if ($this->isPost()) {
@@ -52,7 +52,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
     public function logoutAction ()
     {
         Util_Cookie::delete(Yaf_G::getConf('indexuserkey', 'cookie'));
-        $this->redirect('/index/account/cdlogin');
+        $this->redirect('/tijian/index/account/cdlogin');
     }
 
     /**
@@ -133,7 +133,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
         $aParam = $this->_getParams();
         $p_sKey = Yaf_G::getConf('cryptkey', 'register');
         $sPhoneNum = Util_Crypt::decode ($aParam['verify'], $p_sKey);//手机解密
-        if (!Util_Validate::isMobile($sPhoneNum) || !Model_User::getUserByMobile($sPhoneNum,Model_User::TYPE_USER)) {
+        if (!Util_Validate::isMobile($sPhoneNum) || !Tijian_Model_User::getUserByMobile($sPhoneNum,Tijian_Model_User::TYPE_USER)) {
             return $this->showMsg('参数有误', false);
         }
         if ($this->isPost()) {
@@ -219,14 +219,14 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             }
             if ($aCard['iUserID']) { //用户id不为空 则卡已绑定
                 Tijian_Model_CustomerNew::setCookie($aCard['iUserID']);
-                $url = '/index/record/list/';
+                $url = '/tijian/index/record/list/';
             } else {
                 $iOrderID = $aCard['iOrderID'];
                 $iCardID  = $aCard['iAutoID'];
                 if (!$iOrderID) {
                     return $this->showMsg('订单不存在!', false);
                 }
-                $url = '/order/baseinfo/type/2/id/' . $iCardID . '/pid/' . $iCardID;
+                $url = '/tijian/index/order/baseinfo/type/2/id/' . $iCardID . '/pid/' . $iCardID;
             }
             
             return $this->showMsg('登陆成功!', true, $url);

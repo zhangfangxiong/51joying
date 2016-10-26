@@ -69,12 +69,12 @@
             </div>
         <div class="btn-toolbar text-center">
             <button id="save" class="btn btn-primary">保存</button>
-            <button id="cancel" class="btn" onclick="location.href='/admin/role/list/';return false;">取消</button>
+            <button id="cancel" class="btn" onclick="location.href='/tijian/admin/role/list/';return false;">取消</button>
         </div>
     </form>
 </div>
 <script>
-    var url = '<?php echo isset($aRole['iRoleID']) ? '/admin/role/edit/id/'.$aRole['iRoleID'].'/' : '/admin/role/add/'?>';
+    var url = '<?php echo isset($aRole['iRoleID']) ? '/tijian/admin/role/edit/id/'.$aRole['iRoleID'].'/' : '/tijian/admin/role/add/'?>';
     $(function () {
         $('.mopenbtn').click(function () {
             var ptr = $(this).parent();
@@ -105,7 +105,7 @@
                 $.post(form.action, $(form).serialize(), function (ret) {
                     alert(ret.data);
                     if (ret.status) {
-                        location.href = '/admin/role/list/';
+                        location.href = '/tijian/admin/role/list/';
                     }
                 }, 'json');
                 return false;

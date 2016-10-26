@@ -5,7 +5,7 @@
 </style>
 <div class="pheader clearfix">全部客户</div>
 <div class="pbody clearfix">
-    <form class="form-inline search-form" role="form" method="post" id="myform" action="/admin/user/clientlist">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/tijian/admin/user/clientlist">
         <div class="row">
 
             <div class="form-group col-sm-3">
@@ -87,9 +87,9 @@
                     <td class="text-center"><?php echo !empty($aIsCheck[$aUser['iIsCheck']]) ? $aIsCheck[$aUser['iIsCheck']] : '' ?></td>
                     <td class="text-center"><?php echo !empty($aCustomerManager[$aUser['iCustomerManager']]) ? $aCustomerManager[$aUser['iCustomerManager']] : '' ?></td>
                     <td class="text-center">
-                        <a href="/admin/user/clientinfo?id=<?php echo $aUser['iUserID'] ?>" title="查看详情"><i
+                        <a href="/tijian/admin/user/clientinfo?id=<?php echo $aUser['iUserID'] ?>" title="查看详情"><i
                                 class="fa fa-eye fa-large"></i></a>
-                        <a href="/admin/user/editclient?id=<?php echo $aUser['iUserID'] ?>" title="编辑"><i
+                        <a href="/tijian/admin/user/editclient?id=<?php echo $aUser['iUserID'] ?>" title="编辑"><i
                                 class="fa fa-pencil fa-large"></i></a>
                         <!--<a class="user_delete" href="javascript:;" data-url="/admin/user/del?id=<?php echo $aUser['iUserID'] ?>" title="删除"><i
                                 class="fa fa-trash fa-large"></i></a>-->

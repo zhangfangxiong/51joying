@@ -2,7 +2,7 @@
 <div class="pbody clearfix">
     <hr>
     <div class="btn-toolbar list-toolbar">
-        <a href="/admin/news/list.html">返回列表</a>
+        <a href="/tijian/admin/news/list.html">返回列表</a>
         <div style="float:right">
             <label> 排序方式：</label>
             <select class="input-sm" id="sOrder">
@@ -31,8 +31,8 @@
                 <td><?php echo $v['iType']==1?'广告主':'自媒体'?></td>
                 <td class="text-center"><?php echo $v['sEmail']?></td>
 <!--                <td class="text-center">-->
-<!--                    <a href="/admin/news/show?id=--><?php //echo $v['NewsId']?><!--" title="查看"><i class="fa fa-pencil fa-large"></i></a>-->
-<!--                    <a class="user_delete" href="/admin/user/del?id=--><?php //echo $aUser['iAdminID']?><!--" title="删除"><i class="fa fa-trash fa-large"></i></a>-->
+<!--                    <a href="/tijian/admin/news/show?id=--><?php //echo $v['NewsId']?><!--" title="查看"><i class="fa fa-pencil fa-large"></i></a>-->
+<!--                    <a class="user_delete" href="/tijian/admin/user/del?id=--><?php //echo $aUser['iAdminID']?><!--" title="删除"><i class="fa fa-trash fa-large"></i></a>-->
 <!--                </td>-->
             </tr>
         <?php }?>
@@ -49,7 +49,7 @@
 <script>
     $(function () {
         $('#user_add').click(function(){
-            location.href = '/admin/news/add.html';
+            location.href = '/tijian/admin/news/add.html';
         });
     })
 

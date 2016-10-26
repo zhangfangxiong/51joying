@@ -5,7 +5,7 @@
 </style>
 <div class="pheader clearfix">个人用户账号</div>
 <div class="pbody clearfix">
-    <form class="form-inline search-form" role="form" method="post" id="myform" action="/admin/user/userlist/">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/tijian/admin/user/userlist/">
         <div class="row">
 
             <div class="form-group col-sm-3">
@@ -48,8 +48,8 @@
                     <td class="text-center"><?php echo !empty($value['sCompanyName']) ? $value['sCompanyName'] : '' ?></td>
                     <td class="text-center"><?php echo !empty($aStatus[$value['iStatus']]) ? $aStatus[$value['iStatus']] : '' ?></td>
                     <td class="text-center">
-                        <a class="user_lock" href="javascript:;" data-url="/admin/user/lockuser?id=<?php echo $value['iUserID'] ?>">账号<span><?php echo ($value['iStatus'] == Tijian_Model_User::STATUS_TYPE_LOCK) ? '解锁' : '锁定';?></span></a>
-                        <a class="user_reset" href="javascript:;" data-url="/admin/user/resetuserpwd?id=<?php echo $value['iUserID'] ?>">密码重置</a>
+                        <a class="user_lock" href="javascript:;" data-url="/tijian/admin/user/lockuser?id=<?php echo $value['iUserID'] ?>">账号<span><?php echo ($value['iStatus'] == Tijian_Model_User::STATUS_TYPE_LOCK) ? '解锁' : '锁定';?></span></a>
+                        <a class="user_reset" href="javascript:;" data-url="/tijian/admin/user/resetuserpwd?id=<?php echo $value['iUserID'] ?>">密码重置</a>
                     </td>
                 </tr>
             <?php }

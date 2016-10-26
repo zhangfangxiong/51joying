@@ -5,7 +5,7 @@
 </style>
 <div class="pheader clearfix">员工列表</div>
 <div class="pbody clearfix">
-    <form class="form-inline search-form" role="form" method="post" id="myform" action="/company/employee/list">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/tijian/company/employee/list">
         <div class="row">
 
             <div class="form-group col-sm-3">
@@ -50,10 +50,10 @@
                     <?php } ?>
                 </select>              
                 
-                <a class="text-right btn btn-default" href='/company/employee/add'>添加员工</a>
-                <a class="text-right btn btn-default" href='/company/excel/importemployee'>导入</a>
-                <a class="text-right btn btn-default" href='/company/excel/export'>导出</a>
-                <a class="text-right btn btn-default" href='/company/mail/setmultimail'>批量发送账号</a>
+                <a class="text-right btn btn-default" href='/tijian/company/employee/add'>添加员工</a>
+                <a class="text-right btn btn-default" href='/tijian/company/excel/importemployee'>导入</a>
+                <a class="text-right btn btn-default" href='/tijian/company/excel/export'>导出</a>
+                <a class="text-right btn btn-default" href='/tijian/company/mail/setmultimail'>批量发送账号</a>
                 <a id="batch_transfer" class="text-right btn btn-default">批量转移员工</a>
                 <input type="submit" id="formbtn" class="btn btn-primary" value="查询">
             </div>
@@ -85,8 +85,8 @@
                     <td class="text-center"><?php echo $aUser['sMobile'] ?></td>
                     <td class="text-center"><?php echo $aLevel[$aUser['iJobGradeID']] ?></td>
                     <td class="text-center">
-                        <a href="/company/employee/detail?iEmployeeID=<?php echo $aUser['iUserID'] ?>" title="查看详情">查看</a>
-                        <a href="/company/mail/setmail?employeeId=<?php echo $aUser['iUserID'] ?>" title="发送账号">发送账号</a>                        
+                        <a href="/tijian/company/employee/detail?iEmployeeID=<?php echo $aUser['iUserID'] ?>" title="查看详情">查看</a>
+                        <a href="/tijian/company/mail/setmail?employeeId=<?php echo $aUser['iUserID'] ?>" title="发送账号">发送账号</a>
                     </td>
                 </tr>
             <?php }
@@ -147,7 +147,7 @@
 
     $('#tSave').click(function() {
         $.ajax({
-            url : '/company/employee/transfer',
+            url : '/tijian/company/employee/transfer',
             type : 'post',
             data : {
                 employeeIds : $('#ids').val(),

@@ -92,7 +92,7 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
         if (!empty($aParam['page'])) {
         	unset($aParam['page']);
         }
-        
+
 		$aList = Tijian_Model_Item::getList($aParam, $page, 'iUpdateTime DESC');
 		foreach ($aList['aList'] as $key => $value) {
 			$aList['aList'][$key]['sCost'] = 0;
@@ -173,9 +173,9 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
 
 			$type = intval($this->getParam('type'));
 			if (1 == $type) {
-				$url = '/admin/itemap/list';
+				$url = '/tijian/admin/itemap/list';
 			} else {
-				$url = '/admin/item/list';
+				$url = '/tijian/admin/item/list';
 			}
 
 			$this->assign('sUrl', $url);

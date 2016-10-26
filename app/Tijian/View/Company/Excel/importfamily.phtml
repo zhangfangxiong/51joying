@@ -18,7 +18,7 @@
 
         <div class="btn-toolbar text-center col-sm-12">
             <button id="save" class="btn btn-primary">确定导入</button>
-            <a class="text-right btn btn-default" href='/company/employee/list'>取消</a>
+            <a class="text-right btn btn-default" href='/tijian/company/employee/list'>取消</a>
         </div>
     </form>
 </div>
@@ -36,7 +36,7 @@ $(function() {
         $.post(form.action, $(form).serialize(), function(ret){
             alert(ret.data);
             if (ret.status) {
-               location.href = '/company/employee/list';
+               location.href = '/tijian/company/employee/list';
             }
         }, 'json');
         return false;

@@ -106,8 +106,8 @@
 <!--    				<a href="/admin/finance/list.html?iUserID=--><?php //echo $aUser['iUserID']?><!--" title="财务列表"><i class="fa fa-list fa-large"></i></a>-->
 <!--    				<a href="/admin/mediaorder/list.html?iUserID=--><?php //echo $aUser['iUserID']?><!--" title="资源订单列表"><i class="fa fa-list-ol fa-large"></i></a>-->
 <!--    				<a href="/admin/ad/list.html?iUserID=--><?php //echo $aUser['iUserID']?><!--" title="广告列表"><i class="fa fa-list-ul fa-large"></i></a>-->
-    			    <a href="/admin/member/edit.html?id=<?php echo $aUser['iUserID']?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
-    			    <a class="member_delete" href="/admin/member/del?id=<?php echo $aUser['iUserID']?>" title="删除"><i class="fa fa-trash fa-large"></i></a>
+    			    <a href="/tijian/admin/member/edit.html?id=<?php echo $aUser['iUserID']?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
+    			    <a class="member_delete" href="/tijian/admin/member/del?id=<?php echo $aUser['iUserID']?>" title="删除"><i class="fa fa-trash fa-large"></i></a>
     			</td>
     		</tr>
         <?php }?>
@@ -117,14 +117,14 @@
 </div>
 <script>
 $("#formquerybtn").bind("click", function() {  
-    var url = "/admin/member/list.html";  
+    var url = "/tijian/admin/member/list.html";
     //更改form的action  
     $("#myform").attr("action", url);  
     //触发submit事件，提交表单   
     $("#myform").submit();  
 });
 $("#formexplodebtn").bind("click", function() {  
-    var url = "/admin/member/explode.html";  
+    var url = "/tijian/admin/member/explode.html";
     //更改form的action  
     $("#myform").attr("action", url);  
     //触发submit事件，提交表单   
@@ -149,6 +149,6 @@ $('.member_delete').click(function() {
 	return false;
 });
 $('#member_add').click(function(){
-	location.href = '/admin/member/add';
+	location.href = '/tijian/admin/member/add';
 });
 </script>

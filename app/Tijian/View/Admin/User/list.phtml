@@ -5,7 +5,7 @@
 </style>
 <div class="pheader clearfix">员工列表</div>
 <div class="pbody clearfix">
-    <form class="form-inline search-form" role="form" method="post" id="myform" action="/admin/user/list">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/tijian/admin/user/list">
         <div class="row">
 
             <div class="form-group col-sm-3">
@@ -80,10 +80,10 @@
                     <td class="text-center"><?php echo !empty($aUser['sJobTitleName']) ? $aUser['sJobTitleName'] : '' ?></td>
                     <td class="text-center"><?php echo !empty($aJobGradeID[$aUser['iJobGradeID']]) ? $aJobGradeID[$aUser['iJobGradeID']] : '' ?></td>
                     <td class="text-center">
-                        <a href="/admin/user/edit?id=<?php echo $aUser['iUserID'] ?>" title="编辑"><i
+                        <a href="/tijian/admin/user/edit?id=<?php echo $aUser['iUserID'] ?>" title="编辑"><i
                                 class="fa fa-pencil fa-large"></i></a>
                         <!--
-                        <a class="user_delete" href="javascript:;" data-url="/admin/user/del?id=<?php echo $aUser['iUserID'] ?>" title="删除"><i
+                        <a class="user_delete" href="javascript:;" data-url="/tijian/admin/user/del?id=<?php echo $aUser['iUserID'] ?>" title="删除"><i
                                 class="fa fa-trash fa-large"></i></a>
                                 -->
                     </td>
@@ -109,7 +109,7 @@
         }
     });
     $('#user_add').click(function () {
-        location.href = '/admin/user/add';
+        location.href = '/tijian/admin/user/add';
         return false;
     });
 </script>

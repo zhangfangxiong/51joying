@@ -23,9 +23,9 @@
 				<td class="text-center"><?php echo $v['sCityCode']?></td>
 				<td class="text-center"><?php echo $v['iFrontShow']?'是':'否'?></td>
 				<td class="text-center">
-					<a href="/admin/city/edit?id=<?php echo $v['iCityID']?>" title="编辑"><i
+					<a href="/tijian/admin/city/edit?id=<?php echo $v['iCityID']?>" title="编辑"><i
 						class="fa fa-pencil fa-large"></i></a> <a class="city_delete"
-						href="/admin/city/del?id=<?php echo $v['iCityID']?>" role="button"
+						href="/tijian/admin/city/del?id=<?php echo $v['iCityID']?>" role="button"
 						data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a>
 				</td>
 			</tr>
@@ -48,6 +48,6 @@ $('.city_delete').click(function() {
 	return false;
 });
 $('#city_add').click(function(){
-	location.href = '/admin/city/add';
+	location.href = '/tijian/admin/city/add';
 });
 </script>

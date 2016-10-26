@@ -50,7 +50,7 @@ class Tijian_Controller_Company_Base extends Tijian_Controller_Admin_Base
  			]]);
 
  			if (!$row) {
- 				$this->redirect('/admin/user/myclient');
+ 				$this->redirect('/tijian/admin/user/myclient');
  			}
 
  			Util_Cookie::set('iHrID', $this->enterpriseId, '86400 * 7');

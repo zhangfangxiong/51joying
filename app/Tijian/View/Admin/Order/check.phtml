@@ -1,6 +1,6 @@
 <div class="pheader clearfix">体检数据核对</div>
 <div class="pbody clearfix">
-    <form class="form-inline search-form" role="form" method="post" id="myform" action="/admin/order/check">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/tijian/admin/order/check">
         <div class="form-group col-sm-12">
             <div class="col-sm-3">
                 <label style="width: 100px">公司名称：</label>
@@ -101,7 +101,7 @@
                        class="form-control laydatetime" format="YYYY-MM-DD" name="sOptEndDate" style="width: 120px">
             </div>
             <div class="col-sm-6" style="text-align:right">
-                <label><a href="/admin/order/errorlist" style="color:red;padding-right:20px">预约报错预警：<?php echo !empty($iError) ? $iError : 0;?></a></label>
+                <label><a href="/tijian/admin/order/errorlist" style="color:red;padding-right:20px">预约报错预警：<?php echo !empty($iError) ? $iError : 0;?></a></label>
                 <input type="submit" id="formbtn" class="btn btn-primary" value="查询">
                 <a id="sendmsg" class="btn btn-primary" href="javascript: batchsendmsg();">发送体检通知</a>
                 <a id="batchddiscard" class="btn btn-primary" href="javascript: batchddiscard();">批量作废</a>
@@ -160,7 +160,7 @@
                                                                 邮件<?php echo !empty($v['iSendEMail']) ? '已发送' : '未发送' ?>
                     </td>
                     <td class="text-center">
-                        <a href="/admin/order/detail?iCradID=<?php echo $v['iCardID'] ?>&icpID=<?php echo $v['iAutoID'] ?>" title="查看"><i
+                        <a href="/tijian/admin/order/detail?iCradID=<?php echo $v['iCardID'] ?>&icpID=<?php echo $v['iAutoID'] ?>" title="查看"><i
                                 class="fa fa-eye fa-large"></i></a>
                     </td>
                 </tr>

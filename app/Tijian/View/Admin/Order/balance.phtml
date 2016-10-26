@@ -1,6 +1,6 @@
 <div class="pheader clearfix">体检产品结算</div>
 <div class="pbody clearfix">
-    <form class="form-inline search-form" role="form" method="post" id="myform" action="/admin/order/balance.html">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/tijian/admin/order/balance.html">
         <div class="row">
             <div class="form-group col-sm-3">
                 <label style="width: 70px">请款编号：</label>
@@ -55,7 +55,7 @@
                     <td class="text-center"><?php echo !empty($v['iSMoney']) ? $v['iSMoney'] : '' ?></td>
                     <td class="text-center"><?php echo !empty($aStatus[$v['iStatus']]) ? $aStatus[$v['iStatus']] : '' ?></td>
                     <td class="text-center">
-                        <a href="/admin/balance/detail.html?id=<?php echo $v['iBalanceID'] ?>">详细</a>
+                        <a href="/tijian/admin/balance/detail.html?id=<?php echo $v['iBalanceID'] ?>">详细</a>
                     </td>
                 </tr>
             <?php }

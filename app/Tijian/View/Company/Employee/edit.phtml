@@ -153,9 +153,9 @@
             <button id="save" class="btn btn-primary">保存</button>
             <?php
             if (isset($aEmployee['iUserID']) ) {
-                $href = '/company/employee/detail?iEmployeeID=' . $aEmployee['iUserID'];
+                $href = '/tijian/company/employee/detail?iEmployeeID=' . $aEmployee['iUserID'];
             } else {
-                $href = '/company/employee/list';
+                $href = '/tijian/company/employee/list';
             }
             ?>
             <a class="text-right btn btn-default" href=<?php echo $href;?>>取消</a>

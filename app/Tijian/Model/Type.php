@@ -5,10 +5,11 @@
  * @author xiejinci
  *
  */
-class Model_Type extends Tijian_Model_Base
+class Tijian_Model_Type extends Tijian_Model_Base
 {
 
     const TABLE_NAME = 't_type';
+    const PK_FIELD = 'iTypeID';
 
     /**
      * 取得Class信息

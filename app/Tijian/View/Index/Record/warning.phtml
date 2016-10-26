@@ -31,12 +31,12 @@ $(function () {
 	});
 
 	$('#disagree').click(function() {
-		window.location.href = '/index/account/cdlogin';
+		window.location.href = '/tijian/index/account/cdlogin';
 	});
 
 	$('#agree').click(function() {
 		$.ajax({
-			url : '/index/web/confirmLogin',
+			url : '/tijian/index/web/confirmLogin',
             type : 'post',
             data : {
                 iCustomerID : $('#iCustomerID').val(),                

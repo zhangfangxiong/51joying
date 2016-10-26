@@ -152,7 +152,7 @@
 <script>
     function checkPay(sOrderCode){
         if (confirm("您确认已经付款吗？")) {
-            $.post('/admin/order/confirmPay', {ordercode: sOrderCode, iPayStatus: 2}, function (ret) {
+            $.post('/tijian/admin/order/confirmPay', {ordercode: sOrderCode, iPayStatus: 2}, function (ret) {
                 if (ret.status) {
                     alert(ret.data);
                     location.reload();
@@ -165,7 +165,7 @@
 
     function checkSent(id){
         if (confirm("您确认已经发卡吗？")) {
-            $.post('/admin/order/updateOrder', {iOrderID: id, iShippingStatus: 1}, function (ret) {
+            $.post('/tijian/admin/order/updateOrder', {iOrderID: id, iShippingStatus: 1}, function (ret) {
                 if (ret.status) {
                     alert(ret.data);
                     location.reload();

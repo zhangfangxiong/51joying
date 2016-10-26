@@ -4,6 +4,7 @@ class Tijian_Model_City extends Tijian_Model_Base
 {
 
     const TABLE_NAME = 't_city';
+    const PK_FIELD = 'iCityID';
     
     const TYPE_FRONT = 1;
     

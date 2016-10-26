@@ -1,6 +1,6 @@
 <div class="pheader clearfix">员工列表</div>
 <div class="pbody clearfix">
-<form class="form-inline search-form" role="form" method="post" id="myform" action="/Employee/user/list.html">
+<form class="form-inline search-form" role="form" method="post" id="myform" action="/tijian/Employee/user/list.html">
         <div class="row sousuo_now">
             <div class="form-group">
                 <label>帐号：</label>
@@ -76,8 +76,8 @@
     			<td class="text-center"><?php echo ((isset($v['iUpdateTime']) && $v['iUpdateTime'] > 0) ? (date('Y-m-d H:i:s' , $v['iUpdateTime'])) : '');?></td>
     			<td class="text-center"><?php echo ((isset($v['iCreateTime']) && $v['iCreateTime'] > 0) ? (date('Y-m-d H:i:s' , $v['iCreateTime'])) : '');?></td>
     			<td class="text-center">
-    			    <a href="/Employee/price/edit?id=<?php echo $v['iAutoID']?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
-    			    <a class="price_delete" href="/Employee/price/del?id=<?php echo $v['iAutoID']?>" role="button" data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a>
+    			    <a href="/tijian/Employee/price/edit?id=<?php echo $v['iAutoID']?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
+    			    <a class="price_delete" href="/tijian/Employee/price/del?id=<?php echo $v['iAutoID']?>" role="button" data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a>
     			</td>
     		</tr>
         <?php }?>
@@ -100,6 +100,6 @@ $('.price_delete').click(function() {
 	return false;
 });
 $('#price_add').click(function(){
-	location.href = '/Employee/price/add';
+	location.href = '/tijian/Employee/price/add';
 });
 </script>

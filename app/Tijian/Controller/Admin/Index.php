@@ -78,11 +78,11 @@ class Tijian_Controller_Admin_Index extends Tijian_Controller_Admin_Base
     {
         $type = $this->getParam('admintype');
         if ($type == 2) {
-            $logout = '/admin/hrlogin';
+            $logout = $this->aLoginType[$type]['url'];
         } else if ($type == 4) {
-            $logout = '/admin/supplierlogin';
+            $logout = $this->aLoginType[$type]['url'];
         } else {
-            $logout = '/admin/login';
+            $logout = $this->aLoginType[1]['url'];
         }
 
         Util_Cookie::delete(Yaf_G::getConf('authkey', 'cookie'));

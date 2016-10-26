@@ -37,7 +37,7 @@ $('#confirm').click(function(){
 		$('#newpass').focus();
 		return false;
 	}
-	$.post('/admin/user/chgpwd', {'oldpass':$('#oldpass').val().trim(), 'newpass':$('#newpass').val().trim()}, function(ret){
+	$.post('/tijian/admin/user/chgpwd', {'oldpass':$('#oldpass').val().trim(), 'newpass':$('#newpass').val().trim()}, function(ret){
 	    alert(ret.data);
 	    $('#oldpass').focus();
 	}, 'json');

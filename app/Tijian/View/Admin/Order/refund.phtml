@@ -1,12 +1,12 @@
 <div class="pheader clearfix">体检卡购买记录</div>
 <div class="pbody clearfix">
 	<ul class="nav nav-tabs">
-	    <li role="presentation" <?php echo $aParam['type'] == 0 ? 'class="active"' : '' ?>><a href="<?php echo $aParam['type'] == 0  ? 'javascript:;' : '/admin/order/refund/type/0.html' ?>">未处理</a></li>
-	    <li role="presentation" <?php echo $aParam['type'] == 1 ? 'class="active"' : '' ?>><a href="<?php echo $aParam['type'] == 1 ? 'javascript:;' : '/admin/order/refund/type/1.html' ?>">已处理</a></li>
+	    <li role="presentation" <?php echo $aParam['type'] == 0 ? 'class="active"' : '' ?>><a href="<?php echo $aParam['type'] == 0  ? 'javascript:;' : '/tijian/admin/order/refund/type/0.html' ?>">未处理</a></li>
+	    <li role="presentation" <?php echo $aParam['type'] == 1 ? 'class="active"' : '' ?>><a href="<?php echo $aParam['type'] == 1 ? 'javascript:;' : '/tijian/admin/order/refund/type/1.html' ?>">已处理</a></li>
 	</ul>
 </div>
 <div class="pbody clearfix">
-    <form class="form-inline search-form" role="form" method="post" id="myform" action="/admin/order/refund/">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/tijian/admin/order/refund/">
         <input type="hidden" name="type" value="<?php echo intval($aParam['type']);?>" />
         <div class="row">
             <div class="form-group col-sm-3">
@@ -90,7 +90,7 @@
 </div>
 <script type="text/javascript">
     function checkrefund(id,type){
-        var url = '/admin/order/refundcheck';
+        var url = '/tijian/admin/order/refundcheck';
         var data = {icpID: id,type:type};
         var msg = type == 1 ? '允许退款' : '拒绝退款';
 

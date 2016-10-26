@@ -5,7 +5,7 @@
 </style>
 <div class="pheader clearfix">客户审核</div>
 <div class="pbody clearfix">
-    <form class="form-inline search-form" role="form" method="post" id="myform" action="/admin/user/clientcheck">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/tijian/admin/user/clientcheck">
         <div class="row">
 
             <div class="form-group col-sm-3">
@@ -85,7 +85,7 @@
                     <td class="text-center"><?php echo !empty($aIsCheck[$aUser['iIsCheck']]) ? $aIsCheck[$aUser['iIsCheck']] : '' ?></td>
                     <td class="text-center"><?php echo !empty($aUser['sRemark']) ? $aUser['sRemark'] : '' ?></td>
                     <td class="text-center">
-                        <a href="/admin/user/clientCheckDetail?id=<?php echo $aUser['iUserID'] ?>" title="查看详情"><i
+                        <a href="/tijian/admin/user/clientCheckDetail?id=<?php echo $aUser['iUserID'] ?>" title="查看详情"><i
                                 class="fa fa-pencil fa-large"></i></a>
                     </td>
                 </tr>

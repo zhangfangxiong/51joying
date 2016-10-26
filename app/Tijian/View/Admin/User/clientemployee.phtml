@@ -75,7 +75,7 @@
                     <td class="text-center"><?php echo !empty($value['sJobTitleName'])?$value['sJobTitleName']:''?></td>
                     <td class="text-center"><?php echo !empty($value['sIdentityCard']) ? $value['sIdentityCard'] : '' ?></td>
                     <td class="text-center">
-                        <a href="/admin/clientemployee/edit?id=<?php echo $value['iUserID'] ?>" title="编辑"><i
+                        <a href="/tijian/admin/clientemployee/edit?id=<?php echo $value['iUserID'] ?>" title="编辑"><i
                                 class="fa fa-pencil fa-large"></i></a>
                     </td>
                 </tr>
@@ -87,7 +87,7 @@
 </div>
 <script>
     $('#user_add').click(function () {
-        location.href = '/admin/clientemployee/add?id=<?php echo !empty($aUser['iUserID']) ? $aUser['iUserID'] : '' ?>';
+        location.href = '/tijian/admin/clientemployee/add?id=<?php echo !empty($aUser['iUserID']) ? $aUser['iUserID'] : '' ?>';
         return false;
     });
 </script>

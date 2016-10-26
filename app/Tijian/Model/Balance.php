@@ -24,7 +24,7 @@ class Tijian_Model_Balance extends Tijian_Model_Base
     	$sSQL = 'SELECT b.*,s.sTypeName as sSupplierName FROM ' . self::TABLE_NAME . ' AS b
     			 LEFT JOIN t_type AS s ON s.iTypeID=b.iSupplierID
     			' . $sWhere . ' ' . $sOrder . ' ' . $sLimit;
-    	$aRet['aList'] = self::getOrm()->query($sSQL);
+    	$aRet['aList'] = self::getDbh()->query($sSQL);
     	if ($iPage == 1 && count($aRet['aList']) < $iPageSize) {
     		$aRet['iTotal'] = count($aRet['aList']);
     		$aRet['aPager'] = null;
@@ -32,7 +32,7 @@ class Tijian_Model_Balance extends Tijian_Model_Base
     		unset($aParam['limit'], $aParam['order']);
     		$sCntSQL = 'SELECT COUNT(*) FROM ' . self::TABLE_NAME . ' AS b
     			 LEFT JOIN t_type AS s ON s.iTypeID=b.iSupplierID' . $sWhere;
-    		$ret = self::getOrm()->query($sCntSQL);
+    		$ret = self::getDbh()->query($sCntSQL);
     		$aRet['iTotal'] = $ret[0]['total'];
     		$aRet['aPager'] = Util_Page::getPage($aRet['iTotal'], $iPage, $iPageSize, '', $aParam); // update by cjj 2015-02-13 分页增加query 参数
     	}

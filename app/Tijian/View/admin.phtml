@@ -51,7 +51,7 @@
                             </a>
                             <ul class="dropdown-menu user-menu">
                                 <?php if ($aCurrUser['iType'] == 1) { ?>
-                                <li><a href="/admin/user/chgpwd">修改密码</a></li>                                
+                                <li><a href="/tijian/admin/user/chgpwd">修改密码</a></li>
                                 <?php } ?>
                                 <?php 
                                     if ($aCurrUser['iType'] == 1) {
@@ -64,7 +64,7 @@
                                         $type = 4;   
                                     }
                                 ?>
-                                <li><a href="/admin/logout/admintype/<?php echo $type ?>">登出</a></li>
+                                <li><a href="/tijian/admin/index/logout/admintype/<?php echo $type ?>">登出</a></li>
                             </ul>
                         </li>
                     </ul>

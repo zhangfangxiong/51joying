@@ -29,10 +29,10 @@
     			<?php if ($aClass['sDiy3']){?><td align="center"><?php echo $v['sDiy3'];?></td><?php }?>
     			<?php if ($aClass['sRemark']){?><td align="center"><?php echo $v['sRemark'];?></td><?php }?>
     			<td class="text-center">
-    				<a onclick="return type_move(this,0);" href="/admin/front/move.html?id=<?php echo $v['iAutoID']?>&direct=0" title="上移"><i class="fa fa-arrow-up fa-large"></i></a>
-    				<a onclick="return type_move(this,1);" href="/admin/front/move.html?id=<?php echo $v['iAutoID']?>&direct=1" title="下移"><i class="fa fa-arrow-down fa-large"></i></a>
-    				<a href="/admin/front/edit.html?id=<?php echo $v['iAutoID'];?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
-    				<a href="/admin/front/del.html?id=<?php echo $v['iAutoID'];?>" role="button" class="type_del" title="删除"><i class="fa fa-trash fa-large"></i></a>
+    				<a onclick="return type_move(this,0);" href="/tijian/admin/front/move.html?id=<?php echo $v['iAutoID']?>&direct=0" title="上移"><i class="fa fa-arrow-up fa-large"></i></a>
+    				<a onclick="return type_move(this,1);" href="/tijian/admin/front/move.html?id=<?php echo $v['iAutoID']?>&direct=1" title="下移"><i class="fa fa-arrow-down fa-large"></i></a>
+    				<a href="/tijian/admin/front/edit.html?id=<?php echo $v['iAutoID'];?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
+    				<a href="/tijian/admin/front/del.html?id=<?php echo $v['iAutoID'];?>" role="button" class="type_del" title="删除"><i class="fa fa-trash fa-large"></i></a>
     			</td>
     		</tr>
         <?php }?>
@@ -44,7 +44,7 @@
 </style>
 <script>
 $('#type_add').click(function(){
-	location.href = '/admin/front/add<?php echo empty($sClass)?'.html':"/class/$sClass.html"?>';
+	location.href = '/tijian/admin/front/add<?php echo empty($sClass)?'.html':"/class/$sClass.html"?>';
 	return false;
 });
 $('.type_del').click(function() {

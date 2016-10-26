@@ -127,7 +127,7 @@ class Tijian_Model_Physical_Product extends Tijian_Model_Base
     			 LEFT JOIN t_physical_plan AS pp ON pp.iAutoID=p.iPlanID 
     			 LEFT JOIN t_user AS u ON s.iUserID=u.iUserID AND u.iType=3
     			' . $sWhere . ' ' . $sOrder . ' ' . $sLimit;
-    	$aRet['aList'] = self::getOrm()->query($sSQL);
+    	$aRet['aList'] = self::getDbh()->query($sSQL);
     	if ($iPage == 1 && count($aRet['aList']) < $iPageSize) {
     		$aRet['iTotal'] = count($aRet['aList']);
     		$aRet['aPager'] = null;
@@ -136,7 +136,7 @@ class Tijian_Model_Physical_Product extends Tijian_Model_Base
     		$sCntSQL = 'SELECT COUNT(*) FROM ' . self::TABLE_NAME . ' AS p
     			 LEFT JOIN t_store AS s ON s.iStoreID=p.iStoreID
     			 LEFT JOIN t_user AS u ON s.iUserID=u.iUserID AND u.iType=3 ' . $sWhere;
-    		$ret = self::getOrm()->query($sCntSQL);
+    		$ret = self::getDbh()->query($sCntSQL);
     		$aRet['iTotal'] = $ret[0]['total'];
     		$aRet['aPager'] = Util_Page::getPage($aRet['iTotal'], $iPage, $iPageSize, '', $aParam);
     	}
@@ -167,7 +167,7 @@ class Tijian_Model_Physical_Product extends Tijian_Model_Base
     			 LEFT JOIN t_user AS c ON p.iHRID=c.iUserID
     			 LEFT JOIN t_user AS u ON s.iUserID=u.iUserID AND u.iType=3
     			' . $sWhere . ' ' . $sOrder . ' ' . $sLimit;
-    	$aRet['aList'] = self::getOrm()->query($sSQL);
+    	$aRet['aList'] = self::getDbh()->query($sSQL);
     	if ($iPage == 1 && count($aRet['aList']) < $iPageSize) {
     		$aRet['iTotal'] = count($aRet['aList']);
     		$aRet['aPager'] = null;
@@ -176,7 +176,7 @@ class Tijian_Model_Physical_Product extends Tijian_Model_Base
     		$sCntSQL = 'SELECT COUNT(*) FROM ' . self::TABLE_NAME . ' AS p 
     			 LEFT JOIN t_store AS s ON s.iStoreID=p.iStoreID
     			 LEFT JOIN t_user AS u ON s.iUserID=u.iUserID AND u.iType=3 ' . $sWhere;
-    		$ret = self::getOrm()->query($sCntSQL);
+    		$ret = self::getDbh()->query($sCntSQL);
     		$aRet['iTotal'] = $ret[0]['total'];
     		$aRet['aPager'] = Util_Page::getPage($aRet['iTotal'], $iPage, $iPageSize, '', $aParam);
     	}

@@ -36,7 +36,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 		if ($type == 2) {
 
 		} else if (!$this->aUser['iUserID']) {
-			return $this->redirect('/index/account/logout');
+			return $this->redirect('/tijian/index/account/logout');
 		}
 	}
 
@@ -81,9 +81,9 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 
 					if ($value['iPayStatus'] == 1) {
 						$aOrder['aList'][$key]['sDesc'] = '查看订单';
-						$aOrder['aList'][$key]['sLink'] = '/order/cardorder/id/'.$value['iOrderID'];
+						$aOrder['aList'][$key]['sLink'] = '/tijian/index/order/cardorder/id/'.$value['iOrderID'];
 					} else {
-						$sLink = '/order/cardinfo/id/'.$value['iOrderID'];
+						$sLink = '/tijian/index/order/cardinfo/id/'.$value['iOrderID'];
 						$aOrder['aList'][$key]['sLink'] = $sLink;
 						$aOrder['aList'][$key]['sDesc'] = '查看订单并支付';
 					}
@@ -150,9 +150,9 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 
 		if ($type == 2) {
 			// $url = '/index/record/list/';
-			$url = '/index/web/list/';
+			$url = '/tijian/index/web/list/';
 		} else {
-			$url = '/index/order/list/';
+			$url = '/tijian/index/order/list/';
 		}
 		$aCard = Tijian_Model_OrderCard::getDetail($id);
 		if (!$id || !$aCard) {
@@ -174,8 +174,8 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 		$aProduct = Tijian_Model_UserProductBase::getUserProductBase($pid, $aCard['iCompanyID'], 2, $this->aUser['iChannelID']);
 
 		
-		$eaurl = '/order/buyfourth/type/2/id/'.$id.'/pid/'.$pid.'/sid/'.$aCardProduct['iStoreID'];
-		$caurl = '/order/cancel/id/'.$id.'/pid/'.$pid;
+		$eaurl = '/tijian/index/order/buyfourth/type/2/id/'.$id.'/pid/'.$pid.'/sid/'.$aCardProduct['iStoreID'];
+		$caurl = '/tijian/index/order/cancel/id/'.$id.'/pid/'.$pid;
 
 		if ($aCard['iPhysicalType'] == 1) {
 			$aSupplier = Yaf_G::getConf('aHasApi', 'suppliers');
@@ -280,7 +280,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 				Tijian_Model_CustomerNew::setCookie($data['iUserID']);
 			}
 
-			$url = '/order/buynext/id/' . $id . '/pid/' . $pid;
+			$url = '/tijian/index/order/buynext/id/' . $id . '/pid/' . $pid;
 			if ($plan == 1) {
 				$url .= '/plan/' . $plan;
 			}
@@ -289,7 +289,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 			if ($from == 2) {
 				$upid = $this->getParam('upid');
 				$sid = $this->getParam('sid');
-				$url = '/order/buyfourth/id/' . $id . '/pid/' . $pid . '/sid/' . $sid . '/upid/' . $upid;
+				$url = '/tijian/index/order/buyfourth/id/' . $id . '/pid/' . $pid . '/sid/' . $sid . '/upid/' . $upid;
 			}
 
 			return $this->showMsg('保存成功', true, $url);
@@ -316,7 +316,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 				$aEmployee = Tijian_Model_CustomerNew::getDetail($aCard['iUserID']);
 			}
 			if ($aCard['iAutoID'] != $id) {
-				$this->redirect('/index/account/logout');
+				$this->redirect('/tijian/index/account/logout');
 			}
 
 			$this->assign('aCard', $aCard);
@@ -390,10 +390,10 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 		];
 		$aCardProduct = Tijian_Model_OrderCardProduct::getAll(['where' => $where]);
 		if (!$aCard || !$aCardProduct) {
-			return $this->redirect('/index/record/list/');
+			return $this->redirect('/tijian/index/record/list/');
 		}
 		if ($aCardProduct['iLastProductID'] >0 && $aCardProduct['iBookStatus'] == 6 && $aCardProduct['iCheckRefund'] == 0) {
-			return $this->redirect('/index/record/list/');
+			return $this->redirect('/tijian/index/record/list/');
 		}
 
 		foreach ($aCardProduct as $key => &$value) {
@@ -402,8 +402,8 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 			$value['sPDesc'] = $aProduct['sRemark'];
 			$value['sPImg'] = $aProduct['sImage'] ? Util_Uri::getDFSViewURL($aProduct['sImage']) : '';
 			list($value['sPSCnt'], $value['sPCnt']) = $this->getStoreAndPersonNumber($value['iProductID']);
-			$value['sNextUrl'] = '/order/buythird/id/' . $id . '/pid/' . $value['iProductID'];
-			$value['sPPUrl'] = '/index/web/planproductdetail/id/' . $id . '/pid/' . $value['iProductID'];
+			$value['sNextUrl'] = '/tijian/index/order/buythird/id/' . $id . '/pid/' . $value['iProductID'];
+			$value['sPPUrl'] = '/tijian/index/web/planproductdetail/id/' . $id . '/pid/' . $value['iProductID'];
 		}
 
 		$this->assign('aOP', $aCardProduct);
@@ -423,7 +423,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
             return $this->show404('参数不全', false);
         }
         if (!empty($aParam['id']) && empty($aParam['pid'])) {
-        	return $this->redirect('/order/buynext/id/'.$id, false);
+        	return $this->redirect('/tijian/index/order/buynext/id/'.$id, false);
         }
         $aCard = Tijian_Model_OrderCard::getDetail($aParam['id']);
         if (empty($aCard)) {
@@ -533,7 +533,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 		$this->assign('aStore', $aStore);
 
 		$this->assignUrl($id, $pid);
-		$this->assign('sBaseInfoUrl', '/order/baseinfo/id/' . $id . '/pid/' . $pid);
+		$this->assign('sBaseInfoUrl', '/tijian/index/order/baseinfo/id/' . $id . '/pid/' . $pid);
 		if ($upid) {
 			$this->assign('sBaseInfoUrl', '');
 		}
@@ -553,14 +553,14 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 		$id = $aParam['id'];
 		$pid = $aParam['pid'];
 		$sid = $aParam['sid'];
-		$url = '/order/buyfourth/id/'.$id.'/pid/'.$pid.'/sid/'.$sid;
+		$url = '/tijian/index/order/buyfourth/id/'.$id.'/pid/'.$pid.'/sid/'.$sid;
 		if (!empty($aParam['upid'])) {
         	$aUProduct = Tijian_Model_Product::getDetail($aParam['upid']);
         	$sProductName = $aUProduct['sProductName'];
         	$this->assign('sProductName', $sProductName);
-   			$this->assign('sBaseInfoUrl2', '/order/baseinfo/from/2/id/' . $id . '/pid/' . $pid . '/sid/' . $sid  . '/upid/' . $aParam['upid']);
+   			$this->assign('sBaseInfoUrl2', '/tijian/index/order/baseinfo/from/2/id/' . $id . '/pid/' . $pid . '/sid/' . $sid  . '/upid/' . $aParam['upid']);
 		} else {
-			$this->assign('sBaseInfoUrl2', '/order/baseinfo/from/2/id/' . $id . '/pid/' . $pid . '/sid/' . $sid);
+			$this->assign('sBaseInfoUrl2', '/tijian/index/order/baseinfo/from/2/id/' . $id . '/pid/' . $pid . '/sid/' . $sid);
 		}
         if (empty($aParam['id']) || empty($aParam['sid']) || empty($aParam['pid'])) {
             return $this->show404('参数不全', false);
@@ -628,7 +628,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
                 if (!empty($aCardProduct['iOrderID'])) {
                     $aOrder = Tijian_Model_OrderInfo::getDetail($aCardProduct['iOrderID']);
                     if (!empty($aOrder['sOrderCode'])) {
-                        return $this->showMsg('确认去支付', true, '/order/orderpay/ordercode/' . $aOrder['sOrderCode']);
+                        return $this->showMsg('确认去支付', true, '/tijian/index/order/orderpay/ordercode/' . $aOrder['sOrderCode']);
                     }
                 }
                 //入库操作
@@ -657,7 +657,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
                         $aOrderCardProductParam['iOrderID'] = $iOrderID;
                         if (Tijian_Model_OrderCardProduct::updData($aOrderCardProductParam)) {
                             Tijian_Model_OrderInfo::commit();
-                            return $this->showMsg('确认去支付', true, '/order/orderpay/ordercode/' . $sOrderCode);
+                            return $this->showMsg('确认去支付', true, '/tijian/index/order/orderpay/ordercode/' . $sOrderCode);
                         } else {
                             Tijian_Model_OrderInfo::rollback();
                             return $this->show404('卡产品状态更新失败，请稍后重试！', false);
@@ -675,7 +675,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
                 if (!empty($aCardProduct['iPayOrderID'])) {
                     $aOrder = Tijian_Model_OrderInfo::getDetail($aCardProduct['iPayOrderID']);
                     if (!empty($aOrder['sOrderCode'])) {
-                        return $this->showMsg('确认去支付', true, '/order/orderpay/ordercode/' . $aOrder['sOrderCode']);
+                        return $this->showMsg('确认去支付', true, '/tijian/index/order/orderpay/ordercode/' . $aOrder['sOrderCode']);
                     }
                 }
                 if (($aCard['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT_PLAN || $aCard['iOrderType'] == Tijian_Model_OrderCard::ORDERTYPE_PRODUCT) && $aCard['iPayType'] == Tijian_Model_OrderCard::PAYTYPE_COMPANY) {
@@ -739,7 +739,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
                         if (Tijian_Model_OrderCardProduct::updData($aOrderCardProductParam)) {
                             Tijian_Model_OrderInfo::commit();
                             // return $this->show404('upgrade', false, $sOrderCode);
-                            return $this->showMsg('确认去支付', true, '/order/orderpay/ordercode/' . $sOrderCode);
+                            return $this->showMsg('确认去支付', true, '/tijian/index/order/orderpay/ordercode/' . $sOrderCode);
                         } else {
                             Tijian_Model_OrderInfo::rollback();
                             return $this->show404('卡产品状态更新失败，请稍后重试！', false);
@@ -806,9 +806,9 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
                         // if ($aCardProductParam['iPreStatus'] = 1) {
                         if (!empty($aHasApiConf[$aSupplier['sCode']])) {
                         	Tijian_Model_OrderCardProduct::sendMailMsg($aCardProduct['iAutoID'], $this->iCurrUserID);
-	                        return $this->show404('预定成功!待供应商确认后您可以去体检', true, '/order/detail/type/2/id/'.$id.'/pid/'.$pid);
+	                        return $this->show404('预定成功!待供应商确认后您可以去体检', true, '/tijian/index/order/detail/type/2/id/'.$id.'/pid/'.$pid);
 	                    } else {
-	                    	return $this->show404('预定成功!', true, '/order/result/id/'.$id.'/pid/'.$pid);	
+	                    	return $this->show404('预定成功!', true, '/tijian/index/order/result/id/'.$id.'/pid/'.$pid);
 	                    }                                                
                         // return $this->show404('预定成功!待供应商确认后您可以去体检', true, '/order/detail/type/2/id/'.$id.'/pid/'.$pid);
                     } else {
@@ -820,9 +820,9 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
                     // if ($aCardProductParam['iPreStatus'] = 1) {
                     if (!empty($aHasApiConf[$aSupplier['sCode']])) {
                     	Tijian_Model_OrderCardProduct::sendMailMsg($aCardProduct['iAutoID'], $this->iCurrUserID);
-                    	return $this->show404('预定成功!待供应商确认后您可以去体检', true, '/order/detail/type/2/id/'.$id.'/pid/'.$pid);
+                    	return $this->show404('预定成功!待供应商确认后您可以去体检', true, '/tijian/index/order/detail/type/2/id/'.$id.'/pid/'.$pid);
                     } else {
-                    	return $this->show404('预定成功!', true, '/order/result/id/'.$id.'/pid/'.$pid);	
+                    	return $this->show404('预定成功!', true, '/tijian/index/order/result/id/'.$id.'/pid/'.$pid);
                     }
                     // return $this->show404('预定成功!待供应商确认后您可以去体检', true, '/order/detail/type/2/id/'.$id.'/pid/'.$pid);
                 }
@@ -849,7 +849,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
         	if ($aStore && $aStore['iStatus']
 				&& in_array($iStoreID, $aStoreIDs)) {			
 			} else {
-				return $this->redirect('/order/buythird/id/' . $id . '/pid/' . $pid . '/sid/' . $sid);
+				return $this->redirect('/tijian/index/order/buythird/id/' . $id . '/pid/' . $pid . '/sid/' . $sid);
 			}
 
 			
@@ -940,11 +940,11 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 
 	public function assignUrl($id, $pid)
 	{
-		$this->assign('sBaseInfoUrl', '/order/baseinfo/id/' . $id . '/pid/' . $pid);
-		$this->assign('sBuyNextUrl', '/order/buynext/id/' . $id . '/pid/' . $pid);
-		$this->assign('sBuyThirdUrl', '/order/buythird/id/' . $id . '/pid/' . $pid);
-		$this->assign('sBuyFourthUrl', '/order/buyfourth/id/' . $id .'/pid/' . $pid);
-		$this->assign('sBuyLastUrl', '/order/buylast/id/' . $id . '/pid/' . $pid);
+		$this->assign('sBaseInfoUrl', '/tijian/index/order/baseinfo/id/' . $id . '/pid/' . $pid);
+		$this->assign('sBuyNextUrl', '/tijian/index/order/buynext/id/' . $id . '/pid/' . $pid);
+		$this->assign('sBuyThirdUrl', '/tijian/index/order/buythird/id/' . $id . '/pid/' . $pid);
+		$this->assign('sBuyFourthUrl', '/tijian/index/order/buyfourth/id/' . $id .'/pid/' . $pid);
+		$this->assign('sBuyLastUrl', '/tijian/index/order/buylast/id/' . $id . '/pid/' . $pid);
 	}
 
 	/*
@@ -954,11 +954,11 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
     {
         $aMenu = [            
             1 => [
-                'url' => '/index/order/list/type/1',
+                'url' => '/tijian/index/order/list/type/1',
                 'name' => '待支付的订单',
             ],
             2 => [
-                'url' => '/index/order/list/type/2',
+                'url' => '/tijian/index/order/list/type/2',
                 'name' => '已支付的订单',
             ]                    
         ];
@@ -977,7 +977,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 		$id = $this->getParam('id');
 		$aOrder = Tijian_Model_OrderInfo::getDetail($id);
 		if (!$id || !$aOrder) {
-			return $this->redirect('/index/order/list');
+			return $this->redirect('/tijian/index/order/list');
 		}
 		$this->getOrderAmount($id);
 
@@ -1025,7 +1025,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
     	$type = $this->getParam('type');
     	$aOrder = Tijian_Model_OrderInfo::getDetail($id);
     	if (!$id || !$aOrder) {
-			return $this->redirect('/index/order/list');
+			return $this->redirect('/tijian/index/order/list');
 		}
 
 		$aOrder['sPayStatus'] = $this->aPayStatus[$aOrder['iPayStatus']];
@@ -1142,7 +1142,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
                 if (Tijian_Model_OrderCardProduct::updateCardProductStatus($aParam['id'], $aParam['pid'], 1)) {
                     Tijian_Model_OrderCardProduct::commit();
                     Tijian_Model_OrderCardProduct::sendCancleMailMsg($aProduct['iAutoID'], $this->iCurrUserID, $iOrderTime);
-                    return $this->show404('取消成功', true, '/index/record/list/');
+                    return $this->show404('取消成功', true, '/tijian/index/record/list/');
                 } else {
                     Tijian_Model_OrderCardProduct::rollback();
                     return $this->show404('取消失败，请稍后再试', false);
@@ -1150,7 +1150,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
             } else {
                 Tijian_Model_OrderCardProduct::commit();
                 Tijian_Model_OrderCardProduct::sendCancleMailMsg($aProduct['iAutoID'], $this->iCurrUserID, $iOrderTime);
-                return $this->show404('取消成功', true, '/index/record/list/');
+                return $this->show404('取消成功', true, '/tijian/index/record/list/');
             }
         } else {
             Tijian_Model_OrderCardProduct::rollback();
@@ -1228,12 +1228,12 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
         }
 
         
-        $sReturnUrl = '/order/buythird/id/'.$id.'/pid/'.$pid;
-        $sUpgradeUrl = '/order/upgrade/id/'.$id.'/pid/'.$pid;
+        $sReturnUrl = '/tijian/index/order/buythird/id/'.$id.'/pid/'.$pid;
+        $sUpgradeUrl = '/tijian/index/order/upgrade/id/'.$id.'/pid/'.$pid;
         return $this->showMsg($sUpgradeUrl, true);
 
         $this->assign('aUpgrade', $aUpgrade);
-        $this->assign('sDetailUrl', '/index/web/detail/');
+        $this->assign('sDetailUrl', '/tijian/index/web/detail/');
         $this->assign('sReturnUrl', $sReturnUrl);
         $this->assign('iPID', $pid);
     }
@@ -1308,7 +1308,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
             }
         }
 
-        $sReturnUrl = '/order/buythird/id/'.$id.'/pid/'.$pid;
+        $sReturnUrl = '/tijian/index/order/buythird/id/'.$id.'/pid/'.$pid;
         $this->assign('aUpgrade', $aUpgrade);
         $this->assign('sDetailUrl', '/index/web/detail/');
         $this->assign('sReturnUrl', $sReturnUrl);

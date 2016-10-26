@@ -92,10 +92,10 @@
                     <td class="text-center"><?php echo !empty($aFaq['sIsShare']) ? $aFaq['sIsApply'] : '' ?></td>
                     <td class="text-center"><?php echo !empty($aFaq['sIsTop']) ? $aFaq['sIsTop'] : '' ?></td>
                     <td class="text-center">
-                        <a href="/admin/faq/edit?id=<?php echo $aFaq['iAutoID'] ?>">修改</a>
+                        <a href="/tijian/admin/faq/edit?id=<?php echo $aFaq['iAutoID'] ?>">修改</a>
                     </td>
                     <td class="text-center">
-                        <a href="/admin/faq/edit?id=<?php echo $aFaq['iAutoID'] ?>">预览</a>
+                        <a href="/tijian/admin/faq/edit?id=<?php echo $aFaq['iAutoID'] ?>">预览</a>
                     </td>
                 </tr>
             <?php }
@@ -120,7 +120,7 @@
         }
     });
     $('#user_add').click(function () {
-        location.href = '/admin/faq/add';
+        location.href = '/tijian/admin/faq/add';
         return false;
     });
 </script>

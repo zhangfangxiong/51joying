@@ -127,8 +127,8 @@
 </form>
 
 <script>
-    var Code2Url = '/index/Verify/sms?type=<?php echo $iCodeType2 ?>&mobile=';
-    var StepTwoUrl = '/index/web/list';
+    var Code2Url = '/tijian/index/Verify/sms?type=<?php echo $iCodeType2 ?>&mobile=';
+    var StepTwoUrl = '/tijian/index/web/list';
 
     function codeChange2()
     {
@@ -147,7 +147,7 @@
         codeChange2();
     });
 
-    var CodeUrl = '/index/verify/image?type=<?php echo $iCodeType ?>';
+    var CodeUrl = '/tijian/index/verify/image?type=<?php echo $iCodeType ?>';
     function codeChange()
     {
         $('#sCode').attr('src',CodeUrl+'&'+Math.random());

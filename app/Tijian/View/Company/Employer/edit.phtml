@@ -35,7 +35,7 @@
 
     	<div class="form-groupbtn-toolbar text-center col-sm-9">
         	<button id="save" class="btn btn-primary">保存</button>
-        	<button id="cancel"class="btn" onclick="location.href='/company/employer/index/iDeptID/<?php echo $aDept['iAutoID']?>';return false;">取消</button>
+        	<button id="cancel"class="btn" onclick="location.href='/tijian/company/employer/index/iDeptID/<?php echo $aDept['iAutoID']?>';return false;">取消</button>
         </div>
     </form>
 </div>
@@ -46,7 +46,7 @@ $(function() {
 	    $.post(form.action, $(form).serialize(), function(ret){
 	        alert(ret.data);
 	        if (ret.status) {
-	           location.href = '/company/employer?iDeptID=<?php echo $aDept['iAutoID']?>';
+	           location.href = '/tijian/company/employer?iDeptID=<?php echo $aDept['iAutoID']?>';
 	        }
 	    }, 'json');
 		return false;

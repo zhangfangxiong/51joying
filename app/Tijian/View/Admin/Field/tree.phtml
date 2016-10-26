@@ -29,7 +29,7 @@
             		</div>
                 	<div class="btn-toolbar text-center">
                     	<button id="save" class="btn btn-primary">保存</button>
-                    	<button id="cancel"class="btn btn-primary" onclick="location.href='/admin/field/tree/type/<?php echo $sType?>.html?pid=<?php echo $aField['iAutoID']?>';return false;">添加下级部门</button>
+                    	<button id="cancel"class="btn btn-primary" onclick="location.href='/tijian/admin/field/tree/type/<?php echo $sType?>.html?pid=<?php echo $aField['iAutoID']?>';return false;">添加下级部门</button>
                     </div>
             	</form>
 			</td>
@@ -64,7 +64,7 @@ $(function() {
     $('#tree').bind(
 	    'tree.click',
 	    function(event) {
-	        location.href = '/admin/field/tree/type/dept.html?id=' + event.node.id;	        
+	        location.href = '/tijian/admin/field/tree/type/dept.html?id=' + event.node.id;
 	    }
 	);
 });

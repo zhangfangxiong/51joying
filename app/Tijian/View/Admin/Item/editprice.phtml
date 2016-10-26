@@ -70,7 +70,7 @@
     </table>    
 
 <div class="btn-toolbar text-center col-sm-12">
-    <a class="text-right btn btn-default" href='/admin/item/list'>取消</a>
+    <a class="text-right btn btn-default" href='/tijian/admin/item/list'>取消</a>
 </div>
 
 <script type="text/javascript">
@@ -108,7 +108,7 @@
         sMarketPrice = $('#sMarketPrice_'+id).val();
         sChannelPrice = $('#sChannelPrice_'+id).val();
         $.ajax({
-            url : '/admin/item/saved',
+            url : '/tijian/admin/item/saved',
             type : 'post',
             data : {
                 iAutoID : id,

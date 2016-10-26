@@ -84,9 +84,9 @@
 <div class="btn-toolbar text-center col-sm-12">
     <?php 
         if(5 == $type) {
-            $href = '/admin/itemap/service';
+            $href = '/tijian/admin/itemap/service';
         } else {
-            $href = '/admin/itemap/group'; 
+            $href = '/tijian/admin/itemap/group';
         }
     ?>
     <a class="text-right btn btn-default" href='<?php echo $href?>'>取消</a>
@@ -127,7 +127,7 @@
         sMarketPrice = $('#sMarketPrice_'+id).val();
         sChannelPrice = $('#sChannelPrice_'+id).val();
         $.ajax({
-            url : '/admin/itemap/saved',
+            url : '/tijian/admin/itemap/saved',
             type : 'post',
             data : {
                 iAutoID : id,

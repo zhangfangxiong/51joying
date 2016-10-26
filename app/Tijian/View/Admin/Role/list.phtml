@@ -5,7 +5,7 @@
 </style>
 <div class="pheader clearfix">权限设定</div>
 <div class="pbody clearfix">
-    <form class="form-inline search-form" role="form" method="post" id="myform" action="/admin/role/list/">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/tijian/admin/role/list/">
         <div class="row">
 
             <div class="form-group col-sm-3">
@@ -53,12 +53,12 @@
                     <td class="text-center"><?php echo !empty($aRole['sCreateUserName']) ? $aRole['sCreateUserName'] : '' ?></td>
                     <td class="text-center"><?php echo !empty($aRole['iCreateTime']) ? date('Y-m-d H:i:s', $aRole['iCreateTime']) : '' ?></td>
                     <td class="text-center">
-                        <a href="/admin/role/edit?id=<?php echo $aRole['iRoleID'] ?>" title="编辑"><i
+                        <a href="/tijian/admin/role/edit?id=<?php echo $aRole['iRoleID'] ?>" title="编辑"><i
                                 class="fa fa-pencil fa-large"></i></a>
                         <?php if ($sHrRoleName != $aRole['sRoleName'] && $sSupplierRoleName != $aRole['sRoleName']) {
                             ?>
                             <a class="role_delete" href="javascript:;"
-                               data-url="/admin/role/del?id=<?php echo $aRole['iRoleID'] ?>" title="删除"><i
+                               data-url="/tijian/admin/role/del?id=<?php echo $aRole['iRoleID'] ?>" title="删除"><i
                                     class="fa fa-trash fa-large"></i></a>
                         <?php
                         } ?>
@@ -83,7 +83,7 @@
         }
     });
     $('#user_add').click(function () {
-        location.href = '/admin/role/add';
+        location.href = '/tijian/admin/role/add';
         return false;
     });
 </script>

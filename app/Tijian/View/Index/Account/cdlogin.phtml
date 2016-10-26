@@ -47,8 +47,8 @@
        </div> 
 
        <div class="switch">
-          <a id="main_hlLogin" href="/index/account/pblogin"><button type="button">账号登陆</button></a>
-          <a id="main_hlLogin" href="/index/account/idlogin"><button type="button">身份证登录</button></a>
+          <a id="main_hlLogin" href="/tijian/index/account/pblogin"><button type="button">账号登陆</button></a>
+          <a id="main_hlLogin" href="/tijian/index/account/idlogin"><button type="button">身份证登录</button></a>
        </div>
        <div class="tl_nb"><img src="<?php echo $sStaticRoot?>/backend/img/tp_number_bl.png" /></div>
            
@@ -69,7 +69,7 @@
 </form>
 
 <script>
-    var CodeUrl = '/index/verify/image/type/<?php echo $iCodeType ?>';
+    var CodeUrl = '/tijian/index/verify/image/type/<?php echo $iCodeType ?>';
     function codeChange()
     {
         $('#verify_nb').attr('src',CodeUrl+'&'+Math.random());

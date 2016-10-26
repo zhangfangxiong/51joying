@@ -26,7 +26,7 @@
 
         <div class="btn-toolbar text-center col-sm-12">
             <button id="save" class="btn btn-primary">发送</button>
-            <a class="text-right btn btn-default" href="/company/employee/list">返回</a>
+            <a class="text-right btn btn-default" href="/tijian/company/employee/list">返回</a>
         </div>      
     </form>
 </div>
@@ -37,7 +37,7 @@ $(function() {
         $.post(form.action, $(form).serialize(), function(ret){
             alert(ret.data);
             if (ret.status) {
-               location.href = '/company/mail/setmail?employeeId=<?php echo $aMail['employeeId']?>';             
+               location.href = '/tijian/company/mail/setmail?employeeId=<?php echo $aMail['employeeId']?>';
             }
         }, 'json');
         return false;

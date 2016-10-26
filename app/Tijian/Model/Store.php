@@ -1,8 +1,9 @@
 <?php
 
-class Model_Store extends Tijian_Model_Base
+class Tijian_Model_Store extends Tijian_Model_Base
 {
     const TABLE_NAME = 't_store';
+    const PK_FIELD = 'iStoreID';
 
     const INPORTROWSUPPERNAME = '供应商名称';//导入的格式，第一行必须叫门店名称
     const INPORTROWCITY = '城市';//导入的格式，第一行必须叫门店名称
@@ -81,7 +82,7 @@ class Model_Store extends Tijian_Model_Base
         }
 
         $sSQL .= ' Order by ' . $sOrder;
-        $aData = self::getOrm()->query($sSQL);
+        $aData = self::getDbh()->query($sSQL);
         return $aData;
     }
 
@@ -117,13 +118,13 @@ class Model_Store extends Tijian_Model_Base
         }
         $sSQL .= ' Order by ' . $sOrder;
         $sSQL .= ' Limit ' . ($iPage - 1) * $iPageSize . ',' . $iPageSize;
-        $aRet['aList'] = self::getOrm()->query($sSQL);
+        $aRet['aList'] = self::getDbh()->query($sSQL);
         if ($iPage == 1 && count($aRet['aList']) < $iPageSize) {
             $aRet['iTotal'] = count($aRet['aList']);
             $aRet['aPager'] = null;
         } else {
             unset($aParam['limit'], $aParam['order']);
-            $ret = self::getOrm()->query($sCntSQL);
+            $ret = self::getDbh()->query($sCntSQL);
             $aRet['iTotal'] = $ret[0]['total'];
             $aRet['aPager'] = Util_Page::getPage($aRet['iTotal'], $iPage, $iPageSize, '', self::_getNewsPageParam($aParam));
         }

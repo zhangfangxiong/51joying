@@ -10,7 +10,7 @@ function makeTree($aTree, $aColor) { foreach ($aTree as $v) { ?>
         <td align="left">
             <?php echo str_repeat('&nbsp;', 4*$v['iLevel'])?>
             <?php if(!empty($v['aChild'])){?><i class="fa fa-minus-square mopenbtn"></i><?php }else{?>-<?php }?>
-            <a href='/company/employer/index/iDeptID/<?php echo $v['iAutoID'];?>'><?php echo $v['sDeptName'];?></a>
+            <a href='/tijian/company/employer/index/iDeptID/<?php echo $v['iAutoID'];?>'><?php echo $v['sDeptName'];?></a>
         </td>          
     </tr>
 <?php if (!empty($v['aChild'])) {
@@ -69,10 +69,10 @@ function makeTree($aTree, $aColor) { foreach ($aTree as $v) { ?>
                                 <tr>
                                     <th></th>
                                     <td>
-                                    <a href="/company/employer/edit/iDeptID/<?php echo $iDeptID; ?>">
+                                    <a href="/tijian/company/employer/edit/iDeptID/<?php echo $iDeptID; ?>">
                                         <input type="submit" value="修改架构信息" class="btn_submit_blue">
                                     </a>
-                                    <a href="/company/employer/add/iDeptID/<?php echo $iDeptID; ?>">
+                                    <a href="/tijian/company/employer/add/iDeptID/<?php echo $iDeptID; ?>">
                                         <input type="submit" value="添加下级机构" class="btn_submit_blue">
                                     </a>
                                     </td>

@@ -70,7 +70,7 @@
                 <tr>
                     <td style="text-align: center;" colspan="2">
                         <button id="save" class="btn btn-primary">确定</button>
-                        <a href='/account/cdlogin' class="btn btn-primary">返回</a>
+                        <a href='/tijian/index/account/cdlogin' class="btn btn-primary">返回</a>
                     </td>
                 </tr>
             </table>
@@ -85,10 +85,10 @@
 </form>
 
 <script type="text/javascript">
-var UcenterUrl = '/index/web/list';
+var UcenterUrl = '/tijian/index/web/list';
 function codeChange()
 {
-    var CodeUrl = '/index/account/sendcode/type/<?php echo $iCodeType ?>/mobile/';
+    var CodeUrl = '/tijian/index/account/sendcode/type/<?php echo $iCodeType ?>/mobile/';
     var Mobile = $('#verify').text();
     if (!Mobile) {
         alert('请输入手机号');

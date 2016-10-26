@@ -66,8 +66,8 @@
                     <td class="text-center"><?php echo $aUser['sMobile'] ?></td>
                     <td class="text-center"><?php echo $aLevel[$aUser['iJobGradeID']] ?></td>
                     <td class="text-center">
-                        <a href="/company/employee/detail?iEmployeeID=<?php echo $aUser['iUserID'] ?>" title="查看详情">查看</a>
-                        <a href="/company/mail/setmail?employeeId=<?php echo $aUser['iUserID'] ?>" title="发送账号">发送账号</a>                        
+                        <a href="/tijian/company/employee/detail?iEmployeeID=<?php echo $aUser['iUserID'] ?>" title="查看详情">查看</a>
+                        <a href="/tijian/company/mail/setmail?employeeId=<?php echo $aUser['iUserID'] ?>" title="发送账号">发送账号</a>
                     </td>
                 </tr>
             <?php }?>
@@ -78,7 +78,7 @@
     	<input name="employeeIds" type="hidden" value="<?php echo $sIDs;?>"></input>
     	<div class="btn-toolbar text-center col-sm-12">
         	<button id="send" class="btn btn-primary">发送</button>
-	        <a class="text-right btn btn-default" href='/company/employee/list'>返回</a>
+	        <a class="text-right btn btn-default" href='/tijian/company/employee/list'>返回</a>
 	    </div>
     </form>
 
@@ -99,7 +99,7 @@
 <script type="text/javascript">
 $(function() {
 	$("#sIDs").validate({submitHandler: function(form) {
-        $.post('/company/mail/sendmultimail', $(form).serialize(), function(ret){
+        $.post('/tijian/company/mail/sendmultimail', $(form).serialize(), function(ret){
             alert(ret.data);
         }, 'json');
         return false;

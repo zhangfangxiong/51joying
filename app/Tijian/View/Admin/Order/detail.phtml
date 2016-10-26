@@ -176,7 +176,7 @@
 <script type="text/javascript">
     function discard(){
         var iCardID = $('#icpID').val();
-        var url = '/admin/order/discard';
+        var url = '/tijian/admin/order/discard';
         var data = {iAutoID: iCardID, iBookStatus: 4};
         if (confirm("您确认作废吗？")) {
             updateCard(url, data);
@@ -185,7 +185,7 @@
 
     function recard(){
         var iCardID = $('#icpID').val();
-        var url = '/admin/order/discard';
+        var url = '/tijian/admin/order/discard';
         var data = {iAutoID: iCardID, iBookStatus: 0};
         if (confirm("您确认激活吗？请先和供应商确认那边会同步取消预约操作，否则会出现不能预约的情况")) {
             updateCard(url, data);
@@ -194,7 +194,7 @@
 
     function activity(){
         var iCardID = $('#iCardID').val();
-        var url = '/admin/order/change';
+        var url = '/tijian/admin/order/change';
         var data = {iAutoID: iCardID, iStatus: 1};
 
         updateCard(url, data);
@@ -206,7 +206,7 @@
         reportTime.replace(/-/g,'/');
         reportTime = new Date(reportTime).getTime();
 
-        var url = '/admin/order/report';
+        var url = '/tijian/admin/order/report';
         var data = {iAutoID: icpID, iReportTime: reportTime, iBookStatus: 5};
 
         updateCard(url, data);
@@ -217,7 +217,7 @@
         var sStartDate = $('#sStartDate').val();
         var sEndDate = $('#sEndDate').val();
 
-        var url = '/admin/order/change';
+        var url = '/tijian/admin/order/change';
         var data = {iAutoID: iCardID, sStartDate: sStartDate, sEndDate: sEndDate};
 
         updateCard(url, data);
@@ -228,7 +228,7 @@
         var iPaperReport = $('#iPaperReport').val();
         var iPhysicalType = $('#iPhysicalType').val();
         var iPayType = $('#iPayType').val();
-        var url = '/admin/order/change';
+        var url = '/tijian/admin/order/change';
         var data = {iAutoID: iCardID, iPaperReport: iPaperReport, iPhysicalType: iPhysicalType, iPayType: iPayType};
 
         updateCard(url, data);

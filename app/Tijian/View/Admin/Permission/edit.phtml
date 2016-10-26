@@ -33,7 +33,7 @@
 		</div>
     	<div class="btn-toolbar text-center">
         	<button id="save" class="btn btn-primary">保存</button>
-        	<button id="cancel"class="btn" onclick="location.href='/admin/permission/list/';return false;">取消</button>
+        	<button id="cancel"class="btn" onclick="location.href='/tijian/admin/permission/list/';return false;">取消</button>
         </div>
 	</form>
 </div>
@@ -43,7 +43,7 @@ $(function() {
 	    $.post(form.action, $(form).serialize(), function(ret){
 	        alert(ret.data);
 	        if (ret.status) {
-	            location.href = '/admin/permission/list/';
+	            location.href = '/tijian/admin/permission/list/';
 	        }
 	    }, 'json');
 		return false;

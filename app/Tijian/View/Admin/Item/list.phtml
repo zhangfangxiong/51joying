@@ -85,10 +85,10 @@
                 <div>
                     <input placeholder="支持搜索单项名称或编号" name="sKeyword" type="text" value="<?php echo !empty($aParam['sKeyword'])?$aParam['sKeyword']:''?>" class="input-margin-right input-width form-control input-validate">
                     <input type="submit" id="formbtn" class="btn btn-primary" value="查询">
-                    <a class="text-right btn btn-default" href='/admin/item/import'>价格导入</a>
-                    <a class="text-right btn btn-default" href='/admin/category/list'>分类维护</a>
-                    <a class="text-right btn btn-default" href='/admin/item/add'>新增单项</a>
-                    <a class="text-right btn btn-default" href='/admin/item/namelist'>单项名称对应</a>
+                    <a class="text-right btn btn-default" href='/tijian/admin/item/import'>价格导入</a>
+                    <a class="text-right btn btn-default" href='/tijian/admin/category/list'>分类维护</a>
+                    <a class="text-right btn btn-default" href='/tijian/admin/item/add'>新增单项</a>
+                    <a class="text-right btn btn-default" href='/tijian/admin/item/namelist'>单项名称对应</a>
                 </div>
             </div>
         </div>
@@ -120,8 +120,8 @@
                         <td class="text-center"><?php echo 1 == $value['iCanWomanMarry'] ? '√' : '' ?></td>
                         <td class="text-center"><?php echo $value['sCost']?></td>
                         <td class="text-center">
-                            <a href="/admin/item/edit?id=<?php echo $value['iItemID']?>">内容</a>
-                            <a href="/admin/item/editprice?id=<?php echo $value['iItemID']?>" title="发送账号">价格</a>  
+                            <a href="/tijian/admin/item/edit?id=<?php echo $value['iItemID']?>">内容</a>
+                            <a href="/tijian/admin/item/editprice?id=<?php echo $value['iItemID']?>" title="发送账号">价格</a>
                         </td>
                     </tr>
                 <?php }

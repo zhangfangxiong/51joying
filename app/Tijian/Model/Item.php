@@ -3,6 +3,7 @@
 class Tijian_Model_Item extends Tijian_Model_Base
 {
     const TABLE_NAME = 't_item';
+    const PK_FIELD = 'iItemID';
     const INPORTROWNAME = '单项名称';//导入的格式，第一行必须叫单项名称
 
     public static function getPageList($aParam, $iPage, $sOrder = 'iUpdateTime DESC', $iPageSize = 20)
@@ -58,13 +59,13 @@ class Tijian_Model_Item extends Tijian_Model_Base
 
         $sSQL .= ' Order by ' . $sOrder;
         $sSQL .= ' Limit ' . ($iPage - 1) * $iPageSize . ',' . $iPageSize;
-        $aRet['aList'] = self::getOrm()->query($sSQL);
+        $aRet['aList'] = self::getDbh()->query($sSQL);
         if ($iPage == 1 && count($aRet['aList']) < $iPageSize) {
             $aRet['iTotal'] = count($aRet['aList']);
             $aRet['aPager'] = null;
         } else {
             unset($aParam['limit'], $aParam['order']);
-            $ret = self::getOrm()->query($sCntSQL);
+            $ret = self::getDbh()->query($sCntSQL);
             $aRet['iTotal'] = $ret[0]['total'];
             $aRet['aPager'] = Util_Page::getPage($aRet['iTotal'], $iPage, $iPageSize, '', self::_getNewsPageParam($aParam));
         }

@@ -35,8 +35,8 @@
     			<td class="text-center"><?php echo ((isset($v['iUpdateTime']) && $v['iUpdateTime'] > 0) ? (date('Y-m-d H:i:s' , $v['iUpdateTime'])) : '');?></td>
     			<td class="text-center"><?php echo ((isset($v['iCreateTime']) && $v['iCreateTime'] > 0) ? (date('Y-m-d H:i:s' , $v['iCreateTime'])) : '');?></td>
     			<td class="text-center">
-    			    <a href="/admin/badword/edit?id=<?php echo $v['iAutoID']?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
-    			    <a class="badword_delete" href="/admin/badword/del?id=<?php echo $v['iAutoID']?>" role="button" data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a>
+    			    <a href="/tijian/admin/badword/edit?id=<?php echo $v['iAutoID']?>" title="编辑"><i class="fa fa-pencil fa-large"></i></a>
+    			    <a class="badword_delete" href="/tijian/admin/badword/del?id=<?php echo $v['iAutoID']?>" role="button" data-toggle="modal" title="删除"><i class="fa fa-trash fa-large"></i></a>
     			</td>
     		</tr>
         <?php }?>

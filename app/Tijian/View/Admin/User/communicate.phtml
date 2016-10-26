@@ -25,7 +25,7 @@
 
             <div class="form-group col-sm-2">
                 <input type="submit" id="formbtn" class="btn btn-primary" value="查询">
-                <input type="button" onclick="location.href='/admin/communicate/add?id=<?php echo !empty($aUser['iUserID']) ? $aUser['iUserID'] : '' ?>';return false;" class="btn btn-primary" value="添加沟通记录">
+                <input type="button" onclick="location.href='/tijian/admin/communicate/add?id=<?php echo !empty($aUser['iUserID']) ? $aUser['iUserID'] : '' ?>';return false;" class="btn btn-primary" value="添加沟通记录">
             </div>
         </div>
     </form>
@@ -51,7 +51,7 @@
                     <td class="text-center"><?php echo !empty($aCommunicateLevel[$value['iLevel']]) ? $aCommunicateLevel[$value['iLevel']] : '' ?></td>
                     <td class="text-center"><?php echo !empty($aCommunicateResult[$value['iResult']]) ? $aCommunicateResult[$value['iResult']] : '' ?></td>
                     <td class="text-center">
-                        <a href="/admin/communicate/edit?id=<?php echo !empty($value['iID']) ? $value['iID'] : '' ?>" title="编辑"><i
+                        <a href="/tijian/admin/communicate/edit?id=<?php echo !empty($value['iID']) ? $value['iID'] : '' ?>" title="编辑"><i
                                 class="fa fa-pencil fa-large"></i></a>
                     </td>
                 </tr>

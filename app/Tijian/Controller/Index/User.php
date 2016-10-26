@@ -84,10 +84,10 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
                 }
             }
             
-            if (Model_User::getUserByEmail($aParam['sEmail'], $aParam['iType'])) {
+            if (Tijian_Model_User::getUserByEmail($aParam['sEmail'], $aParam['iType'])) {
                 $aErr['sEmail'] = '该邮箱账号已经被注册';
             }
-            if (Model_User::getUserByMobile($aParam['sMobile'], $aParam['iType'])) {
+            if (Tijian_Model_User::getUserByMobile($aParam['sMobile'], $aParam['iType'])) {
                 $aErr['sMobile'] = '手机号码已存在';
             }
             if (! empty($aErr)) {

@@ -77,7 +77,7 @@
                                     <?php echo $value['sAddress'] ?>
                                     </td>
                                     <td style="line-height: 20px; text-align: right;" rowspan="2">
-                                        <a class="btn btn-primary" href="/order/buyfourth/id/<?php echo $iCardID ?>/pid/<?php echo $iProductID ?>/sid/<?php echo $value['iStoreID'] ?>/upid/<?php echo $iUpgradeID ?>">立即预约</a>
+                                        <a class="btn btn-primary" href="/tijian/index/order/buyfourth/id/<?php echo $iCardID ?>/pid/<?php echo $iProductID ?>/sid/<?php echo $value['iStoreID'] ?>/upid/<?php echo $iUpgradeID ?>">立即预约</a>
                                         <??>
                                         <?php if (!$iUpgradeID 
                                             && (($aCard['iPayType'] == Tijian_Model_OrderCard::PAYTYPE_PERSON
@@ -130,22 +130,22 @@
 
     $('#iCityID').change(function(){ 
         cityId = $(this).children('option:selected').val();
-        window.location.href = "/order/buythird/id/"+cardId+"/pid/"+productId+"/iCityID/"+cityId+"/iSupplierID/"+supplierId+"/upid/"+upId;
+        window.location.href = "/tijian/index/order/buythird/id/"+cardId+"/pid/"+productId+"/iCityID/"+cityId+"/iSupplierID/"+supplierId+"/upid/"+upId;
     });
 
     $('#iRegionID').change(function(){ 
         regionId = $(this).children('option:selected').val();       
-        window.location.href = "/order/buythird/id/"+cardId+"/pid/"+productId+"/iCityID/"+cityId+"/iRegionID/"+regionId+"/iSupplierID/"+supplierId+"/upid/"+upId;
+        window.location.href = "/tijian/index/order/buythird/id/"+cardId+"/pid/"+productId+"/iCityID/"+cityId+"/iRegionID/"+regionId+"/iSupplierID/"+supplierId+"/upid/"+upId;
     });
 
     $('#iSupplierID').change(function(){ 
         supplierId = $(this).children('option:selected').val();
-        window.location.href = "/order/buythird/id/"+cardId+"/pid/"+productId+"/iCityID/"+cityId+"/iRegionID/"+regionId+"/iSupplierID/"+supplierId+"/upid/"+upId;
+        window.location.href = "/tijian/index/order/buythird/id/"+cardId+"/pid/"+productId+"/iCityID/"+cityId+"/iRegionID/"+regionId+"/iSupplierID/"+supplierId+"/upid/"+upId;
     });
 
     $('.upgradebtn').click(function () {
         $.ajax({
-            url : '/order/upgradecheck/id/<?php echo $iCardID ?>/pid/<?php echo $iProductID ?>',
+            url : '/tijian/index/order/upgradecheck/id/<?php echo $iCardID ?>/pid/<?php echo $iProductID ?>',
             type : 'post',
             data : {
                 id : <?php echo $iCardID ?>,
