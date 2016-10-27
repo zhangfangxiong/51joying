@@ -143,7 +143,7 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
 			return $this->showMsg($msg, $bool);
 		}
 
-		$url = '/admin/item/list';
+		$url = '/tijian/admin/item/list';
 		$this->assign('sUrl', $url);
     }
 

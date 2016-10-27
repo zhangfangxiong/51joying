@@ -25,7 +25,7 @@ $(function() {
 	    $.post(form.action?form.action:location.href, $(form).serialize(), function(ret){
 	        alert(ret.data);
 	        if (ret.status) {
-	            //location.href = '/admin/city/list/';
+	            //location.href = '/tijian/admin/city/list/';
 	        }
 	    }, 'json');
 		return false;

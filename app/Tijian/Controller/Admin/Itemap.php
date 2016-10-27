@@ -24,8 +24,8 @@ class Tijian_Controller_Admin_Itemap extends Tijian_Controller_Admin_ItemBase
 	{
 		parent::actionAfter();
 
-		$this->assign('sInsertItemUrl', '/admin/itemap/insertitem/');
-		$this->assign('sDeleteItemUrl', '/admin/itemap/deleteitem/');
+		$this->assign('sInsertItemUrl', '/tijian/admin/itemap/insertitem/');
+		$this->assign('sDeleteItemUrl', '/tijian/admin/itemap/deleteitem/');
 		$this->assign('aSex', $this->sexType);
 	}
 
@@ -173,7 +173,7 @@ class Tijian_Controller_Admin_Itemap extends Tijian_Controller_Admin_ItemBase
             $aAddition['iCreateUserID'] = $this->aCurrUser['iUserID'];
             $aAddition['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
             if ($iLastInsertID = Tijian_Model_Addtion::addData($aAddition)) {
-                $sNextUrl = '/admin/itemap/next/id/' . $iLastInsertID;
+                $sNextUrl = '/tijian/admin/itemap/next/id/' . $iLastInsertID;
                 return $this->showMsg($sNextUrl, true);
             } else {
                 return $this->showMsg('增加失败！', false);
@@ -626,15 +626,15 @@ class Tijian_Controller_Admin_Itemap extends Tijian_Controller_Admin_ItemBase
     {
         $aMenu = [
             1 => [
-                'url' => '/admin/itemap/list',
+                'url' => '/tijian/admin/itemap/list',
                 'name' => '单项加项',
             ],
             2 => [
-                'url' => '/admin/itemap/group',
+                'url' => '/tijian/admin/itemap/group',
                 'name' => '组合加项',
             ],
             3 => [
-                'url' => '/admin/itemap/service',
+                'url' => '/tijian/admin/itemap/service',
                 'name' => '服务加项',
             ]            
         ];

@@ -40,7 +40,7 @@ class Tijian_Controller_Admin_Balance extends Tijian_Controller_Admin_Base {
 	public function detailAction(){
 		$id = $this->getParam('id');
 		if (!intval($id)) {
-			$this->redirect('/admin/order/balance');
+			$this->redirect('/tijian/admin/order/balance');
 		}
 
 		$aDetail = Tijian_Model_Balance::getDetail(intval($id));
@@ -128,7 +128,7 @@ class Tijian_Controller_Admin_Balance extends Tijian_Controller_Admin_Base {
 			$this->assign('aBalance', $aDetail);
 			$this->assign('aList', $aProduct);
 		} else {
-			$this->redirect('/admin/order/balance');
+			$this->redirect('/tijian/admin/order/balance');
 		}
 	}
 	
@@ -243,7 +243,7 @@ class Tijian_Controller_Admin_Balance extends Tijian_Controller_Admin_Base {
 
 
 		} else {
-			$this->redirect('/admin/order/balance');
+			$this->redirect('/tijian/admin/order/balance');
 		}
 
 

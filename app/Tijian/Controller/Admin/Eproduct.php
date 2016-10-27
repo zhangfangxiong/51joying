@@ -1626,7 +1626,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
         $this->assign('aProduct', $aProduct);
         $this->assign('aParam', $aParam);
         $this->assign('aData', $aData);
-        $this->assign('sNextUrl', '/admin/eproduct/list/');
+        $this->assign('sNextUrl', '/tijian/admin/eproduct/list/');
         return true;
     }
 
@@ -1707,7 +1707,7 @@ class Tijian_Controller_Admin_Eproduct extends Tijian_Controller_Admin_Base
             'iStatus' => 1,
         ];
         $aCategory = Tijian_Model_Product_Category::getPair($aCatParam, 'iAutoID', 'sCateName');
-        $sNextUrl = '/admin/eproduct/addChannel/id/' . $iProductID;
+        $sNextUrl = '/tijian/admin/eproduct/addChannel/id/' . $iProductID;
         $this->assign('aCategory', $aCategory);
         $this->assign('iProductID', $iProductID);
         $this->assign('aParam', $aParam);

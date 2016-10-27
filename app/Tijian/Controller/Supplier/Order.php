@@ -58,7 +58,7 @@ class Tijian_Controller_Supplier_Order extends Tijian_Controller_Supplier_Base
 	        $this->assign('aPhysical', $aPhysical);
 	        $this->assign('iType', $type);
     	} else {
-    		$this->redirect('/admin/supplierlogin');
+    		$this->redirect('/tijian/admin/supplierlogin');
     	}
     }
 
@@ -81,9 +81,9 @@ class Tijian_Controller_Supplier_Order extends Tijian_Controller_Supplier_Base
     			$data['iPreStatus'] = 1;
     			Tijian_Model_OrderCardProduct::sendMailMsg($params['id']);
     			Tijian_Model_OrderCardProduct::updData($data);
-    			return $this->showMsg('修改成功', true, '/supplier/order/detail/type/'.$params['type']);
+    			return $this->showMsg('修改成功', true, '/tijian/supplier/order/detail/type/'.$params['type']);
     		} else {
-    			return $this->showMsg('无此信息', false, '/supplier/order/detail/type/'.$params['type']);
+    			return $this->showMsg('无此信息', false, '/tijian/supplier/order/detail/type/'.$params['type']);
     		}
 
     		return $this->showMsg('确认成功', true);
@@ -91,7 +91,7 @@ class Tijian_Controller_Supplier_Order extends Tijian_Controller_Supplier_Base
     		$id = $this->getParam('id');
 	    	$type = ($this->getParam('type') == 2) ? 2 : 1; 
 	    	if (!intval($id)) {
-	    		$this->redirect('/supplier/order/index/type'.$type);
+                $this->redirect('/tijian/supplier/order/index/type'.$type);
 	    	}
 
 	    	$aDetail = Tijian_Model_OrderCardProduct::getDetail($id);
@@ -127,7 +127,7 @@ class Tijian_Controller_Supplier_Order extends Tijian_Controller_Supplier_Base
 				$this->assign('aDetail', $aDetail);
 				$this->assign('iType', $type);
 	    	} else {
-	    		$this->redirect('/supplier/order/index/type/'.$type);
+	    		$this->redirect('/tijian/supplier/order/index/type/'.$type);
 	    	}
     	}    	
     }
@@ -230,11 +230,11 @@ class Tijian_Controller_Supplier_Order extends Tijian_Controller_Supplier_Base
     {
         $aMenu = [
             1 => [
-                'url' => '/supplier/order/index/type/1',
+                'url' => '/tijian/supplier/order/index/type/1',
                 'name' => '预订信息',
             ],
             2 => [
-                'url' => '/supplier/order/index/type/2',
+                'url' => '/tijian/supplier/order/index/type/2',
                 'name' => '退订信息',
             ]                        
         ];

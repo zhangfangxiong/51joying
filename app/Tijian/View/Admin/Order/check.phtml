@@ -202,7 +202,7 @@
         }
         select_item = select_item.substring(0, select_item.length - 1);
         if (confirm("您确认要为选中的" + count_num + "个人发送体检通知吗？")) {
-            $.post('/admin/order/batchSend', {iCardIDs: select_item}, function (ret) {
+            $.post('/tijian/admin/order/batchSend', {iCardIDs: select_item}, function (ret) {
                 if (ret.status) {
                     alert(ret.data);
                     location.reload();
@@ -229,7 +229,7 @@
         select_item = select_item.substring(0, select_item.length - 1);
         if (confirm("您确认要作废选中的" + count_num + "个体检卡吗？")) {
 
-            $.post('/admin/order/batchDiscard', {iCardIDs: select_item}, function (ret) {
+            $.post('/tijian/admin/order/batchDiscard', {iCardIDs: select_item}, function (ret) {
                 if (ret.status) {
                     alert(ret.data);
                     location.reload();

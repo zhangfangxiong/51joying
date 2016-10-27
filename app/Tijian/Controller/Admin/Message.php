@@ -14,7 +14,7 @@ class Tijian_Controller_Admin_Message extends Tijian_Controller_Admin_Base {
 			return false;
 		}
 		$this->listAction ( $sClass );
-		$this->setViewScript ( '/Admin/Message/list.phtml' );
+		$this->setViewScript ( '/tijian/Admin/Message/list.phtml' );
 	}
 	
 	/**
@@ -145,14 +145,14 @@ class Tijian_Controller_Admin_Message extends Tijian_Controller_Admin_Base {
 	 * @param unknown $sClass        	
 	 */
 	protected function _assignUrl($sClass) {
-		$this->assign ( 'sListUrl', "/admin/message/list/class/$sClass.html" );
-		$this->assign ( 'sAddUrl', "/admin/message/add/class/$sClass.html" );
-		$this->assign ( 'sEditUrl', '/admin/message/edit.html' );
-		$this->assign ( 'sDelUrl', '/admin/message/del.html' );
-		$this->assign ( 'sReviewUrl', '/admin/message/review.html' );
-		$this->assign ( 'sReplyUrl', '/admin/message/reply.html' );
-		$this->assign ( 'sPublishUrl', '/admin/message/publish.html' );
-		$this->assign ( 'sOffUrl', '/admin/message/off.html' );
+		$this->assign ( 'sListUrl', "/tijian/admin/message/list/class/$sClass.html" );
+		$this->assign ( 'sAddUrl', "/tijian/admin/message/add/class/$sClass.html" );
+		$this->assign ( 'sEditUrl', '/tijian/admin/message/edit.html' );
+		$this->assign ( 'sDelUrl', '/tijian/admin/message/del.html' );
+		$this->assign ( 'sReviewUrl', '/tijian/admin/message/review.html' );
+		$this->assign ( 'sReplyUrl', '/tijian/admin/message/reply.html' );
+		$this->assign ( 'sPublishUrl', '/tijian/admin/message/publish.html' );
+		$this->assign ( 'sOffUrl', '/tijian/admin/message/off.html' );
 		$this->assign ( 'aStatus', Util_Common::getConf ( 'aReviewStatus' ) );
 	}
 }

@@ -167,13 +167,13 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
             }
             $iStoreID = Tijian_Model_Store::addData($data);
             if ($iStoreID) {
-                return $this->showMsg('门店新增成功', true, '/admin/store/list/');
+                return $this->showMsg('门店新增成功', true, '/tijian/admin/store/list/');
             } else {
                 return $this->showMsg('新增失败', false);
             }            
         }
 
-        $this->assign('sDelUrl', '/admin/store/detail/id/'.$id);
+        $this->assign('sDelUrl', '/tijian/admin/store/detail/id/'.$id);
         $this->assign('sOpt', 'add');
     }
 
@@ -199,7 +199,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
 
             $iStoreID = Tijian_Model_Store::updData($data);
             if ($iStoreID) {
-                return $this->showMsg('门店修改成功', true, '/admin/store/detail/id/'.$data['iStoreID']);
+                return $this->showMsg('门店修改成功', true, '/tijian/admin/store/detail/id/'.$data['iStoreID']);
             } else {
                 return $this->showMsg('修改失败', false);
             }
@@ -214,7 +214,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
             $this->assign('aStore', $aStore);
         }
                 
-        $this->assign('sDelUrl', '/admin/store/detail/id/'.$id);
+        $this->assign('sDelUrl', '/tijian/admin/store/detail/id/'.$id);
         $this->assign('sOpt', 'edit');
     }
 
@@ -278,17 +278,17 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
             $data['iStoreID'] = $data['id'];
             $iID = Tijian_Model_Contecter::addData($data);
             if ($iID) {
-                return $this->showMsg('/admin/store/contact/id/'.$data['id'], true);
+                return $this->showMsg('/tijian/admin/store/contact/id/'.$data['id'], true);
             } else {
                 return $this->showMsg('新增失败', false);
             }
         } else {
             $id = intval($this->getParam('id'));
             if (!$id) {
-                return $this->redirect('/admin/store/list');
+                return $this->redirect('/tijian/admin/store/list');
             }
 
-            $this->assign('sDelUrl', '/admin/store/contact/id/'.$id);
+            $this->assign('sDelUrl', '/tijian/admin/store/contact/id/'.$id);
         }        
     }
 
@@ -307,20 +307,20 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
             $data['iType'] = Tijian_Model_Contecter::TYPE_STORE;
             $iUpd = Tijian_Model_Contecter::updData($data);
             if ($iUpd) {
-                return $this->showMsg('/admin/store/contact/id/'.$data['id'], true);
+                return $this->showMsg('/tijian/admin/store/contact/id/'.$data['id'], true);
             } else {
                 return $this->showMsg('修改失败', false);
             }
         } else {
             $id = intval($this->getParam('iID'));
             if (!$id) {
-                return $this->redirect('/admin/store/list');
+                return $this->redirect('/tijian/admin/store/list');
             }
 
             $aContact = Tijian_Model_Contecter::getDetail($id);
 
             $this->assign('aContact', $aContact);
-            $this->assign('sDelUrl', '/admin/store/contact/id/'.$aContact['iStoreID']);
+            $this->assign('sDelUrl', '/tijian/admin/store/contact/id/'.$aContact['iStoreID']);
         }    
     }
 
@@ -328,7 +328,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
     {
         $id = intval($this->getParam('id'));
         if (!$id) {
-            return $this->redirect('/admin/store/list');
+            return $this->redirect('/tijian/admin/store/list');
         } 
         $page = intval($this->getParam('page'));        
         $where = [
@@ -400,7 +400,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
     {
         $aParam = $this->getParams(); 
         if (empty($aParam['id'])) {
-            return $this->redirect('/admin/store/contact');
+            return $this->redirect('/tijian/admin/store/contact');
         }
         if (empty($aParam['sMobile']) || !Util_Validate::isMobile($aParam['sMobile'])) {
             return $this->showMsg('手机不符合规范！', false);
@@ -460,15 +460,15 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
     {
         $aMenu = [
             1 => [
-                'url' => '/admin/store/detail/id/'.$id,
+                'url' => '/tijian/admin/store/detail/id/'.$id,
                 'name' => '门店信息',
             ],
             2 => [
-                'url' => '/admin/store/contact/id/'.$id,
+                'url' => '/tijian/admin/store/contact/id/'.$id,
                 'name' => '联系人信息',
             ],
             3 => [
-                'url' => '/admin/store/product/id/'.$id,
+                'url' => '/tijian/admin/store/product/id/'.$id,
                 'name' => '体检产品',
             ]            
         ];

@@ -19,33 +19,33 @@ class Tijian_Controller_Admin_Product extends Tijian_Controller_Admin_ItemBase
     {
         $aEditHeaderInfo = [
             1 => [
-                'editurl' => '/admin/product/editbaseinfo/',
-                'viewurl' => '/admin/product/viewbaseinfo/',
+                'editurl' => '/tijian/admin/product/editbaseinfo/',
+                'viewurl' => '/tijian/admin/product/viewbaseinfo/',
                 'name' => '基本信息'
             ],
             2 => [
-                'editurl' => '/admin/product/edititem/',
-                'viewurl' => '/admin/product/viewitem/',
+                'editurl' => '/tijian/admin/product/edititem/',
+                'viewurl' => '/tijian/admin/product/viewitem/',
                 'name' => '体检单项'
             ],
             3 => [
-                'editurl' => '/admin/product/editstore/',
-                'viewurl' => '/admin/product/viewstore/',
+                'editurl' => '/tijian/admin/product/editstore/',
+                'viewurl' => '/tijian/admin/product/viewstore/',
                 'name' => '供应商门店'
             ],
             4 => [
-                'editurl' => '/admin/product/editupgrade/',
-                'viewurl' => '/admin/product/viewupgrade/',
+                'editurl' => '/tijian/admin/product/editupgrade/',
+                'viewurl' => '/tijian/admin/product/viewupgrade/',
                 'name' => '升级产品'
             ],
             5 => [
-                'editurl' => '/admin/product/editaddtion/',
-                'viewurl' => '/admin/product/viewaddtion/',
+                'editurl' => '/tijian/admin/product/editaddtion/',
+                'viewurl' => '/tijian/admin/product/viewaddtion/',
                 'name' => '加项包'
             ],
             6 => [
-                'editurl' => '/admin/product/editexpand/',
-                'viewurl' => '/admin/product/sonlist/',
+                'editurl' => '/tijian/admin/product/editexpand/',
+                'viewurl' => '/tijian/admin/product/sonlist/',
                 'name' => '拓展产品'
             ]
         ];
@@ -56,37 +56,37 @@ class Tijian_Controller_Admin_Product extends Tijian_Controller_Admin_ItemBase
 
     protected function _assignUrl()
     {
-        $this->assign('sEpListUrl', '/admin/eproduct/list/');
-        $this->assign('sListUrl', '/admin/product/list/');
-        $this->assign('sAddBaseInfoUrl', '/admin/product/addbaseinfo/');
-        $this->assign('sEditBaseInfoUrl', '/admin/product/editbaseinfo/');
-        $this->assign('sViewBaseInfoUrl', '/admin/product/viewbaseinfo/');
-        $this->assign('sEpEditBaseInfoUrl', '/admin/eproduct/editbaseinfo/');
-        $this->assign('sEpViewBaseInfoUrl', '/admin/eproduct/viewbaseinfo/');
-        $this->assign('sAddItemUrl', '/admin/product/additem/');
-        $this->assign('sEditItemUrl', '/admin/product/edititem/');
-        $this->assign('sViewItemUrl', '/admin/product/viewitem/');
-        $this->assign('sInsertItemUrl', '/admin/product/insertitem/');
-        $this->assign('sDeleteItemUrl', '/admin/product/deleteitem/');
-        $this->assign('sAddStoreUrl', '/admin/product/addstore/');
-        $this->assign('sEditStoreUrl', '/admin/product/editstore/');
-        $this->assign('sViewStoreUrl', '/admin/product/viewstore/');
-        $this->assign('sInsertStoreUrl', '/admin/product/insertstore/');
-        $this->assign('sDeleteStoreUrl', '/admin/product/deletestore/');
-        $this->assign('sAddUpgradeUrl', '/admin/product/addupgrade/');
-        $this->assign('sEditUpgradeUrl', '/admin/product/editupgrade/');
-        $this->assign('sViewUpgradeUrl', '/admin/product/viewupgrade/');
-        $this->assign('sInsertUpgradeUrl', '/admin/product/insertupgrade/');
-        $this->assign('sDeleteUpgradeUrl', '/admin/product/deleteupgrade/');
-        $this->assign('sAddAddtionUrl', '/admin/product/addaddtion/');
-        $this->assign('sEditAddtionUrl', '/admin/product/editaddtion/');
-        $this->assign('sViewAddtionUrl', '/admin/product/viewaddtion/');
-        $this->assign('sInsertAddtionUrl', '/admin/product/insertaddtion/');
-        $this->assign('sDeleteAddtionUrl', '/admin/product/deleteaddtion/');
+        $this->assign('sEpListUrl', '/tijian/admin/eproduct/list/');
+        $this->assign('sListUrl', '/tijian/admin/product/list/');
+        $this->assign('sAddBaseInfoUrl', '/tijian/admin/product/addbaseinfo/');
+        $this->assign('sEditBaseInfoUrl', '/tijian/admin/product/editbaseinfo/');
+        $this->assign('sViewBaseInfoUrl', '/tijian/admin/product/viewbaseinfo/');
+        $this->assign('sEpEditBaseInfoUrl', '/tijian/admin/eproduct/editbaseinfo/');
+        $this->assign('sEpViewBaseInfoUrl', '/tijian/admin/eproduct/viewbaseinfo/');
+        $this->assign('sAddItemUrl', '/tijian/admin/product/additem/');
+        $this->assign('sEditItemUrl', '/tijian/admin/product/edititem/');
+        $this->assign('sViewItemUrl', '/tijian/admin/product/viewitem/');
+        $this->assign('sInsertItemUrl', '/tijian/admin/product/insertitem/');
+        $this->assign('sDeleteItemUrl', '/tijian/admin/product/deleteitem/');
+        $this->assign('sAddStoreUrl', '/tijian/admin/product/addstore/');
+        $this->assign('sEditStoreUrl', '/tijian/admin/product/editstore/');
+        $this->assign('sViewStoreUrl', '/tijian/admin/product/viewstore/');
+        $this->assign('sInsertStoreUrl', '/tijian/admin/product/insertstore/');
+        $this->assign('sDeleteStoreUrl', '/tijian/admin/product/deletestore/');
+        $this->assign('sAddUpgradeUrl', '/tijian/admin/product/addupgrade/');
+        $this->assign('sEditUpgradeUrl', '/tijian/admin/product/editupgrade/');
+        $this->assign('sViewUpgradeUrl', '/tijian/admin/product/viewupgrade/');
+        $this->assign('sInsertUpgradeUrl', '/tijian/admin/product/insertupgrade/');
+        $this->assign('sDeleteUpgradeUrl', '/tijian/admin/product/deleteupgrade/');
+        $this->assign('sAddAddtionUrl', '/tijian/admin/product/addaddtion/');
+        $this->assign('sEditAddtionUrl', '/tijian/admin/product/editaddtion/');
+        $this->assign('sViewAddtionUrl', '/tijian/admin/product/viewaddtion/');
+        $this->assign('sInsertAddtionUrl', '/tijian/admin/product/insertaddtion/');
+        $this->assign('sDeleteAddtionUrl', '/tijian/admin/product/deleteaddtion/');
 //todo
-        $this->assign('sAddExpandUrl', '/admin/product/addexpand/');
-        $this->assign('sInsertExpandUrl', '/admin/product/insertexpand/');
-        $this->assign('sDeleteExpandUrl', '/admin/product/deleteexpand/');
+        $this->assign('sAddExpandUrl', '/tijian/admin/product/addexpand/');
+        $this->assign('sInsertExpandUrl', '/tijian/admin/product/insertexpand/');
+        $this->assign('sDeleteExpandUrl', '/tijian/admin/product/deleteexpand/');
     }
 
     public function actionAfter()
@@ -187,7 +187,7 @@ class Tijian_Controller_Admin_Product extends Tijian_Controller_Admin_ItemBase
             $aProduct['iCreateUserID'] = $aProduct['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
             $aProduct['iStatus'] = 1;
             if ($iLastInsertID = Tijian_Model_Product::addData($aProduct)) {
-                $sNextUrl = '/admin/product/additem/id/' . $iLastInsertID;
+                $sNextUrl = '/tijian/admin/product/additem/id/' . $iLastInsertID;
                 return $this->showMsg('添加成功!', true, $sNextUrl);
             } else {
                 return $this->showMsg('增加失败！', false);
@@ -307,7 +307,7 @@ class Tijian_Controller_Admin_Product extends Tijian_Controller_Admin_ItemBase
             'iStatus' => 1,
         ];
         $aCategory = Tijian_Model_Product_Category::getPair($aCatParam, 'iAutoID', 'sCateName');
-        $sNextUrl = '/admin/product/addstore/id/' . $iProductID;
+        $sNextUrl = '/tijian/admin/product/addstore/id/' . $iProductID;
         $this->assign('aCategory', $aCategory);
         $this->assign('iProductID', $iProductID);
         $this->assign('aParam', $aParam);
@@ -546,7 +546,7 @@ class Tijian_Controller_Admin_Product extends Tijian_Controller_Admin_ItemBase
         if ((ceil($aStore['iTotal'] / $iPageSize)) != 0 && $iPage > (ceil($aStore['iTotal'] / $iPageSize))) {
             $aStore = Tijian_Model_Store::getList($aParam, 1, 'iUpdateTime DESC', $iPageSize);
         }
-        $sNextUrl = '/admin/product/addupgrade/id/' . $iProductID;
+        $sNextUrl = '/tijian/admin/product/addupgrade/id/' . $iProductID;
         $this->assign('aType', $aType);
         $this->assign('aCity', $aCity);
         $this->assign('aSupplier', $aSupplier);
@@ -732,7 +732,7 @@ class Tijian_Controller_Admin_Product extends Tijian_Controller_Admin_ItemBase
             }
         }
         $aStatus = Yaf_G::getConf('aStatus', 'product');
-        $sNextUrl = '/admin/product/addaddtion/id/' . $iProductID;
+        $sNextUrl = '/tijian/admin/product/addaddtion/id/' . $iProductID;
         $this->assign('iProductID', $iProductID);
         $this->assign('aParam', $aParam);
         $this->assign('aUpgrade', $aUpgrade);
@@ -918,7 +918,7 @@ class Tijian_Controller_Admin_Product extends Tijian_Controller_Admin_ItemBase
             $aAddtion = Tijian_Model_Addtion::getList($aParam, 1, 'iUpdateTime DESC', $iPageSize);
         }
 
-        $sNextUrl = '/admin/product/list/';
+        $sNextUrl = '/tijian/admin/product/list/';
         $this->assign('aType', $aType);
         $this->assign('iProductID', $iProductID);
         $this->assign('aParam', $aParam);

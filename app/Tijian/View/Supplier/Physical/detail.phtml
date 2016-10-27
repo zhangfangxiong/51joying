@@ -108,7 +108,7 @@
     </div>
 
     <div class="form-group col-sm-12 text-center">
-        <a class="btn btn-default" href='/supplier/physical/list'>返回</a>
+        <a class="btn btn-default" href='/tijian/supplier/physical/list'>返回</a>
         <?php if ($aDetail['iBookStatus'] == 1) { ?>
         <button id="confirm" data-type='2' class="btn btn-primary">到检确认</button>
         <?php }?>
@@ -157,7 +157,7 @@ $(function() {
     }});
 
     $('#confirm').click(function () {
-        $.post('/supplier/physical/confirm', {id: <?php echo $aDetail['iAutoID'] ?>, type: $(this).data('type')}, function(ret){
+        $.post('/tijian/supplier/physical/confirm', {id: <?php echo $aDetail['iAutoID'] ?>, type: $(this).data('type')}, function(ret){
             alert(ret.data);
             if (ret.status) {
                 location.href = ret.url;     

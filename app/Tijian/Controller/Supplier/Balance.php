@@ -10,10 +10,10 @@ class Tijian_Controller_Supplier_Balance extends Tijian_Controller_Supplier_Base
 	public function actionAfter ()
 	{
 		parent::actionAfter();
-		$this->assign('sInsertItemUrl', '/supplier/balance/add/');
-		$this->assign('sDeleteItemUrl', '/supplier/balance/del/');
-		$this->assign('sNextItemUrl', '/supplier/balance/sign');
-		$this->assign('sTicketUrl', '/supplier/balance/ticket');
+		$this->assign('sInsertItemUrl', '/tijian/supplier/balance/add/');
+		$this->assign('sDeleteItemUrl', '/tijian/supplier/balance/del/');
+		$this->assign('sNextItemUrl', '/tijian/supplier/balance/sign');
+		$this->assign('sTicketUrl', '/tijian/supplier/balance/ticket');
 	}
 
 
@@ -145,7 +145,7 @@ class Tijian_Controller_Supplier_Balance extends Tijian_Controller_Supplier_Base
 				}				
 			}
 
-			return $this->showMsg('添加成功', true, '/supplier/balance/index/iBalanceID/'.$aParam['iBalanceID']);
+			return $this->showMsg('添加成功', true, '/tijian/supplier/balance/index/iBalanceID/'.$aParam['iBalanceID']);
 		}
 
 		return $this->showMsg('添加失败', false);
@@ -172,7 +172,7 @@ class Tijian_Controller_Supplier_Balance extends Tijian_Controller_Supplier_Base
 					Tijian_Model_BalancePhysical::updData($data);
 				}
 			}
-			return $this->showMsg('删除成功', true, '/supplier/balance/index/iBalanceID/'.$aParam['iBalanceID']);
+			return $this->showMsg('删除成功', true, '/tijian/supplier/balance/index/iBalanceID/'.$aParam['iBalanceID']);
 		}
 
 		return $this->showMsg('订单无效', false);
@@ -191,7 +191,7 @@ class Tijian_Controller_Supplier_Balance extends Tijian_Controller_Supplier_Base
 		}
 
 		if (!$iBalanceID || !$aBalance = Tijian_Model_Balance::getDetail($iBalanceID)) {
-			return $this->redirect('/supplier/balance/index');
+			return $this->redirect('/tijian/supplier/balance/index');
 		}
 
 		$balance['sMonth'] = date('Ym', time());
@@ -254,7 +254,7 @@ class Tijian_Controller_Supplier_Balance extends Tijian_Controller_Supplier_Base
 		if ($this->isPost()) {
 			$iBalanceID = $this->getParam('iBalanceID');
 			if (!$iBalanceID || !$aBalance = Tijian_Model_Balance::getDetail($iBalanceID)) {
-				return $this->redirect('/supplier/balance/index');
+				return $this->redirect('/tijian/supplier/balance/index');
 			}
 			
 			$params = $this->getParams();
@@ -269,7 +269,7 @@ class Tijian_Controller_Supplier_Balance extends Tijian_Controller_Supplier_Base
 			$balance['sExpressCode'] = $params['sExpressCode'];
 			Tijian_Model_Balance::updData($balance);
 
-			return $this->showMsg('填写完成', true, '/supplier/balance/record');
+			return $this->showMsg('填写完成', true, '/tijian/supplier/balance/record');
 		} else {
 			$iBalanceID = $this->getParam('iBalanceID');
 			$aBalance = Tijian_Model_Balance::getDetail($iBalanceID);
@@ -361,7 +361,7 @@ class Tijian_Controller_Supplier_Balance extends Tijian_Controller_Supplier_Base
 	{
 		$id = $this->getParam('id');
     	if (!intval($id)) {
-    		$this->redirect('/supplier/balance/record');
+    		$this->redirect('/tijian/supplier/balance/record');
     	}
 
     	$aDetail = Tijian_Model_Balance::getDetail(intval($id));
@@ -409,7 +409,7 @@ class Tijian_Controller_Supplier_Balance extends Tijian_Controller_Supplier_Base
 			$this->assign('aDetail', $aDetail);
 			$this->assign('aProduct', $aProduct);
     	} else {
-    		$this->redirect('/supplier/balance/record');
+    		$this->redirect('/tijian/supplier/balance/record');
     	}
 	}
 

@@ -92,7 +92,7 @@ class Tijian_Controller_Wx_Account extends Tijian_Controller_Wx_Base
                 return $this->show404('手机不符合规范！', false);
             }
             //验证手机验证码是否正确
-            if (!Util_Verify::checkSMSCode(Util_Verify::TYPE_SYS_BIND_WX, $sVerifyCode)) {
+            if (!Util_Verify::checkSMSCode($sMobile, Util_Verify::TYPE_SYS_BIND_WX, $sVerifyCode)) {
                 return $this->show404('手机验证码错误，请重新发送', false);
             }
 

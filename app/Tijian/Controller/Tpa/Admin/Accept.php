@@ -175,7 +175,7 @@ class Tijian_Controller_Tpa_Admin_Accept extends Tijian_Controller_Tpa_Admin_Bas
             $aParams['sEmployeeRealName'] = $aEmployee['sRealName'];
             $aParams['sMobile'] = $aEmployee['sMobile'];
             $aParams['sEmployeeIdentityCard'] = $aEmployee['sIdentityCard'];
-            $sUrl = '/tpa/admin/accept/error/';
+            $sUrl = '/tijian/tpa/admin/accept/error/';
         }
         $aParams['iCreateUserID'] = $aParams['iUpdateUserID'] = $this->aCurrUser['iUserID'];
         $aParams['sCode'] = Tijian_Model_Tpa_Error::initCode();
@@ -222,7 +222,7 @@ class Tijian_Controller_Tpa_Admin_Accept extends Tijian_Controller_Tpa_Admin_Bas
             $aParam['sEmployeeCompanyID'] = $aEmployee['iCompanyID'];
             $aParam['iCreateUserID'] = $aParam['iUpdateUserID'] = $this->aCurrUser['iUserID'];
             if (Tijian_Model_Tpa_Case::addData($aParam)) {
-                return $this->showMsg('受理成功', true, '/tpa/admin/accept/case/');
+                return $this->showMsg('受理成功', true, '/tijian/tpa/admin/accept/case/');
             } else {
                 return $this->showMsg('受理失败', false);
             }

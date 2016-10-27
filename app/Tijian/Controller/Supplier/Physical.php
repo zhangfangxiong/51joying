@@ -53,7 +53,7 @@ class Tijian_Controller_Supplier_Physical extends Tijian_Controller_Supplier_Bas
 					}
 				}
 			} else {
-				$this->redirect('/supplier/physical/list');
+				$this->redirect('/tijian/supplier/physical/list');
 			}
 		}
 		
@@ -107,14 +107,14 @@ class Tijian_Controller_Supplier_Physical extends Tijian_Controller_Supplier_Bas
     			$data['iIsSerious'] = $params['iIsSerious'];
     			$data['sSeriousRemark'] = $params['sSeriousRemark'];
     			Tijian_Model_OrderCardProduct::updData($data);
-    			return $this->showMsg('提交成功', true, '/supplier/physical/detail/id/'.$params['id']);
+    			return $this->showMsg('提交成功', true, '/tijian/supplier/physical/detail/id/'.$params['id']);
     		} else {
-    			return $this->showMsg('无此信息', false, '/supplier/physical/list');
+    			return $this->showMsg('无此信息', false, '/tijian/supplier/physical/list');
     		}
     	} else {
     		$id = $this->getParam('id');
 	    	if (!intval($id)) {
-	    		$this->redirect('/supplier/physical/list');
+	    		$this->redirect('/tijian/supplier/physical/list');
 	    	}
 
 	    	$aDetail = Tijian_Model_OrderCardProduct::getDetail($id);
@@ -145,7 +145,7 @@ class Tijian_Controller_Supplier_Physical extends Tijian_Controller_Supplier_Bas
 
 				$this->assign('aDetail', $aDetail);
 	    	} else {
-	    		$this->redirect('/supplier/order/index/type/'.$type);
+	    		$this->redirect('/tijian/supplier/order/index/type/'.$type);
 	    	}
     	}
 	}
@@ -178,7 +178,7 @@ class Tijian_Controller_Supplier_Physical extends Tijian_Controller_Supplier_Bas
 			}
 			Tijian_Model_OrderCardProduct::updData($data);
 			
-			return $this->showMsg('确认成功', true, '/supplier/physical/detail/id/'. $id);
+			return $this->showMsg('确认成功', true, '/tijian/supplier/physical/detail/id/'. $id);
 		} else {
 			return $this->showMsg('参数错误', false);
 		}

@@ -17,7 +17,7 @@ class Tijian_Controller_Admin_Front extends Tijian_Controller_Admin_Base
             return false;
         }
         $this->listAction($sClass);
-        $this->setViewScript('/Admin/Front/list.phtml');
+        $this->setViewScript('/tijian/Admin/Front/list.phtml');
     }
 
     /**

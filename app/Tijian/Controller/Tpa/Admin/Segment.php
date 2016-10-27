@@ -123,7 +123,7 @@ class Tijian_Controller_Tpa_Admin_Segment extends Tijian_Controller_Tpa_Admin_Ba
 			$data['iAssignedUserID'] = $this->getParam('iAssignedUserID');
 			$data['iCreateUserID'] = $this->iCreateUserID;
 			$data['iStatus'] = Tijian_Model_Tpa_Segment::STATUS_ASSIGNED;
-			Tijian_Model_Tpa_Segment::addData($where);
+			Tijian_Model_Tpa_Segment::addData($data);
 
 			return $this->showMsg('成功指派', true);
 		}

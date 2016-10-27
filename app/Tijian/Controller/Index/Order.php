@@ -97,7 +97,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 					$aOrder['aList'][$key]['sProductName'] = $aProduct[0]['sProductName'];
 					$aOrder['aList'][$key]['sType'] = '体检预约';
 
-					$sLink = '/order/cardorder/type/2/id/'.$value['iOrderID'];
+					$sLink = '/tijian/index/order/cardorder/type/2/id/'.$value['iOrderID'];
 					$aOrder['aList'][$key]['sLink'] = $sLink;
 				}
             }

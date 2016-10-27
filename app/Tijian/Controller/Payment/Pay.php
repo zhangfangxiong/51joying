@@ -24,12 +24,12 @@ class Tijian_Controller_Payment_Pay extends Tijian_Controller_Index_Base
                 ]]);
                 
                 $aAttr = json_decode($aOP['sProductAttr'], true);
-                $url = '/order/buyfourth/id/'.$aAttr['iCardID'].'/pid/'.$aCP['iProductID'].'/sid/'.$aAttr['iStoreID'];
+                $url = '/tijian/index/order/buyfourth/id/'.$aAttr['iCardID'].'/pid/'.$aCP['iProductID'].'/sid/'.$aAttr['iStoreID'];
                 
                 // 支付成功发送邮件
                 Tijian_Model_OrderInfo::sendMailMsg($aOrder, 1, $aCP['sProductName']);
             } else {
-                $url = "/payment/pay/success/id/" . $aRow['iAutoID'] . '.html'; 
+                $url = "/tijian/payment/pay/success/id/" . $aRow['iAutoID'] . '.html';
 
                 // 支付成功发送邮件
                 Tijian_Model_OrderInfo::sendMailMsg($aOrder, 2);

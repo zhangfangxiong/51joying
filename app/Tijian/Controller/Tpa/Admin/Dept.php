@@ -17,10 +17,10 @@ class Tijian_Controller_Tpa_Admin_Dept extends Tijian_Controller_Tpa_Admin_Base
     public $aDept = null;
     
     public $aDeptUrl = [
-        'sDeptUrl'      => '/tpa/admin/dept/index',
-        'sDeptAddUrl'   => '/tpa/admin/dept/add',
-        'sDeptEditUrl'  => '/tpa/admin/dept/edit',
-        'sDeptDelUrl'   => '/tpa/admin/dept/del',
+        'sDeptUrl'      => '/tijian/tpa/admin/dept/index',
+        'sDeptAddUrl'   => '/tijian/tpa/admin/dept/add',
+        'sDeptEditUrl'  => '/tijian/tpa/admin/dept/edit',
+        'sDeptDelUrl'   => '/tijian/tpa/admin/dept/del',
     ];
 
     public function assignUrl ()

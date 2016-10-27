@@ -93,11 +93,11 @@ class Tijian_Controller_Admin_Category extends Tijian_Controller_Admin_Base
     {
         $aMenu = [
             0 => [
-                'url' => '/admin/category/list',
+                'url' => '/tijian/admin/category/list',
                 'name' => '大类维护',
             ],
             1 => [
-                'url' => '/admin/category/list/type/1',
+                'url' => '/tijian/admin/category/list/type/1',
                 'name' => '分类维护',
             ]            
         ];

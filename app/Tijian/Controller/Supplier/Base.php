@@ -62,7 +62,7 @@ class Tijian_Controller_Supplier_Base extends Tijian_Controller_Admin_Base
 	        }
 	        $this->assign('aStoreCity', $this->aStoreCity);
     	} else {
-    		$this->redirect('/admin/supplierlogin');
+    		$this->redirect('/tijian/admin/supplierlogin');
     	}
 	}
 }

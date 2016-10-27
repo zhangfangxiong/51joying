@@ -5,7 +5,7 @@
 <div class="pbody clearfix">
     <table class="table table-bordered table-hover">
         <?php if ($iType == 1 && $aPhysical) { ?>
-        <a class="text-right btn btn-default" href='/supplier/order/export'>导出</a>
+        <a class="text-right btn btn-default" href='/tijian/supplier/order/export'>导出</a>
         <?php } ?>
         <thead>
         <tr>
@@ -29,7 +29,7 @@
                     <td class="text-center"><?php echo $aUser['sProductName'] ?></td>
                     <td class="text-center"><?php echo $aUser['iCreateTime'] ?></td>
                     <td class="text-center">
-                        <a href="/supplier/order/detail/type/<?php echo $iType;?>/id/<?php echo $aUser['iAutoID']?>">查看</a>
+                        <a href="/tijian/supplier/order/detail/type/<?php echo $iType;?>/id/<?php echo $aUser['iAutoID']?>">查看</a>
                     </td>
                 </tr>
             <?php }

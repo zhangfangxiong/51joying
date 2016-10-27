@@ -8,10 +8,10 @@ class Tijian_Controller_Tpa_Admin_Role extends Tijian_Controller_Tpa_Admin_Base
 
     public function assignUrl()
     {
-        $this->assign('sRoleListUrl', '/tpa/admin/role/list');
-        $this->assign('sRoleAddUrl', '/tpa/admin/role/add');
-        $this->assign('sRoleEditUrl', '/tpa/admin/role/edit');
-        $this->assign('sRoleDelUrl', '/tpa/admin/role/del');
+        $this->assign('sRoleListUrl', '/tijian/tpa/admin/role/list');
+        $this->assign('sRoleAddUrl', '/tijian/tpa/admin/role/add');
+        $this->assign('sRoleEditUrl', '/tijian/tpa/admin/role/edit');
+        $this->assign('sRoleDelUrl', '/tijian/tpa/admin/role/del');
     }
 
     public function actionBefore()

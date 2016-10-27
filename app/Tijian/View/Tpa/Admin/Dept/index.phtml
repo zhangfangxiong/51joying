@@ -10,7 +10,7 @@ function makeTree($aTree, $aColor) { foreach ($aTree as $v) { ?>
         <td align="left">
             <?php echo str_repeat('&nbsp;', 4*$v['iLevel'])?>
             <?php if(!empty($v['aChild'])){?><i class="fa fa-minus-square mopenbtn"></i><?php }else{?>-<?php }?>
-            <a href='/tpa/admin/dept/index/iDeptID/<?php echo $v['iAutoID'];?>'><?php echo $v['sDeptName'];?></a>
+            <a href='/tijian/tpa/admin/dept/index/iDeptID/<?php echo $v['iAutoID'];?>'><?php echo $v['sDeptName'];?></a>
         </td>          
     </tr>
 <?php if (!empty($v['aChild'])) {

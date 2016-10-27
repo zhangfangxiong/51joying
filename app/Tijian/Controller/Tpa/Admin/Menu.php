@@ -8,9 +8,9 @@ class Tijian_Controller_Tpa_Admin_Menu extends Tijian_Controller_Tpa_Admin_Base
 
     public function assignUrl ()
     {
-        $this->assign('sMenuListUrl', '/tpa/admin/menu/list');
-        $this->assign('sMenuAddUrl', '/tpa/admin/menu/add');
-        $this->assign('sMenuEditUrl', '/tpa/admin/menu/edit');
+        $this->assign('sMenuListUrl', '/tijian/tpa/admin/menu/list');
+        $this->assign('sMenuAddUrl', '/tijian/tpa/admin/menu/add');
+        $this->assign('sMenuEditUrl', '/tijian/tpa/admin/menu/edit');
     }
 
     public function actionBefore ()

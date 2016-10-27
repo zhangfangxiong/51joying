@@ -5,7 +5,7 @@ class Tijian_Controller_Tpa_Admin_Index extends Tijian_Controller_Tpa_Admin_Base
 
     protected $aLoginType = [
         1 => [
-            'url' => '/tpa/admin/login',
+            'url' => '/tijian/tpa/admin/login',
             'name' => 'admin后台'
         ]
     ];
@@ -16,8 +16,8 @@ class Tijian_Controller_Tpa_Admin_Index extends Tijian_Controller_Tpa_Admin_Base
     {
         parent::actionBefore();
         
-        $this->assign('sSignUrl', '/tpa/admin/signin');
-        $this->assign('sLogoutUrl', '/tpa/admin/logout');
+        $this->assign('sSignUrl', '/tijian/tpa/admin/signin');
+        $this->assign('sLogoutUrl', '/tijian/tpa/admin/logout');
     }
 
     public function indexAction ()
@@ -25,7 +25,7 @@ class Tijian_Controller_Tpa_Admin_Index extends Tijian_Controller_Tpa_Admin_Base
         // 当前用户
         $this->aCurrUser = Util_Cookie::get(Yaf_G::getConf('authkey', 'cookie', 'tpa'));
         if (!$this->aCurrUser) {
-            $sUrl = '/tpa/admin/login';
+            $sUrl = '/tijian/tpa/admin/login';
             return $this->redirect($sUrl);
         }
         
@@ -42,7 +42,7 @@ class Tijian_Controller_Tpa_Admin_Index extends Tijian_Controller_Tpa_Admin_Base
 
     public function logoutAction ()
     {
-        $logout = '/tpa/admin/login';
+        $logout = '/tijian/tpa/admin/login';
         Util_Cookie::delete(Yaf_G::getConf('authkey', 'cookie', 'tpa'));
         $this->redirect($logout);
     }

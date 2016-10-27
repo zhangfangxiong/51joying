@@ -26,7 +26,7 @@ class Tijian_Controller_Tpa_Admin_Type extends Tijian_Controller_Tpa_Admin_Base
             return false;
         }
         $this->listAction($sClass);
-        $this->setViewScript('/Admin/Type/list.phtml');
+        $this->setViewScript('/tijian/tpa/Admin/Type/list.phtml');
     }
 
     /**

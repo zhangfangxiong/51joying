@@ -17,7 +17,7 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
             return false;
         }
         $this->listAction($sClass);
-        $this->setViewScript('/Admin/Article/list.phtml');
+        $this->setViewScript('/tijian/Admin/Article/list.phtml');
     }
     
     /**
@@ -389,11 +389,11 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
      */
     protected function _assignUrl($sClass)
     {
-        $this->assign('sListUrl', "/admin/article/list/class/$sClass.html");
-        $this->assign('sAddUrl', "/admin/article/add/class/$sClass.html");
+        $this->assign('sListUrl', "/tijian/admin/article/list/class/$sClass.html");
+        $this->assign('sAddUrl', "/tijian/admin/article/add/class/$sClass.html");
         $this->assign('sEditUrl', '/admin/article/edit.html');
-        $this->assign('sDelUrl', '/admin/article/del.html');
-        $this->assign('sPublishUrl', '/admin/article/publish.html');
-        $this->assign('sOffUrl', '/admin/article/off.html');
+        $this->assign('sDelUrl', '/tijian/admin/article/del.html');
+        $this->assign('sPublishUrl', '/tijian/admin/article/publish.html');
+        $this->assign('sOffUrl', '/tijian/admin/article/off.html');
     }
 }

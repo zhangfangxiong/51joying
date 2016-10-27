@@ -37,59 +37,59 @@ class Tijian_Controller_Wx_Base extends Yaf_Controller
     protected function _assignUrl()
     {
         //购买相关
-        $this->assign('sVerifyUrl', '/wx/verify/image/');
-        $this->assign('sIndexUrl', '/wx/');
-        $this->assign('sListUrl', '/wx/list/');
-        $this->assign('sDetailUrl', '/wx/detail/');
-        $this->assign('sCartlistUrl', '/wx/cartlist/');
-        $this->assign('sAddCartUrl', '/wx/addcart/');
-        $this->assign('sDeleteCartUrl', '/wx/deletecart/');
-        $this->assign('sBalanceUrl', '/wx/balance/');
-        $this->assign('sBalanceValidateUrl', '/wx/balancevalidate/');
-        $this->assign('sBalancePostUrl', '/wx/balancepost/');
-        $this->assign('sPayUrl', '/wx/pay/');
-        $this->assign('sGetRegionUrl', '/wx/getregion/');
-        $this->assign('sStoreUrl', '/wx/store/');
-        $this->assign('sGetStoreUrl', '/wx/getstore/');
+        $this->assign('sVerifyUrl', '/tijian/wx/verify/image/');
+        $this->assign('sIndexUrl', '/tijian/wx/');
+        $this->assign('sListUrl', '/tijian/wx/list/');
+        $this->assign('sDetailUrl', '/tijian/wx/detail/');
+        $this->assign('sCartlistUrl', '/tijian/wx/cartlist/');
+        $this->assign('sAddCartUrl', '/tijian/wx/addcart/');
+        $this->assign('sDeleteCartUrl', '/tijian/wx/deletecart/');
+        $this->assign('sBalanceUrl', '/tijian/wx/balance/');
+        $this->assign('sBalanceValidateUrl', '/tijian/wx/balancevalidate/');
+        $this->assign('sBalancePostUrl', '/tijian/wx/balancepost/');
+        $this->assign('sPayUrl', '/tijian/wx/pay/');
+        $this->assign('sGetRegionUrl', '/tijian/wx/getregion/');
+        $this->assign('sStoreUrl', '/tijian/wx/store/');
+        $this->assign('sGetStoreUrl', '/tijian/wx/getstore/');
         //预约相关
-        $this->assign('sAppointmentDetailUrl', '/wx/appointment/detail/');
-        $this->assign('sAjaxCheckCardUrl', '/wx/ajax/ajaxcheckcard/');
-        $this->assign('sVerifyCheckUrl', '/wx/ajax/ajaxcheckcardverify/');
-        $this->assign('sCardlistUrl', '/wx/appointment/cardlist/');
-        $this->assign('sAddCardUrl', '/wx/appointment/addcard/');
-        $this->assign('sReserveStoreUrl', '/wx/appointment/reservestore/');
-        $this->assign('sReserveCommitUrl', '/wx/appointment/reservecommit/');
-        $this->assign('sGetStoreListUrl', '/wx/getstoreList/');
-        $this->assign('sUserInfoEditUrl', '/wx/appointment/userInfoEdit/');
-        $this->assign('sMapUrl', '/wx/appointment/map/');
-        $this->assign('sReserveDetailUrl', '/wx/appointment/reservedetail/');
-        $this->assign('sReserveCancelUrl', '/wx/appointment/reservecancel/');
-        $this->assign('sStoreListUrl', '/wx/appointment/storelist/');
-        $this->assign('sUpgradeDetailUrl', '/wx/appointment/upgradedetail/');
-        $this->assign('sGetReserveDateUrl', '/wx/appointment/getreservedate/');
+        $this->assign('sAppointmentDetailUrl', '/tijian/wx/appointment/detail/');
+        $this->assign('sAjaxCheckCardUrl', '/tijian/wx/ajax/ajaxcheckcard/');
+        $this->assign('sVerifyCheckUrl', '/tijian/wx/ajax/ajaxcheckcardverify/');
+        $this->assign('sCardlistUrl', '/tijian/wx/appointment/cardlist/');
+        $this->assign('sAddCardUrl', '/tijian/wx/appointment/addcard/');
+        $this->assign('sReserveStoreUrl', '/tijian/wx/appointment/reservestore/');
+        $this->assign('sReserveCommitUrl', '/tijian/wx/appointment/reservecommit/');
+        $this->assign('sGetStoreListUrl', '/tijian/wx/getstoreList/');
+        $this->assign('sUserInfoEditUrl', '/tijian/wx/appointment/userInfoEdit/');
+        $this->assign('sMapUrl', '/tijian/wx/appointment/map/');
+        $this->assign('sReserveDetailUrl', '/tijian/wx/appointment/reservedetail/');
+        $this->assign('sReserveCancelUrl', '/tijian/wx/appointment/reservecancel/');
+        $this->assign('sStoreListUrl', '/tijian/wx/appointment/storelist/');
+        $this->assign('sUpgradeDetailUrl', '/tijian/wx/appointment/upgradedetail/');
+        $this->assign('sGetReserveDateUrl', '/tijian/wx/appointment/getreservedate/');
         //个人信息相关
-        $this->assign('sOrderListUrl', '/wx/orderlist/');
-        $this->assign('sOrderDetailUrl', '/wx/orderdetail/');
-        $this->assign('sCancelOrderUrl', '/wx/cancelorder/');
-        $this->assign('sBindPhoneUrl', '/wx/account/bindphone/');
-        $this->assign('sBindIdCardUrl', '/wx/account/bindidcard/');
-        $this->assign('sUserInfoUrl', '/wx/account/userinfo/');
-        $this->assign('sAccountUserInfoUrl', '/wx/account/userinfoedit/');
-        $this->assign('sAjaxCheckBindphoneUrl', '/wx/ajax/ajaxcheckbindphone/');
-        $this->assign('sSendSmsUrl', '/wx/verify/sms/');
+        $this->assign('sOrderListUrl', '/tijian/wx/orderlist/');
+        $this->assign('sOrderDetailUrl', '/tijian/wx/orderdetail/');
+        $this->assign('sCancelOrderUrl', '/tijian/wx/cancelorder/');
+        $this->assign('sBindPhoneUrl', '/tijian/wx/account/bindphone/');
+        $this->assign('sBindIdCardUrl', '/tijian/wx/account/bindidcard/');
+        $this->assign('sUserInfoUrl', '/tijian/wx/account/userinfo/');
+        $this->assign('sAccountUserInfoUrl', '/tijian/wx/account/userinfoedit/');
+        $this->assign('sAjaxCheckBindphoneUrl', '/tijian/wx/ajax/ajaxcheckbindphone/');
+        $this->assign('sSendSmsUrl', '/tijian/wx/verify/sms/');
         //支付相关
-        $this->assign('sWeixinPayUrl', '/payment/weixin/pay/');
-        $this->assign('sPayCheckUrl', '/payment/pay/check/');
-        $this->assign('sPaySuccessUrl', '/payment/pay/success/');
-        $this->assign('sPayFailUrl', '/payment/pay/fail/');
-        $this->assign('sWxjsPayUrl', '/payment/wxjs/pay/');//js支付接口
-        $this->assign('sWxjsUpgradePayUrl', '/payment/wxjs/upgradepay/');
-        //$this->assign('sWxjsPayUrl', '/payment/wxjs/paytest/');//js支付测试接口
-        $this->assign('sPayPostUrl', '/wx/paypost/');//js支付接口
-        $this->assign('sRefundUrl', '/wx/appointment/refund/');//退款
+        $this->assign('sWeixinPayUrl', '/tijian/payment/weixin/pay/');
+        $this->assign('sPayCheckUrl', '/tijian/payment/pay/check/');
+        $this->assign('sPaySuccessUrl', '/tijian/payment/pay/success/');
+        $this->assign('sPayFailUrl', '/tijian/payment/pay/fail/');
+        $this->assign('sWxjsPayUrl', '/tijian/payment/wxjs/pay/');//js支付接口
+        $this->assign('sWxjsUpgradePayUrl', '/tijian/payment/wxjs/upgradepay/');
+        //$this->assign('sWxjsPayUrl', '/tijian/payment/wxjs/paytest/');//js支付测试接口
+        $this->assign('sPayPostUrl', '/tijian/wx/paypost/');//js支付接口
+        $this->assign('sRefundUrl', '/tijian/wx/appointment/refund/');//退款
         //静态页面
-        $this->assign('sAboutUrl', '/wx/about/');//关于我们
-        $this->assign('sPartnerUrl', '/wx/partner/');//合作伙伴
+        $this->assign('sAboutUrl', '/tijian/wx/about/');//关于我们
+        $this->assign('sPartnerUrl', '/tijian/wx/partner/');//合作伙伴
     }
 
     /**
@@ -228,7 +228,7 @@ class Tijian_Controller_Wx_Base extends Yaf_Controller
                 $aUser = Tijian_Model_Customer::getUserByOpenID($this->sCurrOpenID);
                 if (empty($aUser)) {
                     if ($this->sRedirectAction != $this->_request->getActionName()) {// 跳转到绑定身份证页面
-                        return $this->redirect('/wx/account/bindidcard/');
+                        return $this->redirect('/tijian/wx/account/bindidcard/');
                     }
                 } else {
                     $this->aUser['iUserID'] = $aUser['iUserID'];

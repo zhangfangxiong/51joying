@@ -42,7 +42,7 @@ qr.make();
 $('.pw-box-hd').html(qr.createImgTag());
 
 setInterval(function(){
-	$.get('/payment/pay/check/id/<?php echo $aParam['ordercode']?>.html', function(ret){
+	$.get('/tijian/payment/pay/check/id/<?php echo $aParam['ordercode']?>.html', function(ret){
 		if (ret.status) {
 			alert(ret.data);
 			location.href = ret.url;
