@@ -58,7 +58,7 @@ function makeTree($aTree, $aColor, $aClass) {
     		</tr>
 <?php
         if (!empty($v['aChild'])) {
-            makeTree($v['aChild'], $aColor);
+            makeTree($v['aChild'], $aColor, $aClass);
         }
     }
 }		
