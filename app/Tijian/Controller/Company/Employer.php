@@ -102,7 +102,7 @@ class Tijian_Controller_Company_Employer extends Tijian_Controller_Company_Base
 		} else {
 			$this->departmentId = $this->getParam('iDeptID') ? intval($this->getParam('iDeptID')) : 0;
 			if (empty($this->dept[$this->departmentId])) {
-				$this->redirect('/company/employer/index');
+				$this->redirect('/tijian/company/employer/index');
 			}
 
 			$aDept['iParentID'] = $this->departmentId;
@@ -137,7 +137,7 @@ class Tijian_Controller_Company_Employer extends Tijian_Controller_Company_Base
 		} else {
 			$this->departmentId = $this->getParam('iDeptID') ? intval($this->getParam('iDeptID')) : 0;
 			if (empty($this->dept[$this->departmentId])) {
-				$this->redirect('/company/employer/index');
+				$this->redirect('/tijian/company/employer/index');
 			}
 
 			$aDept = Tijian_Model_Company_Department::getDetail($this->departmentId);

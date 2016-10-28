@@ -17,7 +17,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
         parent::actionBefore();
         $this->_frame = 'pcbasic.phtml';
         if ($this->aUser) {
-            // $this->redirect('/index/ucenter/index');
+            // $this->redirect('/tijian/index/ucenter/index');
         }
     }
 
@@ -554,7 +554,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             Tijian_Model_OrderCard::updData($card);
 
             Tijian_Model_CustomerNew::setCookie($card['iUserID']);
-            return $this->showMsg('设置成功', true, '/index/record/list/');
+            return $this->showMsg('设置成功', true, '/tijian/index/record/list/');
         }
         $this->assign('aCard', $aCard);
     }
@@ -570,9 +570,9 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
 
         if ($aCard) {
             Tijian_Model_CustomerNew::setCookie($aCard['iUserID']);
-            return $this->redirect('/index/record/list/');
+            return $this->redirect('/tijian/index/record/list/');
         } else {
-            return  $this->redirect('/index/account/cdlogin/');
+            return  $this->redirect('/tijian/index/account/cdlogin/');
         }
     }
 
@@ -605,7 +605,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             }
 
             Tijian_Model_CustomerNew::setCookie($card['iUserID']);
-            return $this->showMsg('登陆成功', true, '/index/record/list/');
+            return $this->showMsg('登陆成功', true, '/tijian/index/record/list/');
         }
         
         $this->assign('aCard', $aCard);
@@ -632,7 +632,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             if ($aParam['sCardPwd'] != $aParam['sConfirmCardPwd']) {
                 return $this->showMsg('密码不一致', false);        
             }
-            if (!Util_Verify::checkSMSCode(Util_Verify::TYPE_SYS_REGISTER, $aParam['sVerifyCode'])) {
+            if (!Util_Verify::checkSMSCode($aParam['sMobile'], Util_Verify::TYPE_SYS_REGISTER, $aParam['sVerifyCode'])) {
                 return $this->showMsg('验证码不正确', false);
             }
 
@@ -644,7 +644,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             $card['sCardPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $aParam['sCardPwd']);
             Tijian_Model_OrderCard::updData($card);
 
-            return $this->showMsg('修改成功', true, '/index/account/cardpwd/id/' . $card['iAutoID']);
+            return $this->showMsg('修改成功', true, '/tijian/index/account/cardpwd/id/' . $card['iAutoID']);
         }
         $this->assign('aCard', $aCard);
         $this->assign('aCustomer', $aCustomer);
@@ -663,11 +663,11 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
             }
             if ($aCard['iUserID']) { //用户id不为空 则卡已绑定
                 // Tijian_Model_CustomerNew::setCookie($aCard['iUserID']);
-                // $url = '/index/record/list/';
+                // $url = '/tijian/index/record/list/';
                 if (!$aCard['sCardPassword']) {
-                    $url = '/index/account/setcardpwd/id/'.$aCard['iAutoID'];   
+                    $url = '/tijian/index/account/setcardpwd/id/'.$aCard['iAutoID'];
                 } else {
-                    $url = '/index/account/cardpwd/id/'.$aCard['iAutoID'];
+                    $url = '/tijian/index/account/cardpwd/id/'.$aCard['iAutoID'];
                 }
             } else {
                 $iOrderID = $aCard['iOrderID'];
@@ -675,7 +675,7 @@ class Tijian_Controller_Index_Account extends Tijian_Controller_Index_Base
                 if (!$iOrderID && $aCard['iOrderType'] != 2) {
                     return $this->showMsg('订单不存在!', false);
                 }
-                $url = '/order/baseinfo/type/2/id/' . $iCardID . '/pid/' . $iCardID;
+                $url = '/tijian/index/order/baseinfo/type/2/id/' . $iCardID . '/pid/' . $iCardID;
             }
             
             return $this->showMsg('登陆成功!', true, $url);

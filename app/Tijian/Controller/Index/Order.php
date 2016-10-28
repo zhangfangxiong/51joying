@@ -149,7 +149,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 		$type = 2 == $this->getParam('type') ? 2 : 1;
 
 		if ($type == 2) {
-			// $url = '/index/record/list/';
+			// $url = '/tijian/index/record/list/';
 			$url = '/tijian/index/web/list/';
 		} else {
 			$url = '/tijian/index/order/list/';
@@ -1310,7 +1310,7 @@ class Tijian_Controller_Index_Order extends Tijian_Controller_Index_Base
 
         $sReturnUrl = '/tijian/index/order/buythird/id/'.$id.'/pid/'.$pid;
         $this->assign('aUpgrade', $aUpgrade);
-        $this->assign('sDetailUrl', '/index/web/detail/');
+        $this->assign('sDetailUrl', '/tijian/index/web/detail/');
         $this->assign('sReturnUrl', $sReturnUrl);
         $this->assign('iPID', $pid);
     }

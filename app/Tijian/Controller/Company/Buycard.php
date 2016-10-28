@@ -10,10 +10,10 @@ class Tijian_Controller_Company_BuyCard extends Tijian_Controller_Company_Base
 	public function actionAfter ()
 	{
 		parent::actionAfter();
-		$this->assign('sListUrl', '/company/buycard/list/');
-		$this->assign('sBuyListUrl', '/company/buycard/buylist/');
-		$this->assign('sBuyUrl', '/company/buycard/buy/');
-		$this->assign('sBuyDetailUrl', '/company/buycard/buydetail/');
+		$this->assign('sListUrl', '/tijian/company/buycard/list/');
+		$this->assign('sBuyListUrl', '/tijian/company/buycard/buylist/');
+		$this->assign('sBuyUrl', '/tijian/company/buycard/buy/');
+		$this->assign('sBuyDetailUrl', '/tijian/company/buycard/buydetail/');
 	}
 	public function listAction()
 	{
@@ -201,7 +201,7 @@ class Tijian_Controller_Company_BuyCard extends Tijian_Controller_Company_Base
 				return $this->showMsg('购买失败！',false);
 			}
 			Tijian_Model_OrderInfo::commit();
-			return $this->showMsg('购买申请已提交，待审核后发送至您的邮箱或邮寄到您所填的地址！',true,'/company/buycard/buylist/');
+			return $this->showMsg('购买申请已提交，待审核后发送至您的邮箱或邮寄到您所填的地址！',true,'/tijian/company/buycard/buylist/');
 		} else {
 			$sPid = $this->getParam('pid') ? trim($this->getParam('pid'),',') : '';
 			$aUser = Tijian_Model_User::getDetail($this->enterpriseId);

@@ -328,7 +328,7 @@ class Tijian_Controller_Wx_Index extends Tijian_Controller_Wx_Base
         if ($aData['sAllTotalPrice'] != strval($aParam['total_price'])) {//当成字符串处理，浮点数不能直接比较
             return $this->show404('结算不成功！', false);
         }
-        return $this->show404($aData, true, '/wx/balance');
+        return $this->show404($aData, true, '/tijian/wx/balance');
     }
 
     //结算页面

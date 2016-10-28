@@ -520,11 +520,11 @@ class Tijian_Controller_Company_Excel extends Tijian_Controller_Company_Employee
     {
         $aMenu = [
             1 => [
-                'url' => '/company/excel/importemployee',
+                'url' => '/tijian/company/excel/importemployee',
                 'name' => '导入员工信息',
             ],
             2 => [
-                'url' => '/company/excel/importfamily',
+                'url' => '/tijian/company/excel/importfamily',
                 'name' => '导入员工家属信息',
             ]            
         ];

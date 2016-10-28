@@ -19,21 +19,21 @@ class Tijian_Controller_Index_Record extends Tijian_Controller_Index_Base
 
     public function _assignUrl()
     {
-        $this->assign('sAppointmentDetailUrl', '/wx/appointment/detail/');
-        $this->assign('sAjaxCheckCardUrl', '/wx/ajax/ajaxcheckcard/');
-        $this->assign('sVerifyCheckUrl', '/wx/ajax/ajaxcheckcardverify/');
-        $this->assign('sCardlistUrl', '/wx/appointment/cardlist/');
-        $this->assign('sAddCardUrl', '/wx/appointment/addcard/');
-        $this->assign('sReserveStoreUrl', '/wx/appointment/reservestore/');
-        $this->assign('sReserveCommitUrl', '/wx/appointment/reservecommit/');
-        $this->assign('sGetStoreListUrl', '/wx/getstoreList/');
-        $this->assign('sUserInfoEditUrl', '/wx/appointment/userInfoEdit/');
-        $this->assign('sMapUrl', '/wx/appointment/map/');
-        $this->assign('sReserveDetailUrl', '/wx/appointment/reservedetail/');
-        $this->assign('sReserveCancelUrl', '/wx/appointment/reservecancel/');
-        $this->assign('sStoreListUrl', '/wx/appointment/storelist/');
-        $this->assign('sUpgradeDetailUrl', '/wx/appointment/upgradedetail/');
-        $this->assign('sRefundUrl', '/wx/appointment/refund/');//退款
+        $this->assign('sAppointmentDetailUrl', '/tijian/wx/appointment/detail/');
+        $this->assign('sAjaxCheckCardUrl', '/tijian/wx/ajax/ajaxcheckcard/');
+        $this->assign('sVerifyCheckUrl', '/tijian/wx/ajax/ajaxcheckcardverify/');
+        $this->assign('sCardlistUrl', '/tijian/wx/appointment/cardlist/');
+        $this->assign('sAddCardUrl', '/tijian/wx/appointment/addcard/');
+        $this->assign('sReserveStoreUrl', '/tijian/wx/appointment/reservestore/');
+        $this->assign('sReserveCommitUrl', '/tijian/wx/appointment/reservecommit/');
+        $this->assign('sGetStoreListUrl', '/tijian/wx/getstoreList/');
+        $this->assign('sUserInfoEditUrl', '/tijian/wx/appointment/userInfoEdit/');
+        $this->assign('sMapUrl', '/tijian/wx/appointment/map/');
+        $this->assign('sReserveDetailUrl', '/tijian/wx/appointment/reservedetail/');
+        $this->assign('sReserveCancelUrl', '/tijian/wx/appointment/reservecancel/');
+        $this->assign('sStoreListUrl', '/tijian/wx/appointment/storelist/');
+        $this->assign('sUpgradeDetailUrl', '/tijian/wx/appointment/upgradedetail/');
+        $this->assign('sRefundUrl', '/tijian/wx/appointment/refund/');//退款
     }
 
     public function actionBefore()
@@ -42,7 +42,7 @@ class Tijian_Controller_Index_Record extends Tijian_Controller_Index_Base
         $this->_frame = 'pcmenu.phtml';
 
         if (!$this->aUser) {
-            return $this->redirect('/index/account/cdlogin');
+            return $this->redirect('/tijian/index/account/cdlogin');
         }
 
         $aCustomer = Tijian_Model_CustomerNew::getDetail($this->aUser['iUserID']);
@@ -179,11 +179,11 @@ class Tijian_Controller_Index_Record extends Tijian_Controller_Index_Base
     {
         $iCardId = $this->getParam('id');
         if (!$iCardId) {
-            return $this->redirect('/index/record/list/');
+            return $this->redirect('/tijian/index/record/list/');
         }
         $aCard = Tijian_Model_OrderCard::getDetail($iCardId);
         if (!$aCard || $aCard['iUserID'] != $this->aUser['iUserID']) {
-            return $this->redirect('/index/record/list/');
+            return $this->redirect('/tijian/index/record/list/');
         }
 
         $aStore = Tijian_Model_Store::getDetail($aCard['iStoreID']);

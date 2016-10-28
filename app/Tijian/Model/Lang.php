@@ -48,7 +48,7 @@ class Tijian_Model_Lang extends Tijian_Model_Base
         $aMenu = [
             [
                 'name' => '安心体检',
-                'url' => '/wx/appointment/cardlist/',
+                'url' => '/tijian/wx/appointment/cardlist/',
                 'icon' => 'fa fa-3x fa-heart',
             ],
             /**
@@ -60,7 +60,7 @@ class Tijian_Model_Lang extends Tijian_Model_Base
              */
             [
                 'name' => '购买体检套餐',
-                'url' => '/wx/list/',
+                'url' => '/tijian/wx/list/',
                 'icon' => 'fa fa-3x fa-credit-card',
             ],
             /**
@@ -72,7 +72,7 @@ class Tijian_Model_Lang extends Tijian_Model_Base
              */
             [
                 'name' => '订单查询',
-                'url' => '/wx/orderlist/',
+                'url' => '/tijian/wx/orderlist/',
                 'icon' => 'fa fa-3x fa-list-alt',
             ],
             /**
@@ -84,7 +84,7 @@ class Tijian_Model_Lang extends Tijian_Model_Base
              */
             [
                 'name' => '个人信息',
-                'url' => '/wx/account/userinfo/',
+                'url' => '/tijian/wx/account/userinfo/',
                 'icon' => 'fa fa-3x fa-user',
             ],
         ];

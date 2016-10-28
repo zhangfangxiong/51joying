@@ -19,7 +19,7 @@ class Tijian_Controller_Index_Balance extends Tijian_Controller_Index_Account
 	{
 		parent::actionBefore();
         if (!$this->aUser) {
-            return $this->showMsg('请先登陆！', false, '/index/account/publicLogin');
+            return $this->showMsg('请先登陆！', false, '/tijian/index/account/publicLogin');
         }
 
 
@@ -155,7 +155,7 @@ class Tijian_Controller_Index_Balance extends Tijian_Controller_Index_Account
             'msg' => '生成订单成功！',
         ];
 
-        return $this->showMsg('生成订单成功！', true, '/order/cardinfo/id/'.$iOrderID);
+        return $this->showMsg('生成订单成功！', true, '/tijian/index/order/cardinfo/id/'.$iOrderID);
     }
 
     //结算页面

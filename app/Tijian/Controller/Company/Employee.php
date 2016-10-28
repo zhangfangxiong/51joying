@@ -95,7 +95,7 @@ class Tijian_Controller_Company_Employee extends Tijian_Controller_Company_Base
 		]);	
 
 		if (!$aEmployee || !$this->employeeId) {
-			$this->redirect('/company/employee/list');
+			$this->redirect('/tijian/company/employee/list');
 		}
 		if ($aEmployee) {
 			$aCustomer = Tijian_Model_CustomerNew::getDetail($aEmployee['iUserID']);

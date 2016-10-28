@@ -91,7 +91,7 @@ class Tijian_Controller_Tpa_Admin_Index extends Tijian_Controller_Tpa_Admin_Base
         Util_Cookie::set(Yaf_G::getConf('authkey', 'cookie', 'tpa'), $aCookie, $expire);
         return $this->showMsg([
             'msg' => '登录成功！',
-            'sUrl' => '/tpa/admin/'
+            'sUrl' => '/tijian/tpa/admin/'
         ], true);
     }
 

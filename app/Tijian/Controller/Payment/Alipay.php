@@ -85,14 +85,14 @@ class Tijian_Controller_Payment_Alipay extends Tijian_Controller_Index_Base
                 
                 Tijian_Model_OrderInfo::sendMailMsg($aOrder, 1, $aCP['sProductName']);
                 $aAttr = json_decode($aOP['sProductAttr'], true);
-                $url = '/order/buyfourth/id/'.$aAttr['iCardID'].'/pid/'.$aCP['iProductID'].'/sid/'.$aAttr['iStoreID'];
+                $url = '/tijian/index/order/buyfourth/id/'.$aAttr['iCardID'].'/pid/'.$aCP['iProductID'].'/sid/'.$aAttr['iStoreID'];
             } else {
                 Tijian_Model_OrderInfo::sendMailMsg($aOrder, 2);
-                $url = "/payment/pay/success/id/" . $iPayID . '.html';    
+                $url = "/tijian/payment/pay/success/id/" . $iPayID . '.html';
 
             }
         } else { // 支付失败
-            $url = "/payment/pay/fail/id/" . $aParam['out_trade_no'] . '.html';
+            $url = "/tijian/payment/pay/fail/id/" . $aParam['out_trade_no'] . '.html';
         }
         
         // $this->setViewScript('404.phtml');

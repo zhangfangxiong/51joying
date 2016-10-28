@@ -20,20 +20,20 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
 
     protected function _assignUrl()
     {
-        $this->assign('sDetailUrl', '/index/web/detail/');
-        $this->assign('sGetRegionUrl', '/index/store/getregion/');
-        $this->assign('sStoreUrl', '/index/store/store/');
-        $this->assign('sGetStoreUrl', '/index/store/getstore/');
-        $this->assign('sStoreDetailUrl', '/index/web/stdetail/id/');
-        $this->assign('sCartlistUrl', '/index/web/cartlist/');
-        $this->assign('sAddCartUrl', '/index/web/addcart/');
-        $this->assign('sDeleteCartUrl', '/index/web/deletecart/');
+        $this->assign('sDetailUrl', '/tijian/index/web/detail/');
+        $this->assign('sGetRegionUrl', '/tijian/index/store/getregion/');
+        $this->assign('sStoreUrl', '/tijian/index/store/store/');
+        $this->assign('sGetStoreUrl', '/tijian/index/store/getstore/');
+        $this->assign('sStoreDetailUrl', '/tijian/index/web/stdetail/id/');
+        $this->assign('sCartlistUrl', '/tijian/index/web/cartlist/');
+        $this->assign('sAddCartUrl', '/tijian/index/web/addcart/');
+        $this->assign('sDeleteCartUrl', '/tijian/index/web/deletecart/');
         
-        $this->assign('sBalanceUrl', '/index/balance/balance/');
-        $this->assign('sBalanceValidateUrl', '/index/balance/balancevalidate/');
-        $this->assign('sBalancePostUrl', '/index/balance/balancepost/');
-        $this->assign('sPayUrl', '/index/balance/pay/');
-        $this->assign('sPayPostUrl', '/index/balance/paypost/');
+        $this->assign('sBalanceUrl', '/tijian/index/balance/balance/');
+        $this->assign('sBalanceValidateUrl', '/tijian/index/balance/balancevalidate/');
+        $this->assign('sBalancePostUrl', '/tijian/index/balance/balancepost/');
+        $this->assign('sPayUrl', '/tijian/index/balance/pay/');
+        $this->assign('sPayPostUrl', '/tijian/index/balance/paypost/');
     }
 
 	/**
@@ -118,7 +118,7 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
     	$id = intval($this->getParam('id'));
     	$aStore = Tijian_Model_Store::getDetail($id);
     	if (!$id || !$aStore) {
-    		return $this->redirect('/index/web/list');
+    		return $this->redirect('/tijian/index/web/list');
     	}
 
     	$page = $this->getParam('page');
@@ -205,7 +205,7 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
     {
         $aParam = $this->getParams();
         if (empty($aParam['pid'])) {
-            return $this->redirect('/order/buynext/id/'.$aParam['id']);
+            return $this->redirect('/tijian/index/order/buynext/id/'.$aParam['id']);
             // return $this->showMsg('参数不全', false);
         }
 
@@ -248,7 +248,7 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
         $this->assign('iProductID', $aData['iProductID']);
         $this->assign('sProductCode', $aParam['id']);
 
-        $sAptUrl = '/order/buythird/id/' . $aParam['id'] . '/pid/' . $aParam['pid'];
+        $sAptUrl = '/tijian/index/order/buythird/id/' . $aParam['id'] . '/pid/' . $aParam['pid'];
         $this->assign('sAptUrl', $sAptUrl);
 
         $aUpgrade = Tijian_Model_UserProductUpgrade::getUserProductUpgrade($aParam['pid'], $this->aUser['iCreateUserID'], $iChannelType, $this->aUser['iChannelID']);
@@ -264,7 +264,7 @@ class Tijian_Controller_Index_Web extends Tijian_Controller_Index_Base
         } else {
             $this->assign('hasUpgrade', 0);
         }
-        $sUpgUrl = '/order/upgrade/id/' . $aParam['id'] . '/pid/' . $aParam['pid'];
+        $sUpgUrl = '/tijian/index/order/upgrade/id/' . $aParam['id'] . '/pid/' . $aParam['pid'];
         $this->assign('sUpgUrl', $sUpgUrl);
     }
 

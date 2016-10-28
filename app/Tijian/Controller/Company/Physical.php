@@ -29,13 +29,13 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 	public function actionAfter ()
 	{
 		parent::actionAfter();
-		$this->assign('sInsertItemUrl', '/company/physical/insertitem/');
-		$this->assign('sDeleteItemUrl', '/company/physical/deleteitem/');
-		$this->assign('sNextItemUrl', '/company/physical/addplanuser');
+		$this->assign('sInsertItemUrl', '/tijian/company/physical/insertitem/');
+		$this->assign('sDeleteItemUrl', '/tijian/company/physical/deleteitem/');
+		$this->assign('sNextItemUrl', '/tijian/company/physical/addplanuser');
 
-		$this->assign('sInsertUserUrl', '/company/physical/insertuser/');
-		$this->assign('sDeleteUserUrl', '/company/physical/deleteuser/');
-		$this->assign('sNextUserUrl', '/company/physical/addnext');
+		$this->assign('sInsertUserUrl', '/tijian/company/physical/insertuser/');
+		$this->assign('sDeleteUserUrl', '/tijian/company/physical/deleteuser/');
+		$this->assign('sNextUserUrl', '/tijian/company/physical/addnext');
 	}
 
 	/**
@@ -165,12 +165,12 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 			$sID = Tijian_Model_OrderCard::createCard($data, $this->enterpriseId);
 			$opt = $this->getParam('opt');
 			if ($data['iSend'] == 1) {
-				$url = '/company/physical/send?ids='.$sID;
+				$url = '/tijian/company/physical/send?ids='.$sID;
 			} else {
 				if ($opt == 'edit') {
-					$url = '/company/physical/plansetvalid/stype/2/iPlanID/'.$data['iPlanID'];
+					$url = '/tijian/company/physical/plansetvalid/stype/2/iPlanID/'.$data['iPlanID'];
 				} else {
-					$url = '/company/physical/record';
+					$url = '/tijian/company/physical/record';
 				}
 			}
 
@@ -181,11 +181,11 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 				$aOrderID = [];
 				$iPlanID = $this->getParam('iPlanID');
 				if (!$iPlanID) {
-					return $this->redirect('/company/physical/list');
+					return $this->redirect('/tijian/company/physical/list');
 				}
 				$aPlan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
 		        if (!$aPlan) {
-		            return $this->redirect('/company/physical/list');
+		            return $this->redirect('/tijian/company/physical/list');
 		        }
 		        $ids = $this->getPlanUserIDs($iPlanID);
 		        $sEndDate = $aPlan['sEndDate'];
@@ -201,7 +201,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 				$iHRProductID = $this->getParam('iHRProductID');
 			}
 			if (!$ids) {
-				return $this->redirect('/company/physical/list');
+				return $this->redirect('/tijian/company/physical/list');
 			}
 
 			if ($type == 2) {
@@ -546,7 +546,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
             $aPlan['iHRID'] = $this->enterpriseId;
             $aPlan['iStatus'] = 0;
             if ($iLastInsertID = Tijian_Model_Physical_Plan::addData($aPlan)) {
-                $sNextUrl = '/company/physical/plannext/id/' . $iLastInsertID;
+                $sNextUrl = '/tijian/company/physical/plannext/id/' . $iLastInsertID;
                 return $this->showMsg($sNextUrl, true);
             } else {
                 return $this->showMsg('增加失败！', false);
@@ -768,11 +768,11 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 		$iPlanID = intval($this->getParam('iPlanID'));
         $iPage = $this->getParam('page') ? intval($this->getParam('page')) : 1;
         if (empty($iPlanID)) {
-        	return $this->redirect('/company/physical/list');
+        	return $this->redirect('/tijian/company/physical/list');
         }
         $aPlan = Tijian_Model_Physical_Plan::getDetail($iPlanID);
         if (empty($aPlan)) {
-        	return $this->redirect('/company/physical/list');
+        	return $this->redirect('/tijian/company/physical/list');
         }
         
         $where = [
@@ -932,11 +932,11 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
     {
         $aMenu = [
             0 => [
-                'url' => '/company/physical/list',
+                'url' => '/tijian/company/physical/list',
                 'name' => '按体检产品新增',
             ],
             1 => [
-                'url' => '/company/physical/addplan',
+                'url' => '/tijian/company/physical/addplan',
                 'name' => '按体检计划新增',
             ]
         ];
@@ -1230,9 +1230,9 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 	    		$aEmployee['sEmail'] = $aCompany['sEmail'];
 	    	}
 			if ($type == 2) {
-				$sReturnUrl = '/company/physical/plansetvalid/stype/2/iPlanID/'.$aCard['iPlanID'];
+				$sReturnUrl = '/tijian/company/physical/plansetvalid/stype/2/iPlanID/'.$aCard['iPlanID'];
 			} else {
-				$sReturnUrl = '/company/physical/record';
+				$sReturnUrl = '/tijian/company/physical/record';
 			}
 
 			$this->assign('iProductID', $iProductID);
@@ -1398,19 +1398,19 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
             //     'name' => '完成进度',
             // ],
             1 => [
-                'url' => '/company/physical/plandetail/id/'.$planID,
+                'url' => '/tijian/company/physical/plandetail/id/'.$planID,
                 'name' => '基本信息',
             ],
             2 => [
-                'url' => '/company/physical/planitem/id/'.$planID,
+                'url' => '/tijian/company/physical/planitem/id/'.$planID,
                 'name' => '体检产品',
             ],
             3 => [
-                'url' => '/company/physical/planuser/iPlanID/'.$planID,
+                'url' => '/tijian/company/physical/planuser/iPlanID/'.$planID,
                 'name' => '体检员工',
             ],
             4 => [
-                'url' => '/company/physical/plansetvalid/stype/2/iPlanID/'.$planID,
+                'url' => '/tijian/company/physical/plansetvalid/stype/2/iPlanID/'.$planID,
                 'name' => '体检有效期',
             ]
         ];
