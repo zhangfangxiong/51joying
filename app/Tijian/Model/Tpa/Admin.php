@@ -6,6 +6,7 @@ class Tijian_Model_Tpa_Admin extends Tijian_Model_Tpa_Base
     //所有用户初始密码都定为用户名
 
     const TABLE_NAME = 't_admin';
+    const PK_FIELD = 'iAdminID';
 
     static $aType = array(
         1 => '中盈员工',

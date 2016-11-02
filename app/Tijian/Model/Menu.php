@@ -9,6 +9,7 @@ class Tijian_Model_Menu extends Tijian_Model_Base
 {
 
     const TABLE_NAME = 't_menu';
+    const PK_FIELD = 'iMenuID';
 
     public static function getMenus ($iAdminID = 0)
     {

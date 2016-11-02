@@ -3,6 +3,7 @@
 class Tijian_Model_Balance extends Tijian_Model_Base
 {
     const TABLE_NAME = 't_balance';
+    const PK_FIELD = 'iBalanceID';
 
     /**
      * 按分页取预给信息数据

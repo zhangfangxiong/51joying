@@ -3,6 +3,7 @@
 class Tijian_Model_OrderInfo extends Tijian_Model_Base
 {
     const TABLE_NAME = 't_order_info';
+    const PK_FIELD = 'iOrderID';
     const ELECTRONICCARD = 1;//电子卡
     const REALCARD = 2;//实物卡
     const ORDERTYPE_PRODUCT = 3;//体检产品

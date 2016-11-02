@@ -3,6 +3,7 @@
 class Tijian_Model_Addtion extends Tijian_Model_Base
 {
     const TABLE_NAME = 't_addtion';
+    const PK_FIELD = 'iAddtionID';
 
 
     //生成产品编号（自动生成的）

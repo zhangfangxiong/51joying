@@ -4,6 +4,7 @@ class Tijian_Model_Article extends Tijian_Model_Base
 {
 
     const TABLE_NAME = 't_article';
+    const PK_FIELD = 'iArticleID';
     
     /**
      * 取得Class信息

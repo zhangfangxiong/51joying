@@ -4,6 +4,7 @@ class Tijian_Model_Message extends Tijian_Model_Base
 {
 
     const TABLE_NAME = 't_message';
+    const PK_FIELD = 'iMessageID';
     
     /**
      * 取得Class信息

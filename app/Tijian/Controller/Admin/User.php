@@ -76,7 +76,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
         $this->assign('aData', $aData);
         $this->assign('aParam', $aParam);
         $this->assign('aStatus', Tijian_Model_User::$aStatus);
-        $this->assign('aRole', Tijian_Model_Role::getPairRoles(Model_User::TYPE_ADMIN, null));
+        $this->assign('aRole', Tijian_Model_Role::getPairRoles(Tijian_Model_User::TYPE_ADMIN, null));
     }
 
     /**
@@ -554,6 +554,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
         $iUserID = intval($this->getParam('id'));
         $iPage = $this->getParam('page') ? intval($this->getParam('page')) : 1;
         $aParam = $this->getParams();
+        $aWhere = [];
         if (empty($iUserID)) {
             return $this->showMsg('参数有误！', false);
         }
@@ -563,8 +564,10 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
         }
         if (!empty($aParam['sKeyword'])) {
             $aParam['sWhere'] = '(sProductCode="' . $aParam['sKeyword'] . '" OR sProductName LIKE "%' . $aParam['sKeyword'] . '%")';
+            $aWhere['sWhere'] = '(sProductCode="' . $aParam['sKeyword'] . '" OR sProductName LIKE "%' . $aParam['sKeyword'] . '%")';
         }
         $aParam['iStatus'] = 1;
+        $aWhere['iStatus'] = 1;
 
         $aProductChannel = Tijian_Model_ProductChannel::getProductByChannel($aUser['iChannel']);
         if (!empty($aProductChannel)) {
@@ -573,9 +576,11 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
                 $aTmp[] = $value['iProductID'];
             }
             $aParam['iProductID IN'] = $aTmp;
+            $aWhere['iProductID IN'] = $aTmp;
         }
+
         if (!empty($aParam['iProductID IN'])) {
-            $aData = Tijian_Model_Product::getList($aParam, $iPage, 'iUpdateTime DESC', $iPageSize);
+            $aData = Tijian_Model_Product::getList($aWhere, $iPage, 'iUpdateTime DESC', $iPageSize);
         } else {
             $aData['aList'] = [];
         }
@@ -930,7 +935,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
             } else {
                 $aUser['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
             }
-            if (Model_User::addData($aUser) > 0) {
+            if (Tijian_Model_User::addData($aUser) > 0) {
                 return $this->showMsg('用户增加成功！', true);
             } else {
                 return $this->showMsg('用户增加失败！', false);

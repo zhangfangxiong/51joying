@@ -4,6 +4,7 @@ class Tijian_Model_Kv extends Tijian_Model_Base
 {
 
     const TABLE_NAME = 't_kv';
+    const PK_FIELD = 'sKey';
     
     /**
      * 取得KV值

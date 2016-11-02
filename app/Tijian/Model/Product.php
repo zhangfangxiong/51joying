@@ -3,6 +3,7 @@
 class Tijian_Model_Product extends Tijian_Model_Base
 {
     const TABLE_NAME = 't_product';
+    const PK_FIELD = 'iProductID';
     const TYPE_BASE = 1;
     const TYPE_EXPAND = 2;
 
@@ -162,7 +163,7 @@ AND (
 
 
     //获取用户能看到的产品列表
-    public static function getUserViewProductList($iUserID, $iChannelType, $iChannelID, $iPage,$iIsCard = false,$sProductID = '', $sOrder = 'iUpdateTime DESC', $iPageSize = 10, $aParam)
+    public static function getUserViewProductList($iUserID, $iChannelType, $iChannelID, $iPage,$iIsCard = false,$sProductID = '', $sOrder = 'iUpdateTime DESC', $iPageSize = 10, $aParam = Array())
     {
         $iPage = max(1, $iPage);
         $sSQL = '

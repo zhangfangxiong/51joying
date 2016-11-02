@@ -97,7 +97,7 @@ class Tijian_Controller_Admin_Role extends Tijian_Controller_Admin_Base
     public function addAction()
     {
         $iType = $this->getParam('type');
-        $iType = in_array($iType, array_keys(Model_User::$aType)) ? $iType : 1;
+        $iType = in_array($iType, array_keys(Tijian_Model_User::$aType)) ? $iType : 1;
         if ($this->isPost()) {
             $aRole = $this->_checkData();
             if (empty($aRole)) {
