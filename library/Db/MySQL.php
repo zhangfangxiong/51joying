@@ -81,7 +81,7 @@ class Db_MySQL
         }
 
         $res = $this->oDbh->query($sql);
-        
+
         // echo $sql . "\n";
         if ($res === false) {
             throw new Exception($sql);
