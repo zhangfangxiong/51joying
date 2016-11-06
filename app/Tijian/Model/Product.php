@@ -259,13 +259,13 @@ AND (
 
         $sSQL .= ' Order by ' . $sOrder;
         $sSQL .= ' Limit ' . ($iPage - 1) * $iPageSize . ',' . $iPageSize;
-        $aRet ['aList'] = self::getDbh()->query($sSQL);
+        $aRet ['aList'] = self::getDbh()->getAll($sSQL);
         if ($iPage == 1 && count($aRet ['aList']) < $iPageSize) {
             $aRet ['iTotal'] = count($aRet ['aList']);
             $aRet ['aPager'] = null;
         } else {
             unset ($aParam ['limit'], $aParam ['order']);
-            $ret = self::getDbh()->query($sCntSQL);
+            $ret = self::getDbh()->getAll($sCntSQL);
             $aRet ['iTotal'] = $ret [0] ['total'];
             $aRet ['aPager'] = Util_Page::getPage($aRet ['iTotal'], $iPage, $iPageSize, '', self::_getNewsPageParam($aParam));
         }

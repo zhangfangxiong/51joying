@@ -223,7 +223,7 @@ class Db_Dao
                 $aRet['aPager'] = null;
             }
         } else {
-            unset($aParam['limit'], $aParam['order']);
+            unset($aWhere['limit'], $aWhere['order']);
             $sSQL = self::_buildSQL($aWhere, 'COUNT(*)');
             $aRet['iTotal'] = self::getDbh()->getOne($sSQL);
             if ($bReturnPager) {
