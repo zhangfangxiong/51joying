@@ -359,7 +359,7 @@ class Tijian_Controller_Admin_Order extends Tijian_Controller_Admin_Base
                 $aRefundParam['sIdentityCard'] = trim($aParam['sIdentityCard']);
             }
             if (!empty($aParam['sKeyword'])) {
-                $aRefundParam['sWhere'] = '(sOrderCode="' . $aParam['sKeyword'] . '" OR sLastOrderCode LIKE "%' . $aParam['sKeyword'] . '%")';
+                $aRefundParam[] = '(sOrderCode="' . $aParam['sKeyword'] . '" OR sLastOrderCode LIKE "%' . $aParam['sKeyword'] . '%")';
             }
             $aData = Tijian_Model_Refund::getList($aRefundParam, $iPage);
         } else {

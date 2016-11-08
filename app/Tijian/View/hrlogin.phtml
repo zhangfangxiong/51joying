@@ -34,7 +34,7 @@
      <div id="header">
         <div id="logo" class="fl">安心体检</div>
         <div class="tl_nb"><img src="<?php echo $sStaticRoot ?>/backend/img/tp_number.png" /></div>
-        <div id="switch"><a href='/tj'/><button type="button">切换个人用户登录</button></a></div>
+        <div id="switch"><a href='/tijian/index/account/cdlogin'/><button type="button">切换个人用户登录</button></a></div>
      </div>
      
      <div id="sign">
@@ -56,7 +56,7 @@
            <div id="sign_fr_shadow"></div>
            <div class="sign_fr_box">
            <h5>管理用户登录</h5>
-           <form class="form-horizontal" method="post" action="/tijian/admin/signin" role="form" id="myform">
+           <form class="form-horizontal" method="post" action="/tijian/admin/index/signin" role="form" id="myform">
                <input id="username" name="username" type="text" class="form-control" placeholder="帐号">
                <input id="password" name="password" type="password" class="form-control" placeholder="密码"/>
                <input type="hidden" value="<?php echo !empty($iType) ? $iType : 1 ?>" name="type">

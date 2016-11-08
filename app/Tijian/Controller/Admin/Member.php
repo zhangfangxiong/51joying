@@ -104,7 +104,7 @@ class Tijian_Controller_Admin_Member extends Tijian_Controller_Admin_Base
                 return $this->showMsg('用户不存在！', false);
             }
             if ($aOldUser['sEmail'] != $aUser['sEmail'] && $aOldUser['iStatus'] > 0) {
-                if (Model_User::getUserByEmail($aUser['sEmail'])) {
+                if (Tijian_Model_User::getUserByEmail($aUser['sEmail'])) {
                     return $this->showMsg('用户已经存在！', false);
                 }
             }
@@ -136,7 +136,7 @@ class Tijian_Controller_Admin_Member extends Tijian_Controller_Admin_Base
             if (empty($aUser)) {
                 return null;
             }
-            if (Model_User::getRow(array(
+            if (Tijian_Model_User::getRow(array(
                 'where' => array(
                     'iType' => $aUser['iType'],
                     'sEmail' => $aUser['sEmail'],
@@ -145,7 +145,7 @@ class Tijian_Controller_Admin_Member extends Tijian_Controller_Admin_Base
             ))) {
                 return $this->showMsg('用户已经存在！', false);
             }
-            if (Model_User::addData($aUser) > 0) {
+            if (Tijian_Model_User::addData($aUser) > 0) {
                 return $this->showMsg('用户增加成功！', true);
             } else {
                 return $this->showMsg('用户增加失败！', false);

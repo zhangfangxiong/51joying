@@ -81,7 +81,7 @@ class Tijian_Model_OrderInfo extends Tijian_Model_Base
         }
         $sSQL .= ' ' . $sOrder . ' ' . $sLimit;
 
-        $aRet['aList'] = self::getDbh()->query($sSQL);
+        $aRet['aList'] = self::getDbh()->getAll($sSQL);
         if (!empty($aRet['aList'])) {
             foreach ($aRet['aList'] as &$order) {
                 $orderID = $order['iOrderID'];
@@ -93,7 +93,7 @@ class Tijian_Model_OrderInfo extends Tijian_Model_Base
             $aRet['iTotal'] = count($aRet['aList']);
             $aRet['aPager'] = null;
         } else {
-            $ret = self::getDbh()->query($sCountSQL);
+            $ret = self::getDbh()->getOne($sCountSQL);
             $aRet['iTotal'] = $ret[0]['total'];
             $aRet['aPager'] = Util_Page::getPage($aRet['iTotal'], $iPage, $iPageSize, '', $aParam);
         }

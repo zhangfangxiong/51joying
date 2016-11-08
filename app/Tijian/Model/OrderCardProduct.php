@@ -129,7 +129,7 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
     			 LEFT JOIN '.Tijian_Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
     			 ' . $sWhere . ' ' . $sOrder . ' ' . $sLimit;
 
-        $aRet['aList'] = self::getDbh()->query($sSQL);
+        $aRet['aList'] = self::getDbh()->getAll($sSQL);
 
         if(!empty($aRet['aList'])) {
             foreach($aRet['aList'] as &$card) {
@@ -159,7 +159,7 @@ class Tijian_Model_OrderCardProduct extends Tijian_Model_Base
                         LEFT JOIN '. Tijian_Model_OrderCard::TABLE_NAME. ' as card on p.iCardID = card.iAutoID
     			        LEFT JOIN '.Tijian_Model_Customer::TABLE_NAME. ' AS c ON card.iUserID=c.iUserID
     			        ' . $sWhere;
-            $ret = self::getDbh()->query($sCntSQL);
+            $ret = self::getDbh()->getOne($sCntSQL);
             $aRet['iTotal'] = $ret[0]['total'];
             $aRet['aPager'] = Util_Page::getPage($aRet['iTotal'], $iPage, $iPageSize, '', $aParam); // update by cjj 2015-02-13 分页增加query 参数
         }

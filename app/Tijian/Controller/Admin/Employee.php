@@ -79,7 +79,7 @@ class Tijian_Controller_Admin_Employee extends Tijian_Controller_Admin_Base
             $aWhere['sMobile'] = $aParam['sMobile'];
         }
         if (! empty($aParam['iRoleID'])) {
-            $aWhere['sWhere'] = 'FIND_IN_SET("' . $aParam['iRoleID'] . '",sRoleID)';
+            $aWhere[] = 'FIND_IN_SET("' . $aParam['iRoleID'] . '",sRoleID)';
         }
         
         $aList = Tijian_Model_Employee::getList($aWhere, $iPage, $this->getParam('sOrder', ''));

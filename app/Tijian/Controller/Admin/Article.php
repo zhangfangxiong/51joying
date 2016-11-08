@@ -332,7 +332,7 @@ class Tijian_Controller_Admin_Article extends Tijian_Controller_Admin_Base
                 }
                 
                 $sAuthorType = $aClass['sAuthor'];
-                if (!Model_Type::getTypeByName($sAuthorType, $aRow['sAuthorName'])) {
+                if (!Tijian_Model_Type::getTypeByName($sAuthorType, $aRow['sAuthorName'])) {
                     return $this->showMsg('作者不存在', false);
                 }
             }

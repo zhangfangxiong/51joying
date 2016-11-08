@@ -59,7 +59,7 @@ class Tijian_Controller_Admin_Itemap extends Tijian_Controller_Admin_ItemBase
             $aParam[ 'iCanWomanMarry IN' ] = $aParam['aCanWomanMarry'];
         }      
         if (!empty($aParam['sKeyword'])) {
-        	$aParam['sWhere'] = "(sName LIKE '%".addslashes($aParam['sKeyword'])."%' OR sCode LIKE '%".addslashes($aParam['sKeyword'])."%')";
+        	$aParam[] = "(sName LIKE '%".addslashes($aParam['sKeyword'])."%' OR sCode LIKE '%".addslashes($aParam['sKeyword'])."%')";
         } else {
         	unset($aParam['sKeyword']);
         }

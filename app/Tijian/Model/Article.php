@@ -113,7 +113,7 @@ class Tijian_Model_Article extends Tijian_Model_Base
             $aWhere = "FIND_IN_SET($iCityID, sCityID)"; 
         }
         
-        return self::query("SELECT * FROM " . self::TABLE_NAME . ' WHERE ' . join(' AND ', $aWhere) . ' LIMIT ' . $iLimit);
+        return self::query("SELECT * FROM " . self::TABLE_NAME . ' WHERE ' . join(' AND ', $aWhere) . ' LIMIT ' . $iLimit, 'all');
     }
 
     /**
@@ -153,14 +153,14 @@ class Tijian_Model_Article extends Tijian_Model_Base
 
         $sSQL = 'SELECT * FROM ' . self::TABLE_NAME . $sWhere . ' ' . $sOrder . ' ' . $sLimit;
 //         echo $sSQL;exit;
-        $aRet['aList'] = self::getDbh()->query($sSQL);
+        $aRet['aList'] = self::getDbh()->getAll($sSQL);
         if ($iPage == 1 && count($aRet['aList']) < $iPageSize) {
             $aRet['iTotal'] = count($aRet['aList']);
             $aRet['aPager'] = null;
         } else {
             unset($aParam['limit'], $aParam['order']);
             $sCntSQL = 'SELECT COUNT(*) as total FROM ' . self::TABLE_NAME . $sWhere;
-            $ret = self::getDbh()->query($sCntSQL);
+            $ret = self::getDbh()->getOne($sCntSQL);
             $aRet['iTotal'] = $ret[0]['total'];
             $aRet['aPager'] = Util_Page::getPage($aRet['iTotal'], $iPage, $iPageSize, '', $aParam); // update by cjj 2015-02-13 分页增加query 参数
         }
@@ -229,7 +229,7 @@ class Tijian_Model_Article extends Tijian_Model_Base
                 $sField = 'iTodayVisit';
         }
         
-        return self::query("SELECT * FROM " . self::TABLE_NAME . " $sWhere ORDER BY $sField DESC LIMIT $iLimit");
+        return self::query("SELECT * FROM " . self::TABLE_NAME . " $sWhere ORDER BY $sField DESC LIMIT $iLimit", 'all');
     }
     
     /**
@@ -254,7 +254,7 @@ class Tijian_Model_Article extends Tijian_Model_Base
                 $sField = 'iTotalVisit';
         }
     
-        return self::query("SELECT * FROM " . self::TABLE_NAME . " $sWhere ORDER BY $sField DESC LIMIT $iLimit");
+        return self::query("SELECT * FROM " . self::TABLE_NAME . " $sWhere ORDER BY $sField DESC LIMIT $iLimit", 'all');
     }
     
     /**
@@ -267,7 +267,7 @@ class Tijian_Model_Article extends Tijian_Model_Base
     public static function getArticlesByWhere ($aParam, $sOrder = 'iPublishTime DESC', $iLimit = 20)
     {
         $sWhere = self::_buildWhere($aParam);
-        return self::query('SELECT * FROM ' . self::TABLE_NAME . ' ' . $sWhere . ' ORDER BY ' . $sOrder . ' LIMIT ' . $iLimit);
+        return self::query('SELECT * FROM ' . self::TABLE_NAME . ' ' . $sWhere . ' ORDER BY ' . $sOrder . ' LIMIT ' . $iLimit, 'all');
     }
     
     /**

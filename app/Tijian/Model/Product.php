@@ -134,7 +134,7 @@ AND (
             $sSQL .= ' AND c.iPCard >0';
         }
 
-        $aData = self::query($sSQL);
+        $aData = self::query($sSQL, 'all');
         $aTmp = [];
 
         foreach ($aData as $key => &$value) {
@@ -210,7 +210,7 @@ AND (
 
         $sSQL .= ' Order by c.' . $sOrder;
         $sSQL .= ' Limit ' . ($iPage - 1) * $iPageSize . ',' . $iPageSize;
-        $aData = self::getDbh()->query($sSQL);
+        $aData = self::getDbh()->getAll($sSQL);
 
         foreach ($aData as $key => &$value) {
             //价格特殊处理
@@ -228,7 +228,7 @@ AND (
             $aRet ['iTotal'] = count($aRet ['aList']);
             $aRet ['aPager'] = null;
         } else {
-            $ret = self::getDbh()->query($sCntSQL);
+            $ret = self::getDbh()->getOne($sCntSQL);
             $aRet ['iTotal'] = $ret [0] ['total'];
             $aRet ['aPager'] = Util_Page::getPage($aRet ['iTotal'], $iPage, $iPageSize, '', self::_getNewsPageParam($aParam));
         }
@@ -265,7 +265,7 @@ AND (
             $aRet ['aPager'] = null;
         } else {
             unset ($aParam ['limit'], $aParam ['order']);
-            $ret = self::getDbh()->getAll($sCntSQL);
+            $ret = self::getDbh()->getOne($sCntSQL);
             $aRet ['iTotal'] = $ret [0] ['total'];
             $aRet ['aPager'] = Util_Page::getPage($aRet ['iTotal'], $iPage, $iPageSize, '', self::_getNewsPageParam($aParam));
         }
@@ -291,7 +291,7 @@ AND (
     public static function getUserViewlist($iProductID, $iType, $iChannelID)
     {
         $sSql = 'SELECT c.sRealName,c.sUserName,b.iAutoID,b.iUserID FROM ' . Tijian_Model_ProductChannel::TABLE_NAME . ' a,' . Tijian_Model_ProductViewRange::TABLE_NAME . ' b,' . Tijian_Model_User::TABLE_NAME . ' c WHERE a.iProductID=' . $iProductID . ' AND a.iType=' . $iType . ' AND a.iChannelID=' . $iChannelID . ' AND a.iAutoID=b.iProductChannelID AND a.iStatus=1 AND b.iStatus=1 AND b.iUserID=c.iUserID AND a.iViewRange = b.iViewRange ORDER BY b.iCreateTime DESC';
-        return self::query($sSql);
+        return self::query($sSql, 'all');
     }
 
     /**

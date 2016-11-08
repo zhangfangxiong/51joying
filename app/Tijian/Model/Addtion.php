@@ -62,13 +62,13 @@ class Tijian_Model_Addtion extends Tijian_Model_Base
 
         $sSQL .= ' Order by ' . $sOrder;
         $sSQL .= ' Limit ' . ($iPage - 1) * $iPageSize . ',' . $iPageSize;
-        $aRet['aList'] = self::getDbh()->query($sSQL);
+        $aRet['aList'] = self::getDbh()->getAll($sSQL);
         if ($iPage == 1 && count($aRet['aList']) < $iPageSize) {
             $aRet['iTotal'] = count($aRet['aList']);
             $aRet['aPager'] = null;
         } else {
             unset($aParam['limit'], $aParam['order']);
-            $ret = self::getDbh()->query($sCntSQL);
+            $ret = self::getDbh()->getOne($sCntSQL);
             $aRet['iTotal'] = $ret[0]['total'];
             $aRet['aPager'] = Util_Page::getPage($aRet['iTotal'], $iPage, $iPageSize, '', self::_getNewsPageParam($aParam));
         }
@@ -98,7 +98,7 @@ class Tijian_Model_Addtion extends Tijian_Model_Base
             $sCntSQL .= " AND (sName LIKE '%".addslashes($aParam['sKeyword']) . "%' OR sCode LIKE '%".addslashes($aParam['sKeyword'])."%')";
         }  
 
-        return self::query($sSQL);
+        return self::query($sSQL, 'all');
     }
 
     //产品包含的所有加项
@@ -112,6 +112,6 @@ class Tijian_Model_Addtion extends Tijian_Model_Base
             $sSql .= ' and pa.iStatus = '. $iStatus;
         }
 
-        return self::query($sSql);
+        return self::query($sSql, 'all');
     }
 }

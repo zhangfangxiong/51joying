@@ -156,7 +156,9 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
         }
         $aUser['iStatus'] = ($aUser['iStatus'] == Tijian_Model_User::STATUS_TYPE_LOCK) ? Tijian_Model_User::STATUS_TYPE_NORMAL : Tijian_Model_User::STATUS_TYPE_LOCK;
         $sType = ($aUser['iStatus'] == Tijian_Model_User::STATUS_TYPE_LOCK) ? '锁定' : '解锁';
-        if (Model_User::updData($aUser) > 0) {
+        $aParam['iStatus']=$aUser['iStatus'];
+        $aParam['iUserID'] = $aUser['iUserID'];
+        if (Tijian_Model_User::updData($aParam) > 0) {
             return $this->showMsg('用户' . $sType . '成功！', true);
         } else {
             return $this->showMsg('用户' . $sType . '失败！', false);
@@ -171,7 +173,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
         if ($this->_request->isPost()) {
             $aUser['iRoleID'] = intval($this->getParam('iRoleID'));
             $aUser['iUserID'] = intval($this->getParam('iUserID'));
-            if (Model_User::updData($aUser) > 0) {
+            if (Tijian_Model_User::updData($aUser) > 0) {
                 return $this->showMsg('权限设置成功！', true);
             } else {
                 return $this->showMsg('权限设置失败！', false);
@@ -183,7 +185,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
                 return $this->showMsg('该用户不存在！', false);
             }
             $this->assign('aUser', $aUser);
-            $this->assign('aRole', Tijian_Model_Role::getPairRoles(Model_User::TYPE_ADMIN, null));
+            $this->assign('aRole', Tijian_Model_Role::getPairRoles(Tijian_Model_User::TYPE_ADMIN, null));
         }
     }
 
@@ -199,7 +201,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
             return $this->showMsg('该用户不存在！', false);
         }
         $aUser['sPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $aUser['sUserName']);
-        if (Model_User::updData($aUser) > 0) {
+        if (Tijian_Model_User::updData($aUser) > 0) {
             return $this->showMsg('用户密码重置成功！', true);
         } else {
             return $this->showMsg('用户密码已重置', false);
@@ -216,8 +218,9 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
             if (empty($aUser)) {
                 return null;
             }
-            $aUser['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
-            if (Model_User::updData($aUser) > 0) {
+            unset($aUser['id']);
+            //$aUser['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
+            if (Tijian_Model_User::updData($aUser) > 0) {
                 return $this->showMsg('用户编辑成功！', true);
             } else {
                 return $this->showMsg('用户编辑失败！', false);
@@ -251,8 +254,8 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
             $aUser['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
             $aUser['iIsCheck'] = Tijian_Model_User::ISCHECK;
             $aUser['sPassword'] = md5(Yaf_G::getConf('cryptkey', 'cookie') . $aUser['sUserName']);
-            $aUser['iCreateUserID'] = $aUser['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
-            if (Model_User::addData($aUser) > 0) {
+            $aUser['iCreateUserID'] = $this->aCurrUser['iUserID'];
+            if (Tijian_Model_User::addData($aUser) > 0) {
                 return $this->showMsg('用户增加成功！', true);
             } else {
                 return $this->showMsg('用户增加失败！', false);
@@ -283,7 +286,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
             if (empty($aParam['iUserID'])) {
                 return $this->showMsg('非法操作！', false);
             }
-            if (!Model_User::getDetail($aParam['iUserID'])) {
+            if (!Tijian_Model_User::getDetail($aParam['iUserID'])) {
                 return $this->showMsg('用户不存在！', false);
             }
         }
@@ -563,8 +566,8 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
             return $this->showMsg('员工不存在！', false);
         }
         if (!empty($aParam['sKeyword'])) {
-            $aParam['sWhere'] = '(sProductCode="' . $aParam['sKeyword'] . '" OR sProductName LIKE "%' . $aParam['sKeyword'] . '%")';
-            $aWhere['sWhere'] = '(sProductCode="' . $aParam['sKeyword'] . '" OR sProductName LIKE "%' . $aParam['sKeyword'] . '%")';
+            $aParam[] = '(sProductCode="' . $aParam['sKeyword'] . '" OR sProductName LIKE "%' . $aParam['sKeyword'] . '%")';
+            $aWhere[] = '(sProductCode="' . $aParam['sKeyword'] . '" OR sProductName LIKE "%' . $aParam['sKeyword'] . '%")';
         }
         $aParam['iStatus'] = 1;
         $aWhere['iStatus'] = 1;
@@ -859,8 +862,12 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
                 return $this->showMsg('该用户不存在！', false);
             }
             $sCheckStatus = $aParam['iIsCheck'] == 1 ? '通过' : '拒绝';
+            $iIfSendAccount = $aParam['iIfSendAccount'];
+            unset($aParam['id']);
+            unset($aParam['iIfSendAccount']);
+
             if (Tijian_Model_User::updData($aParam)) {
-                if (!empty($aParam['iIfSendAccount'])) {
+                if (!empty($iIfSendAccount)) {
                     //发送账号todo
                 }
                 return $this->showMsg($sCheckStatus . '成功！', true);
@@ -984,7 +991,7 @@ class Tijian_Controller_Admin_User extends Tijian_Controller_Admin_Base
                 $aUser['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
             }
             $aUser['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
-            if (Model_User::updData($aUser) > 0) {
+            if (Tijian_Model_User::updData($aUser) > 0) {
                 return $this->showMsg('用户编辑成功！', true);
             } else {
                 return $this->showMsg('用户编辑失败！', false);

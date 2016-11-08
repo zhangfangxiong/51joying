@@ -3,7 +3,7 @@
 /**
  * 供应商处理类
  */
-class Model_Supplier extends Tijian_Model_Base
+class Tijian_Model_Supplier extends Tijian_Model_Base
 {
     const TABLE_NAME = '';
 

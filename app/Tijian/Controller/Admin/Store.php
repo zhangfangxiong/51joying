@@ -382,7 +382,7 @@ class Tijian_Controller_Admin_Store extends Tijian_Controller_Admin_Base
             if (empty($aParam['iStoreID'])) {
                 return $this->showMsg('非法操作！', false);
             }
-            if (!Model_Store::getDetail($aParam['iStoreID'])) {
+            if (!Tijian_Model_Store::getDetail($aParam['iStoreID'])) {
                 return $this->showMsg('门店不存在！', false);
             }
         }

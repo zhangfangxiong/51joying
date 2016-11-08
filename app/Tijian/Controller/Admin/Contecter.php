@@ -97,7 +97,7 @@ class Tijian_Controller_Admin_Contecter extends Tijian_Controller_Admin_Base
             if (empty($aParam['iUserID'])) {
                 return $this->showMsg('非法操作！', false);
             }
-            if (!Model_User::getDetail($aParam['iUserID'])) {
+            if (!Tijian_Model_User::getDetail($aParam['iUserID'])) {
                 return $this->showMsg('用户不存在！', false);
             }
         }

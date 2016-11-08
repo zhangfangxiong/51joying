@@ -85,13 +85,10 @@ class Tijian_Controller_Admin_Item extends Tijian_Controller_Admin_ItemBase
             $aParam[ 'iCanAdd IN' ] = $aParam['aCanAdd'];
         }        
         if (!empty($aParam['sKeyword'])) {
-        	$aParam['sWhere'] = "(sName LIKE '%".addslashes($aParam['sKeyword'])."%' OR sCode LIKE '%".addslashes($aParam['sKeyword'])."%')";
-        } else {
-        	unset($aParam['sKeyword']);
+        	$aParam[] = "(sName LIKE '%".addslashes($aParam['sKeyword'])."%' OR sCode LIKE '%".addslashes($aParam['sKeyword'])."%')";
         }
-        if (!empty($aParam['page'])) {
-        	unset($aParam['page']);
-        }
+        unset($aParam['sKeyword']);
+        unset($aParam['page']);
 
 		$aList = Tijian_Model_Item::getList($aParam, $page, 'iUpdateTime DESC');
 		foreach ($aList['aList'] as $key => $value) {

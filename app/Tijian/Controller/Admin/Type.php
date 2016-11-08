@@ -122,10 +122,13 @@ class Tijian_Controller_Admin_Type extends Tijian_Controller_Admin_Base
             if (empty($aType)) {
                 return null;
             }
-            print_r($aType);die;
             
             $aClass = Tijian_Model_Type::getClass($aType['sClass']);
             $sClassName = $aClass['sTitle'];
+            if(empty($aType['iParentID']))
+            {
+                $aType['iParentID'] = 0;
+            }
             $aType['iOrder'] = Tijian_Model_Type::getNextOrder($aType['iParentID']);
             if (Tijian_Model_Type::addData($aType) > 0) {
                 return $this->showMsg($sClassName . '增加成功！', true);

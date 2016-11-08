@@ -128,7 +128,7 @@ class Tijian_Model_Message extends Tijian_Model_Base
     
     	$sSQL = 'SELECT * FROM ' . self::TABLE_NAME . $sWhere . ' ' . $sOrder . ' ' . $sLimit;
     	//         echo $sSQL;exit;
-    	$aRet['aList'] = self::getDbh()->query($sSQL);
+    	$aRet['aList'] = self::getDbh()->getAll($sSQL);
     	$sModel = $aClass['sTargetModel'];
     	foreach ($aRet['aList'] as &$v) {
     		$v['aTarget'] = $sModel::getDetail($v['iTargetID']);
@@ -141,7 +141,7 @@ class Tijian_Model_Message extends Tijian_Model_Base
     	} else {
     		unset($aParam['limit'], $aParam['order']);
     		$sCntSQL = 'SELECT COUNT(*) as total FROM ' . self::TABLE_NAME . $sWhere;
-    		$ret = self::getDbh()->query($sCntSQL);
+    		$ret = self::getDbh()->getOne($sCntSQL);
     		$aRet['iTotal'] = $ret[0]['total'];
     		$aRet['aPager'] = Util_Page::getPage($aRet['iTotal'], $iPage, $iPageSize, '', $aParam); // update by cjj 2015-02-13 分页增加query 参数
     	}

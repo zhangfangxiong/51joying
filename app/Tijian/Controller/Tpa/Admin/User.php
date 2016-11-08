@@ -562,7 +562,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             return $this->showMsg('员工不存在！', false);
         }
         if (!empty($aParam['sKeyword'])) {
-            $aParam['sWhere'] = '(sProductCode="' . $aParam['sKeyword'] . '" OR sProductName LIKE "%' . $aParam['sKeyword'] . '%")';
+            $aParam[] = '(sProductCode="' . $aParam['sKeyword'] . '" OR sProductName LIKE "%' . $aParam['sKeyword'] . '%")';
         }
         $aParam['iStatus'] = 1;
 
@@ -930,7 +930,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
             } else {
                 $aUser['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
             }
-            if (Model_User::addData($aUser) > 0) {
+            if (Tijian_Model_User::addData($aUser) > 0) {
                 return $this->showMsg('用户增加成功！', true);
             } else {
                 return $this->showMsg('用户增加失败！', false);
@@ -979,7 +979,7 @@ class Tijian_Controller_Tpa_Admin_User extends Tijian_Controller_Tpa_Admin_Base
                 $aUser['iStatus'] = Tijian_Model_User::STATUS_TYPE_NORMAL;
             }
             $aUser['iLastUpdateUserID'] = $this->aCurrUser['iUserID'];
-            if (Model_User::updData($aUser) > 0) {
+            if (Tijian_Model_User::updData($aUser) > 0) {
                 return $this->showMsg('用户编辑成功！', true);
             } else {
                 return $this->showMsg('用户编辑失败！', false);

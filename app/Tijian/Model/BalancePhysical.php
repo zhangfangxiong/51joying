@@ -18,6 +18,6 @@ class Tijian_Model_BalancePhysical extends Tijian_Model_Base
     			 LEFT JOIN t_product p ON p.iProductID=pp.iProductID
     			 WHERE bp.iBalanceID=$iBalanceID
     			";
-    	return self::query($sSQL);
+    	return self::query($sSQL, 'all');
     }
 }

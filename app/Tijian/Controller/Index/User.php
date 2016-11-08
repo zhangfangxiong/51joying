@@ -201,7 +201,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
             }
             
             $aUser = Tijian_Model_User::getDetail($aUser['iUserID']);
-            if (Model_User::makePassword($aParam['sOldPassword']) != $aUser['sPassword']) {
+            if (Tijian_Model_User::makePassword($aParam['sOldPassword']) != $aUser['sPassword']) {
                 $aErr['sOldPassword'] = '原密码输入错误 ';
             }
             
@@ -411,7 +411,7 @@ class Tijian_Controller_Index_User extends Tijian_Controller_Index_Base
                 $aUser = Tijian_Model_User::getUserByEmail($sUser, $iType);
                 if (empty($aUser)) {
                     $aErr['user'] = '该邮箱尚未注册';
-                } elseif (Model_User::makePassword($sPass) != $aUser['sPassword']) {
+                } elseif (Tijian_Model_User::makePassword($sPass) != $aUser['sPassword']) {
                     $aErr['pass'] = '登录密码错误';
                 }
             }
