@@ -4,7 +4,7 @@ class Tijian_Controller_Admin_City extends Tijian_Controller_Admin_Base
 {
 
     /**
-     * 城市删除
+     * 城市删除 提交测试不要ice
      */
     public function delAction ()
     {
