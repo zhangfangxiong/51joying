@@ -12,7 +12,6 @@ class Tpa_Controller_Admin_Accept extends Tpa_Controller_Admin_Base
     //受理雇员列表
     public function employeeAction()
     {
-        echo 444;die;
         $aParam = $this->getParams();
         $iPage = $this->getParam('page') ? $this->getParam('page') : 1;
         $where['iStatus'] = Tpa_Model_Employee::STATUS_VALID;
