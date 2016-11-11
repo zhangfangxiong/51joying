@@ -18,15 +18,19 @@ class Tijian_Controller_Admin_Permission extends Tijian_Controller_Admin_Base
         $aWhere = array(
             'iStatus' => 1
         );
-        if (! empty($sKey)) {
+        if (!empty($sKey)) {
             $aWhere['sPath LIKE'] = '%' . $sKey . '%';
         }
         $aList = Tijian_Model_Permission::getList($aWhere, $iPage);
-        $aMenuID = array();
-        foreach ($aList['aList'] as $v) {
-            $aMenuID[] = $v['iMenuID'];
+        $aMenuList = array();
+        if (!empty($aList['aList'])) {
+
+            $aMenuID = array();
+            foreach ($aList['aList'] as $v) {
+                $aMenuID[] = $v['iMenuID'];
+            }
+            $aMenuList = Tijian_Model_Menu::getPKIDList($aMenuID, true);
         }
-        $aMenuList = Tijian_Model_Menu::getPKIDList($aMenuID, true);
         $this->assign('aList', $aList);
         $this->assign('aMenuList', $aMenuList);
     }

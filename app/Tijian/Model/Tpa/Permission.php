@@ -13,9 +13,12 @@ class Tijian_Model_Tpa_Permission extends Tijian_Model_Tpa_Base
      */
     public static function delData ($iPermissionID)
     {
-        $oOrm = self::getDbh();
-        $oOrm->setPKIDValue($iPermissionID);
-        return $oOrm->delData();
+//        $oOrm = self::getDbh();
+//        $oOrm->setPKIDValue($iPermissionID);
+//        return $oOrm->delData();
+        $sPKField = self::getPKField();
+        $sTable = self::getTable();
+        return self::getDbh()->query("UPDATE $sTable SET iStatus=" . self::STATUS_INVALID . ",iUpdateTime=" . time() . " WHERE $sPKField='$iPermissionID'");
     }
 
     /**
