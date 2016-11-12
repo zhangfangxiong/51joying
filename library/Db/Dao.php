@@ -491,4 +491,18 @@ class Db_Dao
         }
         return addcslashes($value, "\000\n\r\\'\"\032");
     }
+
+    public static function getListByPKIDs($ids)
+    {
+        if(is_array($ids))
+        {
+            $sIds = implode(',', $ids);
+        }
+        else
+        {
+            $sIds = $ids;
+        }
+        $sSQL = "SELECT * FROM ".self::getTable()." WHERE ".self::getPKField()." IN (".$sIds.")";
+        return self::getDbh()->getAll($sSQL);
+    }
 }

@@ -17,11 +17,23 @@ $config['image']['aWaterMarkPosition'] = array(
 );
 
 $config['image']['aNeedWaterMarkSize'] = array(
-	'bNeed' => false, 
-	'iWidth'  => 241,
-	'iHeight' => 241
+		'bNeed' => false,
+		'iWidth'  => 241,
+		'iHeight' => 241
 );
-$config['image']['aDimension'] = array();
+$config['image']['aDimension'] = array(
+    /*
+    '54x80' => array(
+        'width' => 54,
+        'height' => 80
+    ),
+    '213x160' => array(
+        'width' => 213,
+        'height' => 160,
+        'waterMark' => false
+    )
+    */
+);
 
 // 图片类型
 $config['file']['aImageType'] = array(
@@ -29,7 +41,9 @@ $config['file']['aImageType'] = array(
     'jpg',
     'jpeg',
     'png',
-    'webp'
+    'webp',
+    // 'xls',
+    // 'xltx'
 );
 
 // 文件系统支持的文件格式
@@ -46,10 +60,8 @@ $config['file']['aAllowedType'] = array(
     "mp4",
     'webp',
     'zip',
-    'xlsx',
     'xls',
-    'csv',
-    'txt'
+    'xlsx',
 );
 
 // 文件系统支持的文件格式

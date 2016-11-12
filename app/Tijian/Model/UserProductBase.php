@@ -20,7 +20,7 @@ class Tijian_Model_UserProductBase extends Tijian_Model_Base
             $aProduct = $aBaseProduct = Tijian_Model_Product::getProductByCode($iProductID);
             $iProductID = $aProduct['iProductID'];
         } else {
-            $aProduct = $aBaseProduct =Model_Product::getDetail($iProductID);
+            $aProduct = $aBaseProduct = Tijian_Model_Product::getDetail($iProductID);
         }
         if (empty($aProduct)) {
             return [];
@@ -32,6 +32,10 @@ class Tijian_Model_UserProductBase extends Tijian_Model_Base
             'iChannelID' => $iChannelID,
             'iStatus' => 1
         );
+        if(empty($iChannelID))
+        {
+            unset($aWhere['iChannelID']);
+        }
         $aUserProductBase = self::getRow(array(
             'where' => $aWhere
         ));

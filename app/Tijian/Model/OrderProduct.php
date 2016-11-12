@@ -63,7 +63,17 @@ class Tijian_Model_OrderProduct extends Tijian_Model_Base
             $aOrderParam['sProductAttr'] = json_encode($aParam['sProductAttr']);
         }
         //以上为选填
-        return self::addData($aOrderParam);
+        return self::addOrderProduct($aOrderParam);
+    }
+
+    public static function addOrderProduct ($aData, $bQuote = true, $sType = 'INSERT')
+    {
+        if ($sType == 'INSERT') {
+            self::getDbh()->insert(self::getTable(), $aData, $bQuote);
+        } else {
+            self::getDbh()->replace(self::getTable(), $aData, $bQuote);
+        }
+        return self::getDbh()->lastInsertId();
     }
 
 }

@@ -1,17 +1,17 @@
 <?php
 $config['database']['default']['master'] = array(
-    'dsn' => 'mysql:host=127.0.0.1;dbname=fangjl',
-    'user' => 'root',
-    'pass' => 'xjc.123',
+    'dsn' => 'mysql:host=10.24.26.127;dbname=51joying',
+    'user' => 'www',
+    'pass' => '51joying',
     'init' => array(
         'SET CHARACTER SET utf8',
         'SET NAMES utf8'
     )
 );
 $config['database']['default']['salve'] = array(
-    'dsn' => 'mysql:host=127.0.0.1;dbname=fangjl',
-    'user' => 'root',
-    'pass' => 'xjc.123',
+    'dsn' => 'mysql:host=10.24.26.127;dbname=51joying',
+    'user' => 'www',
+    'pass' => '51joying',
     'init' => array(
         'SET CHARACTER SET utf8',
         'SET NAMES utf8'
@@ -26,48 +26,68 @@ $config['cache']['bll'] = array(
 );
 
 $config["mailer"] = array(
-    'from_email' => 'pancke@163.com',
-    'from_name' => 'pancke',
-    'smtp_host' => 'smtp.163.com',
-    'smtp_user' => 'pancke',
-    'smtp_pass' => 'xjc.123',
+    'from_email' => 'test01@joying-insurance.com',
+    'from_name' => '51joying',
+    'smtp_host' => 'smtp.muchost.com',
+    'smtp_user' => 'test01@joying-insurance.com',
+    'smtp_pass' => 'Abc@1234',
     'smtp_port' => '25',
     'smtp_secure' => ''
 );
 
+// 云通讯配制
 $config['CCP'] = array(
     'host' => 'app.cloopen.com',
     // 'host' => 'sandboxapp.cloopen.com',
     'port' => '8883',
     'version' => '2013-12-26',
-    'sid' => '8aaf070855c4a7270155c4ec742400b5',
-    'token' => 'c9c81e8f6a4e42cab99406bddd62291e',
-    'appid' => '8aaf070855c4a7270155c4ec749400bb'
+    'sid' => 'aaf98f89544cd9d90154854b52e5369c',
+    'token' => '2d584f21c13e48129b4b8e58909bb736',
+    'appid' => '8a216da85577a5cc0155806d75bd0bf5'
 );
 
-$config['umeng'] = array(
-    'appkey_android' => '5782f369e0f55a5989003612',
-    'msecret_android' => 'jgujhub8j0yimnflkiagfdv4lwh7pglt',
-    'umsecret_android' => '6f62475b5b20f463d99997439194acb2',
-    'appkey_ios' => '5795bec4e0f55abba0002d62',
-    'msecret_ios' => 'zatrmmtql0hpfnpolgig7ygs2sbcfwfx',
+//供应商接口地址配置
+$config['supplier'] = array(
+    'ikang' => array(
+        'linkurl' => "https://services.health.ikang.com/ikang-service/rs/cooperation/",
+        'preTag' => "_ikang@",
+        'onlyCode' => "zzweofjwoi8347e",
+        'version' => "0.1",
+    ),
+    'renai' => array(
+        'linkurl' => "http://218.80.216.50:12567/yxxt/services/",
+        'preTag' => "SHRATJ",
+        'onlyCode' => "SHZYBX001",
+        'version' => "Version 1.0",
+    ),
+    'ruici' => array(
+        'linkurl' => "http://zj.rayelink.com:8005/RichHealthThridInterface.svc",
+        'tokenUrl' => "http://zj.rayelink.com:8004/TokenCreater.asmx",
+        'identityID' => "ZhongYing1",
+        'password' => "dFwvF6SxKoqMdynF",
+        'macAddr' => "B8-AE-ED-28-D8-02"
+    ),
+    'ciming' => array(
+        'linkurl' => "http://tjdata.srv.api.ciming.com:20010/cimingForExternal/ws/resultWs",
+        'user' => "ciicjy",
+        'password' => "cmjjk2016"
+    ),
+    'meinian' => array(
+        'linkurl' => "http://api.health-100.cn/StandardService/api/",
+        'appKey' => "20138168",
+        'password' => "zhongying@123"
+    ),
+    'meinian_niandu' => array(
+        'linkurl' => "http://api.health-100.cn/StandardService/api/",
+        'appKey' => "20138168",
+        'password' => "2015@)!%zhiying"
+    ),
+    'meinian_ruzhi' => array(
+        'linkurl' => "http://api.health-100.cn/StandardService/api/",
+        'appKey' => "20153530",
+        'password' => "zhiying@)!%3530"
+    )
+
 );
 
-$config['wxConfig'] = [
-    'APPID' => 'wxc8017e7331c66217',
-    'APPSECRET' => '2ed256c70ea5dc8c8678244ababb515c',
-    'TOKEN' => 'aaaabbbbccccdddd',
-    'ACTIVESTART' => 'i5df1A34JOXCgjTzmSqHVGbYQ7bECYcKkd1t_A8iyYY',//浠诲姟寮�鎻愰啋妯℃澘
-    'MCHID' => '1321444201', // 鍟嗘埛ID
-    'PAYKEY' => '69805779a07a78588a5c07c71ce400a5', // MD5 ("m18116208033@163.com")
-];
-
-$config['mongodb']['fangjl'] = array(
-    'dsn' => 'mongodb://139.196.189.143:27017/fangjl',
-    'query_safety' => null
-);
-
-$config['mongodb']['fangjl2'] = array(
-    'dsn' => 'mongodb://139.196.189.143:27017/fangjl2',
-    'query_safety' => null
-);
+return $config;

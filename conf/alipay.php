@@ -20,13 +20,13 @@
 
 //↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 //合作身份者id，以2088开头的16位纯数字
-$config['aliapy_config']['partner']      = '2088711465369097';
+$config['aliapy_config']['partner']      = '2088311740607081';
 
 //安全检验码，以数字和字母组成的32位字符
-$config['aliapy_config']['key']          = 'ftliblbtle6za5m9m01jlitcy2xuelb5';
+$config['aliapy_config']['key']          = 'q13ri42pspz5zuvcvxd59syd68cqj0u4';
 
 //签约支付宝账号或卖家支付宝帐户
-$config['aliapy_config']['seller_email'] = 'tony@51wom.com';
+$config['aliapy_config']['seller_email'] = 'zhifubao@joying-insurance.com';
 
 //页面跳转同步通知页面路径，要用 http://格式的完整路径，不允许加?id=123这类自定义参数
 //return_url的域名不能写成http://localhost/create_direct_pay_by_user_php_utf8/return_url.php ，否则会导致return_url执行无效

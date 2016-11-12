@@ -163,9 +163,25 @@ class Tijian_Model_OrderInfo extends Tijian_Model_Base
 
         //以上为选填
 
-        return self::addData($aOrderParam);
+        return self::addOrderInfo($aOrderParam);
     }
+    
+    public static function addOrderInfo ($aData, $bQuote = true, $sType = 'INSERT')
+    {
+        if (! isset($aData['iCreateTime'])) {
+            $aData['iCreateTime'] = time();
+        }
+        if (! isset($aData['iUpdateTime'])) {
+            $aData['iUpdateTime'] = time();
+        }
 
+        if ($sType == 'INSERT') {
+            self::getDbh()->insert(self::getTable(), $aData, $bQuote);
+        } else {
+            self::getDbh()->replace(self::getTable(), $aData, $bQuote);
+        }
+        return self::getDbh()->lastInsertId();
+    }
     /**
      * 发货后的处理（电子卡发邮件，实体卡寄出后点确认）
      */

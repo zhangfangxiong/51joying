@@ -2,8 +2,8 @@
 
 	<dl class="tab_nav login_nav">
 		<dd>
-			<a href="javascript:;" <?php echo $iType==Model_User::TYPE_AD?'class="tab_light"':''?>>广告主注册</a>
-			<a href="javascript:;" <?php echo $iType!=Model_User::TYPE_AD?'class="tab_light"':''?>>自媒体注册</a>
+			<a href="javascript:;" <?php echo $iType== Tijian_Model_User::TYPE_AD?'class="tab_light"':''?>>广告主注册</a>
+			<a href="javascript:;" <?php echo $iType!= Tijian_Model_User::TYPE_AD?'class="tab_light"':''?>>自媒体注册</a>
 		</dd>
 	</dl>
 

@@ -70,6 +70,7 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 		$iIsAll = intval($this->getParam('iIsAll'));
 		if (!$iIsAll) {
 			$sUserID = $this->getCustomerLastThreeMonths($this->enterpriseId);
+
 			if ($sUserID) {
 				$where['iUserID NOT IN'] = $sUserID;
 			}
@@ -152,7 +153,6 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 			if (!$data) {
 				return null;
 			}
-
 			//判断选择的人性别和卡性别是否一致
 			foreach ($data['aUserID'] as $key => $value) {
 				$aUser = Tijian_Model_CustomerNew::getDetail($value);
@@ -284,7 +284,8 @@ class Tijian_Controller_Company_Physical extends Tijian_Controller_Company_Base
 		$aUsers = [];
 		$aEmpolyee = [];
 		if ($userIds) {
-			$aEmpolyee = Tijian_Model_CustomerNew::getListByPKIDs($userIds);
+            $sUserIds = implode(',', $userIds);
+			$aEmpolyee = Tijian_Model_CustomerNew::getListByPKIDs($sUserIds);
 			if ($aEmpolyee) {
 				foreach ($aEmpolyee as $key => $value) {
 					$aUsers[$value['iUserID']]['sRealName'] = $value['sRealName'];

@@ -188,13 +188,19 @@ class Tijian_Controller_Company_Base extends Tijian_Controller_Admin_Base
 			}
 		}
 		if ($aAppointment) {
+            $aCardIDs = array();
 			foreach ($aAppointment as $key => $value) {
-				if (!in_array($value['iAutoID'], $aUserID)) {
-					$aCardIDs[] = $value['iAutoID'];
+				if (!in_array($value['iCardID'], $aCardIDs)) {
+					$aCardIDs[] = $value['iCardID'];
 				}
 			}
 			if ($aCardIDs) {
+                //$sCardIDs = implode(',', $aCardIDs);
 				$aCards = Tijian_Model_OrderCard::getListByPKIDs($aCardIDs);
+
+//                $aCards = Tijian_Model_OrderCard::getAll(['where' => [
+//                    'iAutoID IN'  => $sCardIDs,
+//                ]]);
 				if ($aCards) {
 					foreach ($aCards as $key => $value) {
 						if ($value['iUserID']) {
